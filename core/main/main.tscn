@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://c5qt8u5hbysnw"]
+
+[node name="Main" type="Node" unique_id=686021068]
+
+[node name="Menu" type="Node" parent="." unique_id=84615357]
+
+[node name="MenuCanvasLayer" type="CanvasLayer" parent="Menu" unique_id=2112220324]
+
+[node name="World" type="Node" parent="." unique_id=673644353]
+
+[node name="Map" type="Node3D" parent="World" unique_id=1659139570]
+
+[node name="Actors" type="Node3D" parent="World" unique_id=629470526]
+
+[node name="Systems" type="Node" parent="." unique_id=560121007]
