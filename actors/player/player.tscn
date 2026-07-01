@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://co62vn6pet0yj"]
+
+[ext_resource type="Script" uid="uid://cgmnwh2ahgdo3" path="res://actors/player/Player.cs" id="1_nvxhs"]
+[ext_resource type="Resource" uid="uid://0eh8wi8mt7cp" path="res://actors/player/stats/player_velocity_stats.tres" id="2_388e2"]
+[ext_resource type="Script" uid="uid://ghu5ha8v5lp2" path="res://components/StateMachine.cs" id="3_bop6h"]
+[ext_resource type="Script" uid="uid://dc3slcqxdplvw" path="res://components/CameraComponent.cs" id="3_lsln6"]
+[ext_resource type="Resource" uid="uid://dwvvperwoei6p" path="res://actors/player/states/player_state_idle.tres" id="4_a744p"]
+[ext_resource type="Resource" uid="uid://btl5uvn2oxivt" path="res://actors/player/states/player_state_walk.tres" id="5_388e2"]
+[ext_resource type="Resource" uid="uid://f848jnj4rsdi" path="res://actors/player/states/player_state_sprint.tres" id="6_lsln6"]
+[ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="7_hiosj"]
+[ext_resource type="Script" uid="uid://dtal7j6ccfpjj" path="res://components/InputComponent.cs" id="8_hiosj"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
+
+[node name="Player" type="CharacterBody3D" unique_id=458013798 node_paths=PackedStringArray("components")]
+script = ExtResource("1_nvxhs")
+velocityStats = ExtResource("2_388e2")
+components = [NodePath("CameraPivot/CameraComponent"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("InputComponent")]
+metadata/_custom_type_script = "uid://cgmnwh2ahgdo3"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=859779642]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_v4a0d")
+
+[node name="CameraPivot" type="Node3D" parent="." unique_id=1853229366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.2)
+
+[node name="CameraComponent" type="Camera3D" parent="CameraPivot" unique_id=660106367 node_paths=PackedStringArray("pivot")]
+script = ExtResource("3_lsln6")
+sensitivity = 0.4
+tiltLowerLimit = -1.3962634015954636
+tiltUpperLimit = 1.5707963267948966
+pivot = NodePath("..")
+metadata/_custom_type_script = "uid://dc3slcqxdplvw"
+
+[node name="StateMachine" type="Node" parent="." unique_id=1220325799 node_paths=PackedStringArray("actor")]
+script = ExtResource("3_bop6h")
+states = Array[Object]([ExtResource("4_a744p"), ExtResource("5_388e2"), ExtResource("6_lsln6")])
+startingState = ExtResource("4_a744p")
+actor = NodePath("..")
+metadata/_custom_type_script = "uid://ghu5ha8v5lp2"
+
+[node name="VelocityComponent" type="Node" parent="." unique_id=109072836]
+script = ExtResource("7_hiosj")
+metadata/_custom_type_script = "uid://2b3a880do5ag"
+
+[node name="InputComponent" type="Node" parent="." unique_id=536807353]
+script = ExtResource("8_hiosj")
+metadata/_custom_type_script = "uid://dtal7j6ccfpjj"

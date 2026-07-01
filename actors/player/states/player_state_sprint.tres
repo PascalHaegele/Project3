@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="StateSprint" format=3 uid="uid://f848jnj4rsdi"]
+
+[ext_resource type="Script" uid="uid://centhwh2xuoye" path="res://components/states/StateSprint.cs" id="1_gusm0"]
+
+[resource]
+script = ExtResource("1_gusm0")
+metadata/_custom_type_script = "uid://centhwh2xuoye"

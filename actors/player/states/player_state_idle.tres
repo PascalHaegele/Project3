@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="StateIdle" format=3 uid="uid://dwvvperwoei6p"]
+
+[ext_resource type="Script" uid="uid://d106lxvpexrmj" path="res://components/states/StateIdle.cs" id="1_hks8b"]
+
+[resource]
+script = ExtResource("1_hks8b")
+metadata/_custom_type_script = "uid://d106lxvpexrmj"

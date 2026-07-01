@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="VelocityStats" format=3 uid="uid://0eh8wi8mt7cp"]
+
+[ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityStats.cs" id="1_26ttj"]
+
+[resource]
+script = ExtResource("1_26ttj")
