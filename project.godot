@@ -27,10 +27,6 @@ display_server/driver.linuxbsd="wayland"
 
 project/assembly_name="Project3"
 
-[global_group]
-
-Player=""
-
 [input]
 
 move_left={
@@ -111,8 +107,10 @@ pause={
 
 [layer_names]
 
-3d_physics/layer_4="HitBox"
-3d_physics/layer_5="HurtBox"
+3d_physics/layer_1="World"
+3d_physics/layer_2="Player"
+3d_physics/layer_3="Enemy"
+3d_physics/layer_4="Interactable"
 
 [physics]
 

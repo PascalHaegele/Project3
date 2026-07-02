@@ -26,66 +26,79 @@ shadow_enabled = true
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1660493623]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 use_collision = true
+collision_mask = 0
 size = Vector3(50, 0.1, 50)
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=568598283]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 2, -22)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=2103223636]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 2, -18)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="." unique_id=429148915]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 2, -14)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="." unique_id=1013659509]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, -10)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="." unique_id=811015147]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2, -6)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="." unique_id=1934330894]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -2)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D8" type="CSGBox3D" parent="." unique_id=1844239347]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 2)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="." unique_id=1383940001]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2, 6)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="." unique_id=835063112]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 10)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="." unique_id=1113400818]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 2, 14)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D12" type="CSGBox3D" parent="." unique_id=1805701109]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 2, 18)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D13" type="CSGBox3D" parent="." unique_id=1441987527]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 2, 22)
 use_collision = true
+collision_mask = 0
 size = Vector3(1, 4, 1)
 
 [node name="TestInteractable" parent="." unique_id=160606323 instance=ExtResource("1_6slyc")]
