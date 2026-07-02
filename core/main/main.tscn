@@ -2,6 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://cad0jomcq3ndd" path="res://maps/test_map.tscn" id="1_6vymn"]
 [ext_resource type="PackedScene" uid="uid://co62vn6pet0yj" path="res://actors/player/player.tscn" id="2_6vymn"]
+[ext_resource type="Script" uid="uid://bpiq23lhf8xg2" path="res://components/HitBoxComponent.cs" id="4_yibi5"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_v20um"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v20um"]
+size = Vector3(2.57901, 2.1230469, 2.8887863)
 
 [node name="Main" type="Node" unique_id=686021068]
 
@@ -14,9 +20,24 @@
 [node name="Map" type="Node3D" parent="World" unique_id=1659139570]
 
 [node name="TestMap" parent="World/Map" unique_id=1304355676 instance=ExtResource("1_6vymn")]
+transform = Transform3D(1.0031044, 0, 0, 0, 1.0031044, 0, 0, 0, 1.0031044, 0, 0, 0)
 
 [node name="Actors" type="Node3D" parent="World" unique_id=629470526]
 
 [node name="Player" parent="World/Actors" unique_id=458013798 instance=ExtResource("2_6vymn")]
 
 [node name="Systems" type="Node" parent="." unique_id=560121007]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="." unique_id=921303103]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1190686, 2.8327396)
+use_collision = true
+mesh = SubResource("BoxMesh_v20um")
+
+[node name="HurtboxArea" type="Area3D" parent="CSGMesh3D" unique_id=277896690]
+collision_layer = 4
+collision_mask = 8
+script = ExtResource("4_yibi5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CSGMesh3D/HurtboxArea" unique_id=835397873]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0019683838, -0.56152344, -0.2779808)
+shape = SubResource("BoxShape3D_v20um")

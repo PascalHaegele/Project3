@@ -9,8 +9,13 @@
 [ext_resource type="Resource" uid="uid://f848jnj4rsdi" path="res://actors/player/states/player_state_sprint.tres" id="6_lsln6"]
 [ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="7_hiosj"]
 [ext_resource type="Script" uid="uid://dtal7j6ccfpjj" path="res://components/InputComponent.cs" id="8_hiosj"]
+[ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="10_hiosj"]
+[ext_resource type="Script" uid="uid://ba7ijgg4hf2mg" path="res://components/HurtBoxComponent.cs" id="11_ssdk0"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7aotg"]
+radius = 0.8149414
 
 [node name="Player" type="CharacterBody3D" unique_id=458013798 node_paths=PackedStringArray("components")]
 script = ExtResource("1_nvxhs")
@@ -47,3 +52,17 @@ metadata/_custom_type_script = "uid://2b3a880do5ag"
 [node name="InputComponent" type="Node" parent="." unique_id=536807353]
 script = ExtResource("8_hiosj")
 metadata/_custom_type_script = "uid://dtal7j6ccfpjj"
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1721660443]
+script = ExtResource("10_hiosj")
+metadata/_custom_type_script = "uid://cmb0oydjb0jfo"
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1860624545 node_paths=PackedStringArray("ActorHealthComponent")]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("11_ssdk0")
+ActorHealthComponent = NodePath("../HealthComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=2072616246]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.97922975, 0)
+shape = SubResource("CapsuleShape3D_7aotg")

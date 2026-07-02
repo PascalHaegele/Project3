@@ -4,6 +4,7 @@ using Godot;
 public partial class Player : Actor {
   [Export]
   public VelocityStats velocityStats;
+  [Export] public HealthComponent EntityHurtbox { get; set; }
 
   private CameraComponent camera;
   private StateMachine stateMachine;
@@ -25,8 +26,18 @@ public partial class Player : Actor {
     stateMachine.actor = this;
 
     velocityComponent.stats = velocityStats;
+
+    if(EntityHurtbox != null){
+      EntityHurtbox.Died += OnDeath;
+
+    }
   }
 
+   private void OnDeath()
+    {
+        GD.Print($"{Name} wird aus der Szene entfernt.");
+        QueueFree(); 
+    }
   public override void _Process(double delta) {
     input = inputComponent.GetInput;
     stateMachine.input = input;
