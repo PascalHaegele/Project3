@@ -12,10 +12,10 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
 
-[node name="Player" type="CharacterBody3D" unique_id=458013798 node_paths=PackedStringArray("components")]
+[node name="Player" type="CharacterBody3D" unique_id=458013798 node_paths=PackedStringArray("components") groups=["Player"]]
 script = ExtResource("1_nvxhs")
 velocityStats = ExtResource("2_388e2")
-components = [NodePath("CameraPivot/CameraComponent"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("InputComponent")]
+components = [NodePath("CameraPivot/CameraComponent"), NodePath("InputComponent"), NodePath("StateMachine"), NodePath("VelocityComponent")]
 metadata/_custom_type_script = "uid://cgmnwh2ahgdo3"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=859779642]

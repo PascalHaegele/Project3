@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://sdwg2u5270xb"]
+
+[ext_resource type="Script" uid="uid://vbgoq1tmo7cp" path="res://TestInteractable.cs" id="1_ocq4t"]
+[ext_resource type="Script" uid="uid://2pt8ci63eny8" path="res://components/InteractionComponent.cs" id="2_lbg8v"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bfp77"]
+size = Vector3(1.5, 1, 1.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bfp77"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o8bm0"]
+
+[node name="TestInteractable" type="StaticBody3D" unique_id=160606323]
+script = ExtResource("1_ocq4t")
+
+[node name="InteractionComponent" type="Area3D" parent="." unique_id=1022909495 node_paths=PackedStringArray("owner")]
+script = ExtResource("2_lbg8v")
+owner = NodePath("..")
+metadata/_custom_type_script = "uid://2pt8ci63eny8"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionComponent" unique_id=1727026180]
+shape = SubResource("BoxShape3D_bfp77")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1125833893]
+mesh = SubResource("BoxMesh_bfp77")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1619436714]
+shape = SubResource("BoxShape3D_o8bm0")
