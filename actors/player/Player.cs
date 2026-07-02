@@ -13,12 +13,15 @@ public partial class Player : Actor {
 
   private InputPackage input = new();
 
+  [Signal]
+  public delegate void InteractingEventHandler();
+
   public override void _Ready() {
     Input.MouseMode = Input.MouseModeEnum.Captured;
 
     camera = GetComponent(typeof(CameraComponent)) as CameraComponent;
-    stateMachine = GetComponent(typeof(StateMachine)) as StateMachine;
     inputComponent = GetComponent(typeof(InputComponent)) as InputComponent;
+    stateMachine = GetComponent(typeof(StateMachine)) as StateMachine;
     velocityComponent =
       GetComponent(typeof(VelocityComponent)) as VelocityComponent;
 
@@ -41,6 +44,8 @@ public partial class Player : Actor {
   public override void _Process(double delta) {
     input = inputComponent.GetInput;
     stateMachine.input = input;
+
+    if(input.interact) { _ = EmitSignal(SignalName.Interacting); }
   }
 
   public override void _PhysicsProcess(double delta) {

@@ -1,41 +1,36 @@
 using Godot;
 
 [GlobalClass]
-public partial class InteractionComponent : Node {
+public partial class InteractionComponent : Area3D {
   [Export]
-  public Actor actor;
+  private Node3D owner;
 
-  [Export]
-  private Area3D interactionArea;
-  private bool playerInsideArea;
+  private Player? player;
 
   public override void _Ready() {
-    if(interactionArea != null) {
-      interactionArea.BodyEntered += OnAreaBodyEntered;
-      interactionArea.BodyExited += OnAreaBodyExited;
-    } else { GD.PrintErr("no interaction area found"); }
+    BodyEntered += OnAreaBodyEntered;
+    BodyExited += OnAreaBodyExited;
   }
 
   private void TryInteract() {
-    if(interactionArea == null) { return; }
-
-    if(!playerInsideArea) { return; }
-
-    if(interactionArea is IInteractable interactable) {
-      interactable.Interact();
-    }
+    if(player == null) { return; }
+    if(owner is IInteractable interactable) { interactable.Interact(); }
   }
 
-  private void OnAreaBodyEntered(Node body) {
-    if(actor == null) { return; }
-
-    if(body == actor) { playerInsideArea = true; }
+  private void OnAreaBodyEntered(Node3D body) {
+    if(body is not Player) { return; }
+    player = body as Player;
+    _ = player
+      .Connect(
+        Player.SignalName.Interacting,
+        Callable.From(TryInteract),
+        (uint)ConnectFlags.OneShot
+      );
   }
 
-  private void OnAreaBodyExited(Node body) {
-    if(actor == null) { return; }
-
-    if(body == actor) { playerInsideArea = false; }
+  private void OnAreaBodyExited(Node3D body) {
+    if(body is not Player) { return; }
+    player = null;
   }
 }
 
