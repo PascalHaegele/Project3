@@ -12,7 +12,8 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
 
-[node name="Player" type="CharacterBody3D" unique_id=458013798 node_paths=PackedStringArray("components") groups=["Player"]]
+[node name="Player" type="CharacterBody3D" unique_id=458013798 node_paths=PackedStringArray("components")]
+collision_layer = 2
 script = ExtResource("1_nvxhs")
 velocityStats = ExtResource("2_388e2")
 components = [NodePath("CameraPivot/CameraComponent"), NodePath("InputComponent"), NodePath("StateMachine"), NodePath("VelocityComponent")]
@@ -33,6 +34,10 @@ tiltUpperLimit = 1.5707963267948966
 pivot = NodePath("..")
 metadata/_custom_type_script = "uid://dc3slcqxdplvw"
 
+[node name="InputComponent" type="Node" parent="." unique_id=536807353]
+script = ExtResource("8_hiosj")
+metadata/_custom_type_script = "uid://dtal7j6ccfpjj"
+
 [node name="StateMachine" type="Node" parent="." unique_id=1220325799 node_paths=PackedStringArray("actor")]
 script = ExtResource("3_bop6h")
 states = Array[Object]([ExtResource("4_a744p"), ExtResource("5_388e2"), ExtResource("6_lsln6")])
@@ -43,7 +48,3 @@ metadata/_custom_type_script = "uid://ghu5ha8v5lp2"
 [node name="VelocityComponent" type="Node" parent="." unique_id=109072836]
 script = ExtResource("7_hiosj")
 metadata/_custom_type_script = "uid://2b3a880do5ag"
-
-[node name="InputComponent" type="Node" parent="." unique_id=536807353]
-script = ExtResource("8_hiosj")
-metadata/_custom_type_script = "uid://dtal7j6ccfpjj"

@@ -21,11 +21,8 @@ public partial class InputPackage : Resource {
 
 [GlobalClass]
 public partial class InputComponent : Node {
-  public InputPackage input = new();
-
-  public InputPackage GetInput => input;
-
-  public override void _UnhandledInput(InputEvent @event) {
+  public InputPackage GetInput() {
+    InputPackage input = new();
     // Movement (WASD)
     input.direction = Input.GetVector(
       "move_left",
@@ -62,6 +59,8 @@ public partial class InputComponent : Node {
     if(input.pause) { GD.Print("Action: Pause"); }
 
     input.EmitChanged();
+
+    return input;
   }
 }
 

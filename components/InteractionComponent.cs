@@ -14,6 +14,7 @@ public partial class InteractionComponent : Area3D {
 
   private void TryInteract() {
     if(player == null) { return; }
+    player.healthComponent.TakeDamage(10.0f);
     if(owner is IInteractable interactable) { interactable.Interact(); }
   }
 

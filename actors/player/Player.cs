@@ -5,10 +5,13 @@ public partial class Player : Actor {
   [Export]
   public VelocityStats velocityStats;
 
+  public HealthComponent healthComponent;
+
   private CameraComponent camera;
+  private InputComponent inputComponent;
   private StateMachine stateMachine;
   private VelocityComponent velocityComponent;
-  private InputComponent inputComponent;
+  private InventoryComponent inventoryComponent;
 
   private InputPackage input = new();
 
@@ -18,11 +21,15 @@ public partial class Player : Actor {
   public override void _Ready() {
     Input.MouseMode = Input.MouseModeEnum.Captured;
 
+    healthComponent = GetComponent(typeof(HealthComponent)) as HealthComponent;
+
     camera = GetComponent(typeof(CameraComponent)) as CameraComponent;
     inputComponent = GetComponent(typeof(InputComponent)) as InputComponent;
     stateMachine = GetComponent(typeof(StateMachine)) as StateMachine;
     velocityComponent =
       GetComponent(typeof(VelocityComponent)) as VelocityComponent;
+    inventoryComponent =
+      GetComponent(typeof(InventoryComponent)) as InventoryComponent;
 
     stateMachine.actorVelocityStats = velocityStats;
     stateMachine.actor = this;
@@ -31,10 +38,11 @@ public partial class Player : Actor {
   }
 
   public override void _Process(double delta) {
-    input = inputComponent.GetInput;
+    input = inputComponent.GetInput();
     stateMachine.input = input;
 
     if(input.interact) { _ = EmitSignal(SignalName.Interacting); }
+    if(input.openInventory) { inventoryComponent.PrintInventory(); }
   }
 
   public override void _PhysicsProcess(double delta) {
@@ -62,6 +70,11 @@ public partial class Player : Actor {
         Input.MouseMode == Input.MouseModeEnum.Captured ?
         Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
     }
+
+    if(Input.IsKeyPressed(Key.F)) { inventoryComponent.AddItem("ITEM_0"); }
+    if(Input.IsKeyPressed(Key.G)) { inventoryComponent.AddItem("ITEM_1"); }
+    if(Input.IsKeyPressed(Key.H)) { _ = inventoryComponent.RemoveItem("ITEM_0"); }
+    if(Input.IsKeyPressed(Key.J)) { inventoryComponent.ClearInventory(); }
   }
 }
 
