@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cad0jomcq3ndd" path="res://maps/test_map.tscn" id="1_6vymn"]
 [ext_resource type="PackedScene" uid="uid://co62vn6pet0yj" path="res://actors/player/player.tscn" id="2_6vymn"]
+[ext_resource type="PackedScene" uid="uid://b1557xgv14uto" path="res://CS_Map.tscn" id="4_k5wvu"]
 [ext_resource type="Script" uid="uid://bpiq23lhf8xg2" path="res://components/HitBoxComponent.cs" id="4_yibi5"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_v20um"]
@@ -41,3 +42,6 @@ script = ExtResource("4_yibi5")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CSGMesh3D/HurtboxArea" unique_id=835397873]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0019683838, -0.56152344, -0.2779808)
 shape = SubResource("BoxShape3D_v20um")
+
+[node name="CS_Map" parent="." unique_id=7192887 instance=ExtResource("4_k5wvu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 180.45819, -0.18592834, -45.0813)
