@@ -1,0 +1,54 @@
+using Godot;
+
+[GlobalClass]
+public partial class StateDash : State {
+  [Export] public float distance = 8f;
+  [Export] public float duration = 0.2f;
+  [Export] public float cooldown = 0.8f;
+
+  public Timer cooldownTimer = new();
+  private float durationTimer;
+
+  private Vector3 direction;
+
+  public override void CheckRelevance() {
+    if(durationTimer > 0.0f) { return; }
+    if(!actor.IsOnFloor()) {
+      EmitSignalTransition(stateMachine.GetState<StateFall>()); return;
+    }
+    if(Input.jump) {
+      EmitSignalTransition(stateMachine.GetState<StateJump>()); return;
+    }
+    if(Input.direction == Vector2.Zero) {
+      EmitSignalTransition(stateMachine.GetState<StateIdle>()); return;
+    }
+    if(Input.sprint) {
+      EmitSignalTransition(stateMachine.GetState<StateSprint>()); return;
+    }
+    EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;
+  }
+
+  public override void Ready() {
+    cooldownTimer.OneShot = true;
+    stateMachine.AddChild(cooldownTimer);
+  }
+
+  public override void Enter() {
+    durationTimer = duration;
+    cooldownTimer.Start(cooldown);
+
+    direction = actor.Direction;
+    if(direction == Vector3.Zero) { direction = -actor.Basis.Z; }
+
+    actorVelocityInfo.Speed = 1.0f;
+  }
+
+  public override void PhysicsUpdate(double delta) {
+    durationTimer -= (float)delta;
+    actorVelocityComponent
+      .AccelerateInDirection(direction * (distance / duration));
+  }
+
+  public override void Exit() => actorVelocityComponent.Stop();
+}
+

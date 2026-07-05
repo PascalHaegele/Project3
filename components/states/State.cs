@@ -2,31 +2,38 @@ using Godot;
 
 [GlobalClass]
 public abstract partial class State : Resource {
-  public VelocityStats actorVelocityStats;
-  public InputPackage input = new();
-
+  protected Actor actor;
   protected StateMachine stateMachine;
+  protected VelocityInfo? actorVelocityInfo;
+  protected VelocityComponent? actorVelocityComponent;
+  protected CameraComponent? cameraComponent;
 
-  [Signal]
-  public delegate void TransitionEventHandler(State newState);
+  public InputPackage Input { protected get; set; } = new();
+
+  [Signal] public delegate void TransitionEventHandler(State newState);
 
   public abstract void CheckRelevance();
 
   public virtual void Init(
-    VelocityStats actorVelocityStats,
+    Actor targetActor,
     StateMachine targetStateMachine,
-    bool local = true
+    VelocityInfo? targetActorVelocityInfo
   ) {
-    this.actorVelocityStats = actorVelocityStats;
+    actor = targetActor;
     stateMachine = targetStateMachine;
-    ResourceLocalToScene = local;
+    actorVelocityInfo = targetActorVelocityInfo;
+
+    actorVelocityComponent = actor.GetComponent<VelocityComponent>();
+    cameraComponent = actor.GetComponent<CameraComponent>();
   }
+
+  public virtual void Ready() { }
+
+  public virtual void Enter() { }
 
   public virtual void Update(double delta) { }
 
   public virtual void PhysicsUpdate(double delta) { }
-
-  public virtual void Enter() { }
 
   public virtual void Exit() { }
 }

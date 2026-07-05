@@ -3,8 +3,7 @@ using Godot;
 // Handles life-cycle, damage, and healing for an actor
 [GlobalClass]
 public partial class HealthComponent : Node {
-  [Export]
-  public float MaxHealth = 100.0f;
+  [Export] public float MaxHealth = 100.0f;
 
   // Current health value; only modifiable via TakeDamage or Heal
   public float CurrentHealth { get; private set; }
@@ -13,12 +12,10 @@ public partial class HealthComponent : Node {
   public bool IsAlive => CurrentHealth > 0.0f;
 
   // Signal emitted when health drops to zero
-  [Signal]
-  public delegate void DiedEventHandler();
+  [Signal] public delegate void DiedEventHandler();
 
   // Signal emitted whenever health changes
-  [Signal]
-  public delegate void HealthChangedEventHandler(float newHealth);
+  [Signal] public delegate void HealthChangedEventHandler(float newHealth);
 
   public override void _Ready() {
     CurrentHealth = MaxHealth;
@@ -30,13 +27,13 @@ public partial class HealthComponent : Node {
 
     CurrentHealth = Mathf.Max(0.0f, CurrentHealth - damage);
 
-    _ = EmitSignal(SignalName.HealthChanged, CurrentHealth);
+    EmitSignalHealthChanged(CurrentHealth);
 
     GD.Print($"Damage Taken: {damage} | Health: {CurrentHealth}/{MaxHealth}");
 
     if(CurrentHealth <= 0.0f) {
-      GD.Print("Actor Died");
-       _ = EmitSignal(SignalName.Died);
+      GD.Print($"{GetParent().Name} Died");
+      EmitSignalDied();
     }
   }
 }

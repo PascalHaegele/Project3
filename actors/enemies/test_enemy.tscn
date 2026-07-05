@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://c55wv856x1kmu"]
+
+[ext_resource type="Script" uid="uid://b8mw3s0ecxg3r" path="res://actors/enemies/TestEnemy.cs" id="1_xmkit"]
+[ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="2_l1sbr"]
+[ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="3_l1sbr"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_v4a0d"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5k4qt"]
+
+[node name="TestEnemy" type="CharacterBody3D" unique_id=952052820 node_paths=PackedStringArray("components")]
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_xmkit")
+components = [NodePath("HealthComponent")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1364863915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_v4a0d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1951671070]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_v4a0d")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1400482761]
+script = ExtResource("2_l1sbr")
+metadata/_custom_type_script = "uid://cmb0oydjb0jfo"
+
+[node name="HurtboxComponent" type="Area3D" parent="." unique_id=1503364270]
+collision_layer = 128
+collision_mask = 16
+script = ExtResource("3_l1sbr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent" unique_id=1142917535]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_5k4qt")

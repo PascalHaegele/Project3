@@ -1,7 +1,7 @@
 using Godot;
 
 [GlobalClass]
-public partial class VelocityStats : Resource {
+public partial class VelocityInfo : Resource {
   [Export(PropertyHint.Range, "0.0f, 100.0f, 0.1f")]
   public float maxSpeed = 10.0f;
 

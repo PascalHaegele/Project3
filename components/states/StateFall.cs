@@ -1,20 +1,16 @@
 using Godot;
 
 [GlobalClass]
-public partial class StateWalk : State {
-  [Export] private float speed = 6.0f;
-
+public partial class StateFall : State {
   public override void CheckRelevance() {
-    if(!actor.IsOnFloor()) {
-      EmitSignalTransition(stateMachine.GetState<StateFall>()); return;
-    }
-    if(Input.jump) {
-      EmitSignalTransition(stateMachine.GetState<StateJump>()); return;
-    }
     if(Input.dash) {
       StateDash dashState = stateMachine.GetState<StateDash>();
       if(dashState.cooldownTimer.TimeLeft > 0.0) { return; }
       EmitSignalTransition(dashState); return;
+    }
+    if(!actor.IsOnFloor()) { return; }
+    if(Input.jump) {
+      EmitSignalTransition(stateMachine.GetState<StateJump>()); return;
     }
     if(Input.direction == Vector2.Zero) {
       EmitSignalTransition(stateMachine.GetState<StateIdle>()); return;
@@ -22,9 +18,10 @@ public partial class StateWalk : State {
     if(Input.sprint) {
       EmitSignalTransition(stateMachine.GetState<StateSprint>()); return;
     }
+    EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;
   }
 
-  public override void Enter() => actorVelocityInfo.Speed = speed;
+  public override void Enter() => actorVelocityInfo.Speed = 4.0f;
 
   public override void PhysicsUpdate(double delta) {
     actorVelocityComponent.AccelerateInDirection(actor.Direction);

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ProjectileInfo" format=3 uid="uid://bjpm6ll01s4po"]
+
+[ext_resource type="Script" uid="uid://bnbmk7u6r1a23" path="res://weapons/projectiles/ProjectileInfo.cs" id="1_qrkvg"]
+
+[resource]
+script = ExtResource("1_qrkvg")
+metadata/_custom_type_script = "uid://bnbmk7u6r1a23"

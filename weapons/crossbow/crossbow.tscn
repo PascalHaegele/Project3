@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://3g43korc3kuh"]
+
+[ext_resource type="Script" uid="uid://cohnw7rgixh8v" path="res://weapons/Weapon.cs" id="1_o6kij"]
+[ext_resource type="Resource" uid="uid://ca23qbtw67ubh" path="res://weapons/crossbow/crossbow_info.tres" id="2_o6kij"]
+[ext_resource type="PackedScene" uid="uid://dknx78bheoyio" path="res://weapons/projectiles/bolt/bolt.tscn" id="3_o6kij"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_v4a0d"]
+size = Vector3(0.07, 0.075, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5k4qt"]
+size = Vector3(0.3, 0.065, 0.015)
+
+[node name="Weapon" type="Node3D" unique_id=50347542]
+script = ExtResource("1_o6kij")
+info = ExtResource("2_o6kij")
+projectile = ExtResource("3_o6kij")
+metadata/_custom_type_script = "uid://cohnw7rgixh8v"
+
+[node name="Stock" type="MeshInstance3D" parent="." unique_id=1544646082]
+mesh = SubResource("BoxMesh_v4a0d")
+
+[node name="RightBow" type="MeshInstance3D" parent="Stock" unique_id=96901744]
+transform = Transform3D(0.90630776, 0, -0.42261827, 0, 1, 0, 0.42261827, 0, 0.90630776, 0.15, 0.02, -0.151)
+mesh = SubResource("BoxMesh_5k4qt")
+
+[node name="LeftBow" type="MeshInstance3D" parent="Stock" unique_id=977839933]
+transform = Transform3D(0.9063077, 0, 0.42261824, 0, 1, 0, -0.42261824, 0, 0.9063077, -0.15, 0.02, -0.151)
+mesh = SubResource("BoxMesh_5k4qt")
+
+[node name="ProjectileSpawn" type="Marker3D" parent="." unique_id=1726782027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.047809955, -0.040503837)

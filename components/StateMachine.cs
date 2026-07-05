@@ -1,25 +1,26 @@
 using Godot;
+using System.Diagnostics;
+using System.Linq;
 
 [GlobalClass]
 public partial class StateMachine : Node {
-  [Export]
-  private State[] states;
-  [Export]
-  private State startingState;
+  [Export] private State[] states;
+  [Export] private State? startingState;
   private State currentState;
 
-  [Export]
-  public Actor actor;
-  public VelocityStats actorVelocityStats;
+  private Actor actor;
+  public VelocityInfo actorVelocityInfo;
 
-  public InputPackage input = new();
+  public InputPackage Input { private get; set; } = new();
 
   public override async void _Ready() {
+    actor = GetParent<Actor>();
     _ = await ToSignal(actor, Node.SignalName.Ready);
 
     foreach(State state in states) {
-      state.Init(actorVelocityStats, this);
+      state.Init(actor, this, actorVelocityInfo);
       state.Transition += OnStateTransition;
+      state.Ready();
     }
 
     currentState = startingState?? states[0];
@@ -34,24 +35,34 @@ public partial class StateMachine : Node {
   public override void _Process(double delta) {
     currentState.Update(delta);
     currentState.CheckRelevance();
-    currentState.input = input;
+    currentState.Input = Input;
+
+    Debug
+      .panel
+      .AddProperty("Current State", currentState.GetType().ToString(), 1);
   }
 
   public override void _PhysicsProcess(double delta) {
     currentState.PhysicsUpdate(delta);
   }
 
-  public State GetState(System.Type request) {
-    foreach(State state in states) {
-      if(state.GetType() == request) { return state; }
-    }
-    GD.PrintErr($"{actor.Name} StateMachine does not have requested State");
+  public T? GetState<T>() where T : State {
+    foreach(State state in states) { if(state is T) { return state as T; } }
+
+    StackFrame frame = new StackTrace().GetFrame(1);
+    GD.PrintErr(
+      $"{actor.Name} StateMachine does not have requested State {typeof(T)} | " +
+      $"Requested from {frame.GetMethod().DeclaringType.Name} " +
+      $"in method {frame.GetMethod().Name}"
+    );
     return null;
   }
 
   private void OnStateTransition(State newState) {
-    if(GetState(newState.GetType()) == null) {
-      GD.PrintErr($"{actor.Name} StateMachine transition failed");
+    if(!states.Contains(newState)) {
+      GD.PrintErr(
+        $"{actor.Name} StateMachine does not contain {newState.GetType()}"
+      );
       return;
     }
 
@@ -60,8 +71,6 @@ public partial class StateMachine : Node {
     currentState.Exit();
     currentState = newState;
     newState.Enter();
-
-    GD.Print($"{actor.Name} transitioned to {currentState.GetType()}");
   }
 }
 

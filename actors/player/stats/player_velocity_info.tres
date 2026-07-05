@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="VelocityInfo" format=3 uid="uid://cxiadxn0tvgj3"]
+
+[ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="1_njneb"]
+
+[resource]
+script = ExtResource("1_njneb")
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"

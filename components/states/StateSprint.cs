@@ -2,22 +2,32 @@ using Godot;
 
 [GlobalClass]
 public partial class StateSprint : State {
-  [Export]
-  private float speed = 10.0f;
+  [Export] private float speed = 10.0f;
 
   public override void CheckRelevance() {
-    if(input.direction == Vector2.Zero) {
-      EmitSignalTransition(stateMachine.GetState(typeof(StateIdle)));
-      return;
+    if(!actor.IsOnFloor()) {
+        EmitSignalTransition(stateMachine.GetState<StateFall>()); return;
     }
-    if(!input.sprint) {
-      EmitSignalTransition(stateMachine.GetState(typeof(StateWalk)));
-      return;
+    if(Input.jump) {
+      EmitSignalTransition(stateMachine.GetState<StateJump>()); return;
+    }
+    if(Input.dash) {
+      StateDash dashState = stateMachine.GetState<StateDash>();
+      if(dashState.cooldownTimer.TimeLeft > 0.0) { return; }
+      EmitSignalTransition(dashState); return;
+    }
+    if(Input.direction == Vector2.Zero) {
+      EmitSignalTransition(stateMachine.GetState<StateIdle>()); return;
+    }
+    if(!Input.sprint) {
+      EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;
     }
   }
 
-  public override void Enter() {
-    actorVelocityStats.Speed = 10.0f;
+  public override void Enter() => actorVelocityInfo.Speed = speed;
+
+  public override void PhysicsUpdate(double delta) {
+    actorVelocityComponent.AccelerateInDirection(actor.Direction);
   }
 }
 

@@ -2,24 +2,35 @@ using Godot;
 
 [GlobalClass]
 public partial class VelocityComponent : Node {
-  public Vector3 velocity;
+  private Vector3 velocity;
+  private VelocityInfo info;
 
-  public VelocityStats stats;
+  public override void _Ready() {
+    info = GetParent<Actor>().velocityInfo;
+  }
 
   public void AccelerateToVelocity(Vector3 targetVelocity) {
-    velocity = velocity.Lerp(targetVelocity, stats.accelerationCoefficient);
+    velocity.X =
+      Mathf.Lerp(velocity.X, targetVelocity.X, info.decelerationCoefficient);
+    velocity.Z =
+      Mathf.Lerp(velocity.Z, targetVelocity.Z, info.decelerationCoefficient);
   }
 
   public void AccelerateInDirection(Vector3 direction) {
-    AccelerateToVelocity(direction * stats.Speed);
+    AccelerateToVelocity(direction * info.Speed);
   }
 
-  public void ApplyGravity(Vector3 gravity) {
-    velocity += gravity;
+  public void AddVelocityInDirection(Vector3 direction, float magnitude = 1.0f) {
+    velocity += direction * magnitude;
   }
 
   public void Decelerate() {
-    velocity = velocity.Lerp(Vector3.Zero, stats.decelerationCoefficient);
+    velocity.X = Mathf.Lerp(velocity.X, 0.0f, info.decelerationCoefficient);
+    velocity.Z = Mathf.Lerp(velocity.Z, 0.0f, info.decelerationCoefficient);
+  }
+
+  public void Stop() {
+    velocity = Vector3.Zero;
   }
 
   public void Move(CharacterBody3D body) {

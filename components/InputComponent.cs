@@ -45,18 +45,18 @@ public partial class InputComponent : Node {
     input.pause = Input.IsActionJustPressed("pause");
 
     // Debug Output
-    if(input.direction != Vector2.Zero) {
-      GD.Print($"Movement: {input.direction}");
-    }
-    if(input.jump) { GD.Print("Action: Jump"); }
-    if(input.sprint) { GD.Print("Action: Sprint"); }
-    if(input.dash) { GD.Print("Action: Dash"); }
-    if(input.shoot) { GD.Print("Action: Shoot"); }
-    if(input.special) { GD.Print("Action: Special"); }
-    if(input.interact) { GD.Print("Action: Interact"); }
-    if(input.reload) { GD.Print("Action: Reload"); }
-    if(input.openInventory) { GD.Print("Action: Open Inventory"); }
-    if(input.pause) { GD.Print("Action: Pause"); }
+    // if(input.direction != Vector2.Zero) {
+    //   GD.Print($"Movement: {input.direction}");
+    // }
+    // if(input.jump) { GD.Print("Action: Jump"); }
+    // if(input.sprint) { GD.Print("Action: Sprint"); }
+    // if(input.dash) { GD.Print("Action: Dash"); }
+    // if(input.shoot) { GD.Print("Action: Shoot"); }
+    // if(input.special) { GD.Print("Action: Special"); }
+    // if(input.interact) { GD.Print("Action: Interact"); }
+    // if(input.reload) { GD.Print("Action: Reload"); }
+    // if(input.openInventory) { GD.Print("Action: Open Inventory"); }
+    // if(input.pause) { GD.Print("Action: Pause"); }
 
     input.EmitChanged();
 

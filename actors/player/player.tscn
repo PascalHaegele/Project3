@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://co62vn6pet0yj"]
 
 [ext_resource type="Script" uid="uid://cgmnwh2ahgdo3" path="res://actors/player/Player.cs" id="1_nvxhs"]
-[ext_resource type="Resource" uid="uid://0eh8wi8mt7cp" path="res://actors/player/stats/player_velocity_stats.tres" id="2_388e2"]
+[ext_resource type="Resource" uid="uid://cxiadxn0tvgj3" path="res://actors/player/stats/player_velocity_info.tres" id="2_k67x5"]
 [ext_resource type="Script" uid="uid://ghu5ha8v5lp2" path="res://components/StateMachine.cs" id="3_bop6h"]
 [ext_resource type="Script" uid="uid://dc3slcqxdplvw" path="res://components/CameraComponent.cs" id="3_lsln6"]
 [ext_resource type="Resource" uid="uid://dwvvperwoei6p" path="res://actors/player/states/player_state_idle.tres" id="4_a744p"]
@@ -9,18 +9,45 @@
 [ext_resource type="Resource" uid="uid://f848jnj4rsdi" path="res://actors/player/states/player_state_sprint.tres" id="6_lsln6"]
 [ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="7_hiosj"]
 [ext_resource type="Script" uid="uid://dtal7j6ccfpjj" path="res://components/InputComponent.cs" id="8_hiosj"]
-[ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="10_hiosj"]
-[ext_resource type="Script" uid="uid://ba7ijgg4hf2mg" path="res://components/HurtBoxComponent.cs" id="11_ssdk0"]
+[ext_resource type="Resource" uid="uid://c381t2ndtl8r2" path="res://actors/player/states/player_state_jump.tres" id="9_lsln6"]
+[ext_resource type="Resource" uid="uid://qosqakqqr03r" path="res://actors/player/states/player_state_fall.tres" id="10_ssdk0"]
+[ext_resource type="Resource" uid="uid://daj70cpvgiy86" path="res://actors/player/states/player_state_dash.tres" id="11_7aotg"]
+[ext_resource type="Script" uid="uid://g3kw63x81wsu" path="res://components/InventoryComponent.cs" id="13_7aotg"]
+[ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="14_0wchr"]
+[ext_resource type="PackedScene" uid="uid://3g43korc3kuh" path="res://weapons/crossbow/crossbow.tscn" id="14_k67x5"]
+[ext_resource type="Script" uid="uid://385nx60lb30b" path="res://core/debug/DebugPanel.cs" id="15_12xki"]
+[ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="15_qrxv1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5k4qt"]
 
-[node name="Player" type="CharacterBody3D" unique_id=458013798 node_paths=PackedStringArray("components")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yibi5"]
+bg_color = Color(0.14117648, 0.14117648, 0.14117648, 0.49803922)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.67058825, 0.67058825, 0.67058825, 0.49803922)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_rt46e"]
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_left = 10
+MarginContainer/constants/margin_right = 10
+MarginContainer/constants/margin_top = 10
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_yibi5")
+
+[node name="Player" type="CharacterBody3D" unique_id=134350 node_paths=PackedStringArray("weapon", "components")]
 collision_layer = 2
+collision_mask = 7
 script = ExtResource("1_nvxhs")
-velocityStats = ExtResource("2_388e2")
-components = [NodePath("CameraPivot/CameraComponent"), NodePath("InputComponent"), NodePath("StateMachine"), NodePath("VelocityComponent")]
-metadata/_custom_type_script = "uid://cgmnwh2ahgdo3"
+weapon = NodePath("CameraPivot/Crossbow")
+velocityInfo = ExtResource("2_k67x5")
+components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("HealthComponent"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=859779642]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -29,25 +56,70 @@ shape = SubResource("CapsuleShape3D_v4a0d")
 [node name="CameraPivot" type="Node3D" parent="." unique_id=1853229366]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.2)
 
-[node name="CameraComponent" type="Camera3D" parent="CameraPivot" unique_id=660106367 node_paths=PackedStringArray("pivot")]
+[node name="CameraComponent" type="Camera3D" parent="CameraPivot" unique_id=660106367]
 script = ExtResource("3_lsln6")
 sensitivity = 0.4
-tiltLowerLimit = -1.3962634015954636
-tiltUpperLimit = 1.5707963267948966
-pivot = NodePath("..")
+tiltLowerLimit = -1.3089969389957472
+tiltUpperLimit = 1.3962634015954636
 metadata/_custom_type_script = "uid://dc3slcqxdplvw"
+
+[node name="Crossbow" parent="CameraPivot" unique_id=454790018 instance=ExtResource("14_k67x5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.16500008, -0.292)
 
 [node name="InputComponent" type="Node" parent="." unique_id=536807353]
 script = ExtResource("8_hiosj")
 metadata/_custom_type_script = "uid://dtal7j6ccfpjj"
 
-[node name="StateMachine" type="Node" parent="." unique_id=1220325799 node_paths=PackedStringArray("actor")]
+[node name="StateMachine" type="Node" parent="." unique_id=1220325799]
 script = ExtResource("3_bop6h")
-states = Array[Object]([ExtResource("4_a744p"), ExtResource("5_388e2"), ExtResource("6_lsln6")])
+states = Array[Object]([ExtResource("4_a744p"), ExtResource("5_388e2"), ExtResource("6_lsln6"), ExtResource("9_lsln6"), ExtResource("10_ssdk0"), ExtResource("11_7aotg")])
 startingState = ExtResource("4_a744p")
-actor = NodePath("..")
 metadata/_custom_type_script = "uid://ghu5ha8v5lp2"
 
 [node name="VelocityComponent" type="Node" parent="." unique_id=109072836]
 script = ExtResource("7_hiosj")
 metadata/_custom_type_script = "uid://2b3a880do5ag"
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1537337790]
+script = ExtResource("14_0wchr")
+metadata/_custom_type_script = "uid://cmb0oydjb0jfo"
+
+[node name="HurtboxComponent" type="Area3D" parent="." unique_id=1847107477]
+collision_layer = 32
+collision_mask = 0
+script = ExtResource("15_qrxv1")
+metadata/_custom_type_script = "uid://t8p3r0lninay"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent" unique_id=2036225698]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_5k4qt")
+
+[node name="InventoryComponent" type="Node" parent="." unique_id=1260849864]
+script = ExtResource("13_7aotg")
+metadata/_custom_type_script = "uid://g3kw63x81wsu"
+
+[node name="UI" type="Control" parent="." unique_id=925751462]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="DebugPanel" type="PanelContainer" parent="UI" unique_id=2093023493]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 50.0
+theme = SubResource("Theme_rt46e")
+script = ExtResource("15_12xki")
+metadata/_custom_type_script = "uid://385nx60lb30b"
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/DebugPanel" unique_id=663774772]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/DebugPanel/MarginContainer" unique_id=2041628129]
+layout_mode = 2
