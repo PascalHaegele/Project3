@@ -43,7 +43,7 @@ PanelContainer/styles/panel = SubResource("StyleBoxFlat_yibi5")
 
 [node name="Player" type="CharacterBody3D" unique_id=134350 node_paths=PackedStringArray("weapon", "components")]
 collision_layer = 2
-collision_mask = 7
+collision_mask = 5
 script = ExtResource("1_nvxhs")
 weapon = NodePath("CameraPivot/Crossbow")
 velocityInfo = ExtResource("2_k67x5")

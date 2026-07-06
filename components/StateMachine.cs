@@ -9,16 +9,14 @@ public partial class StateMachine : Node {
   private State currentState;
 
   private Actor actor;
-  public VelocityInfo actorVelocityInfo;
-
-  public InputPackage Input { private get; set; } = new();
+  public InputPackage input = new();
 
   public override async void _Ready() {
     actor = GetParent<Actor>();
     _ = await ToSignal(actor, Node.SignalName.Ready);
 
     foreach(State state in states) {
-      state.Init(actor, this, actorVelocityInfo);
+      state.Init(actor, this, actor.velocityInfo);
       state.Transition += OnStateTransition;
       state.Ready();
     }
@@ -35,7 +33,7 @@ public partial class StateMachine : Node {
   public override void _Process(double delta) {
     currentState.Update(delta);
     currentState.CheckRelevance();
-    currentState.Input = Input;
+    currentState.input = input;
 
     Debug
       .panel

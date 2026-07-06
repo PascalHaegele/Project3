@@ -1,38 +1,107 @@
 [gd_scene format=3 uid="uid://c55wv856x1kmu"]
 
 [ext_resource type="Script" uid="uid://b8mw3s0ecxg3r" path="res://actors/enemies/TestEnemy.cs" id="1_xmkit"]
+[ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="2_k4hf1"]
 [ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="2_l1sbr"]
+[ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_mka0o"]
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="3_l1sbr"]
+[ext_resource type="Script" uid="uid://7o1hcb8cvtng" path="res://components/AIComponent.cs" id="5_mka0o"]
+[ext_resource type="Script" uid="uid://ghu5ha8v5lp2" path="res://components/StateMachine.cs" id="5_veuwo"]
+[ext_resource type="Script" uid="uid://d106lxvpexrmj" path="res://components/states/StateIdle.cs" id="6_k1n75"]
+[ext_resource type="Script" uid="uid://brlg5cb3b2dfm" path="res://components/states/StateWalk.cs" id="7_ad4r6"]
+[ext_resource type="Script" uid="uid://centhwh2xuoye" path="res://components/states/StateSprint.cs" id="8_otf45"]
+[ext_resource type="Script" uid="uid://jxbnvwb037xw" path="res://components/states/StateJump.cs" id="9_0pasn"]
+[ext_resource type="Script" uid="uid://7hkl7lnu3cqg" path="res://components/states/StateDash.cs" id="10_kstis"]
+[ext_resource type="Script" uid="uid://d8b6t7u5sv66" path="res://components/states/StateFall.cs" id="11_da4by"]
+
+[sub_resource type="Resource" id="Resource_rt46e"]
+script = ExtResource("2_mka0o")
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_v4a0d"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_bfp77"]
+size = Vector3(0.2, 0.2, 0.66064453)
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5k4qt"]
+[sub_resource type="Resource" id="Resource_veuwo"]
+script = ExtResource("6_k1n75")
+metadata/_custom_type_script = "uid://d106lxvpexrmj"
+
+[sub_resource type="Resource" id="Resource_0wfyu"]
+script = ExtResource("7_ad4r6")
+speed = 3.0
+metadata/_custom_type_script = "uid://brlg5cb3b2dfm"
+
+[sub_resource type="Resource" id="Resource_jawxn"]
+script = ExtResource("8_otf45")
+speed = 6.0
+metadata/_custom_type_script = "uid://centhwh2xuoye"
+
+[sub_resource type="Resource" id="Resource_710do"]
+script = ExtResource("9_0pasn")
+metadata/_custom_type_script = "uid://jxbnvwb037xw"
+
+[sub_resource type="Resource" id="Resource_p5iym"]
+script = ExtResource("10_kstis")
+metadata/_custom_type_script = "uid://7hkl7lnu3cqg"
+
+[sub_resource type="Resource" id="Resource_ad4r6"]
+script = ExtResource("11_da4by")
+metadata/_custom_type_script = "uid://d8b6t7u5sv66"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
 
 [node name="TestEnemy" type="CharacterBody3D" unique_id=952052820 node_paths=PackedStringArray("components")]
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_xmkit")
-components = [NodePath("HealthComponent")]
+velocityInfo = SubResource("Resource_rt46e")
+components = [NodePath("AIComponent"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1364863915]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_v4a0d")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1951825375]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3873272, 0.74493146)
+mesh = SubResource("BoxMesh_bfp77")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1951671070]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_v4a0d")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1785939912]
+path_desired_distance = 0.5
+target_desired_distance = 0.5
+path_height_offset = 0.25
+debug_enabled = true
+
+[node name="AIComponent" type="Node" parent="." unique_id=520362924]
+script = ExtResource("5_mka0o")
+detectionRange = 8.0
+metadata/_custom_type_script = "uid://7o1hcb8cvtng"
+
+[node name="VelocityComponent" type="Node" parent="." unique_id=1302938011]
+script = ExtResource("2_k4hf1")
+metadata/_custom_type_script = "uid://2b3a880do5ag"
+
+[node name="StateMachine" type="Node" parent="." unique_id=2024083235]
+script = ExtResource("5_veuwo")
+states = Array[Object]([SubResource("Resource_veuwo"), SubResource("Resource_0wfyu"), SubResource("Resource_jawxn"), SubResource("Resource_710do"), SubResource("Resource_p5iym"), SubResource("Resource_ad4r6")])
+metadata/_custom_type_script = "uid://ghu5ha8v5lp2"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1400482761]
 script = ExtResource("2_l1sbr")
 metadata/_custom_type_script = "uid://cmb0oydjb0jfo"
 
-[node name="HurtboxComponent" type="Area3D" parent="." unique_id=1503364270]
+[node name="HurtboxComponent" type="Area3D" parent="." unique_id=1301362105]
 collision_layer = 128
-collision_mask = 16
+collision_mask = 0
 script = ExtResource("3_l1sbr")
+metadata/_custom_type_script = "uid://t8p3r0lninay"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent" unique_id=1142917535]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent" unique_id=1049210021]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_5k4qt")
+shape = SubResource("CapsuleShape3D_bfp77")

@@ -5,7 +5,7 @@ public partial class StateJump : State {
   [Export] private float velocity = 5.0f;
 
   public override void CheckRelevance() {
-    if(Input.dash) {
+    if(input.dash) {
       StateDash dashState = stateMachine.GetState<StateDash>();
       if(dashState.cooldownTimer.TimeLeft > 0.0) { return; }
       EmitSignalTransition(dashState); return;
@@ -16,10 +16,10 @@ public partial class StateJump : State {
       }
       return;
     }
-    if(Input.direction == Vector2.Zero) {
+    if(input.direction == Vector2.Zero) {
       EmitSignalTransition(stateMachine.GetState<StateIdle>()); return;
     }
-    if(Input.sprint) {
+    if(input.sprint) {
       EmitSignalTransition(stateMachine.GetState<StateSprint>()); return;
     }
     EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;

@@ -6,36 +6,35 @@ public partial class VelocityComponent : Node {
   private VelocityInfo info;
 
   public override void _Ready() {
-    info = GetParent<Actor>().velocityInfo;
+	info = GetParent<Actor>().velocityInfo;
   }
 
   public void AccelerateToVelocity(Vector3 targetVelocity) {
-    velocity.X =
-      Mathf.Lerp(velocity.X, targetVelocity.X, info.decelerationCoefficient);
-    velocity.Z =
-      Mathf.Lerp(velocity.Z, targetVelocity.Z, info.decelerationCoefficient);
+	velocity.X =
+	  Mathf.Lerp(velocity.X, targetVelocity.X, info.decelerationCoefficient);
+	velocity.Z =
+	  Mathf.Lerp(velocity.Z, targetVelocity.Z, info.decelerationCoefficient);
   }
 
   public void AccelerateInDirection(Vector3 direction) {
-    AccelerateToVelocity(direction * info.Speed);
+	AccelerateToVelocity(direction * info.Speed);
   }
 
   public void AddVelocityInDirection(Vector3 direction, float magnitude = 1.0f) {
-    velocity += direction * magnitude;
+	velocity += direction * magnitude;
   }
 
   public void Decelerate() {
-    velocity.X = Mathf.Lerp(velocity.X, 0.0f, info.decelerationCoefficient);
-    velocity.Z = Mathf.Lerp(velocity.Z, 0.0f, info.decelerationCoefficient);
+	velocity.X = Mathf.Lerp(velocity.X, 0.0f, info.decelerationCoefficient);
+	velocity.Z = Mathf.Lerp(velocity.Z, 0.0f, info.decelerationCoefficient);
   }
 
   public void Stop() {
-    velocity = Vector3.Zero;
+	velocity = Vector3.Zero;
   }
 
   public void Move(CharacterBody3D body) {
-    body.Velocity = velocity;
-    _ = body.MoveAndSlide();
+	body.Velocity = velocity;
+	_ = body.MoveAndSlide();
   }
 }
-

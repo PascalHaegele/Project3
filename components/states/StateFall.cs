@@ -3,19 +3,19 @@ using Godot;
 [GlobalClass]
 public partial class StateFall : State {
   public override void CheckRelevance() {
-    if(Input.dash) {
+    if(input.dash) {
       StateDash dashState = stateMachine.GetState<StateDash>();
       if(dashState.cooldownTimer.TimeLeft > 0.0) { return; }
       EmitSignalTransition(dashState); return;
     }
     if(!actor.IsOnFloor()) { return; }
-    if(Input.jump) {
+    if(input.jump) {
       EmitSignalTransition(stateMachine.GetState<StateJump>()); return;
     }
-    if(Input.direction == Vector2.Zero) {
+    if(input.direction == Vector2.Zero) {
       EmitSignalTransition(stateMachine.GetState<StateIdle>()); return;
     }
-    if(Input.sprint) {
+    if(input.sprint) {
       EmitSignalTransition(stateMachine.GetState<StateSprint>()); return;
     }
     EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;

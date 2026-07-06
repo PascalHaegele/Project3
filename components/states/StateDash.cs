@@ -16,13 +16,13 @@ public partial class StateDash : State {
     if(!actor.IsOnFloor()) {
       EmitSignalTransition(stateMachine.GetState<StateFall>()); return;
     }
-    if(Input.jump) {
+    if(input.jump) {
       EmitSignalTransition(stateMachine.GetState<StateJump>()); return;
     }
-    if(Input.direction == Vector2.Zero) {
+    if(input.direction == Vector2.Zero) {
       EmitSignalTransition(stateMachine.GetState<StateIdle>()); return;
     }
-    if(Input.sprint) {
+    if(input.sprint) {
       EmitSignalTransition(stateMachine.GetState<StateSprint>()); return;
     }
     EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;

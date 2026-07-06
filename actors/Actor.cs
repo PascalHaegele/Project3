@@ -21,5 +21,12 @@ public abstract partial class Actor : CharacterBody3D {
     );
     return null;
   }
+
+  public T? GetComponentOrNull<T>() where T : Node {
+    foreach(Node component in components) {
+      if(component is T) { return component as T; }
+    }
+    return null;
+  }
 }
 

@@ -6,15 +6,15 @@ public partial class StateIdle : State {
     if(!actor.IsOnFloor()) {
       EmitSignalTransition(stateMachine.GetState<StateFall>()); return;
     }
-    if(Input.jump) {
+    if(input.jump) {
       EmitSignalTransition(stateMachine.GetState<StateJump>()); return;
     }
-    if(Input.dash) {
+    if(input.dash) {
       StateDash dashState = stateMachine.GetState<StateDash>();
       if(dashState.cooldownTimer.TimeLeft > 0.0) { return; }
       EmitSignalTransition(dashState); return;
     }
-    if(Input.direction == Vector2.Zero) { return; }
+    if(input.direction == Vector2.Zero) { return; }
     if(Godot.Input.IsActionPressed("sprint")) {
       EmitSignalTransition(stateMachine.GetState<StateSprint>()); return;
     }

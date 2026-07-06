@@ -19,13 +19,11 @@ public partial class Player : Actor {
     inputComponent = GetComponent<InputComponent>();
     stateMachine = GetComponent<StateMachine>();
     velocityComponent = GetComponent<VelocityComponent>();
-
-    stateMachine.actorVelocityInfo = velocityInfo;
   }
 
   public override void _Process(double delta) {
     input = inputComponent.GetInput();
-    stateMachine.Input = input;
+    stateMachine.input = input;
 
     if(input.interact) { _ = EmitSignal(SignalName.Interacting); }
     if(input.shoot) { weapon.Shoot(); }

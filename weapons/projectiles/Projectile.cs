@@ -32,21 +32,22 @@ public partial class Projectile : RigidBody3D {
   }
 
   public override void _PhysicsProcess(double delta) {
-    if(!hit) {
-      KinematicCollision3D collision3D =
-         MoveAndCollide(-GlobalBasis.Z * info.speed * (float)delta);
+    if(hit) { return; }
+    KinematicCollision3D collision3D =
+      MoveAndCollide(-GlobalBasis.Z * info.speed * (float)delta);
 
-      if(collision3D != null) {
-        hit = true;
-        Freeze = true;
-        freeTimer.Start(3.0);
-        // hitbox.QueueFree();
-      }
+    if(collision3D != null) {
+      hit = true;
+      Freeze = true;
+      freeTimer.Start(3.0);
 
-      if(GlobalPosition.DistanceTo(start) > info.range) {
-        QueueFree();
+      if(collision3D.GetCollider() is PhysicsBody3D body) {
+        owner.RemoveChild(this);
+        body.AddChild(this);
+        TopLevel = false;
       }
     }
+
+    if(GlobalPosition.DistanceTo(start) > info.range) { QueueFree(); }
   }
 }
-

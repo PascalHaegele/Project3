@@ -6,9 +6,8 @@ public abstract partial class State : Resource {
   protected StateMachine stateMachine;
   protected VelocityInfo? actorVelocityInfo;
   protected VelocityComponent? actorVelocityComponent;
-  protected CameraComponent? cameraComponent;
 
-  public InputPackage Input { protected get; set; } = new();
+  public InputPackage input = new();
 
   [Signal] public delegate void TransitionEventHandler(State newState);
 
@@ -23,8 +22,7 @@ public abstract partial class State : Resource {
     stateMachine = targetStateMachine;
     actorVelocityInfo = targetActorVelocityInfo;
 
-    actorVelocityComponent = actor.GetComponent<VelocityComponent>();
-    cameraComponent = actor.GetComponent<CameraComponent>();
+    actorVelocityComponent = actor.GetComponentOrNull<VelocityComponent>();
   }
 
   public virtual void Ready() { }
