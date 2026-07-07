@@ -2,10 +2,6 @@ using Godot;
 
 [GlobalClass]
 public partial class StateDash : State {
-  [Export] public float distance = 8f;
-  [Export] public float duration = 0.2f;
-  [Export] public float cooldown = 0.8f;
-
   public Timer cooldownTimer = new();
   private float durationTimer;
 
@@ -31,12 +27,12 @@ public partial class StateDash : State {
   public override void Init(Actor actor, StateMachine stateMachine) {
     base.Init(actor, stateMachine);
     cooldownTimer.OneShot = true;
-    base.stateMachine.AddChild(cooldownTimer);
+    stateMachine.AddChild(cooldownTimer);
   }
 
   public override void Enter() {
-    durationTimer = duration;
-    cooldownTimer.Start(cooldown);
+    durationTimer = velocityInfo.dashDuration;
+    cooldownTimer.Start(velocityInfo.dashCooldown);
 
     direction = actor.Direction;
     if(direction == Vector3.Zero) { direction = -actor.Basis.Z; }
@@ -47,7 +43,9 @@ public partial class StateDash : State {
   public override void PhysicsUpdate(double delta) {
     durationTimer -= (float)delta;
     velocityComponent
-      .AccelerateInDirection(direction * (distance / duration));
+      .AccelerateInDirection(
+        direction * (velocityInfo.dashDistance / velocityInfo.dashDuration)
+      );
   }
 
   public override void Exit() => velocityComponent.Stop();

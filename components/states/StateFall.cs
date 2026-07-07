@@ -21,7 +21,9 @@ public partial class StateFall : State {
     EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;
   }
 
-  public override void Enter() => velocityInfo.Speed = 4.0f;
+  public override void Enter() {
+    velocityInfo.Speed = velocityInfo.airborneSpeed;
+  }
 
   public override void PhysicsUpdate(double delta) {
     velocityComponent.AccelerateInDirection(actor.Direction);

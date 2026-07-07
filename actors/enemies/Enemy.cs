@@ -2,17 +2,23 @@ using Godot;
 
 [GlobalClass]
 public partial class Enemy : Actor {
-  protected AIComponent aiComponent;
+  [Export] public Marker3D[]? patrolPath;
+  [Export] public Marker3D? leashPoint;
+
+  [Export] public float attackRange = 2.0f;
+  [Export] public float leashLength = 20.0f;
+
+  public bool playerInVision;
+
+  protected AIStateMachine aiStateMachine;
   protected StateMachine stateMachine;
   protected VelocityComponent velocityComponent;
   protected HealthComponent healthComponent;
 
   protected Area3D visionArea;
 
-  [Export] public Marker3D[]? patrolPath;
-
   public override void _Ready() {
-    aiComponent = GetComponent<AIComponent>();
+    aiStateMachine = GetComponent<AIStateMachine>();
     stateMachine = GetComponent<StateMachine>();
     velocityComponent = GetComponent<VelocityComponent>();
     healthComponent = GetComponent<HealthComponent>();

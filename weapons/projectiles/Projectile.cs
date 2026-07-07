@@ -28,8 +28,16 @@ public partial class Projectile : RigidBody3D {
   }
 
   public override void _Process(double delta) {
-    if(hit) { Debug.draw.DrawLine(shotPosition, hitPosition, Colors.Red); }
-    else { Debug.draw.DrawLine(shotPosition, GlobalPosition, Colors.Red); }
+    if(hit) {
+      Debug
+        .draw
+        .DrawLineThick(shotPosition, hitPosition, 1, false, Colors.Red);
+    }
+    else {
+      Debug
+        .draw
+        .DrawLineThick(shotPosition, GlobalPosition, 1, false, Colors.Red);
+    }
   }
 
   public override void _PhysicsProcess(double delta) {

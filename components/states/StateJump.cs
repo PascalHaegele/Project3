@@ -2,8 +2,6 @@ using Godot;
 
 [GlobalClass]
 public partial class StateJump : State {
-  [Export] private float velocity = 5.0f;
-
   public override void CheckRelevance() {
     if(input.dash) {
       StateDash dashState = stateMachine.GetState<StateDash>();
@@ -26,8 +24,9 @@ public partial class StateJump : State {
   }
 
   public override void Enter() {
-    velocityInfo.Speed = 4.0f;
-    velocityComponent.AddVelocityInDirection(actor.UpDirection, velocity);
+    velocityInfo.Speed = velocityInfo.airborneSpeed;
+    velocityComponent
+      .AddVelocityInDirection(actor.UpDirection, velocityInfo.jumpVelocity);
   }
 
   public override void PhysicsUpdate(double delta) {

@@ -6,6 +6,10 @@ public partial class DebugDraw : MeshInstance3D {
     Debug.draw = this;
 
     Visible = false;
+    CastShadow = ShadowCastingSetting.Off;
+    StandardMaterial3D mat = new();
+    mat.VertexColorUseAsAlbedo = true;
+    MaterialOverride = mat;
   }
 
   public override void _PhysicsProcess(double delta) {

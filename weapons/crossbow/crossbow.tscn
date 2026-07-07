@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://3g43korc3kuh"]
 
 [ext_resource type="Script" uid="uid://cohnw7rgixh8v" path="res://weapons/Weapon.cs" id="1_o6kij"]
-[ext_resource type="Resource" uid="uid://ca23qbtw67ubh" path="res://weapons/crossbow/crossbow_info.tres" id="2_o6kij"]
+[ext_resource type="Script" uid="uid://bv03t2orsyg68" path="res://weapons/WeaponInfo.cs" id="2_o6kij"]
 [ext_resource type="PackedScene" uid="uid://dknx78bheoyio" path="res://weapons/projectiles/bolt/bolt.tscn" id="3_o6kij"]
+
+[sub_resource type="Resource" id="Resource_pwco0"]
+script = ExtResource("2_o6kij")
+metadata/_custom_type_script = "uid://bv03t2orsyg68"
 
 [sub_resource type="BoxMesh" id="BoxMesh_v4a0d"]
 size = Vector3(0.07, 0.075, 0.4)
@@ -12,7 +16,7 @@ size = Vector3(0.3, 0.065, 0.015)
 
 [node name="Weapon" type="Node3D" unique_id=50347542 node_paths=PackedStringArray("projectileSpawn")]
 script = ExtResource("1_o6kij")
-info = ExtResource("2_o6kij")
+info = SubResource("Resource_pwco0")
 projectile = ExtResource("3_o6kij")
 projectileSpawn = NodePath("ProjectileSpawn")
 metadata/_custom_type_script = "uid://cohnw7rgixh8v"

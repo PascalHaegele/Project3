@@ -1,8 +1,13 @@
 [gd_scene format=3 uid="uid://dknx78bheoyio"]
 
 [ext_resource type="Script" uid="uid://bl7eube2r4d4u" path="res://weapons/projectiles/Projectile.cs" id="1_wkkc4"]
-[ext_resource type="Resource" uid="uid://bjpm6ll01s4po" path="res://weapons/projectiles/bolt/bolt_info.tres" id="2_3i2uc"]
+[ext_resource type="Script" uid="uid://bnbmk7u6r1a23" path="res://weapons/projectiles/ProjectileInfo.cs" id="2_wkkc4"]
 [ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="3_rtc74"]
+
+[sub_resource type="Resource" id="Resource_brpge"]
+script = ExtResource("2_wkkc4")
+speed = 75.0
+metadata/_custom_type_script = "uid://bnbmk7u6r1a23"
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_v4a0d"]
 radius = 0.01
@@ -19,7 +24,7 @@ radius = 0.05
 collision_layer = 0
 collision_mask = 5
 script = ExtResource("1_wkkc4")
-info = ExtResource("2_3i2uc")
+info = SubResource("Resource_brpge")
 metadata/_custom_type_script = "uid://bl7eube2r4d4u"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1604783826]

@@ -1,12 +1,14 @@
 using Godot;
 
 public enum EnemyType { Melee, Ranged, Brute }
-public enum AIState { Idle, Patrol, Chase, Attack, Search, Dead }
+public enum AIStateEnum { Idle, Patrol, Chase, Attack, Search, Dead }
 
 /// <summary>
-/// AI component for enemy actors. Manages states, detection, and basic combat logic.
+/// AI component for enemy actors.
+/// Manages states, detection, and basic combat logic.
 /// Attach as a child Node of an Actor (CharacterBody3D).
-/// Uses the actor's VelocityComponent for movement and HealthComponent for death detection.
+/// Uses the actor's VelocityComponent for movement
+/// and HealthComponent for death detection.
 /// </summary>
 [GlobalClass]
 public partial class AIComponent : Node {
@@ -14,28 +16,36 @@ public partial class AIComponent : Node {
   [Export] public float detectionRange = 12f;
   [Export] public float attackRange = 2f;
   [Export] public float searchDuration = 3f;
-  [Export] public float leashDistance = 10.0f;
+  [Export] public float leashLength = 10.0f;
 
   [Export] public NavigationAgent3D navAgent;
-  [Export] public AIState currentState = AIState.Idle;
+  [Export] public AIStateEnum currentState = AIStateEnum.Idle;
+
+  public float searchTimer;
 
   private int patrolIndex;
 
   private Enemy actor;
   private HealthComponent healthComponent;
+
   private Player player;
-  private float searchTimer;
+  private float playerDistance;
 
   private Vector3 leashPoint;
-
-  private RandomNumberGenerator rng = new();
+  private float leashDistance;
 
   private InputPackage input = new();
+
   public InputPackage GetInput() => input;
+
+  [Signal] public delegate void AttackingEventHandler();
 
   public override void _Ready() {
     actor = GetParent<Enemy>();
-    leashPoint = actor.GlobalPosition;
+    leashPoint =
+      actor.leashPoint == null ?
+      actor.GlobalPosition :
+      actor.leashPoint.GlobalPosition;
 
     player = GetTree().Root.FindChild("Player", true, false) as Player;
     if(player == null) {
@@ -50,48 +60,40 @@ public partial class AIComponent : Node {
       );
     }
 
-    navAgent.TargetPosition = actor.patrolPath[0].GlobalPosition;
+    if(actor.patrolPath != null) {
+      navAgent.TargetPosition = actor.patrolPath[0].GlobalPosition;
+    }
 
     healthComponent = actor.GetComponent<HealthComponent>();
     healthComponent.Died += OnDied;
-
-    rng.Randomize();
   }
 
   public override void _PhysicsProcess(double delta) {
-    if(player == null || currentState == AIState.Dead) { return; }
+    if(player == null || currentState == AIStateEnum.Dead) { return; }
 
     input = new();
 
-    float distance = actor.GlobalPosition.DistanceTo(player.GlobalPosition);
+    playerDistance = actor.GlobalPosition.DistanceTo(player.GlobalPosition);
+    leashDistance = actor.GlobalPosition.DistanceTo(leashPoint);
 
     switch(currentState) {
-      case AIState.Idle: UpdateIdle(distance); break;
-      case AIState.Patrol: UpdatePatrol(distance); break;
-      case AIState.Chase: UpdateChase(distance); break;
-      case AIState.Attack: UpdateAttack(distance); break;
-      case AIState.Search: UpdateSearch(distance, delta); break;
-      case AIState.Dead: // handled above
+      case AIStateEnum.Idle: UpdateIdle(); break;
+      case AIStateEnum.Patrol: UpdatePatrol(); break;
+      case AIStateEnum.Chase: UpdateChase(); break;
+      case AIStateEnum.Attack: UpdateAttack(); break;
+      case AIStateEnum.Search: UpdateSearch(delta); break;
+      case AIStateEnum.Dead: // handled above
       default: break;
     }
   }
 
-  private void UpdateIdle(float distance) {
-    if(distance <= detectionRange) {
-      GD.Print($"{actor.Name}: Detected player - chasing!");
-      currentState = AIState.Chase;
-    }
+  private void UpdateIdle() {
+    input.direction = Vector2.Zero;
   }
 
-  private void UpdatePatrol(float distance) {
-    if(distance <= detectionRange) {
-      currentState = AIState.Chase;
-    }
-
-    // if(navAgent.IsNavigationFinished()) { return; }
-
+  private void UpdatePatrol() {
     if(navAgent.IsTargetReached()) {
-      patrolIndex = (patrolIndex + 1) % actor.patrolPath.Length;
+      patrolIndex = Mathf.PosMod(++patrolIndex, actor.patrolPath.Length - 1);
       navAgent.TargetPosition = actor.patrolPath[patrolIndex].GlobalPosition;
     }
 
@@ -108,10 +110,10 @@ public partial class AIComponent : Node {
     }
   }
 
-  private void UpdateChase(float distance) {
+  private void UpdateChase() {
     // Face the player (Y-axis rotation only)
     // Move toward player using NavigationAgent or direct movement
-    if(navAgent != null && !navAgent.IsNavigationFinished()) {
+    if(!navAgent.IsNavigationFinished()) {
       navAgent.TargetPosition = player.GlobalPosition;
     }
 
@@ -129,48 +131,41 @@ public partial class AIComponent : Node {
     }
 
     // State transitions
-    // if(actor.GlobalPosition.DistanceTo(leashPoint) > leashDistance) {
-    //   currentState = AIState.Patrol;
-    // } else if(distance <= attackRange) {
-    //   GD.Print($"{actor.Name}: Entering attack range!");
-    //   currentState = AIState.Attack;
-    // } else if(distance > detectionRange * 1.5f) {
-    //   GD.Print($"{actor.Name}: Lost sight of player - searching!");
-    //   currentState = AIState.Search;
-    //   searchTimer = 0f;
-    // }
-  }
-
-  private void UpdateAttack(float distance) {
-    // Attack logic can be extended later (e.g. emit signal, deal damage via HitBoxComponent)
-    // For now, just return to chase if player leaves attack range
-    if(distance > attackRange) {
-      currentState = AIState.Chase;
+    if(playerDistance <= attackRange) {
+      GD.Print($"{actor.Name}: Entering attack range!");
+      EmitSignalAttacking();
+      currentState = AIStateEnum.Attack;
     }
   }
 
-  private void UpdateSearch(float distance, double delta) {
+  private void UpdateAttack() {
+    if(playerDistance > attackRange) { currentState = AIStateEnum.Chase; }
+  }
+
+  private void UpdateSearch(double delta) {
     searchTimer += (float)delta;
     if(searchTimer >= searchDuration) {
-      searchTimer = 0f;
+      searchTimer = 0.0f;
       GD.Print($"{actor.Name}: Search over - returning to patrol.");
-      currentState = AIState.Patrol;
-    } else if(actor.GlobalPosition.DistanceTo(leashPoint) > leashDistance) {
-      currentState = AIState.Patrol;
-    } else if(distance <= detectionRange) {
-      currentState = AIState.Chase;
+      currentState = AIStateEnum.Patrol;
+    }
+    if(leashDistance > leashLength) {
+      GD.Print($"{actor.Name} leash length reached");
+      searchTimer = 0.0f;
+      currentState = AIStateEnum.Patrol;
     }
   }
 
   private void OnDied() {
     GD.Print($"{actor.Name}: AI died.");
-    currentState = AIState.Dead;
+    currentState = AIStateEnum.Dead;
   }
 
   /// <summary>
-  /// Public method to force death (called externally, e.g. from a button or script).
+  /// Public method to force death
+  /// (called externally, e.g. from a button or script).
   /// </summary>
   public void Die() {
-    currentState = AIState.Dead;
+    currentState = AIStateEnum.Dead;
   }
 }

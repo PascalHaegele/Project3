@@ -11,9 +11,8 @@ public partial class StateMachine : Node {
   private Actor actor;
   public InputPackage input = new();
 
-  public override async void _Ready() {
+  public override void _Ready() {
     actor = GetParent<Actor>();
-    _ = await ToSignal(actor, Node.SignalName.Ready);
 
     foreach(State state in states) {
       state.Init(actor, this);
@@ -48,7 +47,8 @@ public partial class StateMachine : Node {
 
     StackFrame frame = new StackTrace().GetFrame(1);
     GD.PrintErr(
-      $"{actor.Name} StateMachine does not have requested State {typeof(T)} | " +
+      $"{actor.Name} StateMachine does not have requested State " +
+      $"{typeof(T)} | " +
       $"Requested from {frame.GetMethod().DeclaringType.Name} " +
       $"in method {frame.GetMethod().Name}"
     );

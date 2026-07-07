@@ -23,7 +23,7 @@ public partial class Player : Actor {
     input = inputComponent.GetInput();
     stateMachine.input = input;
 
-    if(input.interact) { _ = EmitSignal(SignalName.Interacting); }
+    if(input.interact) { EmitSignalInteracting(); }
     if(input.shoot) { weapon.Shoot(); }
     if(input.reload) { weapon.Reload(); }
 
