@@ -4,8 +4,8 @@ using Godot;
 public abstract partial class State : Resource {
   protected Actor actor;
   protected StateMachine stateMachine;
-  protected VelocityInfo? actorVelocityInfo;
-  protected VelocityComponent? actorVelocityComponent;
+  protected VelocityInfo velocityInfo;
+  protected VelocityComponent velocityComponent;
 
   public InputPackage input = new();
 
@@ -13,19 +13,13 @@ public abstract partial class State : Resource {
 
   public abstract void CheckRelevance();
 
-  public virtual void Init(
-    Actor targetActor,
-    StateMachine targetStateMachine,
-    VelocityInfo? targetActorVelocityInfo
-  ) {
-    actor = targetActor;
-    stateMachine = targetStateMachine;
-    actorVelocityInfo = targetActorVelocityInfo;
+  public virtual void Init(Actor actor, StateMachine stateMachine) {
+    this.actor = actor;
+    this.stateMachine = stateMachine;
 
-    actorVelocityComponent = actor.GetComponentOrNull<VelocityComponent>();
+    velocityInfo = actor.velocityInfo;
+    velocityComponent = actor.GetComponent<VelocityComponent>();
   }
-
-  public virtual void Ready() { }
 
   public virtual void Enter() { }
 

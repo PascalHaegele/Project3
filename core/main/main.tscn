@@ -1,15 +1,7 @@
 [gd_scene format=3 uid="uid://c5qt8u5hbysnw"]
 
 [ext_resource type="PackedScene" uid="uid://cad0jomcq3ndd" path="res://maps/test_map.tscn" id="1_6vymn"]
-[ext_resource type="PackedScene" uid="uid://co62vn6pet0yj" path="res://actors/player/player.tscn" id="2_6vymn"]
-[ext_resource type="PackedScene" uid="uid://c55wv856x1kmu" path="res://actors/enemies/test_enemy.tscn" id="4_81xgm"]
 [ext_resource type="PackedScene" uid="uid://b1557xgv14uto" path="res://maps/CS_Map.tscn" id="4_k5wvu"]
-[ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="4_yibi5"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yibi5"]
-vertex_color_use_as_albedo = true
-
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_yibi5"]
 
 [node name="Main" type="Node" unique_id=686021068]
 
@@ -28,15 +20,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 180.45819, -0.18592834, -45.0
 
 [node name="Actors" type="Node3D" parent="World" unique_id=629470526]
 
-[node name="Player" parent="World/Actors" unique_id=458013798 instance=ExtResource("2_6vymn")]
-
-[node name="TestEnemy" parent="World/Actors" unique_id=952052820 instance=ExtResource("4_81xgm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5163746, 0, -14.6833935)
-
 [node name="Systems" type="Node" parent="." unique_id=560121007]
-
-[node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=824262904]
-material_override = SubResource("StandardMaterial3D_yibi5")
-mesh = SubResource("ImmediateMesh_yibi5")
-script = ExtResource("4_yibi5")
-metadata/_custom_type_script = "uid://cq4ddchn0vss"

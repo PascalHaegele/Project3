@@ -26,12 +26,12 @@ public partial class StateJump : State {
   }
 
   public override void Enter() {
-    actorVelocityInfo.Speed = 4.0f;
-    actorVelocityComponent.AddVelocityInDirection(actor.UpDirection, velocity);
+    velocityInfo.Speed = 4.0f;
+    velocityComponent.AddVelocityInDirection(actor.UpDirection, velocity);
   }
 
   public override void PhysicsUpdate(double delta) {
-    actorVelocityComponent.AccelerateInDirection(actor.Direction);
+    velocityComponent.AccelerateInDirection(actor.Direction);
   }
 }
 

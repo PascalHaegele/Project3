@@ -2,8 +2,6 @@ using Godot;
 
 [GlobalClass]
 public partial class StateWalk : State {
-  [Export] private float speed = 6.0f;
-
   public override void CheckRelevance() {
     if(!actor.IsOnFloor()) {
       EmitSignalTransition(stateMachine.GetState<StateFall>()); return;
@@ -24,10 +22,12 @@ public partial class StateWalk : State {
     }
   }
 
-  public override void Enter() => actorVelocityInfo.Speed = speed;
+  public override void Enter() {
+    velocityInfo.Speed = velocityInfo.walkSpeed;
+  }
 
   public override void PhysicsUpdate(double delta) {
-    actorVelocityComponent.AccelerateInDirection(actor.Direction);
+    velocityComponent.AccelerateInDirection(actor.Direction);
   }
 }
 

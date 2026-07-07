@@ -10,10 +10,11 @@ size = Vector3(0.07, 0.075, 0.4)
 [sub_resource type="BoxMesh" id="BoxMesh_5k4qt"]
 size = Vector3(0.3, 0.065, 0.015)
 
-[node name="Weapon" type="Node3D" unique_id=50347542]
+[node name="Weapon" type="Node3D" unique_id=50347542 node_paths=PackedStringArray("projectileSpawn")]
 script = ExtResource("1_o6kij")
 info = ExtResource("2_o6kij")
 projectile = ExtResource("3_o6kij")
+projectileSpawn = NodePath("ProjectileSpawn")
 metadata/_custom_type_script = "uid://cohnw7rgixh8v"
 
 [node name="Stock" type="MeshInstance3D" parent="." unique_id=1544646082]

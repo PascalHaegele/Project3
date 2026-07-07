@@ -28,9 +28,10 @@ public partial class StateDash : State {
     EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;
   }
 
-  public override void Ready() {
+  public override void Init(Actor actor, StateMachine stateMachine) {
+    base.Init(actor, stateMachine);
     cooldownTimer.OneShot = true;
-    stateMachine.AddChild(cooldownTimer);
+    base.stateMachine.AddChild(cooldownTimer);
   }
 
   public override void Enter() {
@@ -40,15 +41,15 @@ public partial class StateDash : State {
     direction = actor.Direction;
     if(direction == Vector3.Zero) { direction = -actor.Basis.Z; }
 
-    actorVelocityInfo.Speed = 1.0f;
+    velocityInfo.Speed = 1.0f;
   }
 
   public override void PhysicsUpdate(double delta) {
     durationTimer -= (float)delta;
-    actorVelocityComponent
+    velocityComponent
       .AccelerateInDirection(direction * (distance / duration));
   }
 
-  public override void Exit() => actorVelocityComponent.Stop();
+  public override void Exit() => velocityComponent.Stop();
 }
 

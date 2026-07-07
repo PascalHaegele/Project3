@@ -1,24 +1,52 @@
 [gd_scene format=3 uid="uid://co62vn6pet0yj"]
 
 [ext_resource type="Script" uid="uid://cgmnwh2ahgdo3" path="res://actors/player/Player.cs" id="1_nvxhs"]
-[ext_resource type="Resource" uid="uid://cxiadxn0tvgj3" path="res://actors/player/stats/player_velocity_info.tres" id="2_k67x5"]
+[ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_0wchr"]
 [ext_resource type="Script" uid="uid://ghu5ha8v5lp2" path="res://components/StateMachine.cs" id="3_bop6h"]
 [ext_resource type="Script" uid="uid://dc3slcqxdplvw" path="res://components/CameraComponent.cs" id="3_lsln6"]
-[ext_resource type="Resource" uid="uid://dwvvperwoei6p" path="res://actors/player/states/player_state_idle.tres" id="4_a744p"]
-[ext_resource type="Resource" uid="uid://btl5uvn2oxivt" path="res://actors/player/states/player_state_walk.tres" id="5_388e2"]
-[ext_resource type="Resource" uid="uid://f848jnj4rsdi" path="res://actors/player/states/player_state_sprint.tres" id="6_lsln6"]
 [ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="7_hiosj"]
+[ext_resource type="Script" uid="uid://d106lxvpexrmj" path="res://components/states/StateIdle.cs" id="7_qrxv1"]
+[ext_resource type="Script" uid="uid://brlg5cb3b2dfm" path="res://components/states/StateWalk.cs" id="8_dqf5y"]
 [ext_resource type="Script" uid="uid://dtal7j6ccfpjj" path="res://components/InputComponent.cs" id="8_hiosj"]
-[ext_resource type="Resource" uid="uid://c381t2ndtl8r2" path="res://actors/player/states/player_state_jump.tres" id="9_lsln6"]
-[ext_resource type="Resource" uid="uid://qosqakqqr03r" path="res://actors/player/states/player_state_fall.tres" id="10_ssdk0"]
-[ext_resource type="Resource" uid="uid://daj70cpvgiy86" path="res://actors/player/states/player_state_dash.tres" id="11_7aotg"]
+[ext_resource type="Script" uid="uid://centhwh2xuoye" path="res://components/states/StateSprint.cs" id="9_otn2r"]
+[ext_resource type="Script" uid="uid://jxbnvwb037xw" path="res://components/states/StateJump.cs" id="10_ctwkf"]
+[ext_resource type="Script" uid="uid://d8b6t7u5sv66" path="res://components/states/StateFall.cs" id="11_icg72"]
+[ext_resource type="Script" uid="uid://7hkl7lnu3cqg" path="res://components/states/StateDash.cs" id="12_lj3dd"]
 [ext_resource type="Script" uid="uid://g3kw63x81wsu" path="res://components/InventoryComponent.cs" id="13_7aotg"]
 [ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="14_0wchr"]
 [ext_resource type="PackedScene" uid="uid://3g43korc3kuh" path="res://weapons/crossbow/crossbow.tscn" id="14_k67x5"]
 [ext_resource type="Script" uid="uid://385nx60lb30b" path="res://core/debug/DebugPanel.cs" id="15_12xki"]
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="15_qrxv1"]
 
+[sub_resource type="Resource" id="Resource_0wchr"]
+script = ExtResource("2_0wchr")
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
+
+[sub_resource type="Resource" id="Resource_ad4r6"]
+script = ExtResource("7_qrxv1")
+metadata/_custom_type_script = "uid://d106lxvpexrmj"
+
+[sub_resource type="Resource" id="Resource_qrxv1"]
+script = ExtResource("8_dqf5y")
+metadata/_custom_type_script = "uid://brlg5cb3b2dfm"
+
+[sub_resource type="Resource" id="Resource_dqf5y"]
+script = ExtResource("9_otn2r")
+metadata/_custom_type_script = "uid://centhwh2xuoye"
+
+[sub_resource type="Resource" id="Resource_otn2r"]
+script = ExtResource("10_ctwkf")
+metadata/_custom_type_script = "uid://jxbnvwb037xw"
+
+[sub_resource type="Resource" id="Resource_ctwkf"]
+script = ExtResource("11_icg72")
+metadata/_custom_type_script = "uid://d8b6t7u5sv66"
+
+[sub_resource type="Resource" id="Resource_icg72"]
+script = ExtResource("12_lj3dd")
+metadata/_custom_type_script = "uid://7hkl7lnu3cqg"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5k4qt"]
 
@@ -46,7 +74,7 @@ collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_nvxhs")
 weapon = NodePath("CameraPivot/Crossbow")
-velocityInfo = ExtResource("2_k67x5")
+velocityInfo = SubResource("Resource_0wchr")
 components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("HealthComponent"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=859779642]
@@ -72,8 +100,7 @@ metadata/_custom_type_script = "uid://dtal7j6ccfpjj"
 
 [node name="StateMachine" type="Node" parent="." unique_id=1220325799]
 script = ExtResource("3_bop6h")
-states = Array[Object]([ExtResource("4_a744p"), ExtResource("5_388e2"), ExtResource("6_lsln6"), ExtResource("9_lsln6"), ExtResource("10_ssdk0"), ExtResource("11_7aotg")])
-startingState = ExtResource("4_a744p")
+states = Array[Object]([SubResource("Resource_ad4r6"), SubResource("Resource_qrxv1"), SubResource("Resource_dqf5y"), SubResource("Resource_otn2r"), SubResource("Resource_ctwkf"), SubResource("Resource_icg72")])
 metadata/_custom_type_script = "uid://ghu5ha8v5lp2"
 
 [node name="VelocityComponent" type="Node" parent="." unique_id=109072836]

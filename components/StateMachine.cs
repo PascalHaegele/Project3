@@ -16,12 +16,11 @@ public partial class StateMachine : Node {
     _ = await ToSignal(actor, Node.SignalName.Ready);
 
     foreach(State state in states) {
-      state.Init(actor, this, actor.velocityInfo);
+      state.Init(actor, this);
       state.Transition += OnStateTransition;
-      state.Ready();
     }
 
-    currentState = startingState?? states[0];
+    currentState = startingState ?? states[0];
 
     if(currentState == null) {
       GD.PrintErr($"{actor.Name} StateMachine has no starting State");

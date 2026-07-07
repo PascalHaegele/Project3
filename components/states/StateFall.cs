@@ -21,10 +21,10 @@ public partial class StateFall : State {
     EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;
   }
 
-  public override void Enter() => actorVelocityInfo.Speed = 4.0f;
+  public override void Enter() => velocityInfo.Speed = 4.0f;
 
   public override void PhysicsUpdate(double delta) {
-    actorVelocityComponent.AccelerateInDirection(actor.Direction);
+    velocityComponent.AccelerateInDirection(actor.Direction);
   }
 }
 

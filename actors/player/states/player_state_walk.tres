@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="StateWalk" format=3 uid="uid://btl5uvn2oxivt"]
-
-[ext_resource type="Script" uid="uid://brlg5cb3b2dfm" path="res://components/states/StateWalk.cs" id="1_3jsjd"]
-
-[resource]
-script = ExtResource("1_3jsjd")
-metadata/_custom_type_script = "uid://brlg5cb3b2dfm"

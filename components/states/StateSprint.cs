@@ -2,8 +2,6 @@ using Godot;
 
 [GlobalClass]
 public partial class StateSprint : State {
-  [Export] private float speed = 10.0f;
-
   public override void CheckRelevance() {
     if(!actor.IsOnFloor()) {
         EmitSignalTransition(stateMachine.GetState<StateFall>()); return;
@@ -24,10 +22,12 @@ public partial class StateSprint : State {
     }
   }
 
-  public override void Enter() => actorVelocityInfo.Speed = speed;
+  public override void Enter() {
+    velocityInfo.Speed = velocityInfo.sprintSpeed;
+  }
 
   public override void PhysicsUpdate(double delta) {
-    actorVelocityComponent.AccelerateInDirection(actor.Direction);
+    velocityComponent.AccelerateInDirection(actor.Direction);
   }
 }
 

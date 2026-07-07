@@ -2,15 +2,17 @@ using Godot;
 
 [GlobalClass]
 public partial class Projectile : RigidBody3D {
+  public Vector3 shotPosition = new();
+
   [Export] private ProjectileInfo info;
 
   private bool hit;
   private Timer freeTimer;
 
-  private Weapon owner;
+  private Weapon weapon;
   private HitboxComponent hitbox;
 
-  private Vector3 start;
+  private Vector3 hitPosition;
 
   [Signal] public delegate void HitEventHandler(Area3D area);
 
@@ -20,15 +22,14 @@ public partial class Projectile : RigidBody3D {
     freeTimer.OneShot = true;
     freeTimer.Timeout += QueueFree;
 
-    owner = GetParent<Weapon>();
+    weapon = GetParent<Weapon>();
     hitbox = GetNode<HitboxComponent>("HitboxComponent");
-    hitbox.damage = info.damage * owner.DamageMultiplier;
-
-    start = GlobalPosition;
+    hitbox.damage = info.damage * weapon.DamageMultiplier;
   }
 
   public override void _Process(double delta) {
-    Debug.draw.DrawLine(start, GlobalPosition, Colors.Red);
+    if(hit) { Debug.draw.DrawLine(shotPosition, hitPosition, Colors.Red); }
+    else { Debug.draw.DrawLine(shotPosition, GlobalPosition, Colors.Red); }
   }
 
   public override void _PhysicsProcess(double delta) {
@@ -38,16 +39,20 @@ public partial class Projectile : RigidBody3D {
 
     if(collision3D != null) {
       hit = true;
+      hitPosition = GlobalPosition;
       Freeze = true;
       freeTimer.Start(3.0);
 
       if(collision3D.GetCollider() is PhysicsBody3D body) {
-        owner.RemoveChild(this);
+        weapon.RemoveChild(this);
         body.AddChild(this);
         TopLevel = false;
+      } else {
+        hitbox.DisableCollisionShapes();
       }
     }
 
-    if(GlobalPosition.DistanceTo(start) > info.range) { QueueFree(); }
+    if(GlobalPosition.DistanceTo(shotPosition) > info.range) { QueueFree(); }
   }
 }
+

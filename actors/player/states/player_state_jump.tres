@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="StateJump" format=3 uid="uid://c381t2ndtl8r2"]
-
-[ext_resource type="Script" uid="uid://jxbnvwb037xw" path="res://components/states/StateJump.cs" id="1_ex0j1"]
-
-[resource]
-script = ExtResource("1_ex0j1")
-velocity = 5.0
-metadata/_custom_type_script = "uid://jxbnvwb037xw"

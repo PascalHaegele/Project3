@@ -6,7 +6,7 @@ public enum WeaponType { Crossbow, Shotgun }
 public partial class Weapon : Node3D {
   [Export] private WeaponInfo info;
   [Export] private PackedScene projectile;
-  private Marker3D? projectileSpawn;
+  [Export] private Marker3D? projectileSpawn;
 
   private float fireCooldown;
   private float reloadTimer;
@@ -19,7 +19,6 @@ public partial class Weapon : Node3D {
   public float DamageMultiplier => info.damageMulitplier;
 
   public override void _Ready() {
-    projectileSpawn = GetNodeOrNull<Marker3D>("ProjectileSpawn");
     if(projectileSpawn == null) {
       GD.PrintErr($"{Name} missing Projectile Spawn Marker");
     }
@@ -46,6 +45,7 @@ public partial class Weapon : Node3D {
 
     fireCooldown = 1.0f / info.fireRate;
 
+    p.shotPosition = GlobalPosition;
     p.ProcessMode = ProcessModeEnum.Inherit;
     p.TopLevel = true;
 

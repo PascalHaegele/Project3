@@ -6,6 +6,8 @@ public abstract partial class Actor : CharacterBody3D {
   [Export] public VelocityInfo velocityInfo;
   [Export] protected Node[] components;
 
+  protected InputPackage input = new();
+
   public Vector3 Direction { get; protected set; }
 
   public T? GetComponent<T>() where T : Node {

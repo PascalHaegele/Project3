@@ -14,65 +14,48 @@ public partial class AIComponent : Node {
   [Export] public float detectionRange = 12f;
   [Export] public float attackRange = 2f;
   [Export] public float searchDuration = 3f;
+  [Export] public float leashDistance = 10.0f;
 
-  [Export] public NavigationAgent3D navigationAgent;
+  [Export] public NavigationAgent3D navAgent;
+  [Export] public AIState currentState = AIState.Idle;
 
-  public AIState currentState = AIState.Patrol;
+  private int patrolIndex;
 
-  private Actor actor;
+  private Enemy actor;
   private HealthComponent healthComponent;
   private Player player;
   private float searchTimer;
 
+  private Vector3 leashPoint;
+
   private RandomNumberGenerator rng = new();
 
   private InputPackage input = new();
-
-  public InputPackage GetInput => input;
-
-  [Signal] public delegate void IdlingEventHandler();
-  [Signal] public delegate void PatrolingEventHandler();
-  [Signal] public delegate void ChasingEventHandler();
-  [Signal] public delegate void AttackingEventHandler();
-  [Signal] public delegate void SearchingEventHandler();
+  public InputPackage GetInput() => input;
 
   public override void _Ready() {
-    actor = GetParent<Actor>();
+    actor = GetParent<Enemy>();
+    leashPoint = actor.GlobalPosition;
 
     player = GetTree().Root.FindChild("Player", true, false) as Player;
     if(player == null) {
       GD.PrintErr($"{actor.Name}: Player not found in scene tree!");
     }
 
-    navigationAgent ??= GetNode<NavigationAgent3D>("../NavigationAgent3D");
+    navAgent ??= GetNode<NavigationAgent3D>("../NavigationAgent3D");
 
-    if(navigationAgent == null) {
+    if(navAgent == null) {
       GD.PrintErr(
         $"{actor.Name}: No NavigationAgent3D found! AI needs one for movement."
       );
     }
 
-    navigationAgent.TargetPosition =
-      actor.GlobalPosition +
-      new Vector3(
-        rng.Randf() * 4.0f + 1.0f,
-        0.0f,
-        rng.Randf() * 4.0f + 1.0f
-      );
+    navAgent.TargetPosition = actor.patrolPath[0].GlobalPosition;
 
     healthComponent = actor.GetComponent<HealthComponent>();
     healthComponent.Died += OnDied;
 
-    Idling += OnIdling;
-    Patroling += OnPatroling;
-    Chasing += OnChasing;
-    Attacking += OnAttacking;
-    Searching += OnSearching;
-
     rng.Randomize();
-  }
-
-  public override void _Process(double delta) {
   }
 
   public override void _PhysicsProcess(double delta) {
@@ -85,7 +68,7 @@ public partial class AIComponent : Node {
     switch(currentState) {
       case AIState.Idle: UpdateIdle(distance); break;
       case AIState.Patrol: UpdatePatrol(distance); break;
-      case AIState.Chase: UpdateChase(distance, delta); break;
+      case AIState.Chase: UpdateChase(distance); break;
       case AIState.Attack: UpdateAttack(distance); break;
       case AIState.Search: UpdateSearch(distance, delta); break;
       case AIState.Dead: // handled above
@@ -97,30 +80,23 @@ public partial class AIComponent : Node {
     if(distance <= detectionRange) {
       GD.Print($"{actor.Name}: Detected player - chasing!");
       currentState = AIState.Chase;
-      EmitSignalChasing();
     }
   }
 
   private void UpdatePatrol(float distance) {
     if(distance <= detectionRange) {
       currentState = AIState.Chase;
-      EmitSignalChasing();
     }
 
-    // if(NavigationAgent.IsNavigationFinished()) { return; }
+    // if(navAgent.IsNavigationFinished()) { return; }
 
-    if(navigationAgent.IsTargetReached()) {
-      navigationAgent.TargetPosition =
-        actor.GlobalPosition +
-        new Vector3(
-          rng.Randf() * 4.0f + 1.0f,
-          0.0f,
-          rng.Randf() * 4.0f + 1.0f
-        );
+    if(navAgent.IsTargetReached()) {
+      patrolIndex = (patrolIndex + 1) % actor.patrolPath.Length;
+      navAgent.TargetPosition = actor.patrolPath[patrolIndex].GlobalPosition;
     }
 
     Vector3 actorPosition = actor.GlobalTransform.Origin;
-    Vector3 nextPathPosition = navigationAgent.GetNextPathPosition();
+    Vector3 nextPathPosition = navAgent.GetNextPathPosition();
 
     Vector3 direction =
       actorPosition.DirectionTo(nextPathPosition).Normalized();
@@ -128,19 +104,19 @@ public partial class AIComponent : Node {
     input.direction = new(direction.X, direction.Z);
 
     if(!actorPosition.IsEqualApprox(actorPosition + actor.Direction)) {
-      actor.LookAt(actorPosition - actor.Direction);
+      actor.LookAt(actorPosition + actor.Direction);
     }
   }
 
-  private void UpdateChase(float distance, double delta) {
+  private void UpdateChase(float distance) {
     // Face the player (Y-axis rotation only)
     // Move toward player using NavigationAgent or direct movement
-    if(navigationAgent != null && !navigationAgent.IsNavigationFinished()) {
-      navigationAgent.TargetPosition = player.GlobalPosition;
+    if(navAgent != null && !navAgent.IsNavigationFinished()) {
+      navAgent.TargetPosition = player.GlobalPosition;
     }
 
     Vector3 actorPosition = actor.GlobalTransform.Origin;
-    Vector3 nextPathPosition = navigationAgent.GetNextPathPosition();
+    Vector3 nextPathPosition = navAgent.GetNextPathPosition();
 
     Vector3 direction =
       actorPosition.DirectionTo(nextPathPosition).Normalized();
@@ -149,20 +125,20 @@ public partial class AIComponent : Node {
     input.sprint = true;
 
     if(!actorPosition.IsEqualApprox(actorPosition + actor.Direction)) {
-      actor.LookAt(actorPosition - actor.Direction);
+      actor.LookAt(actorPosition + actor.Direction);
     }
 
     // State transitions
-    if(distance <= attackRange) {
-      GD.Print($"{actor.Name}: Entering attack range!");
-      currentState = AIState.Attack;
-      EmitSignalAttacking();
-    } else if(distance > detectionRange * 1.5f) {
-      GD.Print($"{actor.Name}: Lost sight of player - searching!");
-      currentState = AIState.Search;
-      EmitSignalSearching();
-      searchTimer = 0f;
-    }
+    // if(actor.GlobalPosition.DistanceTo(leashPoint) > leashDistance) {
+    //   currentState = AIState.Patrol;
+    // } else if(distance <= attackRange) {
+    //   GD.Print($"{actor.Name}: Entering attack range!");
+    //   currentState = AIState.Attack;
+    // } else if(distance > detectionRange * 1.5f) {
+    //   GD.Print($"{actor.Name}: Lost sight of player - searching!");
+    //   currentState = AIState.Search;
+    //   searchTimer = 0f;
+    // }
   }
 
   private void UpdateAttack(float distance) {
@@ -170,7 +146,6 @@ public partial class AIComponent : Node {
     // For now, just return to chase if player leaves attack range
     if(distance > attackRange) {
       currentState = AIState.Chase;
-      EmitSignalChasing();
     }
   }
 
@@ -180,23 +155,12 @@ public partial class AIComponent : Node {
       searchTimer = 0f;
       GD.Print($"{actor.Name}: Search over - returning to patrol.");
       currentState = AIState.Patrol;
-      EmitSignalPatroling();
-    }
-    if(distance <= detectionRange) {
+    } else if(actor.GlobalPosition.DistanceTo(leashPoint) > leashDistance) {
+      currentState = AIState.Patrol;
+    } else if(distance <= detectionRange) {
       currentState = AIState.Chase;
-      EmitSignalChasing();
     }
   }
-
-  private void OnIdling() { }
-
-  private void OnPatroling() { }
-
-  private void OnChasing() { input.sprint = true; }
-
-  private void OnAttacking() { }
-
-  private void OnSearching() { }
 
   private void OnDied() {
     GD.Print($"{actor.Name}: AI died.");

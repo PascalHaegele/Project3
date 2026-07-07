@@ -10,53 +10,59 @@
 [ext_resource type="Script" uid="uid://d106lxvpexrmj" path="res://components/states/StateIdle.cs" id="6_k1n75"]
 [ext_resource type="Script" uid="uid://brlg5cb3b2dfm" path="res://components/states/StateWalk.cs" id="7_ad4r6"]
 [ext_resource type="Script" uid="uid://centhwh2xuoye" path="res://components/states/StateSprint.cs" id="8_otf45"]
-[ext_resource type="Script" uid="uid://jxbnvwb037xw" path="res://components/states/StateJump.cs" id="9_0pasn"]
-[ext_resource type="Script" uid="uid://7hkl7lnu3cqg" path="res://components/states/StateDash.cs" id="10_kstis"]
 [ext_resource type="Script" uid="uid://d8b6t7u5sv66" path="res://components/states/StateFall.cs" id="11_da4by"]
 
 [sub_resource type="Resource" id="Resource_rt46e"]
 script = ExtResource("2_mka0o")
+walkSpeed = 3.0
+sprintSpeed = 5.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_v4a0d"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_bfp77"]
-size = Vector3(0.2, 0.2, 0.66064453)
+size = Vector3(0.2, 0.2, 0.6)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
 
-[sub_resource type="Resource" id="Resource_veuwo"]
+[sub_resource type="Resource" id="Resource_710do"]
+resource_local_to_scene = true
 script = ExtResource("6_k1n75")
 metadata/_custom_type_script = "uid://d106lxvpexrmj"
 
-[sub_resource type="Resource" id="Resource_0wfyu"]
+[sub_resource type="Resource" id="Resource_p5iym"]
+resource_local_to_scene = true
 script = ExtResource("7_ad4r6")
-speed = 3.0
 metadata/_custom_type_script = "uid://brlg5cb3b2dfm"
 
-[sub_resource type="Resource" id="Resource_jawxn"]
+[sub_resource type="Resource" id="Resource_ad4r6"]
+resource_local_to_scene = true
 script = ExtResource("8_otf45")
-speed = 6.0
 metadata/_custom_type_script = "uid://centhwh2xuoye"
 
-[sub_resource type="Resource" id="Resource_710do"]
-script = ExtResource("9_0pasn")
-metadata/_custom_type_script = "uid://jxbnvwb037xw"
-
-[sub_resource type="Resource" id="Resource_p5iym"]
-script = ExtResource("10_kstis")
-metadata/_custom_type_script = "uid://7hkl7lnu3cqg"
-
-[sub_resource type="Resource" id="Resource_ad4r6"]
+[sub_resource type="Resource" id="Resource_otf45"]
+resource_local_to_scene = true
 script = ExtResource("11_da4by")
 metadata/_custom_type_script = "uid://d8b6t7u5sv66"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
 
-[node name="TestEnemy" type="CharacterBody3D" unique_id=952052820 node_paths=PackedStringArray("components")]
+[sub_resource type="CylinderMesh" id="CylinderMesh_o8bm0"]
+top_radius = 0.0
+bottom_radius = 7.0
+height = 10.749878
+radial_segments = 16
+rings = 0
+cap_top = false
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_710do"]
+points = PackedVector3Array(0, -5.374939, -7, -2.6791306, -5.374939, -6.468285, 0, 5.374939, 0, 2.6777601, -5.374939, -6.468285, -4.9498825, -5.374939, -4.9498825, -6.468285, -5.374939, -2.6791306, -7, -5.374939, 0, -6.468285, -5.374939, 2.6777601, -4.9498825, -5.374939, 4.948512, -2.6791306, -5.374939, 6.466915, 0, -5.374939, 7, 2.6777601, -5.374939, 6.466915, 4.948512, -5.374939, 4.948512, 6.466915, -5.374939, 2.6777601, 7, -5.374939, 0, 6.466915, -5.374939, -2.6791306, 4.948512, -5.374939, -4.9498825)
+
+[node name="TestEnemy" type="CharacterBody3D" unique_id=952052820 node_paths=PackedStringArray("patrolPath", "components")]
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_xmkit")
+patrolPath = []
 velocityInfo = SubResource("Resource_rt46e")
 components = [NodePath("AIComponent"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent")]
 
@@ -65,7 +71,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_v4a0d")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1951825375]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3873272, 0.74493146)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.387, -0.745)
 mesh = SubResource("BoxMesh_bfp77")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1951671070]
@@ -81,6 +87,8 @@ debug_enabled = true
 [node name="AIComponent" type="Node" parent="." unique_id=520362924]
 script = ExtResource("5_mka0o")
 detectionRange = 8.0
+leashDistance = 5.0
+currentState = 1
 metadata/_custom_type_script = "uid://7o1hcb8cvtng"
 
 [node name="VelocityComponent" type="Node" parent="." unique_id=1302938011]
@@ -89,7 +97,7 @@ metadata/_custom_type_script = "uid://2b3a880do5ag"
 
 [node name="StateMachine" type="Node" parent="." unique_id=2024083235]
 script = ExtResource("5_veuwo")
-states = Array[Object]([SubResource("Resource_veuwo"), SubResource("Resource_0wfyu"), SubResource("Resource_jawxn"), SubResource("Resource_710do"), SubResource("Resource_p5iym"), SubResource("Resource_ad4r6")])
+states = Array[Object]([SubResource("Resource_710do"), SubResource("Resource_p5iym"), SubResource("Resource_ad4r6"), SubResource("Resource_otf45")])
 metadata/_custom_type_script = "uid://ghu5ha8v5lp2"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1400482761]
@@ -105,3 +113,17 @@ metadata/_custom_type_script = "uid://t8p3r0lninay"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent" unique_id=1049210021]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_bfp77")
+
+[node name="Vision" type="Area3D" parent="." unique_id=288155143]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Cone" type="MeshInstance3D" parent="Vision" unique_id=1726166761]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1.6000001, -5.874939)
+visible = false
+mesh = SubResource("CylinderMesh_o8bm0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Vision" unique_id=1410797231]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1.6000001, -5.874939)
+shape = SubResource("ConvexPolygonShape3D_710do")

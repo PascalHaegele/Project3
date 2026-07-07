@@ -15,16 +15,16 @@ public partial class StateIdle : State {
       EmitSignalTransition(dashState); return;
     }
     if(input.direction == Vector2.Zero) { return; }
-    if(Godot.Input.IsActionPressed("sprint")) {
+    if(input.sprint) {
       EmitSignalTransition(stateMachine.GetState<StateSprint>()); return;
     }
     EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;
   }
 
-  public override void Enter() => actorVelocityInfo.Speed = 0.0f;
+  public override void Enter() => velocityInfo.Speed = 0.0f;
 
   public override void PhysicsUpdate(double delta) {
-    actorVelocityComponent.Decelerate();
+    velocityComponent.Decelerate();
   }
 }
 

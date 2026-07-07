@@ -3,6 +3,7 @@ using Godot;
 [GlobalClass]
 public partial class HitboxComponent : Area3D {
   public float damage;
+
   public double? lifetime;
   public Shape3D? shape;
   public HitLog? hitLog;
@@ -25,6 +26,14 @@ public partial class HitboxComponent : Area3D {
     }
   }
 
+  public void DisableCollisionShapes() {
+    for(int i = 0; i < GetChildCount(); i++) {
+      if(GetChildOrNull<CollisionShape3D>(i) != null) {
+        GetChild<CollisionShape3D>(i).Disabled = true;
+      }
+    }
+  }
+
   private void OnAreaEntered(Area3D area) {
     if(area is HurtboxComponent hurtbox) {
       if(hitLog != null) {
@@ -35,5 +44,7 @@ public partial class HitboxComponent : Area3D {
 
       hurtbox.RecieveHit(damage);
     }
+    DisableCollisionShapes();
   }
 }
+

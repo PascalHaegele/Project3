@@ -1,26 +1,17 @@
 using Godot;
 
-public partial class TestEnemy : Actor {
-  private AIComponent aiComponent;
-  private StateMachine stateMachine;
-  private VelocityComponent velocityComponent;
-  private HealthComponent healthComponent;
-
-  private InputPackage input = new();
-
+public partial class TestEnemy : Enemy {
   public override void _Ready() {
-    aiComponent = GetComponent<AIComponent>();
+    base._Ready();
 
-    stateMachine = GetComponent<StateMachine>();
-
-    velocityComponent = GetComponent<VelocityComponent>();
-
-    healthComponent = GetComponent<HealthComponent>();
     healthComponent.Died += OnDeath;
+
+    visionArea.BodyEntered += OnPlayerEnteredVision;
+    visionArea.BodyExited += OnPlayerExitedVision;
   }
 
   public override void _Process(double delta) {
-    input = aiComponent.GetInput;
+    input = aiComponent.GetInput();
     stateMachine.input = input;
   }
 
@@ -32,6 +23,17 @@ public partial class TestEnemy : Actor {
       velocityComponent.AddVelocityInDirection(GetGravity() * (float)delta);
     }
     velocityComponent.Move(this);
+  }
+
+  private void OnPlayerEnteredVision(Node3D body) {
+    GD.Print($"Player entered Vision of {Name}");
+    aiComponent.currentState = AIState.Chase;
+  }
+
+  private void OnPlayerExitedVision(Node3D body) {
+    GD.Print($"Player exited Vision of {Name}");
+    aiComponent.currentState = AIState.Patrol;
+    aiComponent.navAgent.TargetPosition = GlobalPosition;
   }
 
   private void OnDeath() {

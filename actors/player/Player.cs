@@ -6,8 +6,6 @@ public partial class Player : Actor {
   private InputComponent inputComponent;
   private StateMachine stateMachine;
 
-  private InputPackage input = new();
-
   [Export] private Weapon weapon;
 
   [Signal] public delegate void InteractingEventHandler();
