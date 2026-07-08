@@ -7,7 +7,9 @@ public partial class PatrolPathConverter : EditorScript {
 
   private Window window;
 
-  private Array<Vector3>positions = [];
+  private Array<Vector3>patrolPoints = [];
+
+  private Vector3 leashPoint = new();
 
   public override void _Run() {
     ei = EditorInterface.Singleton;
@@ -19,68 +21,92 @@ public partial class PatrolPathConverter : EditorScript {
 
     Button closeButton = new();
     closeButton.Text = "close";
-    closeButton.Pressed +=
-      () => window.EmitSignal(Window.SignalName.CloseRequested);
+    closeButton.Pressed += window.QueueFree;
 
     window.AddChild(closeButton);
 
-    Button selectorButton = new();
-    selectorButton.Text = "select node";
-    selectorButton.Pressed +=
+    Button patrolButton = new();
+    patrolButton.Text = "patrol";
+    patrolButton.Pressed +=
       () => ei
         .PopupNodeSelector(
-          Callable.From<NodePath>(OnPatrolRootSelected),
+          Callable.From<NodePath>(OnPatrolSelected),
           [nameof(Node3D)]
         );
 
-    window.AddChild(selectorButton);
+    window.AddChild(patrolButton);
+
+    Button leashButton = new();
+    leashButton.Text = "leash";
+    leashButton.Pressed +=
+      () => ei
+        .PopupNodeSelector(
+          Callable.From<NodePath>(OnLeashSelected),
+          [nameof(Marker3D)]
+        );
+
+    window.AddChild(leashButton);
+
+    Button enemyButton = new();
+    enemyButton.Text = "enemy";
+    enemyButton.Pressed +=
+      () => ei
+        .PopupNodeSelector(
+          Callable.From<NodePath>(OnEnemySelected),
+          [nameof(Enemy)]
+        );
+
+    window.AddChild(enemyButton);
 
     ei.PopupDialog(window, new(100, 100, window.Size));
 
-    closeButton.Position =
+    patrolButton.Position =
       new Vector2(
-        window.Size.X / 2 - closeButton.Size.X,
-        window.Size.Y - closeButton.Size.Y
+        window.Size.X / 2,
+        20
       );
 
-    selectorButton.Position =
+    leashButton.Position =
       new Vector2(
-        window.Size.X / 2 + selectorButton.Size.X,
-        window.Size.Y - selectorButton.Size.Y
+        window.Size.X / 2,
+        patrolButton.Position.Y + 100
+      );
+
+    enemyButton.Position =
+      new Vector2(
+        window.Size.X / 2,
+        leashButton.Position.Y + 100
+      );
+
+    closeButton.Position =
+      new Vector2(
+        window.Size.X / 2,
+        enemyButton.Position.Y + 100
       );
   }
 
-  private void OnPatrolRootSelected(NodePath nodePath) {
+  private void OnPatrolSelected(NodePath nodePath) {
     Node3D patrolRoot = ei.GetEditedSceneRoot().GetNode<Node3D>(nodePath);
     foreach(Node child in patrolRoot.GetChildren()) {
       if(child is Marker3D marker) {
-        positions.Add(marker.GlobalPosition);
+        patrolPoints.Add(marker.GlobalPosition);
       }
     }
+  }
 
-    ei.PopupNodeSelector(
-      Callable.From<NodePath>(OnEnemySelected),
-      [nameof(Enemy)]
-    );
+  private void OnLeashSelected(NodePath nodePath) {
+    Marker3D leash= ei.GetEditedSceneRoot().GetNode<Marker3D>(nodePath);
+    leashPoint = leash.GlobalPosition;
   }
 
   private void OnEnemySelected(NodePath nodePath) {
-    var n = ei.GetEditedSceneRoot().GetNode(nodePath);
-    var script = (CSharpScript)n.GetScript();
+    Node body = ei.GetEditedSceneRoot().GetNode(nodePath);
 
-    GD.Print($"runtime={n.GetType().FullName}");
-    GD.Print($"scriptPath={script.ResourcePath}");
-    GD.Print($"scriptClass={script.GetClass()}");
-    GD.Print($"typeof(TestEnemy)={typeof(TestEnemy).FullName}");
-    GD.Print($"sameType={ReferenceEquals(n.GetType(), typeof(TestEnemy))}");
-    GD.Print($"isTestEnemy={n is TestEnemy}");
-    // CharacterBody3D body =
-    //   ei.GetEditedSceneRoot().GetNode<CharacterBody3D>(nodePath);
-    // if(body is TestEnemy enemy) {
-    //   GD.Print(enemy);
-    // }
-    // enemy.info.patrolPath = new Vector3[positions.Count];
-    // positions.CopyTo(enemy.info.patrolPath, 0);
+    EnemyInfo enemyInfo =
+      (EnemyInfo)(GodotObject)body.Get(Enemy.PropertyName.info);
+    enemyInfo.patrolPath = new Vector3[patrolPoints.Count];
+    enemyInfo.patrolPath = [.. patrolPoints];
+    enemyInfo.leashPoint = leashPoint;
   }
 }
 

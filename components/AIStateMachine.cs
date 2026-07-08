@@ -57,10 +57,6 @@ public partial class AIStateMachine : Node {
 
     currentState.Update(delta);
     currentState.CheckRelevance(playerDistance, leashDistance);
-
-    Debug
-      .panel
-      .AddProperty("Current State", currentState.GetType().ToString(), 1);
   }
 
   public override void _PhysicsProcess(double delta) {

@@ -18,10 +18,10 @@
 [ext_resource type="Script" uid="uid://d8b6t7u5sv66" path="res://components/states/StateFall.cs" id="11_da4by"]
 [ext_resource type="Script" uid="uid://bh1wcy7x4xxqk" path="res://components/AIDetectionComponent.cs" id="17_da4by"]
 
-[sub_resource type="Resource" id="Resource_rt46e"]
+[sub_resource type="Resource" id="Resource_qrxv1"]
 script = ExtResource("2_mka0o")
 walkSpeed = 3.0
-sprintSpeed = 5.0
+sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_v4a0d"]
@@ -55,22 +55,22 @@ metadata/_custom_type_script = "uid://dgf67hc0g785g"
 script = ExtResource("9_jm64t")
 metadata/_custom_type_script = "uid://drdb24umi8upn"
 
-[sub_resource type="Resource" id="Resource_v554o"]
+[sub_resource type="Resource" id="Resource_da4by"]
 resource_local_to_scene = true
 script = ExtResource("6_k1n75")
 metadata/_custom_type_script = "uid://d106lxvpexrmj"
 
-[sub_resource type="Resource" id="Resource_robej"]
+[sub_resource type="Resource" id="Resource_v554o"]
 resource_local_to_scene = true
 script = ExtResource("7_ad4r6")
 metadata/_custom_type_script = "uid://brlg5cb3b2dfm"
 
-[sub_resource type="Resource" id="Resource_nl8p5"]
+[sub_resource type="Resource" id="Resource_robej"]
 resource_local_to_scene = true
 script = ExtResource("8_otf45")
 metadata/_custom_type_script = "uid://centhwh2xuoye"
 
-[sub_resource type="Resource" id="Resource_jm64t"]
+[sub_resource type="Resource" id="Resource_nl8p5"]
 resource_local_to_scene = true
 script = ExtResource("11_da4by")
 metadata/_custom_type_script = "uid://d8b6t7u5sv66"
@@ -156,8 +156,8 @@ _data = {
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_xmkit")
-velocityInfo = SubResource("Resource_rt46e")
-components = [NodePath("AIStateMachine"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent"), NodePath("MeshInstance3D/MeshInstance3D2/HitboxComponent"), NodePath("AIDetectionComponent")]
+velocityInfo = SubResource("Resource_qrxv1")
+components = [NodePath("AIStateMachine"), NodePath("VelocityComponent"), NodePath("StateMachine"), NodePath("HealthComponent"), NodePath("MeshInstance3D/MeshInstance3D2/HitboxComponent"), NodePath("HurtboxComponent"), NodePath("AIDetectionComponent")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1364863915]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -202,7 +202,7 @@ metadata/_custom_type_script = "uid://2b3a880do5ag"
 
 [node name="StateMachine" type="Node" parent="." unique_id=2024083235]
 script = ExtResource("5_veuwo")
-states = Array[Object]([SubResource("Resource_v554o"), SubResource("Resource_robej"), SubResource("Resource_nl8p5"), SubResource("Resource_jm64t")])
+states = Array[Object]([SubResource("Resource_da4by"), SubResource("Resource_v554o"), SubResource("Resource_robej"), SubResource("Resource_nl8p5")])
 metadata/_custom_type_script = "uid://ghu5ha8v5lp2"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1400482761]

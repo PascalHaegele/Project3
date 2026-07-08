@@ -3,19 +3,19 @@
 [ext_resource type="Script" uid="uid://cohnw7rgixh8v" path="res://weapons/Weapon.cs" id="1_hfse1"]
 [ext_resource type="Script" uid="uid://bv03t2orsyg68" path="res://weapons/WeaponInfo.cs" id="2_cffpg"]
 [ext_resource type="PackedScene" uid="uid://di3l0krand30c" path="res://weapons/revolver/Revolver.glb" id="3_b7g5s"]
-[ext_resource type="PackedScene" uid="uid://cvm5xga0cvc2f" path="res://weapons/projectiles/bullet/bullet.tscn" id="3_cffpg"]
+[ext_resource type="PackedScene" uid="uid://cvm5xga0cvc2f" path="res://weapons/projectiles/bullet.tscn" id="3_cffpg"]
 
 [sub_resource type="Resource" id="Resource_bfp77"]
 script = ExtResource("2_cffpg")
 fireRate = 2.0
 magazineSize = 6
 projectile = ExtResource("3_cffpg")
+projectileSpeed = 75.0
 metadata/_custom_type_script = "uid://bv03t2orsyg68"
 
 [node name="Revolver" type="Node3D" unique_id=203871714 node_paths=PackedStringArray("projectileSpawn")]
 script = ExtResource("1_hfse1")
 info = SubResource("Resource_bfp77")
-projectile = ExtResource("3_cffpg")
 projectileSpawn = NodePath("ProjectileSpawn")
 metadata/_custom_type_script = "uid://cohnw7rgixh8v"
 
