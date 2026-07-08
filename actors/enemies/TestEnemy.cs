@@ -2,24 +2,15 @@ using Godot;
 
 public partial class TestEnemy : Enemy {
   private HitboxComponent hitboxComponent;
-  private AnimationPlayer animationPlayer;
 
   public override void _Ready() {
     base._Ready();
 
     hitboxComponent = GetComponent<HitboxComponent>();
-    animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
-    if(patrolPath != null) { GlobalPosition = patrolPath[0].GlobalPosition; }
+    if(info.patrolPath != null) { GlobalPosition = info.patrolPath[0]; }
 
     healthComponent.Died += OnDeath;
-
-    if(visionArea != null) {
-      visionArea.BodyEntered += OnPlayerEnteredVision;
-      visionArea.BodyExited += OnPlayerExitedVision;
-    }
-
-    // aiComponent.Attacking += OnAttacking;
   }
 
   public override void _Process(double delta) {
@@ -51,10 +42,6 @@ public partial class TestEnemy : Enemy {
     // GD.Print($"{Name} searching");
     // aiComponent.navAgent.TargetPosition = GlobalPosition;
     // aiComponent.currentState = AIStateEnum.Search;
-  }
-
-  private void OnAttacking() {
-    animationPlayer.Play("attack");
   }
 
   private void OnDeath() {

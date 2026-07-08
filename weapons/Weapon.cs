@@ -1,20 +1,17 @@
 using Godot;
 
-public enum WeaponType { Crossbow, Shotgun }
-
 [GlobalClass]
 public partial class Weapon : Node3D {
-  [Export] private WeaponInfo info;
-  [Export] private PackedScene projectile;
-  [Export] private Marker3D? projectileSpawn;
+  [Export] public WeaponInfo info;
+  [Export] protected Marker3D projectileSpawn;
 
-  private float fireCooldown;
-  private float reloadTimer;
+  protected float fireCooldown;
+  protected float reloadTimer;
 
-  private Projectile? p;
+  protected Projectile p;
 
-  public int CurrentAmmo { get; private set; }
-  public bool Reloading { get; private set; }
+  public int CurrentAmmo { get; protected set; }
+  public bool Reloading { get; protected set; }
 
   public float DamageMultiplier => info.damageMulitplier;
 
@@ -22,9 +19,10 @@ public partial class Weapon : Node3D {
     if(projectileSpawn == null) {
       GD.PrintErr($"{Name} missing Projectile Spawn Marker");
     }
+
     CurrentAmmo = info.magazineSize;
 
-    SpawnProjectile();
+    // SpawnProjectiles();
   }
 
   public override void _PhysicsProcess(double delta) {
@@ -45,8 +43,16 @@ public partial class Weapon : Node3D {
 
     fireCooldown = 1.0f / info.fireRate;
 
-    p.shotPosition = GlobalPosition;
+    p = info.projectile.Instantiate<Projectile>();
+    // p.hitbox.EnableCollisionShapes();
+    if(p == null) { return; }
+    AddChild(p);
+    p.GlobalPosition =
+      projectileSpawn != null ? projectileSpawn.GlobalPosition : GlobalPosition;
+    p.GlobalRotation =
+      projectileSpawn != null ? projectileSpawn.GlobalRotation : GlobalRotation;
     p.ProcessMode = ProcessModeEnum.Inherit;
+    p.shotPosition = GlobalPosition;
     p.TopLevel = true;
 
     GD.Print($"{Name} fired");
@@ -66,20 +72,21 @@ public partial class Weapon : Node3D {
     Reloading = false;
     CurrentAmmo = info.magazineSize;
 
-    SpawnProjectile();
+    // SpawnProjectiles();
 
     GD.Print($"{Name} reload finished");
     GD.Print($"{Name} Ammo: {CurrentAmmo}");
   }
 
-  private void SpawnProjectile() {
-    p = projectile.InstantiateOrNull<Projectile>();
+  private void SpawnProjectiles() {
+    p = info.projectile.InstantiateOrNull<Projectile>();
     if(p == null) { return; }
     AddChild(p);
     p.GlobalPosition =
       projectileSpawn != null ? projectileSpawn.GlobalPosition : GlobalPosition;
     p.GlobalRotation =
       projectileSpawn != null ? projectileSpawn.GlobalRotation : GlobalRotation;
+    p.hitbox.DisableCollisionShapes();
     p.ProcessMode = ProcessModeEnum.Disabled;
   }
 }

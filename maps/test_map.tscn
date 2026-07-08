@@ -91,9 +91,8 @@ shadow_enabled = true
 
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("1_k1jtb")]
 
-[node name="TestEnemy" parent="." unique_id=952052820 node_paths=PackedStringArray("patrolPath") instance=ExtResource("2_pbr4s")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -13.567976, 0, 3.5622349)
-patrolPath = [NodePath("../PatrolPath/Marker3D"), NodePath("../PatrolPath/Marker3D2"), NodePath("../PatrolPath/Marker3D3"), NodePath("../PatrolPath/Marker3D4"), NodePath("../PatrolPath/Marker3D5"), NodePath("../PatrolPath/Marker3D6")]
+[node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_pbr4s")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -15.386596, 0, -8.256338)
 
 [node name="PatrolPath" type="Node3D" parent="." unique_id=1442712965]
 
@@ -119,3 +118,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.650803, 0, -12.929461)
 mesh = SubResource("ImmediateMesh_bfp77")
 script = ExtResource("3_pwco0")
 metadata/_custom_type_script = "uid://cq4ddchn0vss"
+
+[node name="Marker3D" type="Marker3D" parent="." unique_id=350076741]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.593309)

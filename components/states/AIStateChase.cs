@@ -6,13 +6,13 @@ public partial class AIStateChase : AIState {
     float playerDistance,
     float leashDistance
   ) {
-    if(playerDistance <= actor.attackRange) {
+    if(playerDistance <= actor.info.attackRange) {
       EmitSignalTransition(stateMachine.GetState<AIStateAttack>()); return;
     }
-    if(leashDistance > actor.leashLength) {
+    if(leashDistance > actor.info.leashLength) {
       EmitSignalTransition(stateMachine.GetState<AIStatePatrol>()); return;
     }
-    if(!actor.playerInVision) {
+    if(!actor.playerInVision && !actor.playerInHearing) {
       EmitSignalTransition(stateMachine.GetState<AIStateSearch>()); return;
     }
   }

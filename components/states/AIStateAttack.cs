@@ -6,9 +6,13 @@ public partial class AIStateAttack : AIState {
     float playerDistance,
     float leashDistance
   ) {
-    if(playerDistance > actor.attackRange) {
+    if(playerDistance > actor.info.attackRange) {
       EmitSignalTransition(stateMachine.GetState<AIStateChase>()); return;
     }
+  }
+
+  public override void Enter() {
+    actor.animationPlayer.Play("attack");
   }
 }
 

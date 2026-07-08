@@ -9,13 +9,13 @@ public partial class AIStateSearch : AIState {
     float playerDistance,
     float leashDistance
   ) {
-    if(actor.playerInVision) {
+    if(leashDistance > actor.info.leashLength) {
+      EmitSignalTransition(stateMachine.GetState<AIStatePatrol>()); return;
+    }
+    if(actor.playerInVision || actor.playerInHearing) {
       EmitSignalTransition(stateMachine.GetState<AIStateChase>()); return;
     }
     if(searchTimer >= searchDuration) {
-      EmitSignalTransition(stateMachine.GetState<AIStatePatrol>()); return;
-    }
-    if(leashDistance > actor.leashLength) {
       EmitSignalTransition(stateMachine.GetState<AIStatePatrol>()); return;
     }
   }

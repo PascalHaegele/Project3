@@ -4,13 +4,11 @@ using Godot;
 public partial class Projectile : RigidBody3D {
   public Vector3 shotPosition = new();
 
-  [Export] private ProjectileInfo info;
-
   private bool hit;
   private Timer freeTimer;
 
   private Weapon weapon;
-  private HitboxComponent hitbox;
+  public HitboxComponent hitbox;
 
   private Vector3 hitPosition;
 
@@ -24,7 +22,7 @@ public partial class Projectile : RigidBody3D {
 
     weapon = GetParent<Weapon>();
     hitbox = GetNode<HitboxComponent>("HitboxComponent");
-    hitbox.damage = info.damage * weapon.DamageMultiplier;
+    hitbox.damage = weapon.info.projectileDamage * weapon.DamageMultiplier;
   }
 
   public override void _Process(double delta) {
@@ -43,7 +41,9 @@ public partial class Projectile : RigidBody3D {
   public override void _PhysicsProcess(double delta) {
     if(hit) { return; }
     KinematicCollision3D collision3D =
-      MoveAndCollide(-GlobalBasis.Z * info.speed * (float)delta);
+      MoveAndCollide(
+        -GlobalBasis.Z * weapon.info.projectileSpeed * (float)delta
+      );
 
     if(collision3D != null) {
       hit = true;
@@ -60,7 +60,9 @@ public partial class Projectile : RigidBody3D {
       }
     }
 
-    if(GlobalPosition.DistanceTo(shotPosition) > info.range) { QueueFree(); }
+    if(GlobalPosition.DistanceTo(shotPosition) > weapon.info.range) {
+      QueueFree();
+    }
   }
 }
 

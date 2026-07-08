@@ -1,29 +1,53 @@
 using Godot;
 
 [GlobalClass]
-public partial class Enemy : Actor {
-  [Export] public Marker3D[]? patrolPath;
-  [Export] public Marker3D? leashPoint;
+public abstract partial class Enemy : Actor {
+  [Export] public EnemyInfo info = new();
 
-  [Export] public float attackRange = 2.0f;
-  [Export] public float leashLength = 20.0f;
+  public AnimationPlayer animationPlayer;
 
   public bool playerInVision;
+  public bool playerInHearing;
 
   protected AIStateMachine aiStateMachine;
   protected StateMachine stateMachine;
   protected VelocityComponent velocityComponent;
   protected HealthComponent healthComponent;
-
-  protected Area3D visionArea;
+  protected AIDetectionComponent detectionComponent;
 
   public override void _Ready() {
+    animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+
     aiStateMachine = GetComponent<AIStateMachine>();
     stateMachine = GetComponent<StateMachine>();
     velocityComponent = GetComponent<VelocityComponent>();
     healthComponent = GetComponent<HealthComponent>();
+    detectionComponent = GetComponent<AIDetectionComponent>();
 
-    visionArea = GetNode<Area3D>("Vision");
+    detectionComponent.PlayerEnteredVision += OnPlayerEnteredVision;
+    detectionComponent.PlayerExitedVision += OnPlayerExitedVision;
+    detectionComponent.PlayerEnteredHearing += OnPlayerEnteredHearing;
+    detectionComponent.PlayerExitedHearing += OnPlayerExitedHearing;
+  }
+
+  protected virtual void OnPlayerEnteredVision() {
+    playerInVision = true;
+    GD.Print($"Player entered Vision of {Name}");
+  }
+
+  protected virtual void OnPlayerExitedVision() {
+    playerInVision = false;
+    GD.Print($"Player exited Vision of {Name}");
+  }
+
+  protected virtual void OnPlayerEnteredHearing() {
+    playerInHearing = true;
+    GD.Print($"Player entered Hearing of {Name}");
+  }
+
+  protected virtual void OnPlayerExitedHearing() {
+    playerInHearing = false;
+    GD.Print($"Player exited Hearing of {Name}");
   }
 }
 

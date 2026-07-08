@@ -34,6 +34,14 @@ public partial class HitboxComponent : Area3D {
     }
   }
 
+  public void EnableCollisionShapes() {
+    for(int i = 0; i < GetChildCount(); i++) {
+      if(GetChildOrNull<CollisionShape3D>(i) != null) {
+        GetChild<CollisionShape3D>(i).Disabled = false;
+      }
+    }
+  }
+
   private void OnAreaEntered(Area3D area) {
     if(area is HurtboxComponent hurtbox) {
       if(hitLog != null) {

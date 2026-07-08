@@ -4,8 +4,6 @@ using System.Diagnostics;
 
 [GlobalClass]
 public partial class AIStateMachine : Node {
-  public InputPackage GetInput => currentState.input;
-
   [Export] private AIState[] states;
   [Export] private AIState? startingState;
   private AIState currentState;
@@ -20,22 +18,24 @@ public partial class AIStateMachine : Node {
   private Vector3 leashPoint;
   private float leashDistance;
 
+  public InputPackage GetInput => currentState.input;
+
   public override void _Ready() {
     actor = GetParent<Enemy>();
     player = GetTree().Root.FindChild("Player", true, false) as Player;
 
     navAgent ??= GetNode<NavigationAgent3D>("../NavigationAgent3D");
 
-    if(actor.patrolPath != null) {
-      if(actor.patrolPath.Length > 0) {
-        navAgent.TargetPosition = actor.patrolPath[0].GlobalPosition;
+    if(actor.info.patrolPath != null) {
+      if(actor.info.patrolPath.Length > 0) {
+        navAgent.TargetPosition = actor.info.patrolPath[0];
       }
     }
 
     leashPoint =
-      actor.leashPoint == null ?
+      actor.info.leashPoint == Vector3.Zero ?
       actor.GlobalPosition :
-      actor.leashPoint.GlobalPosition;
+      actor.info.leashPoint;
 
     foreach(AIState state in states) {
       state.Init(actor, player, this, navAgent);
@@ -45,7 +45,7 @@ public partial class AIStateMachine : Node {
     currentState = startingState ?? states[0];
 
     if(currentState == null) {
-      GD.PrintErr($"{actor.Name} StateMachine has no starting State");
+      GD.PrintErr($"{actor.Name} AIStateMachine has no starting State");
     }
 
     currentState.Enter();
@@ -83,7 +83,7 @@ public partial class AIStateMachine : Node {
   private void OnStateTransition(AIState newState) {
     if(!states.Contains(newState)) {
       GD.PrintErr(
-        $"{actor.Name} StateMachine does not contain {newState.GetType()}"
+        $"{actor.Name} AIStateMachine does not contain {newState.GetType()}"
       );
       return;
     }
@@ -92,7 +92,9 @@ public partial class AIStateMachine : Node {
 
     currentState.Exit();
     currentState = newState;
-    newState.Enter();
+    currentState.Enter();
+
+    GD.Print($"{actor.Name} transitioned to {currentState.GetType()}");
   }
 }
 

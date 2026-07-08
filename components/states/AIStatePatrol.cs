@@ -8,18 +8,20 @@ public partial class AIStatePatrol : AIState {
     float playerDistance,
     float leashDistance
   ) {
-    if(actor.playerInVision) {
+    if(leashDistance > actor.info.leashLength) { return; }
+    if(actor.playerInVision || actor.playerInHearing) {
       EmitSignalTransition(stateMachine.GetState<AIStateChase>()); return;
     }
   }
 
   public override void PhysicsUpdate(double delta) {
-    if(actor.patrolPath == null) { return; }
-    if(actor.patrolPath.Length < 1) { return; }
+    if(actor.info.patrolPath == null) { return; }
+    if(actor.info.patrolPath.Length < 1) { return; }
 
     if(navAgent.IsTargetReached()) {
-      patrolIndex = Mathf.PosMod(++patrolIndex, actor.patrolPath.Length - 1);
-      navAgent.TargetPosition = actor.patrolPath[patrolIndex].GlobalPosition;
+      patrolIndex =
+        Mathf.PosMod(++patrolIndex, actor.info.patrolPath.Length - 1);
+      navAgent.TargetPosition = actor.info.patrolPath[patrolIndex];
     }
 
     Vector3 actorPosition = actor.GlobalTransform.Origin;

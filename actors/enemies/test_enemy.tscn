@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://centhwh2xuoye" path="res://components/states/StateSprint.cs" id="8_otf45"]
 [ext_resource type="Script" uid="uid://drdb24umi8upn" path="res://components/states/AIStateSearch.cs" id="9_jm64t"]
 [ext_resource type="Script" uid="uid://d8b6t7u5sv66" path="res://components/states/StateFall.cs" id="11_da4by"]
+[ext_resource type="Script" uid="uid://bh1wcy7x4xxqk" path="res://components/AIDetectionComponent.cs" id="17_da4by"]
 
 [sub_resource type="Resource" id="Resource_rt46e"]
 script = ExtResource("2_mka0o")
@@ -54,22 +55,22 @@ metadata/_custom_type_script = "uid://dgf67hc0g785g"
 script = ExtResource("9_jm64t")
 metadata/_custom_type_script = "uid://drdb24umi8upn"
 
-[sub_resource type="Resource" id="Resource_4uygd"]
+[sub_resource type="Resource" id="Resource_v554o"]
 resource_local_to_scene = true
 script = ExtResource("6_k1n75")
 metadata/_custom_type_script = "uid://d106lxvpexrmj"
 
-[sub_resource type="Resource" id="Resource_ir6ty"]
+[sub_resource type="Resource" id="Resource_robej"]
 resource_local_to_scene = true
 script = ExtResource("7_ad4r6")
 metadata/_custom_type_script = "uid://brlg5cb3b2dfm"
 
-[sub_resource type="Resource" id="Resource_vkxon"]
+[sub_resource type="Resource" id="Resource_nl8p5"]
 resource_local_to_scene = true
 script = ExtResource("8_otf45")
 metadata/_custom_type_script = "uid://centhwh2xuoye"
 
-[sub_resource type="Resource" id="Resource_gfvj2"]
+[sub_resource type="Resource" id="Resource_jm64t"]
 resource_local_to_scene = true
 script = ExtResource("11_da4by")
 metadata/_custom_type_script = "uid://d8b6t7u5sv66"
@@ -86,6 +87,9 @@ cap_top = false
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_710do"]
 points = PackedVector3Array(0, -5.374939, -7, -2.6791306, -5.374939, -6.468285, 0, 5.374939, 0, 2.6777601, -5.374939, -6.468285, -4.9498825, -5.374939, -4.9498825, -6.468285, -5.374939, -2.6791306, -7, -5.374939, 0, -6.468285, -5.374939, 2.6777601, -4.9498825, -5.374939, 4.948512, -2.6791306, -5.374939, 6.466915, 0, -5.374939, 7, 2.6777601, -5.374939, 6.466915, 4.948512, -5.374939, 4.948512, 6.466915, -5.374939, 2.6777601, 7, -5.374939, 0, 6.466915, -5.374939, -2.6791306, 4.948512, -5.374939, -4.9498825)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bfp77"]
+radius = 4.0
 
 [sub_resource type="Animation" id="Animation_ad4r6"]
 length = 0.001
@@ -148,13 +152,12 @@ _data = {
 &"attack": SubResource("Animation_otf45")
 }
 
-[node name="TestEnemy" type="CharacterBody3D" unique_id=952052820 node_paths=PackedStringArray("patrolPath", "components")]
+[node name="TestEnemy" type="CharacterBody3D" unique_id=952052820 node_paths=PackedStringArray("components")]
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_xmkit")
-patrolPath = []
 velocityInfo = SubResource("Resource_rt46e")
-components = [NodePath("AIStateMachine"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent"), NodePath("MeshInstance3D/MeshInstance3D2/HitboxComponent")]
+components = [NodePath("AIStateMachine"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent"), NodePath("MeshInstance3D/MeshInstance3D2/HitboxComponent"), NodePath("AIDetectionComponent")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1364863915]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -199,7 +202,7 @@ metadata/_custom_type_script = "uid://2b3a880do5ag"
 
 [node name="StateMachine" type="Node" parent="." unique_id=2024083235]
 script = ExtResource("5_veuwo")
-states = Array[Object]([SubResource("Resource_4uygd"), SubResource("Resource_ir6ty"), SubResource("Resource_vkxon"), SubResource("Resource_gfvj2")])
+states = Array[Object]([SubResource("Resource_v554o"), SubResource("Resource_robej"), SubResource("Resource_nl8p5"), SubResource("Resource_jm64t")])
 metadata/_custom_type_script = "uid://ghu5ha8v5lp2"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1400482761]
@@ -216,19 +219,30 @@ metadata/_custom_type_script = "uid://t8p3r0lninay"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_bfp77")
 
-[node name="Vision" type="Area3D" parent="." unique_id=288155143]
+[node name="AIDetectionComponent" type="Node3D" parent="." unique_id=1688496113]
+script = ExtResource("17_da4by")
+metadata/_custom_type_script = "uid://bh1wcy7x4xxqk"
+
+[node name="Vision" type="Area3D" parent="AIDetectionComponent" unique_id=288155143]
 collision_layer = 0
 collision_mask = 2
-monitorable = false
 
-[node name="Cone" type="MeshInstance3D" parent="Vision" unique_id=1726166761]
+[node name="Cone" type="MeshInstance3D" parent="AIDetectionComponent/Vision" unique_id=1726166761]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1.6000001, -5.874939)
 visible = false
 mesh = SubResource("CylinderMesh_o8bm0")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Vision" unique_id=1410797231]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AIDetectionComponent/Vision" unique_id=1410797231]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1.6000001, -5.874939)
 shape = SubResource("ConvexPolygonShape3D_710do")
+
+[node name="Hearing" type="Area3D" parent="AIDetectionComponent" unique_id=1866108236]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AIDetectionComponent/Hearing" unique_id=1070024788]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_bfp77")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=946372071]
 libraries/ = SubResource("AnimationLibrary_0pasn")

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_0wchr"]
 [ext_resource type="Script" uid="uid://ghu5ha8v5lp2" path="res://components/StateMachine.cs" id="3_bop6h"]
 [ext_resource type="Script" uid="uid://dc3slcqxdplvw" path="res://components/CameraComponent.cs" id="3_lsln6"]
+[ext_resource type="PackedScene" uid="uid://cohtww8gqmevr" path="res://weapons/revolver/revolver.tscn" id="4_0wchr"]
 [ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="7_hiosj"]
 [ext_resource type="Script" uid="uid://d106lxvpexrmj" path="res://components/states/StateIdle.cs" id="7_qrxv1"]
 [ext_resource type="Script" uid="uid://brlg5cb3b2dfm" path="res://components/states/StateWalk.cs" id="8_dqf5y"]
@@ -14,7 +15,6 @@
 [ext_resource type="Script" uid="uid://7hkl7lnu3cqg" path="res://components/states/StateDash.cs" id="12_lj3dd"]
 [ext_resource type="Script" uid="uid://g3kw63x81wsu" path="res://components/InventoryComponent.cs" id="13_7aotg"]
 [ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="14_0wchr"]
-[ext_resource type="PackedScene" uid="uid://3g43korc3kuh" path="res://weapons/crossbow/crossbow.tscn" id="14_k67x5"]
 [ext_resource type="Script" uid="uid://385nx60lb30b" path="res://core/debug/DebugPanel.cs" id="15_12xki"]
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="15_qrxv1"]
 
@@ -73,7 +73,7 @@ PanelContainer/styles/panel = SubResource("StyleBoxFlat_yibi5")
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_nvxhs")
-weapon = NodePath("CameraPivot/Crossbow")
+weapon = NodePath("CameraPivot/Revolver")
 velocityInfo = SubResource("Resource_0wchr")
 components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("HealthComponent"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent")]
 
@@ -91,8 +91,8 @@ tiltLowerLimit = -1.3089969389957472
 tiltUpperLimit = 1.3962634015954636
 metadata/_custom_type_script = "uid://dc3slcqxdplvw"
 
-[node name="Crossbow" parent="CameraPivot" unique_id=454790018 instance=ExtResource("14_k67x5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.16500008, -0.292)
+[node name="Revolver" parent="CameraPivot" unique_id=203871714 instance=ExtResource("4_0wchr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.128, -0.244, -0.498)
 
 [node name="InputComponent" type="Node" parent="." unique_id=536807353]
 script = ExtResource("8_hiosj")

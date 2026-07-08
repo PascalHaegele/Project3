@@ -5,7 +5,6 @@ public abstract partial class AIState : Resource {
   protected Enemy actor;
   protected Player player;
   protected AIStateMachine stateMachine;
-  protected AIComponent aiComponent;
   protected NavigationAgent3D navAgent;
 
   public InputPackage input = new();
@@ -27,8 +26,6 @@ public abstract partial class AIState : Resource {
     this.player = player;
     this.stateMachine = stateMachine;
     this.navAgent = navAgent;
-
-    aiComponent = actor.GetComponent<AIComponent>();
   }
 
   public virtual void Enter() { }

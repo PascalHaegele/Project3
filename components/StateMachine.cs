@@ -67,7 +67,7 @@ public partial class StateMachine : Node {
 
     currentState.Exit();
     currentState = newState;
-    newState.Enter();
+    currentState.Enter();
   }
 }
 
