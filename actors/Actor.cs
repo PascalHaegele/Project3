@@ -10,6 +10,8 @@ public abstract partial class Actor : CharacterBody3D {
 
   public Vector3 Direction { get; protected set; }
 
+  public override void _Ready() => velocityInfo.ResourceLocalToScene = true;
+
   public T? GetComponent<T>() where T : Node {
     foreach(Node component in components) {
       if(component is T) { return component as T; }

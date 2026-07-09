@@ -40,9 +40,13 @@ public partial class AIStateMachine : Node {
     foreach(AIState state in states) {
       state.Init(actor, player, this, navAgent);
       state.Transition += OnStateTransition;
+      state.Start();
     }
 
-    currentState = startingState ?? states[0];
+    currentState =
+      GetStateOrNull<AIStatePatrol> == null || actor.info.patrolPath == null ?
+      GetState<AIStateIdle>() :
+      GetState<AIStatePatrol>();
 
     if(currentState == null) {
       GD.PrintErr($"{actor.Name} AIStateMachine has no starting State");
@@ -76,7 +80,13 @@ public partial class AIStateMachine : Node {
     return null;
   }
 
-  private void OnStateTransition(AIState newState) {
+  public T? GetStateOrNull<T>() where T : AIState {
+    foreach(AIState state in states) { if(state is T) { return state as T; } }
+    return null;
+  }
+
+  private void OnStateTransition(AIState? newState) {
+    if(newState == null) { return; }
     if(!states.Contains(newState)) {
       GD.PrintErr(
         $"{actor.Name} AIStateMachine does not contain {newState.GetType()}"

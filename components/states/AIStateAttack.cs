@@ -13,6 +13,17 @@ public partial class AIStateAttack : AIState {
 
   public override void Enter() {
     actor.animationPlayer.Play("attack");
+    actor.animationPlayer.AnimationFinished += OnAnimationFinished;
+    actor.GetComponent<HitboxComponent>().EnableCollisionShapes();
+  }
+
+  public override void Exit() {
+    actor.animationPlayer.AnimationFinished -= OnAnimationFinished;
+    actor.GetComponent<HitboxComponent>().DisableCollisionShapes();
+  }
+
+  private void OnAnimationFinished(StringName animName) {
+    actor.animationPlayer.Play("attack");
   }
 }
 

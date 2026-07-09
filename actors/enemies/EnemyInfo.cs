@@ -1,6 +1,6 @@
 using Godot;
 
-[GlobalClass]
+[Tool, GlobalClass]
 public partial class EnemyInfo : Resource {
   [Export] public Vector3[] patrolPath;
 

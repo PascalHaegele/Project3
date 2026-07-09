@@ -16,7 +16,7 @@ public abstract partial class AIState : Resource {
     float leashDistance
   );
 
-  public virtual void Init(
+  public void Init(
     Enemy actor,
     Player player,
     AIStateMachine stateMachine,
@@ -27,6 +27,8 @@ public abstract partial class AIState : Resource {
     this.stateMachine = stateMachine;
     this.navAgent = navAgent;
   }
+
+  public virtual void Start() { }
 
   public virtual void Enter() { }
 

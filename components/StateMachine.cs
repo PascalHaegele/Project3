@@ -17,6 +17,7 @@ public partial class StateMachine : Node {
     foreach(State state in states) {
       state.Init(actor, this);
       state.Transition += OnStateTransition;
+      state.Start();
     }
 
     currentState = startingState ?? states[0];

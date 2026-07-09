@@ -52,7 +52,7 @@ public partial class HitboxComponent : Area3D {
 
       hurtbox.RecieveHit(damage);
     }
-    DisableCollisionShapes();
+    if(GetParent() is Projectile) { DisableCollisionShapes(); }
   }
 }
 

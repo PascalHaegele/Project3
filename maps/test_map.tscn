@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://co62vn6pet0yj" path="res://actors/player/player.tscn" id="1_k1jtb"]
 [ext_resource type="PackedScene" uid="uid://c55wv856x1kmu" path="res://actors/enemies/test_enemy.tscn" id="2_pbr4s"]
-[ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="3_42yok"]
 [ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="3_pwco0"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_bfp77"]
@@ -23,11 +22,6 @@ sky = SubResource("Sky_pbr4s")
 glow_enabled = true
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_bfp77"]
-
-[sub_resource type="Resource" id="Resource_42yok"]
-script = ExtResource("3_42yok")
-patrolPath = PackedVector3Array(-8, 0, -17, 6.77744, 0, -16.653843, 15.346003, 0, -4.8959856, 0.55296326, 0, -5.0219855, -14.483469, 0, -2.364942, -16.650803, 0, -12.929461)
-leashPoint = Vector3(0, 0, -14.593309)
 
 [node name="TestMap" type="Node3D" unique_id=1304355676]
 
@@ -127,4 +121,3 @@ metadata/_custom_type_script = "uid://cq4ddchn0vss"
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_pbr4s")]
 transform = Transform3D(-0.08082022, 0, -0.9967287, 0, 1, 0, 0.9967287, 0, -0.08082022, -3.4765697, 0, -14.940077)
-info = SubResource("Resource_42yok")

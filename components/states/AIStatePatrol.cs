@@ -14,6 +14,10 @@ public partial class AIStatePatrol : AIState {
     }
   }
 
+  public override void Enter() {
+    navAgent.TargetPosition = actor.info.patrolPath[patrolIndex];
+  }
+
   public override void PhysicsUpdate(double delta) {
     if(actor.info.patrolPath == null) { return; }
     if(actor.info.patrolPath.Length < 1) { return; }

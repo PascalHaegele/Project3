@@ -22,7 +22,7 @@ public partial class Projectile : RigidBody3D {
 
     weapon = GetParent<Weapon>();
     hitbox = GetNode<HitboxComponent>("HitboxComponent");
-    hitbox.damage = weapon.info.projectileDamage * weapon.DamageMultiplier;
+    hitbox.damage = weapon.info.projectileDamage * weapon.info.damageMulitplier;
   }
 
   public override void _Process(double delta) {
@@ -49,7 +49,7 @@ public partial class Projectile : RigidBody3D {
       hit = true;
       hitPosition = GlobalPosition;
       Freeze = true;
-      freeTimer.Start(3.0);
+      freeTimer.Start(5.0);
 
       if(collision3D.GetCollider() is PhysicsBody3D body) {
         weapon.RemoveChild(this);

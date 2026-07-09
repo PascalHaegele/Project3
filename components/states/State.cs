@@ -21,6 +21,8 @@ public abstract partial class State : Resource {
     velocityComponent = actor.GetComponent<VelocityComponent>();
   }
 
+  public virtual void Start() { }
+
   public virtual void Enter() { }
 
   public virtual void Update(double delta) { }

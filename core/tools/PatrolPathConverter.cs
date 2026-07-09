@@ -100,11 +100,9 @@ public partial class PatrolPathConverter : EditorScript {
   }
 
   private void OnEnemySelected(NodePath nodePath) {
-    Node body = ei.GetEditedSceneRoot().GetNode(nodePath);
+    Node enemy = ei.GetEditedSceneRoot().GetNode(nodePath);
 
-    EnemyInfo enemyInfo =
-      (EnemyInfo)(GodotObject)body.Get(Enemy.PropertyName.info);
-    enemyInfo.patrolPath = new Vector3[patrolPoints.Count];
+    EnemyInfo enemyInfo = (EnemyInfo)enemy.Get(Enemy.PropertyName.info);
     enemyInfo.patrolPath = [.. patrolPoints];
     enemyInfo.leashPoint = leashPoint;
   }

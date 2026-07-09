@@ -3,22 +3,31 @@ using Godot;
 [GlobalClass]
 public partial class Weapon : Node3D {
   [Export] public WeaponInfo info;
-  [Export] protected Marker3D projectileSpawn;
+  [Export] private Marker3D projectileSpawn;
 
-  protected float fireCooldown;
+  private float fireCooldown;
   protected float reloadTimer;
 
-  protected Projectile p;
+  private Projectile p;
 
-  public int CurrentAmmo { get; protected set; }
-  public bool Reloading { get; protected set; }
+  private RayCast3D? aimCast;
 
-  public float DamageMultiplier => info.damageMulitplier;
+  public int CurrentAmmo { get; private set; }
+  public bool Reloading { get; private set; }
+
+  [Signal] public delegate void ShotEventHandler();
+  [Signal] public delegate void ReloadedEventHandler();
 
   public override void _Ready() {
     if(projectileSpawn == null) {
       GD.PrintErr($"{Name} missing Projectile Spawn Marker");
     }
+
+    aimCast = GetNodeOrNull<RayCast3D>("../AimCast");
+    aimCast?.TargetPosition = new (0.0f, 0.0f, -info.range);
+    // if(aimCast != null) {
+    //   aimCast.TargetPosition = new (0.0f, 0.0f, -info.range);
+    // }
 
     CurrentAmmo = info.magazineSize;
 
@@ -47,13 +56,13 @@ public partial class Weapon : Node3D {
     // p.hitbox.EnableCollisionShapes();
     if(p == null) { return; }
     AddChild(p);
-    p.GlobalPosition =
-      projectileSpawn != null ? projectileSpawn.GlobalPosition : GlobalPosition;
-    p.GlobalRotation =
-      projectileSpawn != null ? projectileSpawn.GlobalRotation : GlobalRotation;
-    p.ProcessMode = ProcessModeEnum.Inherit;
+    p.GlobalPosition = projectileSpawn.GlobalPosition;
+    if(aimCast.IsColliding()) { p.LookAt(aimCast.GetCollisionPoint()); }
+    else { p.GlobalRotation = projectileSpawn.GlobalRotation; }
     p.shotPosition = GlobalPosition;
     p.TopLevel = true;
+
+    EmitSignalShot();
 
     GD.Print($"{Name} fired");
     GD.Print($"{Name} Ammo: {CurrentAmmo}");
@@ -73,6 +82,8 @@ public partial class Weapon : Node3D {
     CurrentAmmo = info.magazineSize;
 
     // SpawnProjectiles();
+
+    EmitSignalReloaded();
 
     GD.Print($"{Name} reload finished");
     GD.Print($"{Name} Ammo: {CurrentAmmo}");

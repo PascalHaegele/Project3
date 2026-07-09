@@ -5,18 +5,38 @@ public partial class Player : Actor {
   private CameraComponent camera;
   private InputComponent inputComponent;
   private StateMachine stateMachine;
+  private HealthComponent healthComponent;
 
   [Export] private Weapon weapon;
+
+  private Label ammoDisplay;
+  private ProgressBar healthBar;
 
   [Signal] public delegate void InteractingEventHandler();
 
   public override void _Ready() {
+    base._Ready();
+
     Input.MouseMode = Input.MouseModeEnum.Captured;
 
     camera = GetComponent<CameraComponent>();
     inputComponent = GetComponent<InputComponent>();
     stateMachine = GetComponent<StateMachine>();
     velocityComponent = GetComponent<VelocityComponent>();
+    healthComponent = GetComponent<HealthComponent>();
+
+    healthComponent.HealthChanged += OnHealthChanged;
+
+    weapon.Shot += OnWeaponShot;
+    weapon.Reloaded += OnWeaponReloaded;
+
+    ammoDisplay = GetNode<Label>("HUD/AmmoDisplay");
+    ammoDisplay.Text =
+      weapon.CurrentAmmo.ToString() + " / " + weapon.info.magazineSize;
+
+    healthBar = GetNode<ProgressBar>("HUD/HealthBar");
+    healthBar.MaxValue = healthComponent.maxHealth;
+    healthBar.Value = healthComponent.CurrentHealth;
   }
 
   public override void _Process(double delta) {
@@ -61,6 +81,20 @@ public partial class Player : Actor {
         Input.MouseMode == Input.MouseModeEnum.Captured ?
         Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
     }
+  }
+
+  private void OnHealthChanged(float newHealth) {
+    healthBar.Value = healthComponent.CurrentHealth;
+  }
+
+  private void OnWeaponShot() {
+    ammoDisplay.Text =
+      weapon.CurrentAmmo.ToString() + " / " + weapon.info.magazineSize;
+  }
+
+  private void OnWeaponReloaded() {
+    ammoDisplay.Text =
+      weapon.CurrentAmmo.ToString() + " / " + weapon.info.magazineSize;
   }
 }
 

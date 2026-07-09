@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="14_0wchr"]
 [ext_resource type="Script" uid="uid://385nx60lb30b" path="res://core/debug/DebugPanel.cs" id="15_12xki"]
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="15_qrxv1"]
+[ext_resource type="PackedScene" uid="uid://dn261xqm15ik0" path="res://ui/health_bar.tscn" id="18_qrxv1"]
 
 [sub_resource type="Resource" id="Resource_pwco0"]
 script = ExtResource("2_0wchr")
@@ -69,6 +70,17 @@ MarginContainer/constants/margin_right = 10
 MarginContainer/constants/margin_top = 10
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_yibi5")
 
+[sub_resource type="LabelSettings" id="LabelSettings_o8bm0"]
+font_size = 32
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_litht"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 16
+
 [node name="Player" type="CharacterBody3D" unique_id=134350 node_paths=PackedStringArray("weapon", "components")]
 collision_layer = 2
 collision_mask = 5
@@ -93,6 +105,11 @@ metadata/_custom_type_script = "uid://dc3slcqxdplvw"
 
 [node name="Revolver" parent="CameraPivot" unique_id=203871714 instance=ExtResource("4_0wchr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.128, -0.244, -0.498)
+
+[node name="AimCast" type="RayCast3D" parent="CameraPivot" unique_id=1930596204]
+target_position = Vector3(0, 0, -50)
+collision_mask = 5
+debug_shape_thickness = 1
 
 [node name="InputComponent" type="Node" parent="." unique_id=536807353]
 script = ExtResource("8_hiosj")
@@ -125,7 +142,7 @@ shape = SubResource("CapsuleShape3D_5k4qt")
 script = ExtResource("13_7aotg")
 metadata/_custom_type_script = "uid://g3kw63x81wsu"
 
-[node name="UI" type="Control" parent="." unique_id=925751462]
+[node name="HUD" type="Control" parent="." unique_id=925751462]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -134,7 +151,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
-[node name="DebugPanel" type="PanelContainer" parent="UI" unique_id=2093023493]
+[node name="DebugPanel" type="PanelContainer" parent="HUD" unique_id=2093023493]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 0
 offset_left = 10.0
@@ -145,8 +162,54 @@ theme = SubResource("Theme_rt46e")
 script = ExtResource("15_12xki")
 metadata/_custom_type_script = "uid://385nx60lb30b"
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/DebugPanel" unique_id=663774772]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/DebugPanel" unique_id=663774772]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/DebugPanel/MarginContainer" unique_id=2041628129]
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/DebugPanel/MarginContainer" unique_id=2041628129]
 layout_mode = 2
+
+[node name="AmmoDisplay" type="Label" parent="HUD" unique_id=2139122940]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -120.0
+offset_right = -120.0
+offset_bottom = -84.0
+grow_horizontal = 0
+grow_vertical = 0
+label_settings = SubResource("LabelSettings_o8bm0")
+
+[node name="HealthBar" parent="HUD" unique_id=1342211278 instance=ExtResource("18_qrxv1")]
+layout_mode = 1
+anchors_preset = 2
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = -12.0
+offset_right = 200.0
+offset_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 0
+offset_transform_enabled = true
+offset_transform_position = Vector2(100, -80)
+
+[node name="Crosshair" type="Panel" parent="HUD" unique_id=46460330]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_litht")

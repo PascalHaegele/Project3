@@ -2,7 +2,7 @@ using Godot;
 
 [GlobalClass]
 public abstract partial class Enemy : Actor {
-  [Export] public EnemyInfo info = new();
+  [Export] public EnemyInfo info;
 
   public AnimationPlayer animationPlayer;
 
@@ -16,6 +16,8 @@ public abstract partial class Enemy : Actor {
   protected AIDetectionComponent detectionComponent;
 
   public override void _Ready() {
+    info.ResourceLocalToScene = true;
+
     animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
     aiStateMachine = GetComponent<AIStateMachine>();
