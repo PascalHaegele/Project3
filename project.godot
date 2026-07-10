@@ -116,6 +116,7 @@ debug_panel={
 3d_physics/layer_1="World"
 3d_physics/layer_2="Player"
 3d_physics/layer_3="Enemy"
+3d_physics/layer_4="Pickup"
 3d_physics/layer_5="PlayerHitbox"
 3d_physics/layer_6="PlayerHurtbox"
 3d_physics/layer_7="EnemyHitbox"

@@ -15,6 +15,7 @@ public partial class StateMachine : Node {
     actor = GetParent<Actor>();
 
     foreach(State state in states) {
+      state.ResourceLocalToScene = true;
       state.Init(actor, this);
       state.Transition += OnStateTransition;
       state.Start();
@@ -71,6 +72,8 @@ public partial class StateMachine : Node {
     currentState.Exit();
     currentState = newState;
     currentState.Enter();
+
+    actor.soundLevel = currentState.soundLevel;
   }
 }
 

@@ -23,6 +23,8 @@ public partial class StateJump : State {
     EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;
   }
 
+  public override void Start() => soundLevel = 6;
+
   public override void Enter() {
     velocityInfo.Speed = velocityInfo.airborneSpeed;
     velocityComponent

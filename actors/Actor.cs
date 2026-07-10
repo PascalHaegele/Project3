@@ -3,6 +3,8 @@ using System.Diagnostics;
 
 [GlobalClass]
 public abstract partial class Actor : CharacterBody3D {
+  public int soundLevel;
+
   [Export] public VelocityInfo velocityInfo;
   [Export] protected Node[] components;
 

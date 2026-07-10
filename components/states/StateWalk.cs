@@ -22,6 +22,8 @@ public partial class StateWalk : State {
     }
   }
 
+  public override void Start() => soundLevel = 3;
+
   public override void Enter() {
     velocityInfo.Speed = velocityInfo.walkSpeed;
   }

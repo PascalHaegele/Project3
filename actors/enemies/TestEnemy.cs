@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class TestEnemy : Enemy {
+public partial class TestEnemy : Enemy, IHitable {
   private HitboxComponent hitboxComponent;
 
   private ProgressBar healthBar;
@@ -17,6 +17,8 @@ public partial class TestEnemy : Enemy {
     healthBar = GetComponent<ProgressBar>();
     healthBar.MaxValue = healthComponent.maxHealth;
     healthBar.Value = healthComponent.CurrentHealth;
+
+    detectionComponent.SoundHeard += OnSoundHeared;
   }
 
   public override void _Process(double delta) {
@@ -32,6 +34,19 @@ public partial class TestEnemy : Enemy {
       velocityComponent.AddVelocityInDirection(GetGravity() * (float)delta);
     }
     velocityComponent.Move(this);
+  }
+
+  public void RecieveHit(HitInfo hitInfo) {
+    if(hitInfo.direction != Vector3.Zero) {
+      aiStateMachine
+        .OnStateTransition(aiStateMachine.GetState<AIStateSearch>());
+      LookAt(GlobalPosition + hitInfo.direction);
+    }
+  }
+
+  private void OnSoundHeared(Vector3 soundPosition) {
+    GD.Print($"{Name} heard sound");
+    hearingPlayer = true;
   }
 
   private void OnHealthChanged(float newHealth) {

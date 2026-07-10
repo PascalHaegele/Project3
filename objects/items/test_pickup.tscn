@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://dudmf7poy21iv"]
+
+[ext_resource type="Script" uid="uid://6p00olcusefr" path="res://objects/items/Pickup.cs" id="1_k4x88"]
+[ext_resource type="PackedScene" uid="uid://4ujh60nwrugk" path="res://ui/pickup_indicator.tscn" id="2_y4gfl"]
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_hykmt"]
+length = 0.75
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_f3oj0"]
+radius = 0.1
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_hykmt"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="BoxMesh" id="BoxMesh_qrxv1"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="Pickup" type="RigidBody3D" unique_id=26626307]
+collision_layer = 0
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_k4x88")
+metadata/_custom_type_script = "uid://6p00olcusefr"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1984499699]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+shape = SubResource("SeparationRayShape3D_hykmt")
+
+[node name="HoverArea" type="Area3D" parent="." unique_id=1345610469]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HoverArea" unique_id=1519258386]
+shape = SubResource("SphereShape3D_f3oj0")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=2045427574]
+disable_3d = true
+transparent_bg = true
+
+[node name="PickupIndicator" parent="SubViewport" unique_id=955568873 instance=ExtResource("2_y4gfl")]
+
+[node name="HoverIndicator" type="Sprite3D" parent="." unique_id=1216346399]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+billboard = 1
+double_sided = false
+no_depth_test = true
+texture = SubResource("ViewportTexture_hykmt")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=303309342]
+mesh = SubResource("BoxMesh_qrxv1")

@@ -12,7 +12,7 @@ public partial class AIStateSearch : AIState {
     if(leashDistance > actor.info.leashLength) {
       EmitSignalTransition(stateMachine.GetState<AIStatePatrol>()); return;
     }
-    if(actor.playerInVision || actor.playerInHearing) {
+    if(actor.playerInVision || actor.hearingPlayer) {
       EmitSignalTransition(stateMachine.GetState<AIStateChase>()); return;
     }
     if(searchTimer >= searchDuration) {

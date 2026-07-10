@@ -36,5 +36,15 @@ public partial class HealthComponent : Node {
       EmitSignalDied();
     }
   }
+
+  public void Heal(float amount) {
+    if(!IsAlive) { return; }
+
+    CurrentHealth = Mathf.Min(maxHealth, CurrentHealth + amount);
+
+    EmitSignalHealthChanged(CurrentHealth);
+
+    GD.Print($"Healed: {amount} | Health: {CurrentHealth}/{maxHealth}");
+  }
 }
 

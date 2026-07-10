@@ -6,8 +6,14 @@ public partial class Player : Actor {
   private InputComponent inputComponent;
   private StateMachine stateMachine;
   private HealthComponent healthComponent;
+  private InventoryComponent inventoryComponent;
 
   [Export] private Weapon weapon;
+
+  private RayCast3D pickupCast;
+
+  private bool hoveringPickup;
+  private Pickup? hoveredPickup;
 
   private Label ammoDisplay;
   private ProgressBar healthBar;
@@ -24,8 +30,11 @@ public partial class Player : Actor {
     stateMachine = GetComponent<StateMachine>();
     velocityComponent = GetComponent<VelocityComponent>();
     healthComponent = GetComponent<HealthComponent>();
+    inventoryComponent = GetComponent<InventoryComponent>();
 
     healthComponent.HealthChanged += OnHealthChanged;
+
+    pickupCast = GetNode<RayCast3D>("CameraPivot/PickupCast");
 
     weapon.Shot += OnWeaponShot;
     weapon.Reloaded += OnWeaponReloaded;
@@ -47,12 +56,35 @@ public partial class Player : Actor {
     if(input.shoot) { weapon.Shoot(); }
     if(input.reload) { weapon.Reload(); }
 
+    if(input.openInventory) { inventoryComponent.PrintInventory(); }
+
     Debug
       .panel
       .AddProperty("Velocity", Velocity.ToString("f2"), 2);
   }
 
   public override void _PhysicsProcess(double delta) {
+    if(pickupCast.IsColliding()) {
+      hoveringPickup = true;
+      Area3D? collider = pickupCast.GetCollider() as Area3D;
+      if(collider?.GetParent() is Pickup pickup) {
+        if(pickup != hoveredPickup) {
+          hoveredPickup?.hovering = false;
+          hoveredPickup = pickup;
+          hoveredPickup?.hovering = true;
+        }
+        if(input.interact) {
+          GD.Print($"Interacted with {hoveredPickup.Name}");
+          hoveredPickup.QueueFree();
+          inventoryComponent.AddItem(hoveredPickup.itemType);
+        }
+      }
+    } else {
+      hoveringPickup = false;
+      hoveredPickup?.hovering = false;
+      hoveredPickup = null;
+    }
+
     // --- Rotation ---
     if(!Mathf.IsEqualApprox(camera.Direction.Y, 0.0f)) {
       RotateY(camera.Direction.Y);
@@ -80,6 +112,13 @@ public partial class Player : Actor {
       Input.MouseMode =
         Input.MouseMode == Input.MouseModeEnum.Captured ?
         Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
+    }
+
+    if(Input.IsKeyPressed(Key.Q)) {
+      if(healthComponent.CurrentHealth >= healthComponent.maxHealth) { return; }
+      if(inventoryComponent.RemoveItem(ItemType.POTION)) {
+        healthComponent.Heal(20.0f);
+      }
     }
   }
 

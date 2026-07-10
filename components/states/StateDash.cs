@@ -26,8 +26,13 @@ public partial class StateDash : State {
 
   public override void Init(Actor actor, StateMachine stateMachine) {
     base.Init(actor, stateMachine);
+  }
+
+  public override void Start() {
     cooldownTimer.OneShot = true;
     stateMachine.AddChild(cooldownTimer);
+
+    soundLevel = 6;
   }
 
   public override void Enter() {

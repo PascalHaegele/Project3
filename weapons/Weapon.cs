@@ -25,9 +25,6 @@ public partial class Weapon : Node3D {
 
     aimCast = GetNodeOrNull<RayCast3D>("../AimCast");
     aimCast?.TargetPosition = new (0.0f, 0.0f, -info.range);
-    // if(aimCast != null) {
-    //   aimCast.TargetPosition = new (0.0f, 0.0f, -info.range);
-    // }
 
     CurrentAmmo = info.magazineSize;
 

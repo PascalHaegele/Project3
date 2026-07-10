@@ -7,7 +7,7 @@ public abstract partial class Enemy : Actor {
   public AnimationPlayer animationPlayer;
 
   public bool playerInVision;
-  public bool playerInHearing;
+  public bool hearingPlayer;
 
   protected AIStateMachine aiStateMachine;
   protected StateMachine stateMachine;
@@ -16,6 +16,7 @@ public abstract partial class Enemy : Actor {
   protected AIDetectionComponent detectionComponent;
 
   public override void _Ready() {
+
     info.ResourceLocalToScene = true;
 
     animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
@@ -28,7 +29,7 @@ public abstract partial class Enemy : Actor {
 
     detectionComponent.PlayerEnteredVision += OnPlayerEnteredVision;
     detectionComponent.PlayerExitedVision += OnPlayerExitedVision;
-    detectionComponent.PlayerEnteredHearing += OnPlayerEnteredHearing;
+    // detectionComponent.PlayerEnteredHearing += OnPlayerEnteredHearing;
     detectionComponent.PlayerExitedHearing += OnPlayerExitedHearing;
   }
 
@@ -42,13 +43,13 @@ public abstract partial class Enemy : Actor {
     GD.Print($"Player exited Vision of {Name}");
   }
 
-  protected virtual void OnPlayerEnteredHearing() {
-    playerInHearing = true;
-    GD.Print($"Player entered Hearing of {Name}");
-  }
+  // protected virtual void OnPlayerEnteredHearing() {
+  //   playerInHearing = true;
+  //   GD.Print($"Player entered Hearing of {Name}");
+  // }
 
   protected virtual void OnPlayerExitedHearing() {
-    playerInHearing = false;
+    hearingPlayer = false;
     GD.Print($"Player exited Hearing of {Name}");
   }
 }

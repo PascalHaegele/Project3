@@ -16,7 +16,10 @@ public partial class InteractionComponent : Area3D {
 
   private void TryInteract() {
     if(player == null) { return; }
-    if(owner is IInteractable interactable) { interactable.Interact(player); }
+    if(owner is IInteractable interactable) {
+      interactable.Interact(player);
+      GetChild<CollisionShape3D>(0).Disabled = true;
+    }
   }
 
   private void OnAreaBodyEntered(Node3D body) {

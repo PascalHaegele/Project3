@@ -2,15 +2,22 @@ using Godot;
 
 [GlobalClass]
 public partial class HurtboxComponent : Area3D {
+  private Actor actor;
   private HealthComponent healthComponent;
 
   public override void _Ready() {
-    healthComponent = GetParent<Actor>().GetComponent<HealthComponent>();
-    Monitoring = false;
+    actor = GetParent<Actor>();
+    healthComponent = actor.GetComponent<HealthComponent>();
+    SetDeferred(Area3D.PropertyName.Monitoring, false);
   }
 
-  public void RecieveHit(float damage) {
-    healthComponent.TakeDamage(damage);
+  public void RecieveHit(HitInfo hitInfo) {
+    healthComponent.TakeDamage(hitInfo.damage);
+    if(actor is IHitable hitable) { hitable.RecieveHit(hitInfo); }
   }
+}
+
+public interface IHitable {
+  void RecieveHit(HitInfo hitInfo);
 }
 

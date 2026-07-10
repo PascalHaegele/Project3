@@ -10,7 +10,7 @@ script = ExtResource("2_cffpg")
 fireRate = 2.0
 magazineSize = 6
 projectile = ExtResource("3_cffpg")
-projectileSpeed = 75.0
+projectileSpeed = 100.0
 metadata/_custom_type_script = "uid://bv03t2orsyg68"
 
 [node name="Revolver" type="Node3D" unique_id=203871714 node_paths=PackedStringArray("projectileSpawn")]

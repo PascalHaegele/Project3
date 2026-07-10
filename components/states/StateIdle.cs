@@ -21,6 +21,8 @@ public partial class StateIdle : State {
     EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;
   }
 
+  public override void Start() => soundLevel = 0;
+
   public override void Enter() => velocityInfo.Speed = 0.0f;
 
   public override void PhysicsUpdate(double delta) {

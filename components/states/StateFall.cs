@@ -21,6 +21,8 @@ public partial class StateFall : State {
     EmitSignalTransition(stateMachine.GetState<StateWalk>()); return;
   }
 
+  public override void Start() => soundLevel = 1;
+
   public override void Enter() {
     velocityInfo.Speed = velocityInfo.airborneSpeed;
   }

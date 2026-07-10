@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://dn261xqm15ik0" path="res://ui/health_bar.tscn" id="19_nl8p5"]
 
 [sub_resource type="Resource" id="Resource_cabd0"]
+resource_local_to_scene = true
 script = ExtResource("2_robej")
 patrolPath = PackedVector3Array(-8, 0, -17, 6.77744, 0, -16.653843, 15.346003, 0, -4.8959856, 0.55296326, 0, -5.0219855, -14.483469, 0, -2.364942, -16.650803, 0, -12.929461)
 leashPoint = Vector3(0, 0, -14.593309)
@@ -29,6 +30,7 @@ attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [sub_resource type="Resource" id="Resource_gfvj2"]
+resource_local_to_scene = true
 script = ExtResource("2_mka0o")
 walkSpeed = 3.0
 sprintSpeed = 6.0
@@ -50,22 +52,27 @@ height = 1.2
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
 
 [sub_resource type="Resource" id="Resource_bfp77"]
+resource_local_to_scene = true
 script = ExtResource("6_v554o")
 metadata/_custom_type_script = "uid://duf7f2x7a3i0g"
 
 [sub_resource type="Resource" id="Resource_o8bm0"]
+resource_local_to_scene = true
 script = ExtResource("7_robej")
 metadata/_custom_type_script = "uid://b1dckfderimef"
 
 [sub_resource type="Resource" id="Resource_litht"]
+resource_local_to_scene = true
 script = ExtResource("8_nl8p5")
 metadata/_custom_type_script = "uid://dgf67hc0g785g"
 
 [sub_resource type="Resource" id="Resource_4ajh5"]
+resource_local_to_scene = true
 script = ExtResource("9_jm64t")
 metadata/_custom_type_script = "uid://drdb24umi8upn"
 
 [sub_resource type="Resource" id="Resource_vkxon"]
+resource_local_to_scene = true
 script = ExtResource("10_nl8p5")
 metadata/_custom_type_script = "uid://bs3mp8e0hcm1x"
 
@@ -91,19 +98,11 @@ metadata/_custom_type_script = "uid://d8b6t7u5sv66"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_o8bm0"]
-top_radius = 0.0
-bottom_radius = 7.0
-height = 10.749878
-radial_segments = 16
-rings = 0
-cap_top = false
-
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_710do"]
 points = PackedVector3Array(0, -5.374939, -7, -2.6791306, -5.374939, -6.468285, 0, 5.374939, 0, 2.6777601, -5.374939, -6.468285, -4.9498825, -5.374939, -4.9498825, -6.468285, -5.374939, -2.6791306, -7, -5.374939, 0, -6.468285, -5.374939, 2.6777601, -4.9498825, -5.374939, 4.948512, -2.6791306, -5.374939, 6.466915, 0, -5.374939, 7, 2.6777601, -5.374939, 6.466915, 4.948512, -5.374939, 4.948512, 6.466915, -5.374939, 2.6777601, 7, -5.374939, 0, 6.466915, -5.374939, -2.6791306, 4.948512, -5.374939, -4.9498825)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_bfp77"]
-radius = 4.0
+radius = 8.0
 
 [sub_resource type="Animation" id="Animation_ad4r6"]
 length = 0.001
@@ -245,18 +244,11 @@ metadata/_custom_type_script = "uid://bh1wcy7x4xxqk"
 collision_layer = 0
 collision_mask = 2
 
-[node name="Cone" type="MeshInstance3D" parent="AIDetectionComponent/Vision" unique_id=1726166761]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1.6000001, -5.874939)
-visible = false
-mesh = SubResource("CylinderMesh_o8bm0")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AIDetectionComponent/Vision" unique_id=1410797231]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1.6000001, -5.874939)
 shape = SubResource("ConvexPolygonShape3D_710do")
 
 [node name="Hearing" type="Area3D" parent="AIDetectionComponent" unique_id=1866108236]
-collision_layer = 0
-collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AIDetectionComponent/Hearing" unique_id=1070024788]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -272,6 +264,7 @@ transparent_bg = true
 [node name="HealthBar" parent="SubViewport" unique_id=1342211278 instance=ExtResource("19_nl8p5")]
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1454135990]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3872952, 0)
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 2.3872952, 0)
 billboard = 1
+double_sided = false
 texture = SubResource("ViewportTexture_bfp77")

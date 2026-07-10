@@ -1,37 +1,39 @@
 using Godot;
-using System.Collections.Generic;
+
+public enum ItemType { POTION, AMMUNITION, PAGE, MAX, }
 
 // Tracks a collection of items held by an actor
 [GlobalClass]
 public partial class InventoryComponent : Node {
-  // List of unique item identifiers
-  public List<string> Items { get; private set; } = new();
+  public readonly int[] maxItems = [3, 54, 100];
+  public readonly int[] items = new int[(int)ItemType.MAX];
+  public readonly string[] itemNames = ["Potion", "Ammunition", "Page"];
 
   // Signal emitted whenever the inventory content changes
-  [Signal]
-  public delegate void InventoryChangedEventHandler();
+  [Signal] public delegate void InventoryChangedEventHandler();
 
   // Adds an item if it does not exist and notifies listeners
-  public void AddItem(string itemName) {
-    if(Items.Contains(itemName)) { return; }
+  public void AddItem(ItemType type) {
+    if(items[(int)type] >= maxItems[(int)type]) { return; }
 
-    Items.Add(itemName);
+    items[(int)type]++;
 
-    GD.Print($"Item Added: {itemName}");
+    GD.Print($"Item Added: {type}");
 
-    _ = EmitSignal(SignalName.InventoryChanged);
+    EmitSignalInventoryChanged();
   }
 
   // Returns true if the item is present in the inventory
-  public bool HasItem(string itemName) => Items.Contains(itemName);
+  public bool HasItem(ItemType type) => items[(int)type] > 0;
 
   // Removes an item and notifies listeners if successful
-  public bool RemoveItem(string itemName) {
-    bool removed = Items.Remove(itemName);
+  public bool RemoveItem(ItemType type) {
+    bool removed = HasItem(type);
 
     if(removed) {
-      GD.Print($"Item Removed: {itemName}");
-      _ = EmitSignal(SignalName.InventoryChanged);
+      items[(int)type]--;
+      GD.Print($"Item Removed: {type}");
+      EmitSignalInventoryChanged();
     }
 
     return removed;
@@ -39,23 +41,20 @@ public partial class InventoryComponent : Node {
 
   // Removes all items from the inventory
   public void ClearInventory() {
-    Items.Clear();
+    for(int i = 0; i < items.Length; i++) { items[i] = 0; }
 
     GD.Print("Inventory Cleared");
 
-    _ = EmitSignal(SignalName.InventoryChanged);
+    EmitSignalInventoryChanged();
   }
 
   // Prints the current inventory content to the console
   public void PrintInventory() {
     GD.Print("------ Inventory ------");
 
-    if(Items.Count == 0) {
-      GD.Print("Inventory is Empty");
-      return;
+    for(int i = 0; i < items.Length; i++) {
+      GD.Print($"{itemNames[i]}: {items[i]}");
     }
-
-    foreach(string item in Items) { GD.Print(item); }
   }
 }
 

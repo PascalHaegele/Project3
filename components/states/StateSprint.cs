@@ -22,6 +22,8 @@ public partial class StateSprint : State {
     }
   }
 
+  public override void Start() => soundLevel = 5;
+
   public override void Enter() {
     velocityInfo.Speed = velocityInfo.sprintSpeed;
   }

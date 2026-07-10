@@ -38,6 +38,7 @@ public partial class AIStateMachine : Node {
       actor.info.leashPoint;
 
     foreach(AIState state in states) {
+      state.ResourceLocalToScene = true;
       state.Init(actor, player, this, navAgent);
       state.Transition += OnStateTransition;
       state.Start();
@@ -85,7 +86,7 @@ public partial class AIStateMachine : Node {
     return null;
   }
 
-  private void OnStateTransition(AIState? newState) {
+  public void OnStateTransition(AIState? newState) {
     if(newState == null) { return; }
     if(!states.Contains(newState)) {
       GD.PrintErr(

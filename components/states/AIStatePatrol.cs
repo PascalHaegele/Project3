@@ -9,7 +9,7 @@ public partial class AIStatePatrol : AIState {
     float leashDistance
   ) {
     if(leashDistance > actor.info.leashLength) { return; }
-    if(actor.playerInVision || actor.playerInHearing) {
+    if(actor.playerInVision || actor.hearingPlayer) {
       EmitSignalTransition(stateMachine.GetState<AIStateChase>()); return;
     }
   }

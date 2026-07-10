@@ -9,7 +9,7 @@ public partial class HitboxComponent : Area3D {
   public HitLog? hitLog;
 
   public override void _Ready() {
-    Monitorable = false;
+    SetDeferred(Area3D.PropertyName.Monitorable, false);
     AreaEntered += OnAreaEntered;
 
     if(lifetime.HasValue) {
@@ -44,15 +44,26 @@ public partial class HitboxComponent : Area3D {
 
   private void OnAreaEntered(Area3D area) {
     if(area is HurtboxComponent hurtbox) {
+      HitInfo info = new();
+      info.damage = damage;
+      if(GetParent() is Projectile p) {
+        info.direction = GlobalPosition.DirectionTo(p.shotPosition);
+      }
+
       if(hitLog != null) {
         Node hurtboxOwner = hurtbox.GetParent();
         if(hitLog.HasHit(hurtboxOwner)) { return; }
         else { hitLog.LogHit(hurtboxOwner); }
       }
 
-      hurtbox.RecieveHit(damage);
+      hurtbox.RecieveHit(info);
     }
     if(GetParent() is Projectile) { DisableCollisionShapes(); }
   }
+}
+
+public struct HitInfo {
+  public float damage;
+  public Vector3 direction;
 }
 

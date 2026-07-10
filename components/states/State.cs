@@ -2,6 +2,8 @@ using Godot;
 
 [GlobalClass]
 public abstract partial class State : Resource {
+  public int soundLevel;
+
   protected Actor actor;
   protected StateMachine stateMachine;
   protected VelocityInfo velocityInfo;

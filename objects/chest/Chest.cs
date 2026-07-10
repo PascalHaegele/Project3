@@ -1,6 +1,8 @@
 using Godot;
 
 public partial class Chest : StaticBody3D, IInteractable {
+  [Export] private PackedScene pickup;
+
   private AnimationPlayer animationPlayer;
   private LootComponent loot;
 
@@ -13,7 +15,12 @@ public partial class Chest : StaticBody3D, IInteractable {
     animationPlayer.Play("open");
     GD.Print($"Interaction with {Name}");
 
-    player.GetComponent<InventoryComponent>().AddItem(loot.GenerateLoot());
+    Pickup p = pickup.Instantiate<Pickup>();
+    AddChild(p);
+    p.Position = new(0.0f, 1.2f, 0.0f);
+    p.ApplyImpulse(new(0.0f, 3.0f, 2.0f));
+
+    // player.GetComponent<InventoryComponent>().AddItem(loot.GenerateLoot());
   }
 }
 
