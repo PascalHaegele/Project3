@@ -102,7 +102,7 @@ public partial class PatrolPathConverter : EditorScript {
   private void OnEnemySelected(NodePath nodePath) {
     Node enemy = ei.GetEditedSceneRoot().GetNode(nodePath);
 
-    EnemyInfo enemyInfo = (EnemyInfo)enemy.Get(Enemy.PropertyName.info);
+    EnemyInfo enemyInfo = (EnemyInfo)enemy.Get(Enemy.PropertyName.enemyInfo);
     enemyInfo.patrolPath = [.. patrolPoints];
     enemyInfo.leashPoint = leashPoint;
   }

@@ -27,8 +27,11 @@ public partial class StateJump : State {
 
   public override void Enter() {
     velocityInfo.Speed = velocityInfo.airborneSpeed;
-    velocityComponent
-      .AddVelocityInDirection(actor.UpDirection, velocityInfo.jumpVelocity);
+    // velocityComponent
+    //   .AddVelocityInDirection(actor.UpDirection, velocityInfo.jumpVelocity);
+    Vector3 vel = actor.Velocity;
+    vel.Y += velocityInfo.jumpVelocity;
+    actor.Velocity = vel;
   }
 
   public override void PhysicsUpdate(double delta) {

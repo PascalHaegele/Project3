@@ -10,7 +10,7 @@ public partial class Pickup : RigidBody3D {
   private Sprite3D hoverIndicator;
 
   public override void _Ready() {
-    CollisionLayer = 0;
+    CollisionLayer = (uint)CollisionLayerEnum.NONE;
     CollisionMask = (uint)CollisionLayerEnum.WORLD;
 
     BodyEntered += OnBodyEntered;
@@ -18,7 +18,7 @@ public partial class Pickup : RigidBody3D {
     hoverArea = GetNode<Area3D>("HoverArea");
     hoverArea.Monitoring = false;
     hoverArea.CollisionLayer = (uint)CollisionLayerEnum.PICKUP;
-    hoverArea.CollisionMask = 0;
+    hoverArea.CollisionMask = (uint)CollisionLayerEnum.NONE;
 
     hoverIndicator = GetNode<Sprite3D>("HoverIndicator");
   }

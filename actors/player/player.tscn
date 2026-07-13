@@ -2,22 +2,16 @@
 
 [ext_resource type="Script" uid="uid://cgmnwh2ahgdo3" path="res://actors/player/Player.cs" id="1_nvxhs"]
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_0wchr"]
-[ext_resource type="Script" uid="uid://ghu5ha8v5lp2" path="res://components/StateMachine.cs" id="3_bop6h"]
 [ext_resource type="Script" uid="uid://dc3slcqxdplvw" path="res://components/CameraComponent.cs" id="3_lsln6"]
 [ext_resource type="PackedScene" uid="uid://cohtww8gqmevr" path="res://weapons/revolver/revolver.tscn" id="4_0wchr"]
 [ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="7_hiosj"]
-[ext_resource type="Script" uid="uid://d106lxvpexrmj" path="res://components/states/StateIdle.cs" id="7_qrxv1"]
-[ext_resource type="Script" uid="uid://brlg5cb3b2dfm" path="res://components/states/StateWalk.cs" id="8_dqf5y"]
 [ext_resource type="Script" uid="uid://dtal7j6ccfpjj" path="res://components/InputComponent.cs" id="8_hiosj"]
-[ext_resource type="Script" uid="uid://centhwh2xuoye" path="res://components/states/StateSprint.cs" id="9_otn2r"]
-[ext_resource type="Script" uid="uid://jxbnvwb037xw" path="res://components/states/StateJump.cs" id="10_ctwkf"]
-[ext_resource type="Script" uid="uid://d8b6t7u5sv66" path="res://components/states/StateFall.cs" id="11_icg72"]
-[ext_resource type="Script" uid="uid://7hkl7lnu3cqg" path="res://components/states/StateDash.cs" id="12_lj3dd"]
 [ext_resource type="Script" uid="uid://g3kw63x81wsu" path="res://components/InventoryComponent.cs" id="13_7aotg"]
 [ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="14_0wchr"]
 [ext_resource type="Script" uid="uid://385nx60lb30b" path="res://core/debug/DebugPanel.cs" id="15_12xki"]
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="15_qrxv1"]
 [ext_resource type="PackedScene" uid="uid://dn261xqm15ik0" path="res://ui/health_bar.tscn" id="18_qrxv1"]
+[ext_resource type="Script" uid="uid://cvmxf2r8l8urx" path="res://actors/player/PlayerStateMachine.cs" id="19_dqf5y"]
 
 [sub_resource type="Resource" id="Resource_pwco0"]
 resource_local_to_scene = true
@@ -25,36 +19,6 @@ script = ExtResource("2_0wchr")
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
-
-[sub_resource type="Resource" id="Resource_ad4r6"]
-resource_local_to_scene = true
-script = ExtResource("7_qrxv1")
-metadata/_custom_type_script = "uid://d106lxvpexrmj"
-
-[sub_resource type="Resource" id="Resource_qrxv1"]
-resource_local_to_scene = true
-script = ExtResource("8_dqf5y")
-metadata/_custom_type_script = "uid://brlg5cb3b2dfm"
-
-[sub_resource type="Resource" id="Resource_dqf5y"]
-resource_local_to_scene = true
-script = ExtResource("9_otn2r")
-metadata/_custom_type_script = "uid://centhwh2xuoye"
-
-[sub_resource type="Resource" id="Resource_otn2r"]
-resource_local_to_scene = true
-script = ExtResource("10_ctwkf")
-metadata/_custom_type_script = "uid://jxbnvwb037xw"
-
-[sub_resource type="Resource" id="Resource_ctwkf"]
-resource_local_to_scene = true
-script = ExtResource("11_icg72")
-metadata/_custom_type_script = "uid://d8b6t7u5sv66"
-
-[sub_resource type="Resource" id="Resource_icg72"]
-resource_local_to_scene = true
-script = ExtResource("12_lj3dd")
-metadata/_custom_type_script = "uid://7hkl7lnu3cqg"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5k4qt"]
 
@@ -94,9 +58,9 @@ collision_mask = 5
 script = ExtResource("1_nvxhs")
 weapon = NodePath("CameraPivot/Revolver")
 velocityInfo = SubResource("Resource_pwco0")
-components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("HealthComponent"), NodePath("StateMachine"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent")]
+components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("PlayerStateMachine"), NodePath("HealthComponent"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=859779642]
+[node name="BodyCollision" type="CollisionShape3D" parent="." unique_id=859779642]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_v4a0d")
 
@@ -111,7 +75,7 @@ tiltUpperLimit = 1.3962634015954636
 metadata/_custom_type_script = "uid://dc3slcqxdplvw"
 
 [node name="Revolver" parent="CameraPivot" unique_id=203871714 instance=ExtResource("4_0wchr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.128, -0.244, -0.498)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.25, -0.5)
 
 [node name="AimCast" type="RayCast3D" parent="CameraPivot" unique_id=1930596204]
 target_position = Vector3(0, 0, -50)
@@ -125,14 +89,18 @@ collide_with_areas = true
 collide_with_bodies = false
 debug_shape_thickness = 1
 
+[node name="ProjectileCast" type="RayCast3D" parent="CameraPivot" unique_id=943272919]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12808561, -0.117037416, 0)
+target_position = Vector3(0, 0, -0.65)
+collision_mask = 5
+
 [node name="InputComponent" type="Node" parent="." unique_id=536807353]
 script = ExtResource("8_hiosj")
 metadata/_custom_type_script = "uid://dtal7j6ccfpjj"
 
-[node name="StateMachine" type="Node" parent="." unique_id=1220325799]
-script = ExtResource("3_bop6h")
-states = Array[Object]([SubResource("Resource_ad4r6"), SubResource("Resource_qrxv1"), SubResource("Resource_dqf5y"), SubResource("Resource_otn2r"), SubResource("Resource_ctwkf"), SubResource("Resource_icg72")])
-metadata/_custom_type_script = "uid://ghu5ha8v5lp2"
+[node name="PlayerStateMachine" type="Node" parent="." unique_id=640292410]
+script = ExtResource("19_dqf5y")
+metadata/_custom_type_script = "uid://cvmxf2r8l8urx"
 
 [node name="VelocityComponent" type="Node" parent="." unique_id=109072836]
 script = ExtResource("7_hiosj")
@@ -163,7 +131,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
+mouse_filter = 2
 
 [node name="DebugPanel" type="PanelContainer" parent="HUD" unique_id=2093023493]
 custom_minimum_size = Vector2(200, 0)
@@ -172,15 +140,18 @@ offset_left = 10.0
 offset_top = 10.0
 offset_right = 210.0
 offset_bottom = 50.0
+mouse_filter = 2
 theme = SubResource("Theme_rt46e")
 script = ExtResource("15_12xki")
 metadata/_custom_type_script = "uid://385nx60lb30b"
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD/DebugPanel" unique_id=663774772]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/DebugPanel/MarginContainer" unique_id=2041628129]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="AmmoDisplay" type="Label" parent="HUD" unique_id=2139122940]
 layout_mode = 1
@@ -212,6 +183,7 @@ grow_horizontal = 1
 grow_vertical = 0
 offset_transform_enabled = true
 offset_transform_position = Vector2(100, -80)
+mouse_filter = 2
 
 [node name="Crosshair" type="Panel" parent="HUD" unique_id=46460330]
 layout_mode = 1
@@ -226,4 +198,5 @@ offset_right = 5.0
 offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_litht")

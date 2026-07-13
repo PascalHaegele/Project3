@@ -1,5 +1,10 @@
 using Godot;
 
+public struct HitInfo {
+  public float damage;
+  public Vector3 direction;
+}
+
 [GlobalClass]
 public partial class HitboxComponent : Area3D {
   public float damage;
@@ -60,10 +65,5 @@ public partial class HitboxComponent : Area3D {
     }
     if(GetParent() is Projectile) { DisableCollisionShapes(); }
   }
-}
-
-public struct HitInfo {
-  public float damage;
-  public Vector3 direction;
 }
 

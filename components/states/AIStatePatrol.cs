@@ -8,24 +8,24 @@ public partial class AIStatePatrol : AIState {
     float playerDistance,
     float leashDistance
   ) {
-    if(leashDistance > actor.info.leashLength) { return; }
+    if(leashDistance > actor.enemyInfo.leashLength) { return; }
     if(actor.playerInVision || actor.hearingPlayer) {
       EmitSignalTransition(stateMachine.GetState<AIStateChase>()); return;
     }
   }
 
   public override void Enter() {
-    navAgent.TargetPosition = actor.info.patrolPath[patrolIndex];
+    navAgent.TargetPosition = actor.enemyInfo.patrolPath[patrolIndex];
   }
 
   public override void PhysicsUpdate(double delta) {
-    if(actor.info.patrolPath == null) { return; }
-    if(actor.info.patrolPath.Length < 1) { return; }
+    if(actor.enemyInfo.patrolPath == null) { return; }
+    if(actor.enemyInfo.patrolPath.Length < 1) { return; }
 
     if(navAgent.IsTargetReached()) {
       patrolIndex =
-        Mathf.PosMod(++patrolIndex, actor.info.patrolPath.Length - 1);
-      navAgent.TargetPosition = actor.info.patrolPath[patrolIndex];
+        Mathf.PosMod(++patrolIndex, actor.enemyInfo.patrolPath.Length - 1);
+      navAgent.TargetPosition = actor.enemyInfo.patrolPath[patrolIndex];
     }
 
     Vector3 actorPosition = actor.GlobalTransform.Origin;

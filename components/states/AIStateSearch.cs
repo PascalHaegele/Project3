@@ -9,7 +9,7 @@ public partial class AIStateSearch : AIState {
     float playerDistance,
     float leashDistance
   ) {
-    if(leashDistance > actor.info.leashLength) {
+    if(leashDistance > actor.enemyInfo.leashLength) {
       EmitSignalTransition(stateMachine.GetState<AIStatePatrol>()); return;
     }
     if(actor.playerInVision || actor.hearingPlayer) {

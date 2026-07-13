@@ -34,12 +34,6 @@ public partial class StateMachine : Node {
     currentState.Update(delta);
     currentState.CheckRelevance();
     currentState.input = input;
-
-    if(actor is Player) {
-      Debug
-        .panel
-        .AddProperty("Current State", currentState.GetType().ToString(), 1);
-    }
   }
 
   public override void _PhysicsProcess(double delta) {

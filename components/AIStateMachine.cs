@@ -26,16 +26,16 @@ public partial class AIStateMachine : Node {
 
     navAgent ??= GetNode<NavigationAgent3D>("../NavigationAgent3D");
 
-    if(actor.info.patrolPath != null) {
-      if(actor.info.patrolPath.Length > 0) {
-        navAgent.TargetPosition = actor.info.patrolPath[0];
+    if(actor.enemyInfo.patrolPath != null) {
+      if(actor.enemyInfo.patrolPath.Length > 0) {
+        navAgent.TargetPosition = actor.enemyInfo.patrolPath[0];
       }
     }
 
     leashPoint =
-      actor.info.leashPoint == Vector3.Zero ?
+      actor.enemyInfo.leashPoint == Vector3.Zero ?
       actor.GlobalPosition :
-      actor.info.leashPoint;
+      actor.enemyInfo.leashPoint;
 
     foreach(AIState state in states) {
       state.ResourceLocalToScene = true;
@@ -45,7 +45,7 @@ public partial class AIStateMachine : Node {
     }
 
     currentState =
-      GetStateOrNull<AIStatePatrol> == null || actor.info.patrolPath == null ?
+      GetStateOrNull<AIStatePatrol> == null || actor.enemyInfo.patrolPath == null ?
       GetState<AIStateIdle>() :
       GetState<AIStatePatrol>();
 

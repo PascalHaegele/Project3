@@ -2,7 +2,7 @@ using Godot;
 
 [GlobalClass]
 public partial class AIDetectionComponent : Node3D {
-  private Enemy owner;
+  private Enemy enemy;
   private Player? player;
 
   private Area3D vision;
@@ -11,17 +11,13 @@ public partial class AIDetectionComponent : Node3D {
   [Export] private int soundThreshold = 5;
 
   private bool playerInHearing;
+  private bool playerInVision;
 
-  [Signal] public delegate void PlayerEnteredVisionEventHandler();
-  [Signal] public delegate void PlayerExitedVisionEventHandler();
-
-  [Signal] public delegate void PlayerEnteredHearingEventHandler();
-  [Signal] public delegate void PlayerExitedHearingEventHandler();
-
-  [Signal] public delegate void SoundHeardEventHandler(Vector3 soundPosition);
+  [Signal] public delegate void SoundHeardEventHandler(Vector3 position);
+  [Signal] public delegate void SeeingPlayerEventHandler(Vector3 position);
 
   public override void _Ready() {
-    owner = GetParent<Enemy>();
+    enemy = GetParent<Enemy>();
 
     vision = GetNode<Area3D>("Vision");
     hearing = GetNode<Area3D>("Hearing");
@@ -29,38 +25,61 @@ public partial class AIDetectionComponent : Node3D {
     vision.SetDeferred(Area3D.PropertyName.Monitorable, false);
     hearing.SetDeferred(Area3D.PropertyName.Monitorable, false);
 
-    vision.CollisionLayer = 0;
-    hearing.CollisionLayer = 0;
+    vision.CollisionLayer = (uint)CollisionLayerEnum.NONE;
+    hearing.CollisionLayer = (uint)CollisionLayerEnum.NONE;
 
     vision.CollisionMask = (uint)CollisionLayerEnum.PLAYER;
     hearing.CollisionMask = (uint)CollisionLayerEnum.PLAYER;
 
-    vision.BodyEntered += body => EmitSignalPlayerEnteredVision();
-    vision.BodyExited += body => EmitSignalPlayerExitedVision();
+    vision.BodyEntered += OnBodyEnteredVision;
+    vision.BodyExited += OnBodyExitedVision;
 
-    hearing.BodyEntered += body => EmitSignalPlayerEnteredHearing();
-    hearing.BodyExited += body => EmitSignalPlayerExitedHearing();
-
-    hearing.BodyEntered += OnBodyEntered;
-    hearing.BodyExited += OnBodyExited;
+    hearing.BodyEntered += OnBodyEnteredHearing;
+    hearing.BodyExited += OnBodyExitedHearing;
   }
 
   public override void _PhysicsProcess(double delta) {
-    if(!playerInHearing || player == null) { return; }
+    if(playerInHearing && player != null) {
+      if(player.soundLevel >= soundThreshold) {
+        enemy.hearingPlayer = true;
+        if(!player.GlobalPosition.IsEqualApprox(enemy.GlobalPosition)) {
+          LookAt(player.GlobalPosition);
+        }
+        GD.Print($"{enemy.Name} hearing sound");
+        EmitSignalSoundHeard(player.GlobalPosition);
+      }
+    }
 
-    if(player.soundLevel >= soundThreshold) {
-      EmitSignalSoundHeard(player.GlobalPosition);
+    if(playerInVision && player != null) {
+      float angle = (-enemy.GlobalBasis.Z).AngleTo(player.GlobalPosition);
+      if(angle < Mathf.DegToRad(60.0f)) {
+        enemy.playerInVision = true;
+        GD.Print($"{enemy.Name} seeing player");
+        EmitSignalSeeingPlayer(player.GlobalPosition);
+      }
     }
   }
 
-  private void OnBodyEntered(Node3D body) {
-    playerInHearing = true;
+  private void OnBodyEnteredVision(Node3D body) {
     player = body as Player;
+    playerInVision = true;
   }
 
-  private void OnBodyExited(Node3D body) {
+  private void OnBodyExitedVision(Node3D body) {
+    playerInVision = false;
+    enemy.playerInVision = false;
     player = null;
+  }
+
+  private void OnBodyEnteredHearing(Node3D body) {
+    player = body as Player;
+    playerInHearing = true;
+  }
+
+  private void OnBodyExitedHearing(Node3D body) {
     playerInHearing = false;
+    enemy.hearingPlayer = false;
+    player = null;
   }
 }
 

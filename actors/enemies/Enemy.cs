@@ -1,8 +1,20 @@
 using Godot;
 
+public struct AIInfo {
+  public bool hasTarget;
+  public bool soundHeard;
+  public bool playerVisible;
+  public bool beeingShot;
+
+  public Vector3 targetPosition;
+  public Vector3 soundPosition;
+  public Vector3 shotFromPosition;
+}
+
 [GlobalClass]
 public abstract partial class Enemy : Actor {
-  [Export] public EnemyInfo info;
+  [Export] public EnemyInfo enemyInfo;
+  public AIInfo aiInfo;
 
   public AnimationPlayer animationPlayer;
 
@@ -10,47 +22,25 @@ public abstract partial class Enemy : Actor {
   public bool hearingPlayer;
 
   protected AIStateMachine aiStateMachine;
-  protected StateMachine stateMachine;
   protected VelocityComponent velocityComponent;
   protected HealthComponent healthComponent;
   protected AIDetectionComponent detectionComponent;
 
   public override void _Ready() {
+    enemyInfo.ResourceLocalToScene = true;
 
-    info.ResourceLocalToScene = true;
+    CollisionLayer = (uint)CollisionLayerEnum.ENEMY;
+    CollisionMask =
+      (uint)CollisionLayerEnum.WORLD |
+      (uint)CollisionLayerEnum.PLAYER |
+      (uint)CollisionLayerEnum.ENEMY;
 
     animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
     aiStateMachine = GetComponent<AIStateMachine>();
-    stateMachine = GetComponent<StateMachine>();
     velocityComponent = GetComponent<VelocityComponent>();
     healthComponent = GetComponent<HealthComponent>();
     detectionComponent = GetComponent<AIDetectionComponent>();
-
-    detectionComponent.PlayerEnteredVision += OnPlayerEnteredVision;
-    detectionComponent.PlayerExitedVision += OnPlayerExitedVision;
-    // detectionComponent.PlayerEnteredHearing += OnPlayerEnteredHearing;
-    detectionComponent.PlayerExitedHearing += OnPlayerExitedHearing;
-  }
-
-  protected virtual void OnPlayerEnteredVision() {
-    playerInVision = true;
-    GD.Print($"Player entered Vision of {Name}");
-  }
-
-  protected virtual void OnPlayerExitedVision() {
-    playerInVision = false;
-    GD.Print($"Player exited Vision of {Name}");
-  }
-
-  // protected virtual void OnPlayerEnteredHearing() {
-  //   playerInHearing = true;
-  //   GD.Print($"Player entered Hearing of {Name}");
-  // }
-
-  protected virtual void OnPlayerExitedHearing() {
-    hearingPlayer = false;
-    GD.Print($"Player exited Hearing of {Name}");
   }
 }
 

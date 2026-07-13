@@ -10,7 +10,8 @@ public partial class Weapon : Node3D {
 
   private Projectile p;
 
-  private RayCast3D? aimCast;
+  private RayCast3D aimCast;
+  private RayCast3D projectileCast;
 
   public int CurrentAmmo { get; private set; }
   public bool Reloading { get; private set; }
@@ -19,12 +20,10 @@ public partial class Weapon : Node3D {
   [Signal] public delegate void ReloadedEventHandler();
 
   public override void _Ready() {
-    if(projectileSpawn == null) {
-      GD.PrintErr($"{Name} missing Projectile Spawn Marker");
-    }
+    aimCast = GetNode<RayCast3D>("../AimCast");
+    aimCast.TargetPosition = new (0.0f, 0.0f, -info.range);
 
-    aimCast = GetNodeOrNull<RayCast3D>("../AimCast");
-    aimCast?.TargetPosition = new (0.0f, 0.0f, -info.range);
+    projectileCast = GetNode<RayCast3D>("../ProjectileCast");
 
     CurrentAmmo = info.magazineSize;
 
@@ -53,10 +52,27 @@ public partial class Weapon : Node3D {
     // p.hitbox.EnableCollisionShapes();
     if(p == null) { return; }
     AddChild(p);
-    p.GlobalPosition = projectileSpawn.GlobalPosition;
-    if(aimCast.IsColliding()) { p.LookAt(aimCast.GetCollisionPoint()); }
-    else { p.GlobalRotation = projectileSpawn.GlobalRotation; }
-    p.shotPosition = GlobalPosition;
+
+    if(aimCast.IsColliding()) {
+      Vector3 collisionPoint = aimCast.GetCollisionPoint();
+
+      if(projectileCast.IsColliding()) {
+        float distance =
+          projectileSpawn.GlobalPosition.DistanceTo(collisionPoint);
+
+        Vector3 position = projectileSpawn.GlobalPosition;
+        projectileSpawn.Position += new Vector3(0.0f, 0.0f, distance + 0.05f);
+        p.GlobalPosition = projectileSpawn.GlobalPosition;
+        projectileSpawn.GlobalPosition = position;
+      } else {
+        p.LookAt(collisionPoint);
+        p.GlobalPosition = projectileSpawn.GlobalPosition;
+      }
+    } else {
+      p.GlobalPosition = projectileSpawn.GlobalPosition;
+    }
+    p.GlobalRotation = projectileSpawn.GlobalRotation;
+    p.shotPosition = p.GlobalPosition;
     p.TopLevel = true;
 
     EmitSignalShot();

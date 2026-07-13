@@ -6,7 +6,7 @@ public partial class AIStateAttack : AIState {
     float playerDistance,
     float leashDistance
   ) {
-    if(playerDistance > actor.info.attackRange) {
+    if(playerDistance > actor.enemyInfo.attackRange) {
       EmitSignalTransition(stateMachine.GetState<AIStateChase>()); return;
     }
   }

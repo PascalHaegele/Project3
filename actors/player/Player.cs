@@ -1,10 +1,10 @@
 using Godot;
 
-public partial class Player : Actor {
+public partial class Player : Actor, IHitable {
   private VelocityComponent velocityComponent;
   private CameraComponent camera;
   private InputComponent inputComponent;
-  private StateMachine stateMachine;
+  private StateMachineV2 stateMachine;
   private HealthComponent healthComponent;
   private InventoryComponent inventoryComponent;
 
@@ -27,7 +27,7 @@ public partial class Player : Actor {
 
     camera = GetComponent<CameraComponent>();
     inputComponent = GetComponent<InputComponent>();
-    stateMachine = GetComponent<StateMachine>();
+    stateMachine = GetComponent<StateMachineV2>();
     velocityComponent = GetComponent<VelocityComponent>();
     healthComponent = GetComponent<HealthComponent>();
     inventoryComponent = GetComponent<InventoryComponent>();
@@ -49,8 +49,14 @@ public partial class Player : Actor {
   }
 
   public override void _Process(double delta) {
+    Debug
+      .panel
+      .AddProperty("Velocity", Velocity.ToString("f2"), 2);
+  }
+
+  public override void _PhysicsProcess(double delta) {
     input = inputComponent.GetInput();
-    stateMachine.input = input;
+    stateMachine.UpdateInput(input);
 
     if(input.interact) { EmitSignalInteracting(); }
     if(input.shoot) { weapon.Shoot(); }
@@ -58,12 +64,6 @@ public partial class Player : Actor {
 
     if(input.openInventory) { inventoryComponent.PrintInventory(); }
 
-    Debug
-      .panel
-      .AddProperty("Velocity", Velocity.ToString("f2"), 2);
-  }
-
-  public override void _PhysicsProcess(double delta) {
     if(pickupCast.IsColliding()) {
       hoveringPickup = true;
       Area3D? collider = pickupCast.GetCollider() as Area3D;
@@ -120,6 +120,10 @@ public partial class Player : Actor {
         healthComponent.Heal(20.0f);
       }
     }
+  }
+
+  public void RecieveHit(HitInfo info) {
+    healthComponent.TakeDamage(info.damage);
   }
 
   private void OnHealthChanged(float newHealth) {
