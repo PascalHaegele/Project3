@@ -17,6 +17,7 @@ public partial class Player : Actor, IHitable {
 
   private Label ammoDisplay;
   private ProgressBar healthBar;
+  private Label potionCount;
 
   [Signal] public delegate void InteractingEventHandler();
 
@@ -34,10 +35,12 @@ public partial class Player : Actor, IHitable {
 
     healthComponent.HealthChanged += OnHealthChanged;
 
-    pickupCast = GetNode<RayCast3D>("CameraPivot/PickupCast");
+    inventoryComponent.InventoryChanged += OnInventoryChanged;
 
     weapon.Shot += OnWeaponShot;
     weapon.Reloaded += OnWeaponReloaded;
+
+    pickupCast = GetNode<RayCast3D>("CameraPivot/PickupCast");
 
     ammoDisplay = GetNode<Label>("HUD/AmmoDisplay");
     ammoDisplay.Text =
@@ -46,6 +49,9 @@ public partial class Player : Actor, IHitable {
     healthBar = GetNode<ProgressBar>("HUD/HealthBar");
     healthBar.MaxValue = healthComponent.maxHealth;
     healthBar.Value = healthComponent.CurrentHealth;
+
+    potionCount = GetNode<Label>("HUD/PotionCount");
+    potionCount.Text = "P : " + inventoryComponent.items[(int)ItemType.POTION];
   }
 
   public override void _Process(double delta) {
@@ -138,6 +144,10 @@ public partial class Player : Actor, IHitable {
   private void OnWeaponReloaded() {
     ammoDisplay.Text =
       weapon.CurrentAmmo.ToString() + " / " + weapon.info.magazineSize;
+  }
+
+  private void OnInventoryChanged() {
+    potionCount.Text = "P : " + inventoryComponent.items[(int)ItemType.POTION];
   }
 }
 

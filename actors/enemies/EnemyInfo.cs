@@ -2,8 +2,6 @@ using Godot;
 
 [Tool, GlobalClass]
 public partial class EnemyInfo : Resource {
-  [Export] public int id;
-
   [Export] public Vector3[] patrolPath;
 
   [Export] public Vector3 leashPoint;

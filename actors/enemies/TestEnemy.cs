@@ -7,6 +7,10 @@ public partial class TestEnemy : Enemy, IHitable {
 
   private ProgressBar healthBar;
 
+  private bool dead;
+
+  [Export] private ShaderMaterial dissolveMaterial;
+
   public override void _Ready() {
     base._Ready();
 
@@ -19,25 +23,25 @@ public partial class TestEnemy : Enemy, IHitable {
     hitboxComponent.damage = 10.0f;
     hitboxComponent.CollisionLayer = (uint)CollisionLayerEnum.ENEMY_HITBOX;
     hitboxComponent.CollisionMask = (uint)CollisionLayerEnum.PLAYER_HURTBOX;
+    hitboxComponent.DisableCollisionShapes();
 
     hurtboxComponent = GetComponent<HurtboxComponent>();
     hurtboxComponent.CollisionLayer = (uint)CollisionLayerEnum.ENEMY_HURTBOX;
     hurtboxComponent.CollisionMask = (uint)CollisionLayerEnum.NONE;
 
+
     healthBar = GetComponent<ProgressBar>();
     healthBar.MaxValue = healthComponent.maxHealth;
     healthBar.Value = healthComponent.CurrentHealth;
-
-    // detectionComponent.SeeingPlayer += OnSeeingPlayer;
-    // detectionComponent.SoundHeard += OnSoundHeared;
-  }
-
-  public override void _Process(double delta) {
-    input = aiStateMachine.GetInput;
-    stateMachine.UpdateInput(input);
   }
 
   public override void _PhysicsProcess(double delta) {
+    if(dead) { return; }
+
+    input = behaviorTree.GetInput;
+    behaviorTree.UpdateInfo(aiInfo);
+    stateMachine.UpdateInput(input);
+
     Vector3 direction = new(input.direction.X, 0.0f, input.direction.Y);
     Direction = direction;
 
@@ -49,29 +53,38 @@ public partial class TestEnemy : Enemy, IHitable {
 
   public void RecieveHit(HitInfo hitInfo) {
     healthComponent.TakeDamage(hitInfo.damage);
-    // if(hitInfo.direction != Vector3.Zero) {
-    //   aiStateMachine
-    //     .OnStateTransition(aiStateMachine.GetState<AIStateSearch>());
-    //   LookAt(GlobalPosition + hitInfo.direction);
-    // }
-  }
-
-  private void OnSeeingPlayer(Vector3 position) {
-    GD.Print($"{Name} sees player");
-    playerInVision = true;
-  }
-
-  private void OnSoundHeared(Vector3 position) {
-    GD.Print($"{Name} heard sound");
-    if(!position.IsEqualApprox(GlobalPosition)) { LookAt(position); }
-    hearingPlayer = true;
+    if(hitInfo.direction != Vector3.Zero && !playerInVision) {
+      Vector3 direction = hitInfo.direction;
+      direction.Y = GlobalPosition.Y;
+      LookAt(GlobalPosition + direction);
+    }
   }
 
   private void OnHealthChanged(float newHealth) {
     healthBar.Value = healthComponent.CurrentHealth;
   }
 
-  private void OnDeath() {
+  private async void OnDeath() {
+    // SetDeferred(Node.PropertyName.ProcessMode, (int)ProcessModeEnum.Disabled);
+    dead = true;
+
+    if(dissolveMaterial != null) {
+      MeshInstance3D mesh = GetNode<MeshInstance3D>("MeshInstance3D");
+      mesh.MaterialOverride = dissolveMaterial;
+      ShaderMaterial meshShader = mesh.MaterialOverride as ShaderMaterial;
+      meshShader.SetShaderParameter("t", 0.0);
+
+      Tween tween = CreateTween();
+      _ = tween.TweenMethod(
+        Callable.From((float value) => meshShader.SetShaderParameter("t", value)),
+        0.0,
+        1.0,
+        3.0
+      );
+
+      _ = await ToSignal(tween, Tween.SignalName.Finished);
+    }
+
     QueueFree();
   }
 }
