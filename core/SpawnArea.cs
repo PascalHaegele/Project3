@@ -9,6 +9,8 @@ public partial class SpawnArea : Area3D {
     CollisionLayer = (uint)CollisionLayerEnum.NONE;
     CollisionMask = (uint)CollisionLayerEnum.PLAYER;
 
+    Monitorable = false;
+
     _ = Connect(
       Area3D.SignalName.BodyEntered,
       Callable.From<Node3D>(OnBodyEntered),

@@ -43,6 +43,8 @@ PanelContainer/styles/panel = SubResource("StyleBoxFlat_yibi5")
 
 [sub_resource type="LabelSettings" id="LabelSettings_o8bm0"]
 font_size = 32
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_litht"]
 bg_color = Color(1, 1, 1, 1)
@@ -51,6 +53,11 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 corner_detail = 16
+
+[sub_resource type="LabelSettings" id="LabelSettings_ssdk0"]
+font_size = 20
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Player" type="CharacterBody3D" unique_id=134350 node_paths=PackedStringArray("weapon", "components")]
 collision_layer = 2
@@ -65,7 +72,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_v4a0d")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=1853229366]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 
 [node name="CameraComponent" type="Camera3D" parent="CameraPivot" unique_id=660106367]
 script = ExtResource("3_lsln6")
@@ -200,3 +207,16 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_litht")
+
+[node name="PotionCount" type="Label" parent="HUD" unique_id=1702446843]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 107.0
+offset_top = -117.0
+offset_right = 174.0
+offset_bottom = -94.0
+grow_vertical = 0
+text = "P : "
+label_settings = SubResource("LabelSettings_ssdk0")

@@ -21,13 +21,15 @@ public abstract partial class Enemy : Actor {
   public bool playerInVision;
   public bool hearingPlayer;
 
-  protected AIStateMachine aiStateMachine;
+  protected BehaviorTree behaviorTree;
   protected VelocityComponent velocityComponent;
   protected HealthComponent healthComponent;
   protected AIDetectionComponent detectionComponent;
 
+  public float LeashDistance => GlobalPosition.DistanceTo(enemyInfo.leashPoint);
+
   public override void _Ready() {
-    enemyInfo.ResourceLocalToScene = true;
+    // enemyInfo.ResourceLocalToScene = true;
 
     CollisionLayer = (uint)CollisionLayerEnum.ENEMY;
     CollisionMask =
@@ -37,7 +39,7 @@ public abstract partial class Enemy : Actor {
 
     animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
-    aiStateMachine = GetComponent<AIStateMachine>();
+    behaviorTree = GetComponent<BehaviorTree>();
     velocityComponent = GetComponent<VelocityComponent>();
     healthComponent = GetComponent<HealthComponent>();
     detectionComponent = GetComponent<AIDetectionComponent>();

@@ -45,7 +45,10 @@ public partial class PlayerStateMachine : TransitionStateMachine {
 
     AddGlobalTransition(
       "fall",
-      () => !actor.IsOnFloor() && actor.Velocity.Y < 0.0f
+      () =>
+        !actor.IsOnFloor() &&
+        actor.Velocity.Y < 0.0f &&
+        currentState is not ActorStateDash
     );
 
     AddTransition("idle", "jump", () => input.jump);

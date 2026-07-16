@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://6p00olcusefr" path="res://objects/items/Pickup.cs" id="1_k4x88"]
 [ext_resource type="PackedScene" uid="uid://4ujh60nwrugk" path="res://ui/pickup_indicator.tscn" id="2_y4gfl"]
+[ext_resource type="PackedScene" uid="uid://ddv0r0abyl5w4" path="res://objects/items/Potion.glb" id="3_hykmt"]
 
 [sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_hykmt"]
 length = 0.75
@@ -11,9 +12,6 @@ radius = 0.1
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_hykmt"]
 viewport_path = NodePath("SubViewport")
-
-[sub_resource type="BoxMesh" id="BoxMesh_qrxv1"]
-size = Vector3(0.1, 0.1, 0.1)
 
 [node name="Pickup" type="RigidBody3D" unique_id=26626307]
 collision_layer = 0
@@ -47,5 +45,5 @@ double_sided = false
 no_depth_test = true
 texture = SubResource("ViewportTexture_hykmt")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=303309342]
-mesh = SubResource("BoxMesh_qrxv1")
+[node name="Potion" parent="." unique_id=1105336233 instance=ExtResource("3_hykmt")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.221334, 0, 0)

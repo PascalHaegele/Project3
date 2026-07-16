@@ -4,20 +4,30 @@
 [ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="2_k4hf1"]
 [ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="2_l1sbr"]
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_mka0o"]
+[ext_resource type="Shader" uid="uid://cbm5fk8m2l66i" path="res://shader/dissolve.gdshader" id="2_p5iym"]
 [ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="2_robej"]
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="3_l1sbr"]
 [ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="3_p5iym"]
-[ext_resource type="Script" uid="uid://bh4khbqh2v4wy" path="res://components/AIStateMachine.cs" id="5_da4by"]
-[ext_resource type="Script" uid="uid://duf7f2x7a3i0g" path="res://components/states/AIStatePatrol.cs" id="6_v554o"]
-[ext_resource type="Script" uid="uid://b1dckfderimef" path="res://components/states/AIStateChase.cs" id="7_robej"]
-[ext_resource type="Script" uid="uid://dgf67hc0g785g" path="res://components/states/AIStateAttack.cs" id="8_nl8p5"]
-[ext_resource type="Script" uid="uid://drdb24umi8upn" path="res://components/states/AIStateSearch.cs" id="9_jm64t"]
-[ext_resource type="Script" uid="uid://bs3mp8e0hcm1x" path="res://components/states/AIStateIdle.cs" id="10_nl8p5"]
 [ext_resource type="Script" uid="uid://bvmpjaulofawh" path="res://actors/enemies/TestEnemyStateMachine.cs" id="12_kstis"]
-[ext_resource type="Script" uid="uid://bh1wcy7x4xxqk" path="res://components/AIDetectionComponent.cs" id="17_da4by"]
+[ext_resource type="Script" uid="uid://bh1wcy7x4xxqk" path="res://components/ai/AIDetectionComponent.cs" id="17_da4by"]
+[ext_resource type="Script" uid="uid://wnjheg6xmkdy" path="res://components/ai/BehaviorTree.cs" id="17_v554o"]
 [ext_resource type="PackedScene" uid="uid://dn261xqm15ik0" path="res://ui/health_bar.tscn" id="19_nl8p5"]
 
-[sub_resource type="Resource" id="Resource_kstis"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ks570"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8pc84"]
+noise = SubResource("FastNoiseLite_ks570")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u8v7t"]
+render_priority = 0
+shader = ExtResource("2_p5iym")
+shader_parameter/t = 0.0
+shader_parameter/emmission_color = Color(0.91330606, 0.8439394, 0.41551143, 1)
+shader_parameter/noise_tex = SubResource("NoiseTexture2D_8pc84")
+shader_parameter/noise_scale = 1.0
+
+[sub_resource type="Resource" id="Resource_6b7mj"]
+resource_local_to_scene = true
 script = ExtResource("2_robej")
 patrolPath = PackedVector3Array(-8, 0, -17, 6.77744, 0, -16.653843, 15.346003, 0, -4.8959856, 0.55296326, 0, -5.0219855, -14.483469, 0, -2.364942, -16.650803, 0, -12.929461)
 leashPoint = Vector3(0, 0, -14.593309)
@@ -45,31 +55,6 @@ radius = 0.16
 height = 1.2
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
-
-[sub_resource type="Resource" id="Resource_da4by"]
-resource_local_to_scene = true
-script = ExtResource("6_v554o")
-metadata/_custom_type_script = "uid://duf7f2x7a3i0g"
-
-[sub_resource type="Resource" id="Resource_v554o"]
-resource_local_to_scene = true
-script = ExtResource("7_robej")
-metadata/_custom_type_script = "uid://b1dckfderimef"
-
-[sub_resource type="Resource" id="Resource_robej"]
-resource_local_to_scene = true
-script = ExtResource("8_nl8p5")
-metadata/_custom_type_script = "uid://dgf67hc0g785g"
-
-[sub_resource type="Resource" id="Resource_jm64t"]
-resource_local_to_scene = true
-script = ExtResource("9_jm64t")
-metadata/_custom_type_script = "uid://drdb24umi8upn"
-
-[sub_resource type="Resource" id="Resource_4uygd"]
-resource_local_to_scene = true
-script = ExtResource("10_nl8p5")
-metadata/_custom_type_script = "uid://bs3mp8e0hcm1x"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
 radius = 0.55
@@ -148,9 +133,10 @@ viewport_path = NodePath("SubViewport")
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_xmkit")
-enemyInfo = SubResource("Resource_kstis")
+dissolveMaterial = SubResource("ShaderMaterial_u8v7t")
+enemyInfo = SubResource("Resource_6b7mj")
 velocityInfo = SubResource("Resource_nl8p5")
-components = [NodePath("AIStateMachine"), NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent"), NodePath("AIDetectionComponent"), NodePath("MeshInstance3D/MeshInstance3D2/HitboxComponent"), NodePath("SubViewport/HealthBar"), NodePath("TestEnemyStateMachine")]
+components = [NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent"), NodePath("AIDetectionComponent"), NodePath("MeshInstance3D/MeshInstance3D2/HitboxComponent"), NodePath("SubViewport/HealthBar"), NodePath("TestEnemyStateMachine"), NodePath("BehaviorTree")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1364863915]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -183,12 +169,6 @@ target_desired_distance = 0.5
 path_height_offset = 0.25
 debug_enabled = true
 
-[node name="AIStateMachine" type="Node" parent="." unique_id=1041256015 node_paths=PackedStringArray("navAgent")]
-script = ExtResource("5_da4by")
-states = Array[Object]([SubResource("Resource_da4by"), SubResource("Resource_v554o"), SubResource("Resource_robej"), SubResource("Resource_jm64t"), SubResource("Resource_4uygd")])
-navAgent = NodePath("../NavigationAgent3D")
-metadata/_custom_type_script = "uid://bh4khbqh2v4wy"
-
 [node name="VelocityComponent" type="Node" parent="." unique_id=1302938011]
 script = ExtResource("2_k4hf1")
 metadata/_custom_type_script = "uid://2b3a880do5ag"
@@ -220,13 +200,16 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AIDetectionComponent/Vision" unique_id=461053048]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("SphereShape3D_v4a0d")
+debug_color = Color(0.8589963, 0.34451708, 0.3117536, 0.41960785)
 
 [node name="Hearing" type="Area3D" parent="AIDetectionComponent" unique_id=1866108236]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AIDetectionComponent/Hearing" unique_id=1070024788]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("SphereShape3D_iupsc")
+debug_color = Color(0.19589242, 0.5166347, 1, 0.41960785)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=946372071]
 libraries/ = SubResource("AnimationLibrary_0pasn")
@@ -242,3 +225,8 @@ transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 2.3872952, 0)
 billboard = 1
 double_sided = false
 texture = SubResource("ViewportTexture_bfp77")
+
+[node name="BehaviorTree" type="Node" parent="." unique_id=1182068400 node_paths=PackedStringArray("navAgent")]
+script = ExtResource("17_v554o")
+navAgent = NodePath("../NavigationAgent3D")
+metadata/_custom_type_script = "uid://wnjheg6xmkdy"
