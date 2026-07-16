@@ -19,6 +19,9 @@ public partial class Weapon : Node3D {
   [Signal] public delegate void ShotEventHandler();
   [Signal] public delegate void ReloadedEventHandler();
 
+  // --- Animation (delegiert an WeaponAnimation-Child) ---
+  private WeaponAnimation weaponAnim;
+
   public override void _Ready() {
     aimCast = GetNode<RayCast3D>("../AimCast");
     aimCast.TargetPosition = new (0.0f, 0.0f, -info.range);
@@ -27,7 +30,7 @@ public partial class Weapon : Node3D {
 
     CurrentAmmo = info.magazineSize;
 
-    // SpawnProjectiles();
+    weaponAnim = GetNodeOrNull<WeaponAnimation>("WeaponAnimation");
   }
 
   public override void _PhysicsProcess(double delta) {
@@ -75,17 +78,26 @@ public partial class Weapon : Node3D {
     p.shotPosition = p.GlobalPosition;
     p.TopLevel = true;
 
+    weaponAnim?.PlayRecoil();
+
     EmitSignalShot();
 
     GD.Print($"{Name} fired");
     GD.Print($"{Name} Ammo: {CurrentAmmo}");
   }
 
+  public void PlayJumpAnim() { weaponAnim?.PlayJump(); }
+  public void PlayDashAnim() { weaponAnim?.PlayDash(); }
+  public void PlaySprintAnim(bool active) { weaponAnim?.PlaySprint(active); }
+  public void PlayReloadAnim() { weaponAnim?.PlayReload(); }
+
   public void Reload() {
     if(Reloading || CurrentAmmo >= info.magazineSize) { return; }
 
     Reloading = true;
     reloadTimer = info.reloadTime;
+
+    weaponAnim?.PlayReload();
 
     GD.Print($"{Name} Reloading");
   }
@@ -94,24 +106,9 @@ public partial class Weapon : Node3D {
     Reloading = false;
     CurrentAmmo = info.magazineSize;
 
-    // SpawnProjectiles();
-
     EmitSignalReloaded();
 
     GD.Print($"{Name} reload finished");
     GD.Print($"{Name} Ammo: {CurrentAmmo}");
   }
-
-  private void SpawnProjectiles() {
-    p = info.projectile.InstantiateOrNull<Projectile>();
-    if(p == null) { return; }
-    AddChild(p);
-    p.GlobalPosition =
-      projectileSpawn != null ? projectileSpawn.GlobalPosition : GlobalPosition;
-    p.GlobalRotation =
-      projectileSpawn != null ? projectileSpawn.GlobalRotation : GlobalRotation;
-    p.hitbox.DisableCollisionShapes();
-    p.ProcessMode = ProcessModeEnum.Disabled;
-  }
 }
-
