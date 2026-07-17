@@ -34,6 +34,9 @@ public partial class EventManager : Node {
       if(keyEvent.Keycode == Key.Period) {
         playerInsanityComponent.AddInsanity(10);
       }
+      if(keyEvent.Keycode == Key.Comma) {
+        playerInsanityComponent.AddInsanity(-10);
+      }
     }
   }
 

@@ -4,23 +4,33 @@
 [ext_resource type="Shader" uid="uid://cgo4kfkp8kqls" path="res://maps/sky.gdshader" id="1_svl6s"]
 [ext_resource type="Script" uid="uid://b20cok5elpx03" path="res://core/EventManager.cs" id="1_wd2vj"]
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_6b7mj"]
+[ext_resource type="Texture2D" uid="uid://lv4ptmsm7xpg" path="res://maps/Map 1_final_M_Brick_albedo.png" id="2_8pc84"]
 [ext_resource type="PackedScene" uid="uid://c55wv856x1kmu" path="res://actors/enemies/test_enemy.tscn" id="2_pbr4s"]
-[ext_resource type="Texture2D" uid="uid://da7jcsvmhja8y" path="res://vfx/skybox.png" id="2_svl6s"]
+[ext_resource type="Texture2D" uid="uid://da7jcsvmhja8y" path="res://maps/skybox.png" id="2_svl6s"]
+[ext_resource type="Texture2D" uid="uid://kwnbrnpp1w4" path="res://maps/Map 1_final_M_Brick_normal.png" id="3_ks570"]
 [ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="3_pbr4s"]
 [ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="3_pwco0"]
+[ext_resource type="Texture2D" uid="uid://brqaum1mit0q3" path="res://maps/Map 1_final_M_Brick_orm.png" id="4_ad6p3"]
 [ext_resource type="PackedScene" uid="uid://dmp0my4bhl36n" path="res://objects/chest/chest.tscn" id="5_cabd0"]
-[ext_resource type="Script" uid="uid://ci31eubnodj4i" path="res://objects/portal/PortalArea.cs" id="10_wd2vj"]
+[ext_resource type="Script" uid="uid://ci31eubnodj4i" path="res://core/PortalArea.cs" id="10_wd2vj"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_bfp77"]
 vertices = PackedVector3Array(-24.5, 0.4, -17.75, -19, 0.4, -17.75, -19, 0.4, -18.75, -17.75, 0.4, -19, -17.75, 0.4, -24.5, -24.5, 0.4, -24.5, -16.75, 0.4, -18.75, -7.25, 0.4, -24.5, -16.75, 0.4, -17.25, -8.75, 0.4, -9, -7.25, 0.4, -9, -6.75, 0.4, -8, 7, 0.4, -7.75, 7, 0.4, -8.75, -6.75, 0.4, -8.75, 7.5, 0.4, -9, 7.5, 0.4, -24.5, 17, 0.4, -18.75, 18, 0.4, -19, 18, 0.4, -24.5, 17, 0.4, -17, 9, 0.4, -9, 17.5, 0.4, -16.75, 19, 0.4, -19, 19.25, 0.4, -18, 24.5, 0.4, -18, 24.5, 0.4, -24.5, 18.75, 0.4, -16.75, 24.5, 0.4, -6.75, 9.25, 0.4, -7.25, 8.75, 0.4, -6.75, -18.75, 0.4, -16.75, -24.5, 0.4, -7.25, -17.25, 0.4, -16.75, -9, 0.4, -7.25, -7.25, 0.4, -6.75, -8, 0.4, -6.75, -7.75, 0.4, 7, -7, 0.4, 7, 7, 0.4, 7.25, 8, 0.4, 7, 8, 0.4, -6.75, -6.75, 0.4, 8, 7, 0.4, 8, 7, 0.4, -7, -8.75, 0.4, 7, -8.75, 0.4, -6.75, -9, 0.4, 7.5, -24.5, 0.4, 7.5, 8.75, 0.4, 7, 24.5, 0.4, 6.75, 19, 0.4, 17, 19.25, 0.4, 18, 24.5, 0.4, 18, 9.25, 0.4, 7.25, 17.5, 0.4, 17, 9.25, 0.4, 8.75, -24.5, 0.4, 18, -19, 0.4, 18, -18.75, 0.4, 17, -17.25, 0.4, 17, -8.75, 0.4, 9.25, 7, 0.4, 8.75, -6.75, 0.4, 8.75, -6.75, 0.4, 24.5, 6.75, 0.4, 24.5, -16.75, 0.4, 18.75, -18, 0.4, 19.25, -18, 0.4, 24.5, -16.75, 0.4, 17.25, -7.25, 0.4, 9.25, 18, 0.4, 24.5, 18, 0.4, 19.25, 17, 0.4, 19, 17, 0.4, 17.25, 8.75, 0.4, 9.25, 7.25, 0.4, 9.25, -19, 0.4, 19, -24.5, 0.4, 24.5, 18.75, 0.4, 19.25, 24.5, 0.4, 24.5)
 polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(3, 2, 4), PackedInt32Array(4, 2, 5), PackedInt32Array(5, 2, 0), PackedInt32Array(3, 4, 6), PackedInt32Array(6, 4, 7), PackedInt32Array(6, 7, 8), PackedInt32Array(8, 7, 9), PackedInt32Array(9, 7, 10), PackedInt32Array(14, 13, 11), PackedInt32Array(11, 13, 12), PackedInt32Array(14, 10, 13), PackedInt32Array(13, 10, 15), PackedInt32Array(15, 10, 7), PackedInt32Array(15, 7, 16), PackedInt32Array(18, 17, 19), PackedInt32Array(19, 17, 16), PackedInt32Array(17, 20, 16), PackedInt32Array(16, 20, 21), PackedInt32Array(16, 21, 15), PackedInt32Array(20, 22, 21), PackedInt32Array(24, 23, 25), PackedInt32Array(25, 23, 26), PackedInt32Array(26, 23, 19), PackedInt32Array(23, 18, 19), PackedInt32Array(24, 25, 27), PackedInt32Array(27, 25, 28), PackedInt32Array(28, 30, 29), PackedInt32Array(27, 28, 22), PackedInt32Array(22, 28, 21), PackedInt32Array(21, 28, 29), PackedInt32Array(1, 31, 0), PackedInt32Array(0, 31, 32), PackedInt32Array(31, 33, 32), PackedInt32Array(32, 33, 9), PackedInt32Array(32, 9, 34), PackedInt32Array(33, 8, 9), PackedInt32Array(38, 37, 35), PackedInt32Array(35, 37, 36), PackedInt32Array(41, 40, 39), PackedInt32Array(43, 42, 39), PackedInt32Array(39, 42, 38), PackedInt32Array(11, 12, 44), PackedInt32Array(41, 39, 44), PackedInt32Array(44, 39, 38), PackedInt32Array(44, 38, 35), PackedInt32Array(44, 35, 11), PackedInt32Array(46, 36, 45), PackedInt32Array(45, 36, 37), PackedInt32Array(45, 47, 46), PackedInt32Array(46, 47, 34), PackedInt32Array(34, 47, 48), PackedInt32Array(34, 48, 32), PackedInt32Array(49, 40, 30), PackedInt32Array(30, 40, 41), PackedInt32Array(28, 50, 30), PackedInt32Array(30, 50, 49), PackedInt32Array(52, 51, 53), PackedInt32Array(53, 51, 50), PackedInt32Array(50, 54, 49), PackedInt32Array(51, 55, 50), PackedInt32Array(50, 55, 56), PackedInt32Array(50, 56, 54), PackedInt32Array(58, 57, 59), PackedInt32Array(59, 57, 48), PackedInt32Array(59, 48, 60), PackedInt32Array(60, 48, 61), PackedInt32Array(61, 48, 47), PackedInt32Array(63, 42, 62), PackedInt32Array(62, 42, 43), PackedInt32Array(64, 63, 65), PackedInt32Array(65, 63, 62), PackedInt32Array(67, 66, 68), PackedInt32Array(68, 66, 64), PackedInt32Array(69, 60, 61), PackedInt32Array(70, 63, 64), PackedInt32Array(61, 70, 69), PackedInt32Array(69, 70, 66), PackedInt32Array(66, 70, 64), PackedInt32Array(72, 71, 73), PackedInt32Array(73, 71, 65), PackedInt32Array(75, 56, 74), PackedInt32Array(74, 56, 55), PackedInt32Array(62, 76, 65), PackedInt32Array(75, 74, 76), PackedInt32Array(76, 74, 73), PackedInt32Array(76, 73, 65), PackedInt32Array(67, 68, 77), PackedInt32Array(77, 68, 78), PackedInt32Array(77, 78, 57), PackedInt32Array(57, 58, 77), PackedInt32Array(71, 72, 79), PackedInt32Array(52, 53, 79), PackedInt32Array(79, 53, 80), PackedInt32Array(79, 80, 71)]
 geometry_collision_mask = 4294967055
 
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_6t5b2"]
+albedo_texture = ExtResource("2_8pc84")
+orm_texture = ExtResource("4_ad6p3")
+normal_enabled = true
+normal_texture = ExtResource("3_ks570")
+uv1_triplanar = true
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsga6"]
 shader = ExtResource("1_svl6s")
 shader_parameter/sky_tex = ExtResource("2_svl6s")
-shader_parameter/background_color = Color(0.13547772, 0.19163427, 0.3386564, 1)
-shader_parameter/accent_color = Color(1.1452327, 0.9265981, 8.858306e-07, 1)
+shader_parameter/background_color = Color(0, 0, 0, 1)
+shader_parameter/accent_color = Color(0.7925, 0.62001187, 0.28809097, 1)
 shader_parameter/accent_intensity = 0.0
 
 [sub_resource type="Sky" id="Sky_pbr4s"]
@@ -33,7 +43,7 @@ ambient_light_sky_contribution = 0.01
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_bfp77"]
 
-[sub_resource type="Resource" id="Resource_wd2vj"]
+[sub_resource type="Resource" id="Resource_8pc84"]
 resource_local_to_scene = true
 script = ExtResource("3_pbr4s")
 patrolPath = PackedVector3Array(-8, 0, -17, 6.77744, 0, -16.653843, 15.346003, 0, -4.8959856, 0.55296326, 0, -5.0219855, -14.483469, 0, -2.364942, -16.650803, 0, -12.929461)
@@ -41,14 +51,14 @@ leashPoint = Vector3(0, 0, -14.593309)
 attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_fpxlb"]
+[sub_resource type="Resource" id="Resource_ks570"]
 resource_local_to_scene = true
 script = ExtResource("2_6b7mj")
 walkSpeed = 3.0
 sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
-[sub_resource type="Resource" id="Resource_u8v7t"]
+[sub_resource type="Resource" id="Resource_ad6p3"]
 resource_local_to_scene = true
 script = ExtResource("2_6b7mj")
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
@@ -120,7 +130,7 @@ size = Vector3(1, 4, 1)
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="NavigationRegion3D" unique_id=1383940001]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, 8)
-gi_mode = 0
+material_override = SubResource("ORMMaterial3D_6t5b2")
 use_collision = true
 collision_mask = 0
 size = Vector3(1, 4, 1)
@@ -162,8 +172,8 @@ metadata/_custom_type_script = "uid://cq4ddchn0vss"
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_pbr4s")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -11.255119, 0, -17.172976)
-enemyInfo = SubResource("Resource_wd2vj")
-velocityInfo = SubResource("Resource_fpxlb")
+enemyInfo = SubResource("Resource_8pc84")
+velocityInfo = SubResource("Resource_ks570")
 
 [node name="Chest" parent="." unique_id=1750432848 instance=ExtResource("5_cabd0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5567584, -2.3841858e-07, 0.13444328)
@@ -172,7 +182,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5567584, -2.3841858e-07, 0.
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4432416, -2.3841858e-07, 0.13444328)
 
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("1_k1jtb")]
-velocityInfo = SubResource("Resource_u8v7t")
+velocityInfo = SubResource("Resource_ad6p3")
 
 [node name="PortalArea" type="Area3D" parent="." unique_id=1281787374]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.847751, 0, 3.2392159)

@@ -102,8 +102,9 @@ shape = SubResource("CapsuleShape3D_v4a0d")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 
 [node name="CameraComponent" type="Camera3D" parent="CameraPivot" unique_id=660106367]
+far = 1000.0
 script = ExtResource("3_lsln6")
-sensitivity = 0.4
+sensitivity = 0.35
 tiltLowerLimit = -1.3089969389957472
 tiltUpperLimit = 1.3962634015954636
 metadata/_custom_type_script = "uid://dc3slcqxdplvw"
@@ -127,6 +128,7 @@ debug_shape_thickness = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12808561, -0.117037416, 0)
 target_position = Vector3(0, 0, -0.65)
 collision_mask = 5
+debug_shape_thickness = 1
 
 [node name="InputComponent" type="Node" parent="." unique_id=536807353]
 script = ExtResource("8_hiosj")

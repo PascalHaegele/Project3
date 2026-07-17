@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="2_k4hf1"]
 [ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="2_l1sbr"]
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_mka0o"]
-[ext_resource type="Shader" uid="uid://cbm5fk8m2l66i" path="res://shader/dissolve.gdshader" id="2_p5iym"]
+[ext_resource type="Shader" uid="uid://cbm5fk8m2l66i" path="res://actors/enemies/dissolve.gdshader" id="2_p5iym"]
 [ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="2_robej"]
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="3_l1sbr"]
 [ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="3_p5iym"]
@@ -164,6 +164,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_v4a0d")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1785939912]
+path_desired_distance = 0.5
+target_desired_distance = 0.5
 path_height_offset = 0.25
 debug_enabled = true
 
@@ -178,6 +180,11 @@ metadata/_custom_type_script = "uid://bvmpjaulofawh"
 [node name="HealthComponent" type="Node" parent="." unique_id=1400482761]
 script = ExtResource("2_l1sbr")
 metadata/_custom_type_script = "uid://cmb0oydjb0jfo"
+
+[node name="BehaviorTree" type="Node" parent="." unique_id=1182068400 node_paths=PackedStringArray("navAgent")]
+script = ExtResource("17_v554o")
+navAgent = NodePath("../NavigationAgent3D")
+metadata/_custom_type_script = "uid://wnjheg6xmkdy"
 
 [node name="HurtboxComponent" type="Area3D" parent="." unique_id=1301362105]
 collision_layer = 128
@@ -223,8 +230,3 @@ transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 2.3872952, 0)
 billboard = 1
 double_sided = false
 texture = SubResource("ViewportTexture_bfp77")
-
-[node name="BehaviorTree" type="Node" parent="." unique_id=1182068400 node_paths=PackedStringArray("navAgent")]
-script = ExtResource("17_v554o")
-navAgent = NodePath("../NavigationAgent3D")
-metadata/_custom_type_script = "uid://wnjheg6xmkdy"
