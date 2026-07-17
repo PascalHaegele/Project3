@@ -160,9 +160,13 @@ public partial class Player : Actor, IHitable {
     ammoDisplay.Text =
       weapon.CurrentAmmo.ToString() + " / " + weapon.info.magazineSize;
   }
+<<<<<<< Updated upstream
 
   private void OnInventoryChanged() {
     potionCount.Text = "P : " + inventoryComponent.items[(int)ItemType.POTION];
   }
 }
 
+=======
+}
+>>>>>>> Stashed changes
