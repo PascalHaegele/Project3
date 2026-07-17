@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://ddv0r0abyl5w4" path="res://objects/items/Potion.glb" id="3_hykmt"]
 
 [sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_hykmt"]
-length = 0.75
+length = 0.5
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_f3oj0"]
 radius = 0.1
@@ -15,6 +15,7 @@ viewport_path = NodePath("SubViewport")
 
 [node name="Pickup" type="RigidBody3D" unique_id=26626307]
 collision_layer = 0
+gravity_scale = 2.0
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_k4x88")

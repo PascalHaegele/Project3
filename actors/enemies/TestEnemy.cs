@@ -76,7 +76,9 @@ public partial class TestEnemy : Enemy, IHitable {
 
       Tween tween = CreateTween();
       _ = tween.TweenMethod(
-        Callable.From((float value) => meshShader.SetShaderParameter("t", value)),
+        Callable.From(
+          (float value) => meshShader.SetShaderParameter("t", value)
+        ),
         0.0,
         1.0,
         3.0

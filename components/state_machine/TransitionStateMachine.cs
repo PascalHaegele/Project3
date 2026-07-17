@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 [GlobalClass]
-public abstract partial class TransitionStateMachine : StateMachineV2 {
+public abstract partial class TransitionStateMachine : StateMachine {
   public bool autoUpdate = true;
 
   private TransitionManager transitionManager = new();
@@ -36,7 +36,7 @@ public abstract partial class TransitionStateMachine : StateMachineV2 {
     if(autoUpdate) { CheckTransitions(); }
   }
 
-  protected override void ChangeState(StateV2 newState) {
+  protected override void ChangeState(State newState) {
     StringName oldState = GetCurrentStateName();
     base.ChangeState(newState);
 

@@ -16,8 +16,6 @@ public partial class BehaviorTree : Node {
 
   private int patrolIndex;
 
-  private float waypointTimer;
-
   private InputPackage input = new();
   public InputPackage GetInput => input;
 
@@ -100,6 +98,7 @@ public partial class BehaviorTree : Node {
   }
 
   private NodeState AttackPlayer() {
+    enemy.GetComponent<HitboxComponent>().EnableCollisionShapes();
     enemy.animationPlayer.Play("attack");
     return NodeState.SUCCESS;
   }

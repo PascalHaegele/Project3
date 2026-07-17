@@ -3,6 +3,7 @@ using Godot;
 [GlobalClass]
 public partial class SpawnArea : Area3D {
   [Export] public PackedScene enemy;
+  [Export] public EnemyInfo enemyInfo;
   [Export] public Marker3D[] spawnPositions;
 
   public override void _Ready() {
@@ -21,6 +22,8 @@ public partial class SpawnArea : Area3D {
   private void OnBodyEntered(Node3D body) {
     for(int i = 0; i < spawnPositions.Length; i++) {
       Enemy e = enemy.Instantiate<Enemy>();
+      e.enemyInfo = enemyInfo;
+      e.enemyInfo.ResourceLocalToScene = true;
       AddChild(e);
       e.Position = spawnPositions[i].Position;
       e.Rotation = spawnPositions[i].Rotation;

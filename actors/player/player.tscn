@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cohtww8gqmevr" path="res://weapons/revolver/revolver.tscn" id="4_0wchr"]
 [ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="7_hiosj"]
 [ext_resource type="Script" uid="uid://dtal7j6ccfpjj" path="res://components/InputComponent.cs" id="8_hiosj"]
+[ext_resource type="Script" uid="uid://blliffgtkxkfr" path="res://components/InsanityComponent.cs" id="11_7aotg"]
 [ext_resource type="Script" uid="uid://g3kw63x81wsu" path="res://components/InventoryComponent.cs" id="13_7aotg"]
 [ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="14_0wchr"]
 [ext_resource type="Script" uid="uid://385nx60lb30b" path="res://core/debug/DebugPanel.cs" id="15_12xki"]
@@ -59,13 +60,39 @@ font_size = 20
 outline_size = 5
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ssdk0"]
+bg_color = Color(0.14280847, 0.14280847, 0.14280841, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_size = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7aotg"]
+bg_color = Color(0.86981654, 0.74060166, 0, 1)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [node name="Player" type="CharacterBody3D" unique_id=134350 node_paths=PackedStringArray("weapon", "components")]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_nvxhs")
 weapon = NodePath("CameraPivot/Revolver")
 velocityInfo = SubResource("Resource_pwco0")
-components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("PlayerStateMachine"), NodePath("HealthComponent"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent")]
+components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("PlayerStateMachine"), NodePath("HealthComponent"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent"), NodePath("InsanityComponent")]
 
 [node name="BodyCollision" type="CollisionShape3D" parent="." unique_id=859779642]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -130,6 +157,10 @@ shape = SubResource("CapsuleShape3D_5k4qt")
 [node name="InventoryComponent" type="Node" parent="." unique_id=1260849864]
 script = ExtResource("13_7aotg")
 metadata/_custom_type_script = "uid://g3kw63x81wsu"
+
+[node name="InsanityComponent" type="Node" parent="." unique_id=331735480]
+script = ExtResource("11_7aotg")
+metadata/_custom_type_script = "uid://blliffgtkxkfr"
 
 [node name="HUD" type="Control" parent="." unique_id=925751462]
 layout_mode = 3
@@ -220,3 +251,20 @@ offset_bottom = -94.0
 grow_vertical = 0
 text = "P : "
 label_settings = SubResource("LabelSettings_ssdk0")
+
+[node name="InsanityMeter" type="ProgressBar" parent="HUD" unique_id=1327990237]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 62.0
+offset_top = -200.0
+offset_right = 83.0
+offset_bottom = -80.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_ssdk0")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7aotg")
+value = 50.0
+fill_mode = 3
+show_percentage = false

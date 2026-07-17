@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://cn8nhwdvhamst"]
+
+[ext_resource type="Shader" uid="uid://b74o5g2jdlfrh" path="res://objects/portal/portal.gdshader" id="1_e3qr7"]
+[ext_resource type="Script" uid="uid://dkgy0nmelclty" path="res://objects/portal/Portal.cs" id="1_v7atq"]
+
+[sub_resource type="HeightMapShape3D" id="HeightMapShape3D_ah4id"]
+
+[sub_resource type="Gradient" id="Gradient_f3oj0"]
+offsets = PackedFloat32Array(0.62634814, 1)
+colors = PackedColorArray(0.02427498, 0.02427498, 0.02427498, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4ajh5"]
+noise_type = 0
+fractal_type = 3
+fractal_octaves = 3
+fractal_ping_pong_strength = 7.0
+domain_warp_enabled = true
+domain_warp_type = 2
+domain_warp_amplitude = 10.0
+domain_warp_frequency = 0.1
+domain_warp_fractal_type = 0
+metadata/_preview_in_3d_space_ = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_litht"]
+noise = SubResource("FastNoiseLite_4ajh5")
+color_ramp = SubResource("Gradient_f3oj0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o8bm0"]
+render_priority = 0
+shader = ExtResource("1_e3qr7")
+shader_parameter/noise_tex = SubResource("NoiseTexture2D_litht")
+shader_parameter/layers = 4
+shader_parameter/depth_amount = 0.2
+shader_parameter/fade_amount = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_bfp77"]
+size = Vector2(1, 2)
+
+[sub_resource type="HeightMapShape3D" id="HeightMapShape3D_v7atq"]
+
+[node name="Portal" type="StaticBody3D" unique_id=1171833219]
+collision_mask = 0
+script = ExtResource("1_v7atq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=625903158]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1, -0.01)
+shape = SubResource("HeightMapShape3D_ah4id")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1826875411]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = SubResource("ShaderMaterial_o8bm0")
+mesh = SubResource("QuadMesh_bfp77")
+
+[node name="PortalArea" type="Area3D" parent="." unique_id=1950876482]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PortalArea" unique_id=599885849]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1, 0.01)
+shape = SubResource("HeightMapShape3D_v7atq")

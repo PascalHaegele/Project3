@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 [GlobalClass]
-public abstract partial class StateMachineV2 : Node {
-  protected List<StateV2> states = new();
-  protected StateV2 currentState;
-  protected StateV2 previousState;
-  protected StateV2? startingState;
+public abstract partial class StateMachine : Node {
+  protected List<State> states = new();
+  protected State currentState;
+  protected State previousState;
+  protected State? startingState;
 
   protected const int maxHistory = 50;
   protected List<StringName> stateHistory = new();
@@ -28,9 +28,9 @@ public abstract partial class StateMachineV2 : Node {
   };
 
   [Signal]
-  public delegate void StateChangedEventHandler(StateV2 from, StateV2 to);
-  [Signal] public delegate void StateEnteredEventHandler(StateV2 state);
-  [Signal] public delegate void StateExitedEventHandler(StateV2 state);
+  public delegate void StateChangedEventHandler(State from, State to);
+  [Signal] public delegate void StateEnteredEventHandler(State state);
+  [Signal] public delegate void StateExitedEventHandler(State state);
 
   public override void _Ready() {
     SetupStates();
@@ -47,8 +47,8 @@ public abstract partial class StateMachineV2 : Node {
     currentState?.PhysicsUpdate(delta);
   }
 
-  public T? GetState<T>() where T : StateV2 {
-    foreach(StateV2 state in states) { if(state is T) { return state as T; } }
+  public T? GetState<T>() where T : State {
+    foreach(State state in states) { if(state is T) { return state as T; } }
 
     StackFrame frame = new StackTrace().GetFrame(1);
     GD.PrintErr(
@@ -59,12 +59,12 @@ public abstract partial class StateMachineV2 : Node {
     return null;
   }
 
-  public T? GetStateOrNull<T>() where T : StateV2 {
+  public T? GetStateOrNull<T>() where T : State {
     return states.Find((state) => state is T) as T;
   }
 
-  public T? GetState<T>(StringName stateName) where T : StateV2 {
-    StateV2? state = states.Find((s) => s.name == stateName);
+  public T? GetState<T>(StringName stateName) where T : State {
+    State? state = states.Find((s) => s.name == stateName);
     if(state is not null and T) { return state as T; }
 
     StackFrame frame = new StackTrace().GetFrame(1);
@@ -76,11 +76,11 @@ public abstract partial class StateMachineV2 : Node {
     return null;
   }
 
-  public T? GetStateOrNull<T>(StringName stateName) where T : StateV2 {
+  public T? GetStateOrNull<T>(StringName stateName) where T : State {
     return states.Find((s) => s.name == stateName && s is T) as T;
   }
 
-  public void AddState(StringName stateName, StateV2 state) {
+  public void AddState(StringName stateName, State state) {
     if(states.Contains(state)) { return; }
     states.Add(state);
     state.name = stateName;
@@ -92,7 +92,7 @@ public abstract partial class StateMachineV2 : Node {
 
   public void UpdateInput(InputPackage newInput) => input = newInput;
 
-  public void ForceChangeState(StateV2 newState) {
+  public void ForceChangeState(State newState) {
     if(!states.Contains(newState)) {
       GD.PrintErr($"{Name} does not contain {newState.GetType()}");
       return;
@@ -107,7 +107,7 @@ public abstract partial class StateMachineV2 : Node {
 
   protected abstract void SetupStates();
 
-  protected virtual void ChangeState(StateV2 newState) {
+  protected virtual void ChangeState(State newState) {
     if(!states.Contains(newState)) {
       GD.PrintErr($"{Name} does not contain {newState.GetType()}");
       return;
@@ -137,7 +137,7 @@ public abstract partial class StateMachineV2 : Node {
   }
 
   protected virtual void ChangeState(StringName newStateName) {
-    StateV2? newState = states.Find((s) => s.name == newStateName);
+    State? newState = states.Find((s) => s.name == newStateName);
     if(newState == null) {
       GD.PrintErr($"{Name} does not contain {newStateName}");
       return;
@@ -166,7 +166,7 @@ public abstract partial class StateMachineV2 : Node {
     EmitSignalStateChanged(previousState, currentState);
   }
 
-  protected void AddToHistory(StateV2 state) {
+  protected void AddToHistory(State state) {
     if(stateHistory.Count >= maxHistory) { stateHistory.RemoveAt(0); }
     stateHistory.Add(state.GetType().ToString());
   }

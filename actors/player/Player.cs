@@ -4,9 +4,10 @@ public partial class Player : Actor, IHitable {
   private VelocityComponent velocityComponent;
   private CameraComponent camera;
   private InputComponent inputComponent;
-  private StateMachineV2 stateMachine;
+  private StateMachine stateMachine;
   private HealthComponent healthComponent;
   private InventoryComponent inventoryComponent;
+  private InsanityComponent insanityComponent;
 
   [Export] private Weapon weapon;
 
@@ -15,8 +16,10 @@ public partial class Player : Actor, IHitable {
   private bool hoveringPickup;
   private Pickup? hoveredPickup;
 
-  private Label ammoDisplay;
   private ProgressBar healthBar;
+  private ProgressBar insanityMeter;
+
+  private Label ammoDisplay;
   private Label potionCount;
 
   [Signal] public delegate void InteractingEventHandler();
@@ -28,12 +31,15 @@ public partial class Player : Actor, IHitable {
 
     camera = GetComponent<CameraComponent>();
     inputComponent = GetComponent<InputComponent>();
-    stateMachine = GetComponent<StateMachineV2>();
+    stateMachine = GetComponent<StateMachine>();
     velocityComponent = GetComponent<VelocityComponent>();
     healthComponent = GetComponent<HealthComponent>();
     inventoryComponent = GetComponent<InventoryComponent>();
+    insanityComponent = GetComponent<InsanityComponent>();
 
     healthComponent.HealthChanged += OnHealthChanged;
+
+    insanityComponent.InsanityChanged += OnInsanityChanged;
 
     inventoryComponent.InventoryChanged += OnInventoryChanged;
 
@@ -42,13 +48,17 @@ public partial class Player : Actor, IHitable {
 
     pickupCast = GetNode<RayCast3D>("CameraPivot/PickupCast");
 
-    ammoDisplay = GetNode<Label>("HUD/AmmoDisplay");
-    ammoDisplay.Text =
-      weapon.CurrentAmmo.ToString() + " / " + weapon.info.magazineSize;
-
     healthBar = GetNode<ProgressBar>("HUD/HealthBar");
     healthBar.MaxValue = healthComponent.maxHealth;
     healthBar.Value = healthComponent.CurrentHealth;
+
+    insanityMeter = GetNode<ProgressBar>("HUD/InsanityMeter");
+    insanityMeter.MaxValue = insanityComponent.MaxInsanity;
+    insanityMeter.Value = insanityComponent.CurrentInsanity;
+
+    ammoDisplay = GetNode<Label>("HUD/AmmoDisplay");
+    ammoDisplay.Text =
+      weapon.CurrentAmmo.ToString() + " / " + weapon.info.magazineSize;
 
     potionCount = GetNode<Label>("HUD/PotionCount");
     potionCount.Text = "P : " + inventoryComponent.items[(int)ItemType.POTION];
@@ -130,10 +140,15 @@ public partial class Player : Actor, IHitable {
 
   public void RecieveHit(HitInfo info) {
     healthComponent.TakeDamage(info.damage);
+    insanityComponent.AddInsanity(5);
   }
 
   private void OnHealthChanged(float newHealth) {
-    healthBar.Value = healthComponent.CurrentHealth;
+    healthBar.Value = newHealth;
+  }
+
+  private void OnInsanityChanged(float insanity) {
+    insanityMeter.Value = insanity;
   }
 
   private void OnWeaponShot() {

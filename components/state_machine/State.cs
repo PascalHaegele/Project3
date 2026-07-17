@@ -2,17 +2,17 @@ using Godot;
 using System.Collections.Generic;
 
 [GlobalClass]
-public abstract partial class StateV2 : RefCounted {
+public abstract partial class State : RefCounted {
   public float timeEntered;
   public StringName name = "";
 
-  protected StateMachineV2 stateMachine;
+  protected StateMachine stateMachine;
 
   protected Dictionary<string, object> data = new();
 
   public float TimeInState { get; private set; }
 
-  [Signal] public delegate void CompletedEventHandler(StateV2 newState);
+  [Signal] public delegate void CompletedEventHandler(State newState);
 
   public virtual bool CanEnter() => true;
 
@@ -33,8 +33,8 @@ public abstract partial class StateV2 : RefCounted {
     return $"State {GetClass()} - Time: {TimeInState:f2}";
   }
 
-  protected void ChangeTo<T>() where T : StateV2 {
-    StateV2? state = stateMachine.GetStateOrNull<T>();
+  protected void ChangeTo<T>() where T : State {
+    State? state = stateMachine.GetStateOrNull<T>();
     if(state != null) { EmitSignalCompleted(state); }
   }
 

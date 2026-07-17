@@ -1,13 +1,13 @@
 using Godot;
 
-public abstract partial class ActorState : StateV2 {
+public abstract partial class ActorState : State {
   public int soundLevel;
 
   protected Actor actor;
   protected VelocityComponent velocityComponent;
   protected AnimationPlayer? animationPlayer;
 
-  public ActorState(Actor actor, StateMachineV2 stateMachine) {
+  public ActorState(Actor actor, StateMachine stateMachine) {
     this.actor = actor;
     this.stateMachine = stateMachine;
     velocityComponent = actor.GetComponent<VelocityComponent>();
@@ -16,7 +16,7 @@ public abstract partial class ActorState : StateV2 {
 }
 
 public partial class ActorStateIdle : ActorState {
-  public ActorStateIdle(Actor actor, StateMachineV2 stateMachine) :
+  public ActorStateIdle(Actor actor, StateMachine stateMachine) :
     base(actor, stateMachine) { }
 
   public override void Start() => soundLevel = 0;
@@ -33,7 +33,7 @@ public partial class ActorStateIdle : ActorState {
 }
 
 public partial class ActorStateWalk : ActorState {
-  public ActorStateWalk(Actor actor, StateMachineV2 stateMachine) :
+  public ActorStateWalk(Actor actor, StateMachine stateMachine) :
     base(actor, stateMachine) { }
 
   public override void Start() => soundLevel = 3;
@@ -50,7 +50,7 @@ public partial class ActorStateWalk : ActorState {
 }
 
 public partial class ActorStateSprint : ActorState {
-  public ActorStateSprint(Actor actor, StateMachineV2 stateMachine) :
+  public ActorStateSprint(Actor actor, StateMachine stateMachine) :
     base(actor, stateMachine) { }
 
   public override void Start() => soundLevel = 5;
@@ -67,7 +67,7 @@ public partial class ActorStateSprint : ActorState {
 }
 
 public partial class ActorStateJump : ActorState {
-  public ActorStateJump(Actor actor, StateMachineV2 stateMachine) :
+  public ActorStateJump(Actor actor, StateMachine stateMachine) :
     base(actor, stateMachine) { }
 
   public override void Start() => soundLevel = 3;
@@ -86,7 +86,7 @@ public partial class ActorStateJump : ActorState {
 }
 
 public partial class ActorStateFall : ActorState {
-  public ActorStateFall(Actor actor, StateMachineV2 stateMachine) :
+  public ActorStateFall(Actor actor, StateMachine stateMachine) :
     base(actor, stateMachine) { }
 
   public override void Start() => soundLevel = 1;
@@ -103,7 +103,7 @@ public partial class ActorStateFall : ActorState {
 }
 
 public partial class ActorStateLand : ActorState {
-  public ActorStateLand(Actor actor, StateMachineV2 stateMachine) :
+  public ActorStateLand(Actor actor, StateMachine stateMachine) :
     base(actor, stateMachine) { }
 
   public override void Start() => soundLevel = 6;
@@ -123,7 +123,7 @@ public partial class ActorStateDash : ActorState {
   public Timer cooldownTimer = new();
   private Vector3 direction;
 
-  public ActorStateDash(Actor actor, StateMachineV2 stateMachine) :
+  public ActorStateDash(Actor actor, StateMachine stateMachine) :
     base(actor, stateMachine) { }
 
   public override void Start() {

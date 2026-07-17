@@ -102,7 +102,7 @@ public partial class PlayerStateMachine : TransitionStateMachine {
 
   }
 
-  protected override void ChangeState(StateV2 newState) {
+  protected override void ChangeState(State newState) {
     base.ChangeState(newState);
     if(currentState is ActorState actorState) {
       actor.soundLevel = actorState.soundLevel;
