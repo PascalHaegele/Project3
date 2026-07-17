@@ -1,0 +1,156 @@
+[gd_scene format=3 uid="uid://dpinventoryui"]
+
+[ext_resource type="Script" path="res://ui/InventoryUI.cs" id="1"]
+
+[node name="InventoryUI" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+focus_mode = 0
+script = ExtResource("1")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SocketPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_minimum_size = Vector2(400, 0)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/SocketPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/SocketPanel/VBoxContainer"]
+layout_mode = 2
+text = "SOCKETS"
+theme_override_font_sizes/font_size = 24
+
+[node name="WeaponSockets" type="VBoxContainer" parent="MarginContainer/HBoxContainer/SocketPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="WeaponLabel" type="Label" parent="MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/WeaponSockets"]
+layout_mode = 2
+text = "Weapon"
+
+[node name="WeaponSocketContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/WeaponSockets"]
+layout_mode = 2
+
+[node name="ArmorSockets" type="VBoxContainer" parent="MarginContainer/HBoxContainer/SocketPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ArmorLabel" type="Label" parent="MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/ArmorSockets"]
+layout_mode = 2
+text = "Armor"
+
+[node name="ArmorSocketContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/ArmorSockets"]
+layout_mode = 2
+
+[node name="SkillSockets" type="VBoxContainer" parent="MarginContainer/HBoxContainer/SocketPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="SkillLabel" type="Label" parent="MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/SkillSockets"]
+layout_mode = 2
+text = "Skill"
+
+[node name="SkillSocketContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/SkillSockets"]
+layout_mode = 2
+
+[node name="PagesPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_minimum_size = Vector2(400, 0)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PagesPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer"]
+layout_mode = 2
+text = "COLLECTED PAGES"
+theme_override_font_sizes/font_size = 24
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+custom_minimum_size = Vector2(0, 200)
+
+[node name="PagesList" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TooltipPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 200)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer/TooltipPanel"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer/TooltipPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[node name="DescriptionLabel" type="Label" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer/TooltipPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="CategoryLabel" type="Label" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer/TooltipPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ModifierLabel" type="Label" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer/TooltipPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ValueLabel" type="Label" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer/TooltipPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="RarityLabel" type="Label" parent="MarginContainer/HBoxContainer/PagesPanel/VBoxContainer/TooltipPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="StatsPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+custom_minimum_size = Vector2(250, 0)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/StatsPanel"]
+layout_mode = 2
+
+[node name="WeaponName" type="Label" parent="MarginContainer/HBoxContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="AmmoCount" type="Label" parent="MarginContainer/HBoxContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+text = "Ammo: 0"
+
+[node name="PotionCount" type="Label" parent="MarginContainer/HBoxContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+text = "Potions: 0"
+
+[node name="CurrencyCount" type="Label" parent="MarginContainer/HBoxContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+text = "Currency: 0"
+
+[node name="CloseButton" type="Button" parent="MarginContainer/HBoxContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+text = "Close (I)"

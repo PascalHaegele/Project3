@@ -22,6 +22,9 @@ public partial class Weapon : Node3D {
   // --- Animation (delegiert an WeaponAnimation-Child) ---
   private WeaponAnimation weaponAnim;
 
+  // Track shots for FrenziedSoul
+  private int shotCounter;
+
   public override void _Ready() {
     aimCast = GetNode<RayCast3D>("../AimCast");
     aimCast.TargetPosition = new (0.0f, 0.0f, -info.range);
@@ -55,6 +58,20 @@ public partial class Weapon : Node3D {
     // p.hitbox.EnableCollisionShapes();
     if(p == null) { return; }
     AddChild(p);
+
+    // Track shot count for FrenziedSoul effect
+    if (GetParent() is Player player) {
+      SocketComponent socket = player.GetComponent<SocketComponent>();
+      if (socket != null && socket.HasModifier("FrenziedSoul")) {
+        shotCounter++;
+        float empoweredThreshold = socket.GetModifier("FrenziedSoul");
+        if (shotCounter >= empoweredThreshold) {
+          shotCounter = 0;
+          p.isEmpowered = true;
+          GD.Print($">>> FRENZIED SOUL! Every 10th shot empowered.");
+        }
+      }
+    }
 
     if(aimCast.IsColliding()) {
       Vector3 collisionPoint = aimCast.GetCollisionPoint();
@@ -95,11 +112,22 @@ public partial class Weapon : Node3D {
     if(Reloading || CurrentAmmo >= info.magazineSize) { return; }
 
     Reloading = true;
-    reloadTimer = info.reloadTime;
+    float reloadDuration = info.reloadTime;
+    Player player = GetParent() as Player ?? GetParent()?.GetParent<Player>();
+    if (player != null) {
+      SocketComponent socket = player.GetComponent<SocketComponent>();
+      if (socket != null) {
+        float reloadBonus = socket.GetModifier("ReloadSpeed");
+        reloadDuration -= reloadBonus;
+        reloadDuration = Mathf.Max(0.1f, reloadDuration);
+        GD.Print($"ReloadSpeed modifier: -{reloadBonus}, new duration: {reloadDuration:F2}");
+      }
+    }
+    reloadTimer = reloadDuration;
 
     weaponAnim?.PlayReload();
 
-    GD.Print($"{Name} Reloading");
+    GD.Print($"{Name} Reloading (duration: {reloadDuration:F2})");
   }
 
   public void FinishReload() {
