@@ -16,58 +16,161 @@ public partial class InventoryUI : Control {
   private PanelContainer tooltipPanel;
   private Label ammoLabel;
   private Label potionLabel;
-  private Label currencyLabel;
   private Label weaponNameLabel;
   private Button closeButton;
 
   private Label tooltipName;
   private Label tooltipDescription;
-  private Label tooltipCategory;
   private Label tooltipModifier;
-  private Label tooltipValue;
-  private Label tooltipRarity;
-
-  private PageData selectedPage;
-  private PageData draggedPage;
 
   private List<SocketSlot> weaponSlots = new();
   private List<SocketSlot> armorSlots = new();
   private List<SocketSlot> skillSlots = new();
+  private PageData selectedPage; // For hover tooltip
+  private PageData selectedPageForSocket; // For socket placement
 
   [Signal] public delegate void InventoryClosedEventHandler();
 
   public override void _Ready() {
     Visible = false;
-    GD.Print("InventoryUI._Ready");
-
-    weaponSocketContainer = GetNodeOrNull<VBoxContainer>("MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/WeaponSockets/WeaponSocketContainer");
-    armorSocketContainer = GetNodeOrNull<VBoxContainer>("MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/ArmorSockets/ArmorSocketContainer");
-    skillSocketContainer = GetNodeOrNull<VBoxContainer>("MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/SkillSockets/SkillSocketContainer");
-    pagesListContainer = GetNodeOrNull<VBoxContainer>("MarginContainer/HBoxContainer/PagesPanel/VBoxContainer/ScrollContainer/PagesList");
-    tooltipPanel = GetNodeOrNull<PanelContainer>("MarginContainer/HBoxContainer/PagesPanel/VBoxContainer/TooltipPanel");
-    ammoLabel = GetNodeOrNull<Label>("MarginContainer/HBoxContainer/StatsPanel/VBoxContainer/AmmoCount");
-    potionLabel = GetNodeOrNull<Label>("MarginContainer/HBoxContainer/StatsPanel/VBoxContainer/PotionCount");
-    currencyLabel = GetNodeOrNull<Label>("MarginContainer/HBoxContainer/StatsPanel/VBoxContainer/CurrencyCount");
-    weaponNameLabel = GetNodeOrNull<Label>("MarginContainer/HBoxContainer/StatsPanel/VBoxContainer/WeaponName");
-    closeButton = GetNodeOrNull<Button>("MarginContainer/HBoxContainer/StatsPanel/VBoxContainer/CloseButton");
-
-    if (tooltipPanel != null) {
-      VBoxContainer tooltipVBox = tooltipPanel.GetNodeOrNull<VBoxContainer>("VBoxContainer");
-      if (tooltipVBox != null) {
-        tooltipName = tooltipVBox.GetNodeOrNull<Label>("NameLabel");
-        tooltipDescription = tooltipVBox.GetNodeOrNull<Label>("DescriptionLabel");
-        tooltipCategory = tooltipVBox.GetNodeOrNull<Label>("CategoryLabel");
-        tooltipModifier = tooltipVBox.GetNodeOrNull<Label>("ModifierLabel");
-        tooltipValue = tooltipVBox.GetNodeOrNull<Label>("ValueLabel");
-        tooltipRarity = tooltipVBox.GetNodeOrNull<Label>("RarityLabel");
-      }
-    }
-
+    
+    BuildUI();
     CreateSocketSlots();
 
     if (closeButton != null) {
       closeButton.Pressed += OnClosePressed;
     }
+  }
+
+  private void BuildUI() {
+    weaponSocketContainer = GetNodeOrNull<VBoxContainer>("WeaponSocketContainer");
+    armorSocketContainer = GetNodeOrNull<VBoxContainer>("ArmorSocketContainer");
+    skillSocketContainer = GetNodeOrNull<VBoxContainer>("SkillSocketContainer");
+    pagesListContainer = GetNodeOrNull<VBoxContainer>("PagesList");
+    closeButton = GetNodeOrNull<Button>("CloseButton");
+    
+    if (weaponSocketContainer != null) return;
+
+    GD.Print("InventoryUI: Building UI programmatically");
+    AnchorRight = 1.0f;
+    AnchorBottom = 1.0f;
+
+    ColorRect bg = new ColorRect();
+    bg.Color = new Color(0.1f, 0.1f, 0.15f, 0.95f);
+    bg.AnchorRight = 1.0f;
+    bg.AnchorBottom = 1.0f;
+    AddChild(bg);
+
+    HBoxContainer mainHBox = new HBoxContainer();
+    mainHBox.AnchorRight = 1.0f;
+    mainHBox.AnchorBottom = 1.0f;
+    AddChild(mainHBox);
+
+    VBoxContainer socketPanel = new VBoxContainer();
+    socketPanel.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+    mainHBox.AddChild(socketPanel);
+
+    Label title = new Label();
+    title.Text = "SOCKETS";
+    title.Theme = CreateLabelTheme(24);
+    socketPanel.AddChild(title);
+
+    weaponSocketContainer = new VBoxContainer();
+    weaponSocketContainer.Name = "WeaponSocketContainer";
+    Label weaponLabel = new Label();
+    weaponLabel.Text = "WEAPON SOCKETS";
+    weaponLabel.Theme = CreateLabelTheme(18);
+    socketPanel.AddChild(weaponLabel);
+    socketPanel.AddChild(weaponSocketContainer);
+
+    armorSocketContainer = new VBoxContainer();
+    armorSocketContainer.Name = "ArmorSocketContainer";
+    Label armorLabel = new Label();
+    armorLabel.Text = "ARMOR SOCKETS";
+    armorLabel.Theme = CreateLabelTheme(18);
+    socketPanel.AddChild(armorLabel);
+    socketPanel.AddChild(armorSocketContainer);
+
+    skillSocketContainer = new VBoxContainer();
+    skillSocketContainer.Name = "SkillSocketContainer";
+    Label skillLabel = new Label();
+    skillLabel.Text = "SKILL SOCKETS";
+    skillLabel.Theme = CreateLabelTheme(18);
+    socketPanel.AddChild(skillLabel);
+    socketPanel.AddChild(skillSocketContainer);
+
+    VBoxContainer statsPanel = new VBoxContainer();
+    statsPanel.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+    mainHBox.AddChild(statsPanel);
+
+    ammoLabel = new Label();
+    ammoLabel.Text = "Ammo: 0/0";
+    ammoLabel.Theme = CreateLabelTheme(18);
+    statsPanel.AddChild(ammoLabel);
+
+    potionLabel = new Label();
+    potionLabel.Text = "Potions: 0";
+    potionLabel.Theme = CreateLabelTheme(18);
+    statsPanel.AddChild(potionLabel);
+
+    weaponNameLabel = new Label();
+    weaponNameLabel.Text = "Weapon: None";
+    weaponNameLabel.Theme = CreateLabelTheme(18);
+    statsPanel.AddChild(weaponNameLabel);
+
+    closeButton = new Button();
+    closeButton.Name = "CloseButton";
+    closeButton.Text = "CLOSE (I)";
+    closeButton.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
+    statsPanel.AddChild(closeButton);
+
+    VBoxContainer pagesPanel = new VBoxContainer();
+    pagesPanel.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+    mainHBox.AddChild(pagesPanel);
+
+    Label pagesTitle = new Label();
+    pagesTitle.Text = "PAGES";
+    pagesTitle.Theme = CreateLabelTheme(24);
+    pagesPanel.AddChild(pagesTitle);
+
+    ScrollContainer scroll = new ScrollContainer();
+    scroll.SizeFlagsVertical = SizeFlags.ExpandFill;
+    pagesPanel.AddChild(scroll);
+
+    pagesListContainer = new VBoxContainer();
+    pagesListContainer.Name = "PagesList";
+    pagesListContainer.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+    scroll.AddChild(pagesListContainer);
+
+    tooltipPanel = new PanelContainer();
+    tooltipPanel.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+    tooltipPanel.CustomMinimumSize = new Vector2(0, 100);
+    VBoxContainer tooltipVBox = new VBoxContainer();
+    tooltipPanel.AddChild(tooltipVBox);
+
+    tooltipName = new Label();
+    tooltipName.Theme = CreateLabelTheme(18);
+    tooltipVBox.AddChild(tooltipName);
+
+    tooltipDescription = new Label();
+    tooltipDescription.Theme = CreateLabelTheme(14);
+    tooltipVBox.AddChild(tooltipDescription);
+
+    tooltipModifier = new Label();
+    tooltipModifier.Theme = CreateLabelTheme(14);
+    tooltipVBox.AddChild(tooltipModifier);
+
+    pagesPanel.AddChild(tooltipPanel);
+  }
+
+  private Theme CreateLabelTheme(int fontSize) {
+    Theme t = new Theme();
+    LabelSettings ls = new LabelSettings();
+    ls.FontSize = fontSize;
+    ls.OutlineSize = 2;
+    ls.OutlineColor = Colors.Black;
+    t.Set("Label/label_settings", ls);
+    return t;
   }
 
   public void Initialize(InventoryComponent inv, SocketComponent socket, Weapon w) {
@@ -118,8 +221,6 @@ public partial class InventoryUI : Control {
       hasAny = true;
 
       Button pageButton = new Button();
-      
-      // Show all three effects in the button text
       pageButton.Text = $"{page.PageName} [{page.Rarity}]\n" +
                        $"  W: {page.WeaponEffect} {page.WeaponEffectValue}\n" +
                        $"  A: {page.ArmorEffect} {page.ArmorEffectValue}\n" +
@@ -128,22 +229,17 @@ public partial class InventoryUI : Control {
       pageButton.CustomMinimumSize = new Vector2(0, 60);
 
       PageData captured = page;
-      pageButton.MouseEntered += () => OnPageHovered(captured);
-      
-      // Store reference for manual drag handling
-      pageButton.MouseFilter = Control.MouseFilterEnum.Stop;
-      pageButton.Pressed += () => {
-        draggedPage = captured;
-        selectedPage = captured;
+      pageButton.MouseEntered += () => {
+        selectedPage = page;
         RefreshTooltip();
       };
-      
+      pageButton.Pressed += () => OnPageClicked(captured);
       pagesListContainer.AddChild(pageButton);
     }
 
     if (!hasAny) {
       Label emptyLabel = new Label();
-      emptyLabel.Text = "No pages available.";
+      emptyLabel.Text = "No pages collected.";
       emptyLabel.Modulate = new Color(0.5f, 0.5f, 0.5f);
       pagesListContainer.AddChild(emptyLabel);
     }
@@ -154,19 +250,19 @@ public partial class InventoryUI : Control {
 
     for (int i = 0; i < 4; i++) {
       SocketSlot slot = new SocketSlot("Weapon", i);
-      slot.RemoveRequested += OnRemoveFromSocket;
+      slot.SlotClicked += OnSlotClicked;
       weaponSlots.Add(slot);
       weaponSocketContainer.AddChild(slot);
     }
     for (int i = 0; i < 3; i++) {
       SocketSlot slot = new SocketSlot("Armor", i);
-      slot.RemoveRequested += OnRemoveFromSocket;
+      slot.SlotClicked += OnSlotClicked;
       armorSlots.Add(slot);
       armorSocketContainer.AddChild(slot);
     }
     for (int i = 0; i < 3; i++) {
       SocketSlot slot = new SocketSlot("Skill", i);
-      slot.RemoveRequested += OnRemoveFromSocket;
+      slot.SlotClicked += OnSlotClicked;
       skillSlots.Add(slot);
       skillSocketContainer.AddChild(slot);
     }
@@ -179,51 +275,25 @@ public partial class InventoryUI : Control {
 
     if (socketComponent == null) return;
 
-    // Get socketed pages from SocketComponent
     Dictionary<string, PageData> socketed = socketComponent.GetAllSocketedPages();
-    
-    // Group by category
-    int weaponIdx = 0, armorIdx = 0, skillIdx = 0;
     foreach (var kvp in socketed) {
       PageData page = kvp.Value;
       string slotId = kvp.Key;
-      
-      // Determine category from slot ID (format: "Category_index")
       string category = slotId.Split('_')[0];
+      // Extract slot index from Weaponi (e.g., "Weapon_0" -> 0)
+      string[] parts = slotId.Split('_');
+      int slotIndex = parts.Length > 1 ? int.Parse(parts[1]) : 0;
       
-      switch (category) {
-        case "Weapon":
-          if (weaponIdx < weaponSlots.Count) {
-            weaponSlots[weaponIdx].SetPage(page);
-            weaponIdx++;
-          }
-          break;
-        case "Armor":
-          if (armorIdx < armorSlots.Count) {
-            armorSlots[armorIdx].SetPage(page);
-            armorIdx++;
-          }
-          break;
-        case "Skill":
-          if (skillIdx < skillSlots.Count) {
-            skillSlots[skillIdx].SetPage(page);
-            skillIdx++;
-          }
-          break;
-      }
+      SocketSlot slot = GetSlotByCategoryIndex(category, slotIndex);
+      if (slot != null) slot.SetPage(page);
     }
   }
 
   private void RefreshStats() {
     if (inventory == null) return;
-    int potions = inventory.items[(int)ItemType.POTION];
-    potionLabel.Text = $"Potions: {potions}";
-    currencyLabel.Text = $"Currency: 0";
-
-    if (weapon != null) {
-      weaponNameLabel.Text = $"Weapon: {weapon.Name}";
-      ammoLabel.Text = $"Ammo: {weapon.CurrentAmmo} / {weapon.info.magazineSize}";
-    }
+    if (potionLabel != null) potionLabel.Text = $"Potions: {inventory.items[(int)ItemType.POTION]}";
+    if (weapon != null && weaponNameLabel != null) weaponNameLabel.Text = $"Weapon: {weapon.Name}";
+    if (weapon != null && ammoLabel != null) ammoLabel.Text = $"Ammo: {weapon.CurrentAmmo} / {weapon.info.magazineSize}";
   }
 
   private void RefreshTooltip() {
@@ -231,200 +301,79 @@ public partial class InventoryUI : Control {
     if (selectedPage != null) {
       tooltipName.Text = selectedPage.PageName;
       tooltipDescription.Text = selectedPage.Description;
-      tooltipCategory.Text = $"Rarity: {selectedPage.Rarity}";
       tooltipModifier.Text = $"Weapon: {selectedPage.WeaponEffect} {selectedPage.WeaponEffectValue}\n" +
                             $"Armor: {selectedPage.ArmorEffect} {selectedPage.ArmorEffectValue}\n" +
                             $"Skill: {selectedPage.SkillEffect} {selectedPage.SkillEffectValue}";
-      tooltipValue.Text = "";
-      tooltipRarity.Text = "";
-      
-      // Get currently active effect
-      string activeEffect = GetActiveEffect(selectedPage);
-      tooltipDescription.Text += $"\n\nCurrently Active: {activeEffect}";
-      
       tooltipPanel.Visible = true;
     } else {
       tooltipPanel.Visible = false;
     }
   }
 
-  private string GetActiveEffect(PageData page) {
-    if (socketComponent == null) return "None (not socketed)";
-    
-    // Check which category this page is socketed in
-    Dictionary<string, PageData> socketed = socketComponent.GetAllSocketedPages();
-    foreach (var kvp in socketed) {
-      if (kvp.Value == page) {
-        string category = kvp.Key.Split('_')[0];
-        (string effect, float value) = page.GetEffectForCategory(category);
-        return $"{category}: {effect} {value}";
-      }
-    }
-    
-    return "Not socketed";
-  }
-
-  private void OnPageHovered(PageData page) {
-    selectedPage = page;
-    RefreshTooltip();
-  }
-
-  private string GetCategoryFromPosition(Vector2 atPosition) {
-    Control slot = GetNodeOrNull<Control>("MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/WeaponSockets/WeaponSocketContainer");
-    if (slot != null && slot.GetGlobalRect().HasPoint(atPosition)) return "Weapon";
-    
-    slot = GetNodeOrNull<Control>("MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/ArmorSockets/ArmorSocketContainer");
-    if (slot != null && slot.GetGlobalRect().HasPoint(atPosition)) return "Armor";
-    
-    slot = GetNodeOrNull<Control>("MarginContainer/HBoxContainer/SocketPanel/VBoxContainer/SkillSockets/SkillSocketContainer");
-    if (slot != null && slot.GetGlobalRect().HasPoint(atPosition)) return "Skill";
-    
-    return null;
-  }
-
-  public override void _Input(InputEvent @event) {
-    if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
-      if (draggedPage != null && socketComponent != null && inventory != null) {
-        // Get global mouse position
-        Vector2 mousePos = GetGlobalMousePosition();
-        
-        // Check if dropped on a socket category
-        string category = GetCategoryFromPosition(mousePos);
-        if (category != null) {
-          // Check if page is already socketed - remove from old socket first
-          string oldCategory = GetCurrentSocketCategory(draggedPage);
-          if (oldCategory != null) {
-            socketComponent.RemovePage(draggedPage, oldCategory);
-            inventory.AddPageItem(draggedPage);
-          }
-
-          // Get first empty slot of this category
-          SocketSlot slot = GetFirstEmptySlot(category);
-          if (slot != null) {
-            // Socket into new category
-            inventory.RemovePageItem(draggedPage);
-            socketComponent.SocketPage(draggedPage, category);
-            slot.SetPage(draggedPage);
-            
-            (string effect, float value) = draggedPage.GetEffectForCategory(category);
-            GD.Print($">>> Drag-Dropped {draggedPage.PageName} into {category}. Effect: {effect} = {value}");
-          } else {
-            GD.Print($"No empty {category} slots available!");
-          }
-
-          RefreshUI();
-          draggedPage = null;
-          return;
-        }
-      }
-    }
-  }
-
   private void OnPageClicked(PageData page) {
-    if (page == null) return;
-
-    // Cycle through socket categories: Weapon -> Armor -> Skill -> None
-    string nextCategory = GetNextCategory(page);
+    if (page == null || socketComponent == null || inventory == null) return;
     
-    if (nextCategory == null) {
-      // Page is already socketed, remove it
-      string currentCategory = GetCurrentSocketCategory(page);
-      if (currentCategory != null) {
-        socketComponent.RemovePage(page, currentCategory);
-        inventory.AddPageItem(page);
-        GD.Print($"Removed {page.PageName} from {currentCategory} socket.");
-      }
+    // Toggle selection: if same page already selected, deselect it
+    if (selectedPageForSocket == page) {
+      selectedPageForSocket = null;
     } else {
-      // Socket into next available slot of this category
-      SocketSlot slot = GetFirstEmptySlot(nextCategory);
-      if (slot != null && socketComponent != null && inventory != null) {
-        // Check if page is already socketed - remove from old socket first
-        string oldCategory = GetCurrentSocketCategory(page);
-        if (oldCategory != null) {
-          socketComponent.RemovePage(page, oldCategory);
-          inventory.AddPageItem(page);
-        }
-        
-        // Now socket into new category
-        inventory.RemovePageItem(page);
-        socketComponent.SocketPage(page, nextCategory);
-        slot.SetPage(page);
-        
-        (string effect, float value) = page.GetEffectForCategory(nextCategory);
-        GD.Print($">>> Socketed {page.PageName} into {nextCategory}. Effect: {effect} = {value}");
-      } else {
-        GD.Print($"No empty {nextCategory} slots available!");
+      selectedPageForSocket = page;
+    }
+    
+    RefreshUI();
+  }
+
+  private void OnSlotClicked(string category, int slotIndex) {
+    if (socketComponent == null || inventory == null) return;
+
+    SocketSlot slot = GetSlotByCategoryIndex(category, slotIndex);
+
+    if (selectedPageForSocket != null) {
+      // Try to socket the selected page into this slot
+      if (slot != null && slot.HasPage) return; // Slot occupied
+      
+      string oldCategory = GetCurrentSocketCategory(selectedPageForSocket);
+      if (oldCategory != null) {
+        socketComponent.RemovePage(selectedPageForSocket, oldCategory);
+        inventory.AddPageItem(selectedPageForSocket);
+      }
+      
+      inventory.RemovePageItem(selectedPageForSocket);
+      socketComponent.SocketPage(selectedPageForSocket, category);
+      selectedPageForSocket = null;
+    } else {
+      // Remove page from this slot if it has one
+      if (slot != null && slot.HasPage) {
+        PageData page = slot.CurrentPage;
+        socketComponent.RemovePage(page, category);
+        inventory.AddPageItem(page);
       }
     }
 
     RefreshUI();
   }
 
-  private string GetNextCategory(PageData page) {
-    string currentCategory = GetCurrentSocketCategory(page);
-    
-    // If not socketed, default to Weapon
-    if (currentCategory == null) {
-      return "Weapon";
-    }
-    
-    // Cycle: Weapon -> Armor -> Skill -> null (removal)
-    return currentCategory switch {
-      "Weapon" => "Armor",
-      "Armor" => "Skill",
-      "Skill" => null, // Will trigger removal
-      _ => "Weapon"
-    };
-  }
-
-  private string GetCurrentSocketCategory(PageData page) {
-    if (socketComponent == null) return null;
-    
-    Dictionary<string, PageData> socketed = socketComponent.GetAllSocketedPages();
-    foreach (var kvp in socketed) {
-      if (kvp.Value == page) {
-        return kvp.Key.Split('_')[0];
-      }
-    }
-    return null;
-  }
-
-  private SocketSlot GetFirstEmptySlot(string category) {
+  private SocketSlot GetSlotByCategoryIndex(string category, int index) {
     List<SocketSlot> slots = category switch {
       "Weapon" => weaponSlots,
       "Armor" => armorSlots,
       "Skill" => skillSlots,
       _ => null
     };
+    if (slots == null || index < 0 || index >= slots.Count) return null;
+    return slots[index];
+  }
 
-    if (slots == null) return null;
-
-    foreach (SocketSlot slot in slots) {
-      if (!slot.HasPage) return slot;
+  private string GetCurrentSocketCategory(PageData page) {
+    if (socketComponent == null) return null;
+    Dictionary<string, PageData> socketed = socketComponent.GetAllSocketedPages();
+    foreach (var kvp in socketed) {
+      if (kvp.Value == page) {
+        string slotId = kvp.Key;
+        return slotId.Split('_')[0];
+      }
     }
     return null;
-  }
-
-  private void OnRemoveFromSocket(PageData page) {
-    if (page == null || socketComponent == null) return;
-
-    string category = GetCurrentSocketCategory(page);
-    if (category != null) {
-      socketComponent.RemovePage(page, category);
-      inventory.AddPageItem(page);
-      GD.Print($"Removed {page.PageName} from {category} socket.");
-    }
-
-    RefreshUI();
-  }
-
-  private List<SocketSlot> GetSlotsForCategory(string category) {
-    return category switch {
-      "Weapon" => weaponSlots,
-      "Armor" => armorSlots,
-      "Skill" => skillSlots,
-      _ => new List<SocketSlot>()
-    };
   }
 
   private void OnClosePressed() {
@@ -434,14 +383,13 @@ public partial class InventoryUI : Control {
 
 public partial class SocketSlot : MarginContainer {
   private Button slotButton;
-  private Button removeButton;
 
   public PageData CurrentPage { get; private set; }
   public bool HasPage => CurrentPage != null;
   public string Category { get; private set; }
   public int SlotIndex { get; private set; }
 
-  public event System.Action<PageData> RemoveRequested;
+  public event System.Action<string, int> SlotClicked;
 
   public SocketSlot(string category, int index) {
     Category = category;
@@ -453,35 +401,26 @@ public partial class SocketSlot : MarginContainer {
     SizeFlagsHorizontal = SizeFlags.ExpandFill;
     CustomMinimumSize = new Vector2(0, 40);
 
-    HBoxContainer hbox = new HBoxContainer();
-    hbox.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-    AddChild(hbox);
-
     slotButton = new Button();
     slotButton.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-    slotButton.Text = "[ Empty ]";
-    slotButton.Disabled = true;
-    hbox.AddChild(slotButton);
-
-    removeButton = new Button();
-    removeButton.Text = "X";
-    removeButton.CustomMinimumSize = new Vector2(30, 0);
-    removeButton.Visible = false;
-    removeButton.Pressed += () => RemoveRequested?.Invoke(CurrentPage);
-    hbox.AddChild(removeButton);
+    slotButton.Text = $"[ {Category} {SlotIndex} ] (click to socket)";
+    slotButton.Pressed += () => {
+      SlotClicked?.Invoke(Category, SlotIndex);
+    };
+    AddChild(slotButton);
   }
 
   public void SetPage(PageData page) {
     CurrentPage = page;
-    slotButton.Text = $"{page.PageName}";
-    slotButton.Disabled = false;
-    removeButton.Visible = true;
+    if (page != null) {
+      slotButton.Text = $"{Category} {SlotIndex}: {page.PageName}";
+    } else {
+      slotButton.Text = $"[ {Category} {SlotIndex} ] (click to socket)";
+    }
   }
 
   public void ClearPage() {
     CurrentPage = null;
-    slotButton.Text = "[ Empty ]";
-    slotButton.Disabled = true;
-    removeButton.Visible = false;
+    slotButton.Text = $"[ {Category} {SlotIndex} ] (click to socket)";
   }
 }
