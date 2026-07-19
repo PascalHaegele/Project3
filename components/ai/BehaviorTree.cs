@@ -23,7 +23,9 @@ public partial class BehaviorTree : Node {
     enemy = GetParent<Enemy>();
 
     navAgent ??= GetNode<NavigationAgent3D>("../NavigationAgent3D");
-    navAgent.TargetPosition = enemy.enemyInfo.patrolPath[patrolIndex];
+    if(enemy.enemyInfo.patrolPath?.Length > 0) {
+      navAgent.TargetPosition = enemy.enemyInfo.patrolPath[patrolIndex];
+    }
 
     rootNode = ConstructTree();
   }
@@ -63,7 +65,13 @@ public partial class BehaviorTree : Node {
     SequenceNode investigateSequence = new();
     investigateSequence.AddChildren(
       new ConditionNode(() => aiInfo.soundHeard),
-      new TaskNode(LookToSound)
+      new TaskNode(LookToSound),
+      new TaskNode(MoveToSound)
+    );
+
+    SequenceNode idleSequence = new();
+    idleSequence.AddChildren(
+      new ConditionNode(() => enemy.enemyInfo.HasPatrol)
     );
 
     SequenceNode patrolSequence = new();
@@ -80,19 +88,9 @@ public partial class BehaviorTree : Node {
 
     navAgent.TargetPosition = aiInfo.targetPosition;
 
-    Vector3 position = enemy.GlobalTransform.Origin;
-    Vector3 nextPathPosition = navAgent.GetNextPathPosition();
+    MoveToTarget();
 
-    Vector3 direction =
-      position.DirectionTo(nextPathPosition).Normalized();
-    direction.Y = 0.0f;
-
-    input.direction = new(direction.X, direction.Z);
     input.sprint = true;
-
-    if(!position.IsEqualApprox(enemy.GlobalPosition + direction)) {
-      enemy.LookAt(enemy.GlobalPosition + direction);
-    }
 
     return NodeState.RUNNING;
   }
@@ -111,6 +109,18 @@ public partial class BehaviorTree : Node {
     return NodeState.SUCCESS;
   }
 
+  private NodeState MoveToSound() {
+    navAgent.TargetPosition = aiInfo.soundPosition;
+
+    if(navAgent.IsTargetReached()) {
+      return NodeState.SUCCESS;
+    }
+
+    MoveToTarget();
+
+    return NodeState.RUNNING;
+  }
+
   private NodeState MoveToNextWaypoint() {
     if(enemy.enemyInfo.patrolPath == null) { return NodeState.FAILURE; }
     if(enemy.enemyInfo.patrolPath.Length < 1) { return NodeState.FAILURE; }
@@ -123,20 +133,24 @@ public partial class BehaviorTree : Node {
       return NodeState.SUCCESS;
     }
 
-    Vector3 actorPosition = enemy.GlobalTransform.Origin;
+    MoveToTarget();
+
+    return NodeState.RUNNING;
+  }
+
+  private void MoveToTarget() {
+    Vector3 position = enemy.GlobalTransform.Origin;
     Vector3 nextPathPosition = navAgent.GetNextPathPosition();
 
     Vector3 direction =
-      actorPosition.DirectionTo(nextPathPosition).Normalized();
+      position.DirectionTo(nextPathPosition).Normalized();
     direction.Y = 0.0f;
 
     input.direction = new(direction.X, direction.Z);
 
-    if(!actorPosition.IsEqualApprox(actorPosition + enemy.Direction)) {
-      enemy.LookAt(actorPosition + enemy.Direction);
+    if(!position.IsEqualApprox(enemy.GlobalPosition + direction)) {
+      enemy.LookAt(enemy.GlobalPosition + direction);
     }
-
-    return NodeState.RUNNING;
   }
 }
 

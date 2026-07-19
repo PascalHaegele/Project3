@@ -8,5 +8,7 @@ public partial class EnemyInfo : Resource {
   [Export] public float leashLength = 25.0f;
 
   [Export] public float attackRange = 3.0f;
+
+  public bool HasPatrol => patrolPath?.Length > 0;
 }
 

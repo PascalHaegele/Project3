@@ -9,6 +9,7 @@ public partial class EventManager : Node {
   private ShaderMaterial skyShader;
 
   private readonly List<PortalArea> portalAreas = new();
+  private readonly List<Altar> altars = new();
 
   public override void _Ready() {
     player = GetTree().Root.FindChild("Player", true, false) as Player;
@@ -26,6 +27,7 @@ public partial class EventManager : Node {
 
     foreach(Node child in GetChildren()) {
       if(child is PortalArea portalArea) { portalAreas.Add(portalArea); }
+      if(child is Altar altar) { altars.Add(altar); }
     }
   }
 

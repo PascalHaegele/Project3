@@ -8,6 +8,10 @@ public partial class InteractionComponent : Area3D {
   private Callable callable;
 
   public override void _Ready() {
+    CollisionLayer = (uint)CollisionLayerEnum.NONE;
+    CollisionMask = (uint)CollisionLayerEnum.PLAYER;
+    Monitorable = false;
+
     owner = GetParent<Node3D>();
     callable = Callable.From(TryInteract);
     BodyEntered += OnAreaBodyEntered;

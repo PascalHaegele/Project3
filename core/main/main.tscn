@@ -1,8 +1,5 @@
 [gd_scene format=3 uid="uid://c5qt8u5hbysnw"]
 
-[ext_resource type="PackedScene" uid="uid://co62vn6pet0yj" path="res://actors/player/player.tscn" id="2_yibi5"]
-[ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="3_k5wvu"]
-
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vwfi5"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -15,11 +12,6 @@ background_mode = 2
 sky = SubResource("Sky_yibi5")
 glow_enabled = true
 
-[sub_resource type="Resource" id="Resource_81xgm"]
-resource_local_to_scene = true
-script = ExtResource("3_k5wvu")
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
-
 [node name="Main" type="Node" unique_id=686021068]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=792852438]
@@ -29,18 +21,10 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1239141895]
 environment = SubResource("Environment_k5wvu")
 
-[node name="Menu" type="Node" parent="." unique_id=84615357]
-
-[node name="MenuCanvasLayer" type="CanvasLayer" parent="Menu" unique_id=2112220324]
-
 [node name="World" type="Node" parent="." unique_id=673644353]
 
 [node name="Maps" type="Node3D" parent="World" unique_id=1659139570]
 
 [node name="Actors" type="Node3D" parent="World" unique_id=629470526]
-
-[node name="Player" parent="World/Actors" unique_id=134350 instance=ExtResource("2_yibi5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.615165, 0, 55.84347)
-velocityInfo = SubResource("Resource_81xgm")
 
 [node name="Systems" type="Node" parent="." unique_id=560121007]

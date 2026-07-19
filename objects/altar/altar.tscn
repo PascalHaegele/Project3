@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://b2f87vnuu8frk"]
+
+[ext_resource type="Script" uid="uid://ctct5m3gak54i" path="res://objects/altar/Altar.cs" id="1_4fo7c"]
+[ext_resource type="Script" uid="uid://2pt8ci63eny8" path="res://components/InteractionComponent.cs" id="2_e0q88"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_bfp77"]
+size = Vector3(0.5, 1.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bfp77"]
+size = Vector3(0.5, 1.5, 0.5)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bfp77"]
+radius = 1.3924251
+
+[node name="Altar" type="StaticBody3D" unique_id=1471931379]
+script = ExtResource("1_4fo7c")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1621770253]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("BoxMesh_bfp77")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=849729109]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("BoxShape3D_bfp77")
+
+[node name="InteractionComponent" type="Area3D" parent="." unique_id=2010354825]
+script = ExtResource("2_e0q88")
+metadata/_custom_type_script = "uid://2pt8ci63eny8"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionComponent" unique_id=897282026]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("SphereShape3D_bfp77")
