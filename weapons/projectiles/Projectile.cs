@@ -12,40 +12,48 @@ public partial class Projectile : RigidBody3D {
 
   private Vector3 hitPosition;
 
-  public override void _Ready() {
-    // BodyEntered += OnBodyEntered;
+  // Empowered shot flag
+  public bool isEmpowered = false;
 
+  public override void _Ready() {
     freeTimer = new();
     AddChild(freeTimer);
     freeTimer.OneShot = true;
     freeTimer.Timeout += QueueFree;
 
     CollisionLayer = (uint)CollisionLayerEnum.NONE;
-    CollisionMask =
-      (uint)CollisionLayerEnum.WORLD | (uint)CollisionLayerEnum.ENEMY;
+    CollisionMask = (uint)CollisionLayerEnum.WORLD | (uint)CollisionLayerEnum.ENEMY;
 
     weapon = GetParent<Weapon>();
     hitbox = GetNode<HitboxComponent>("HitboxComponent");
-    hitbox.damage = weapon.info.projectileDamage * weapon.info.damageMulitplier;
 
-    if(weapon.GetParent() is Player) {
+    float baseDamage = weapon.info.projectileDamage * weapon.info.damageMulitplier;
+    Player player = weapon.GetParent() as Player ?? weapon.GetParent()?.GetParent<Player>();
+    if (player != null) {
+      SocketComponent socket = player.GetComponent<SocketComponent>();
+      if (socket != null) {
+        baseDamage += socket.GetModifier("Damage");
+      }
+    }
+    
+    // Apply FrenziedSoul empowered shot bonus
+    if (isEmpowered) {
+      baseDamage *= 2.0f;
+    }
+    
+    hitbox.damage = baseDamage;
+
+    if (weapon.GetParent() is Player) {
       hitbox.CollisionLayer = (uint)CollisionLayerEnum.PLAYER_HITBOX;
       hitbox.CollisionMask = (uint)CollisionLayerEnum.ENEMY_HURTBOX;
     }
-
-    // ApplyImpulse(-GlobalBasis.Z * weapon.info.projectileSpeed);
   }
 
   public override void _Process(double delta) {
     if(hit) {
-      Debug
-        .draw
-        .DrawLineThick(shotPosition, hitPosition, 1, false, Colors.Red);
-    }
-    else {
-      Debug
-        .draw
-        .DrawLineThick(shotPosition, GlobalPosition, 1, false, Colors.Red);
+      Debug.draw.DrawLineThick(shotPosition, hitPosition, 1, false, Colors.Red);
+    } else {
+      Debug.draw.DrawLineThick(shotPosition, GlobalPosition, 1, false, Colors.Red);
     }
   }
 
@@ -53,9 +61,7 @@ public partial class Projectile : RigidBody3D {
     if(hit) { return; }
 
     KinematicCollision3D collision3D =
-      MoveAndCollide(
-        -GlobalBasis.Z * weapon.info.projectileSpeed * (float)delta
-      );
+      MoveAndCollide(-GlobalBasis.Z * weapon.info.projectileSpeed * (float)delta);
 
     if(collision3D != null) {
       hit = true;
@@ -74,19 +80,4 @@ public partial class Projectile : RigidBody3D {
       QueueFree();
     }
   }
-
-  // private void OnBodyEntered(Node body) {
-  //   hit = true;
-  //   hitPosition = GlobalPosition;
-  //   Freeze = true;
-  //   freeTimer.Start(5.0);
-  //
-  //   if(body is PhysicsBody3D physicsBody) {
-  //     _ = weapon.CallDeferred(Node.MethodName.RemoveChild, this);
-  //     _ = physicsBody.CallDeferred(Node.MethodName.AddChild, this);
-  //     Owner = physicsBody.GetTree().EditedSceneRoot;
-  //     TopLevel = false;
-  //   } else { hitbox.DisableCollisionShapes(); }
-  // }
 }
-

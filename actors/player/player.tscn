@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="15_qrxv1"]
 [ext_resource type="PackedScene" uid="uid://dn261xqm15ik0" path="res://ui/health_bar.tscn" id="18_qrxv1"]
 [ext_resource type="Script" uid="uid://cvmxf2r8l8urx" path="res://actors/player/PlayerStateMachine.cs" id="19_dqf5y"]
+[ext_resource type="Script" path="res://components/SocketComponent.cs" id="20_socket"]
 
 [sub_resource type="Resource" id="Resource_pwco0"]
 resource_local_to_scene = true
@@ -92,7 +93,7 @@ collision_mask = 5
 script = ExtResource("1_nvxhs")
 weapon = NodePath("CameraPivot/Revolver")
 velocityInfo = SubResource("Resource_pwco0")
-components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("PlayerStateMachine"), NodePath("HealthComponent"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent"), NodePath("InsanityComponent")]
+components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("PlayerStateMachine"), NodePath("HealthComponent"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent"), NodePath("InsanityComponent"), NodePath("SocketComponent")]
 
 [node name="BodyCollision" type="CollisionShape3D" parent="." unique_id=859779642]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -163,6 +164,9 @@ metadata/_custom_type_script = "uid://g3kw63x81wsu"
 [node name="InsanityComponent" type="Node" parent="." unique_id=331735480]
 script = ExtResource("11_7aotg")
 metadata/_custom_type_script = "uid://blliffgtkxkfr"
+
+[node name="SocketComponent" type="Node" parent="."]
+script = ExtResource("20_socket")
 
 [node name="HUD" type="Control" parent="." unique_id=925751462]
 layout_mode = 3

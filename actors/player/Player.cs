@@ -21,6 +21,7 @@ public partial class Player : Actor, IHitable {
 
   private Label ammoDisplay;
   private Label potionCount;
+  private InventoryUI inventoryUI;
 
   [Signal] public delegate void InteractingEventHandler();
 
@@ -62,6 +63,16 @@ public partial class Player : Actor, IHitable {
 
     potionCount = GetNode<Label>("HUD/PotionCount");
     potionCount.Text = "P : " + inventoryComponent.items[(int)ItemType.POTION];
+
+    // Setup InventoryUI
+    inventoryUI = GetNodeOrNull<InventoryUI>("HUD/InventoryUI");
+    if (inventoryUI == null) {
+      // Create it dynamically if not in scene
+      inventoryUI = new InventoryUI();
+      inventoryUI.Name = "InventoryUI";
+      GetNode("HUD").AddChild(inventoryUI);
+    }
+    inventoryUI.Initialize(inventoryComponent, GetComponent<SocketComponent>(), weapon);
   }
 
   public override void _Process(double delta) {
@@ -78,7 +89,9 @@ public partial class Player : Actor, IHitable {
     if(input.shoot) { weapon.Shoot(); }
     if(input.reload) { weapon.Reload(); }
 
-    if(input.openInventory) { inventoryComponent.PrintInventory(); }
+    if(input.openInventory) {
+      if (inventoryUI != null) inventoryUI.Toggle();
+    }
 
     if(pickupCast.IsColliding()) {
       hoveringPickup = true;
@@ -93,6 +106,11 @@ public partial class Player : Actor, IHitable {
           GD.Print($"Interacted with {hoveredPickup.Name}");
           hoveredPickup.QueueFree();
           inventoryComponent.AddItem(hoveredPickup.itemType);
+          
+          // For pages, also add the PageData to the collected pages list
+          if (hoveredPickup.itemType == ItemType.PAGE && hoveredPickup.pageData != null) {
+            inventoryComponent.AddPageItem(hoveredPickup.pageData);
+          }
         }
       }
     } else {
@@ -165,4 +183,3 @@ public partial class Player : Actor, IHitable {
     potionCount.Text = "P : " + inventoryComponent.items[(int)ItemType.POTION];
   }
 }
-
