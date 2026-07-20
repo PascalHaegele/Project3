@@ -86,12 +86,11 @@ mesh = SubResource("ImmediateMesh_bfp77")
 script = ExtResource("6_egu6l")
 metadata/_custom_type_script = "uid://cq4ddchn0vss"
 
-[node name="SpawnArea" type="Area3D" parent="." unique_id=237590560 node_paths=PackedStringArray("spawnPositions")]
+[node name="SpawnArea" type="Area3D" parent="." unique_id=237590560]
 transform = Transform3D(0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, 0.49999997, 78.6899, 0, -60.754906)
 script = ExtResource("8_e0egg")
 enemy = ExtResource("9_2m22u")
 enemyInfo = ExtResource("10_xuw2a")
-spawnPositions = [NodePath("Marker3D"), NodePath("Marker3D2")]
 metadata/_custom_type_script = "uid://c8525x2xugj2n"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnArea" unique_id=499836646]

@@ -1,8 +1,11 @@
 using Godot;
 
+public enum WeaponType { Revolver, Shotgun, }
+
 [GlobalClass]
 public partial class WeaponInfo : Resource {
   [ExportGroup("Weapon")]
+  [Export] public WeaponType type = WeaponType.Revolver;
   [Export] public float range = 50.0f;
   [Export] public float fireRate = 1.0f;
   [Export] public float reloadTime = 1.5f;

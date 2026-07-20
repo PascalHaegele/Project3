@@ -5,6 +5,8 @@ public partial class EventManager : Node {
   private Player player;
   private InsanityComponent playerInsanityComponent;
 
+  private Marker3D playerSpawn;
+
   private WorldEnvironment environment;
   private ShaderMaterial skyShader;
 
@@ -17,6 +19,10 @@ public partial class EventManager : Node {
 
     playerInsanityComponent.InsanityChanged += OnInsanityChanged;
     playerInsanityComponent.InsanityLevelChanged += OnInsanityLevelChanged;
+
+    playerSpawn = GetNode<Marker3D>("PlayerSpawn");
+
+    player.GetComponent<HealthComponent>().Died += OnPlayerDeath;
 
     environment =
       GetTree()
@@ -34,12 +40,27 @@ public partial class EventManager : Node {
   public override void _UnhandledInput(InputEvent @event) {
     if(@event is InputEventKey keyEvent) {
       if(keyEvent.Keycode == Key.Period) {
-        playerInsanityComponent.AddInsanity(10);
+        playerInsanityComponent.AddInsanity(10.0f);
       }
       if(keyEvent.Keycode == Key.Comma) {
-        playerInsanityComponent.AddInsanity(-10);
+        playerInsanityComponent.AddInsanity(-10.0f);
       }
     }
+  }
+
+  private void OnPlayerDeath() {
+    player.ProcessMode = ProcessModeEnum.Disabled;
+
+    Timer deathTimer = new();
+    AddChild(deathTimer);
+    deathTimer.OneShot = true;
+    deathTimer.Start(5.0);
+    deathTimer.Timeout += () => {
+      player.Reset();
+      player.GlobalPosition = playerSpawn.GlobalPosition;
+      player.GlobalRotation = playerSpawn.GlobalRotation;
+      player.ProcessMode = ProcessModeEnum.Inherit;
+    };
   }
 
   private void OnInsanityChanged(float insanity) {

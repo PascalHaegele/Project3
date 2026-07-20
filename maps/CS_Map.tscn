@@ -13,7 +13,6 @@
 [ext_resource type="Script" uid="uid://ci31eubnodj4i" path="res://core/PortalArea.cs" id="11_6t5b2"]
 [ext_resource type="PackedScene" uid="uid://cn8nhwdvhamst" path="res://objects/portal/portal.tscn" id="12_k8dp5"]
 [ext_resource type="PackedScene" uid="uid://b2f87vnuu8frk" path="res://objects/altar/altar.tscn" id="13_oxeun"]
-[ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="14_24hbc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsga6"]
 shader = ExtResource("1_ui8i3")
@@ -37,7 +36,7 @@ polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Arr
 agent_height = 2.0
 agent_max_climb = 1.79
 
-[sub_resource type="Resource" id="Resource_cwhf6"]
+[sub_resource type="Resource" id="Resource_k8dp5"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
@@ -52,11 +51,6 @@ radius = 2.5708997
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_o8bm0"]
 radius = 1.5346596
-
-[sub_resource type="Resource" id="Resource_6emo8"]
-script = ExtResource("14_24hbc")
-attackRange = 2.0
-metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [node name="Main" type="Node3D" unique_id=7192887]
 script = ExtResource("1_e5prk")
@@ -644,7 +638,7 @@ size = Vector3(0.26939064, 1.9098358, 3.9516842)
 
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("3_ui8i3")]
 transform = Transform3D(-0.67006296, 0, -0.7423042, 0, 1, 0, 0.7423042, 0, -0.67006296, 254.2417, 2.3424404, 27.744242)
-velocityInfo = SubResource("Resource_cwhf6")
+velocityInfo = SubResource("Resource_k8dp5")
 
 [node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=2016545012]
 mesh = SubResource("ImmediateMesh_bfp77")
@@ -712,8 +706,6 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -152
 [node name="Altar" parent="." unique_id=1471931379 instance=ExtResource("13_oxeun")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 85.5112, 2.3530731, -0.59987545)
 effect = 4
-enemy = ExtResource("2_3soxs")
-enemyInfo = SubResource("Resource_6emo8")
 
 [node name="Marker3D" type="Marker3D" parent="Altar" unique_id=57581382]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.614174, 9.536743e-07, -1.4730902)

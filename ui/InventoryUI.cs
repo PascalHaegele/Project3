@@ -33,7 +33,7 @@ public partial class InventoryUI : Control {
 
   public override void _Ready() {
     Visible = false;
-    
+
     BuildUI();
     CreateSocketSlots();
 
@@ -48,7 +48,7 @@ public partial class InventoryUI : Control {
     skillSocketContainer = GetNodeOrNull<VBoxContainer>("SkillSocketContainer");
     pagesListContainer = GetNodeOrNull<VBoxContainer>("PagesList");
     closeButton = GetNodeOrNull<Button>("CloseButton");
-    
+
     if (weaponSocketContainer != null) return;
 
     GD.Print("InventoryUI: Building UI programmatically");
@@ -283,7 +283,7 @@ public partial class InventoryUI : Control {
       // Extract slot index from Weaponi (e.g., "Weapon_0" -> 0)
       string[] parts = slotId.Split('_');
       int slotIndex = parts.Length > 1 ? int.Parse(parts[1]) : 0;
-      
+
       SocketSlot slot = GetSlotByCategoryIndex(category, slotIndex);
       if (slot != null) slot.SetPage(page);
     }
@@ -291,7 +291,7 @@ public partial class InventoryUI : Control {
 
   private void RefreshStats() {
     if (inventory == null) return;
-    if (potionLabel != null) potionLabel.Text = $"Potions: {inventory.items[(int)ItemType.POTION]}";
+    if (potionLabel != null) potionLabel.Text = $"Potions: {inventory.items[(int)ItemType.Potion]}";
     if (weapon != null && weaponNameLabel != null) weaponNameLabel.Text = $"Weapon: {weapon.Name}";
     if (weapon != null && ammoLabel != null) ammoLabel.Text = $"Ammo: {weapon.CurrentAmmo} / {weapon.info.magazineSize}";
   }
@@ -312,14 +312,14 @@ public partial class InventoryUI : Control {
 
   private void OnPageClicked(PageData page) {
     if (page == null || socketComponent == null || inventory == null) return;
-    
+
     // Toggle selection: if same page already selected, deselect it
     if (selectedPageForSocket == page) {
       selectedPageForSocket = null;
     } else {
       selectedPageForSocket = page;
     }
-    
+
     RefreshUI();
   }
 
@@ -331,13 +331,13 @@ public partial class InventoryUI : Control {
     if (selectedPageForSocket != null) {
       // Try to socket the selected page into this slot
       if (slot != null && slot.HasPage) return; // Slot occupied
-      
+
       string oldCategory = GetCurrentSocketCategory(selectedPageForSocket);
       if (oldCategory != null) {
         socketComponent.RemovePage(selectedPageForSocket, oldCategory);
         inventory.AddPageItem(selectedPageForSocket);
       }
-      
+
       inventory.RemovePageItem(selectedPageForSocket);
       socketComponent.SocketPage(selectedPageForSocket, category);
       selectedPageForSocket = null;

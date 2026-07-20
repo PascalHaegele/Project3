@@ -22,7 +22,9 @@ public partial class Projectile : RigidBody3D {
     freeTimer.Timeout += QueueFree;
 
     CollisionLayer = (uint)CollisionLayerEnum.NONE;
-    CollisionMask = (uint)CollisionLayerEnum.WORLD | (uint)CollisionLayerEnum.ENEMY;
+    CollisionMask =
+      (uint)CollisionLayerEnum.WORLD |
+      (uint)CollisionLayerEnum.ENEMY;
 
     weapon = GetParent<Weapon>();
     hitbox = GetNode<HitboxComponent>("HitboxComponent");
@@ -35,12 +37,12 @@ public partial class Projectile : RigidBody3D {
         baseDamage += socket.GetModifier("Damage");
       }
     }
-    
+
     // Apply FrenziedSoul empowered shot bonus
     if (isEmpowered) {
       baseDamage *= 2.0f;
     }
-    
+
     hitbox.damage = baseDamage;
 
     if (weapon.GetParent() is Player) {

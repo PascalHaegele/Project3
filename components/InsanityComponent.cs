@@ -73,14 +73,6 @@ public partial class InsanityComponent : Node {
     UpdateInsanityLevel();
   }
 
-  public float GetInsanity() {
-    return CurrentInsanity;
-  }
-
-  public InsanityLevel GetLevel() {
-    return CurrentLevel;
-  }
-
   // =========================
   // Private
   // =========================

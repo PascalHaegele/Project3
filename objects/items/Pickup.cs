@@ -16,6 +16,8 @@ public partial class Pickup : RigidBody3D {
 
   public bool hovering;
 
+  public int amount;
+
   private Area3D hoverArea;
   private Sprite3D hoverIndicator;
 
@@ -33,18 +35,22 @@ public partial class Pickup : RigidBody3D {
     hoverIndicator = GetNode<Sprite3D>("HoverIndicator");
 
     // Add a small box collision shape to prevent falling through floor
-    CollisionShape3D floorCollision = new CollisionShape3D();
-    BoxShape3D box = new BoxShape3D();
+    CollisionShape3D floorCollision = new();
+    BoxShape3D box = new();
     box.Size = new Vector3(0.3f, 0.1f, 0.3f);
     floorCollision.Shape = box;
     AddChild(floorCollision);
 
     // Show the correct mesh; defer once to avoid transform issues
     Callable.From(() => {
-      GetNodeOrNull<Node3D>("Potion")?.Set("visible", itemType == ItemType.POTION);
-      GetNodeOrNull<Node3D>("Page")?.Set("visible", itemType == ItemType.PAGE);
-      GetNodeOrNull<Node3D>("AmmoRev")?.Set("visible", itemType == ItemType.AMMUNITION);
-      GetNodeOrNull<Node3D>("AmmoShot")?.Set("visible", itemType == ItemType.AMMUNITION);
+      GetNodeOrNull<Node3D>("Potion")?
+        .Set("visible", itemType == ItemType.Potion);
+      GetNodeOrNull<Node3D>("Page")?
+        .Set("visible", itemType == ItemType.Page);
+      GetNodeOrNull<Node3D>("AmmoRev")?
+        .Set("visible", itemType == ItemType.RAmmo);
+      GetNodeOrNull<Node3D>("AmmoShot")?
+        .Set("visible", itemType == ItemType.SAmmo);
     }).CallDeferred();
 
     ApplyImpulse(new Vector3(0.0f, 3.0f, 2.0f));

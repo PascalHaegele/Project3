@@ -69,15 +69,20 @@ public partial class BehaviorTree : Node {
       new TaskNode(MoveToSound)
     );
 
-    SequenceNode idleSequence = new();
-    idleSequence.AddChildren(
-      new ConditionNode(() => enemy.enemyInfo.HasPatrol)
+    SequenceNode patrolSequence = new();
+    patrolSequence.AddChildren(
+      new ConditionNode(() => enemy.enemyInfo.HasPatrol),
+      new TaskNode(MoveToNextWaypoint)
     );
 
-    SequenceNode patrolSequence = new();
-    patrolSequence.AddChildren(new TaskNode(MoveToNextWaypoint));
+    SequenceNode idleSequence = new();
 
-    root.AddChildren(combatSequence, investigateSequence, idleSequence, patrolSequence);
+    root.AddChildren(
+      combatSequence,
+      investigateSequence,
+      patrolSequence,
+      idleSequence
+    );
     // root.AddChildren(combatSequence, patrolSequence);
     return root;
   }

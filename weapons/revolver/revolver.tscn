@@ -26,43 +26,8 @@ transform = Transform3D(0.15498623, -0.02454741, -1.9938344, 0.31286892, 1.97537
 [node name="ProjectileSpawn" type="Marker3D" parent="." unique_id=1622763174]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.135, -0.1)
 
-[node name="WeaponAnimation" type="Node3D" parent="."]
+[node name="WeaponAnimation" type="Node3D" parent="." unique_id=229667078]
 script = ExtResource("4_k6yiw")
-swaySmoothing = 6.0
-swayMax = 0.005
-springStiffness = 50.0
-springDamping = 20.0
-recoilStrength = 0.045
-recoilAngle = -0.045
-recoilSideDriftMax = 0.015
-recoilVariation = 0.1
-recoilKickDuration = 0.02
-recoilReturnDuration = 0.07
-recoilPauseDuration = 0.01
-reloadDropX = 0.15
-reloadDropY = -0.25
-reloadDropZ = 0.12
-reloadRotX = -0.4
-reloadRotY = 0.6
-reloadRotZ = 0.2
 reloadDropDuration = 0.15
 reloadHoldDuration = 1.1
 reloadReturnDuration = 0.2
-sprintOffsetY = -0.025
-sprintOffsetZ = 0.01
-sprintTiltX = -0.02
-sprintDuration = 0.15
-jumpOffsetY = 0.015
-jumpOffsetZ = -0.005
-jumpTiltX = 0.015
-jumpUpDuration = 0.06
-jumpHoldDuration = 0.08
-jumpDownDuration = 0.08
-dashOffsetX = 0.025
-dashOffsetY = -0.01
-dashOffsetZ = 0.01
-dashTiltX = -0.02
-dashRollZ = 0.06
-dashOutDuration = 0.07
-dashHoldDuration = 0.05
-dashReturnDuration = 0.12

@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 // Configures drop tables and handles randomized loot generation
 [GlobalClass]
@@ -8,30 +9,23 @@ public partial class LootComponent : Node {
   public Godot.Collections.Array<string> PossiblePages = new();
 
   // Array of additional item types that can drop (ammo, health, currency)
-  [Export]
-  public bool CanDropAmmo = false;
-  [Export]
-  public bool CanDropHealth = false;
-  [Export]
-  public bool CanDropCurrency = false;
+  [Export] public bool CanDropAmmo = false;
+  [Export] public bool CanDropHealth = false;
+  [Export] public bool CanDropCurrency = false;
 
   // Random number generator used for loot selection
   private RandomNumberGenerator rng = new();
 
   // Signal emitted whenever loot is successfully generated
-  [Signal]
-  public delegate void LootGeneratedEventHandler(string itemName);
+  [Signal] public delegate void LootGeneratedEventHandler(string itemName);
 
   /// <summary>
   /// Signal emitted when a PageData should be added to the player's inventory.
   /// The receiving system (e.g. pickup or direct injection) handles the actual addition.
   /// </summary>
-  [Signal]
-  public delegate void PageDroppedEventHandler(PageData page);
+  [Signal] public delegate void PageDroppedEventHandler(PageData page);
 
-  public override void _Ready() {
-    rng.Randomize();
-  }
+  public override void _Ready() { rng.Randomize(); }
 
   /// <summary>
   /// Returns a random page name from the possible pages list.
@@ -59,12 +53,12 @@ public partial class LootComponent : Node {
   /// </summary>
   public PageData GeneratePageDrop() {
     // Always return a random page from the database for testing
-    if (PageDatabase.PageCount > 0) {
+    if(PageDatabase.PageCount > 0) {
       int randomIndex = rng.RandiRange(0, PageDatabase.PageCount - 1);
-      string[] allPages = PageDatabase.GetAllPageNames().ToArray();
-      if (allPages.Length > 0) {
+      string[] allPages = [.. PageDatabase.GetAllPageNames()];
+      if(allPages.Length > 0) {
         PageData page = PageDatabase.GetPage(allPages[randomIndex]);
-        if (page != null) {
+        if(page != null) {
           GD.Print($"Page Drop Generated: {page.PageName}");
           _ = EmitSignal(SignalName.PageDropped, page);
           return page;
@@ -82,12 +76,13 @@ public partial class LootComponent : Node {
   /// </summary>
   public ItemType? GenerateItemDrop() {
     // Simple random selection among enabled non-page drops
-    var possibleDrops = new System.Collections.Generic.List<ItemType>();
-    if (CanDropAmmo) possibleDrops.Add(ItemType.AMMUNITION);
-    if (CanDropHealth) possibleDrops.Add(ItemType.POTION);
+    List<ItemType> possibleDrops = new();
+    if(CanDropAmmo) { possibleDrops.Add(ItemType.RAmmo); }
+    if(CanDropHealth) { possibleDrops.Add(ItemType.Potion); }
+
     // Currency would need a new ItemType if needed
 
-    if (possibleDrops.Count == 0) return null;
+    if(possibleDrops.Count == 0) { return null; }
 
     int index = rng.RandiRange(0, possibleDrops.Count - 1);
     return possibleDrops[index];

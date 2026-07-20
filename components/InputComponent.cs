@@ -11,6 +11,7 @@ public partial class InputPackage : Resource {
   public bool dash;
   public bool shoot;
   public bool special;
+  public bool usePotion;
 
   // Future actions
   public bool interact;
@@ -37,6 +38,7 @@ public partial class InputComponent : Node {
     input.dash = Input.IsActionJustPressed("dash");
     input.shoot = Input.IsActionJustPressed("shoot");
     input.special = Input.IsActionJustPressed("special");
+    input.usePotion = Input.IsActionJustPressed("use_potion");
 
     // Future actions
     input.interact = Input.IsActionJustPressed("interact");

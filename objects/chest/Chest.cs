@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 public partial class Chest : StaticBody3D, IInteractable {
   private PackedScene pickup;
@@ -10,19 +11,19 @@ public partial class Chest : StaticBody3D, IInteractable {
   public override void _Ready() {
     // Load pickup scene directly to ensure it's available
     pickup = GD.Load<PackedScene>("res://objects/items/test_pickup.tscn");
-    if (pickup == null) {
+    if(pickup == null) {
       GD.PrintErr("Chest: Could not load test_pickup.tscn!");
     }
     // Find AnimationPlayer from the imported GLB model
-    var model = GetNode<Node3D>("Model");
-    if (model.HasNode("AnimationPlayer")) {
+    Node3D model = GetNode<Node3D>("Model");
+    if(model.HasNode("AnimationPlayer")) {
       animationPlayer = model.GetNode<AnimationPlayer>("AnimationPlayer");
     } else {
       // Fallback: search recursively
       animationPlayer = GetAnimationPlayerRecursive(model);
     }
 
-    if (animationPlayer != null) {
+    if(animationPlayer != null) {
       availableAnimations = animationPlayer.GetAnimationList();
       GD.Print($"Chest animations found: {string.Join(", ", availableAnimations)}");
     } else {
@@ -31,38 +32,37 @@ public partial class Chest : StaticBody3D, IInteractable {
   }
 
   private AnimationPlayer GetAnimationPlayerRecursive(Node node) {
-    foreach (Node child in node.GetChildren()) {
-      if (child is AnimationPlayer ap)
-        return ap;
-      var found = GetAnimationPlayerRecursive(child);
-      if (found != null)
-        return found;
+    foreach(Node child in node.GetChildren()) {
+      if(child is AnimationPlayer ap) { return ap; }
+      AnimationPlayer found = GetAnimationPlayerRecursive(child);
+      if(found != null) { return found; }
     }
     return null;
   }
 
   public void Interact(Player player) {
-    if (opened) return;
+    if(opened) { return; }
+
     opened = true;
 
-    if (animationPlayer == null) {
+    if(animationPlayer == null) {
       GD.PrintErr("Chest: No AnimationPlayer available.");
       return;
     }
 
     // Try to find a matching animation by keywords
     string animName = FindBestAnimation();
-    if (animName != null) {
+    if(animName != null) {
       animationPlayer.Play(animName);
       GD.Print($"Chest.Interact: Playing animation '{animName}'");
     } else {
       GD.PrintErr("Chest: No suitable animation found.");
     }
 
-    if (pickup == null) {
+    if(pickup == null) {
       GD.PrintErr("Chest: pickup is still null after _Ready load. Trying UID load...");
       pickup = GD.Load<PackedScene>("uid://dudmf7poy21iv");
-      if (pickup == null) {
+      if(pickup == null) {
         GD.PrintErr("Chest: Finally no pickup available.");
         return;
       }
@@ -71,7 +71,7 @@ public partial class Chest : StaticBody3D, IInteractable {
 
     // Spawn pickup from LootSpawn marker above the chest
     Marker3D lootSpawn = GetNodeOrNull<Marker3D>("LootSpawn");
-    if (lootSpawn == null) {
+    if(lootSpawn == null) {
       GD.PrintErr("Chest: LootSpawn marker not found!");
       return;
     }
@@ -81,7 +81,7 @@ public partial class Chest : StaticBody3D, IInteractable {
     // --- Drop 1: Page (always drop for testing) ---
     PageData page = GeneratePageDrop();
     GD.Print($"Chest: GeneratePageDrop returned: {(page != null ? page.PageName : "null")}");
-    if (page == null) {
+    if(page == null) {
       GD.PrintErr("Chest: PageDatabase not ready or empty! Using fallback page.");
       page = new PageData {
         PageName = "Test Page",
@@ -97,7 +97,8 @@ public partial class Chest : StaticBody3D, IInteractable {
       Pickup pagePickup = pickup.Instantiate<Pickup>();
       GetParent().AddChild(pagePickup);
       pagePickup.GlobalPosition = pagePos;
-      pagePickup.itemType = ItemType.PAGE;
+      pagePickup.itemType = ItemType.Page;
+      pagePickup.amount = 1;
       pagePickup.pageData = page;
       pagePickup.ApplyImpulse(new Vector3(
         (float)GD.RandRange(-0.3, 0.3),
@@ -115,7 +116,8 @@ public partial class Chest : StaticBody3D, IInteractable {
     Pickup potionPickup = pickup.Instantiate<Pickup>();
     GetParent().AddChild(potionPickup);
     potionPickup.GlobalPosition = potionPos;
-    potionPickup.itemType = ItemType.POTION;
+    potionPickup.itemType = ItemType.Potion;
+    potionPickup.amount = 1;
     potionPickup.ApplyImpulse(new Vector3(
       (float)GD.RandRange(-0.3, 0.3),
       2.0f,
@@ -131,7 +133,8 @@ public partial class Chest : StaticBody3D, IInteractable {
     Pickup ammoRevPickup = pickup.Instantiate<Pickup>();
     GetParent().AddChild(ammoRevPickup);
     ammoRevPickup.GlobalPosition = ammoRevPos;
-    ammoRevPickup.itemType = ItemType.AMMUNITION;
+    ammoRevPickup.itemType = ItemType.RAmmo;
+    ammoRevPickup.amount = 24;
     ammoRevPickup.ApplyImpulse(new Vector3(
       (float)GD.RandRange(-0.3, 0.3),
       2.0f,
@@ -147,7 +150,8 @@ public partial class Chest : StaticBody3D, IInteractable {
     Pickup ammoShotPickup = pickup.Instantiate<Pickup>();
     GetParent().AddChild(ammoShotPickup);
     ammoShotPickup.GlobalPosition = ammoShotPos;
-    ammoShotPickup.itemType = ItemType.AMMUNITION;
+    ammoShotPickup.amount = 12;
+    ammoShotPickup.itemType = ItemType.SAmmo;
     ammoShotPickup.ApplyImpulse(new Vector3(
       (float)GD.RandRange(-0.3, 0.3),
       2.0f,
@@ -157,15 +161,15 @@ public partial class Chest : StaticBody3D, IInteractable {
   }
 
   private string FindBestAnimation() {
-    if (availableAnimations == null || availableAnimations.Length == 0)
+    if(availableAnimations == null || availableAnimations.Length == 0) {
       return null;
+    }
 
     // Try common animation names for opening/closing
-    string[] openKeywords = { "open", "Open", "OPEN", "close", "Close", "closeAction", "CloseAction", "action", "Action" };
-    foreach (string anim in availableAnimations) {
-      foreach (string keyword in openKeywords) {
-        if (anim.Contains(keyword))
-          return anim;
+    string[] openKeywords = ["open", "Open", "OPEN", "close", "Close", "closeAction", "CloseAction", "action", "Action"];
+    foreach(string anim in availableAnimations) {
+      foreach(string keyword in openKeywords) {
+        if(anim.Contains(keyword)) { return anim; }
       }
     }
 
@@ -177,12 +181,12 @@ public partial class Chest : StaticBody3D, IInteractable {
   /// Generates a random page from the database.
   /// </summary>
   private PageData GeneratePageDrop() {
-    if (PageDatabase.PageCount <= 0) return null;
+    if(PageDatabase.PageCount <= 0) { return null; }
 
-    System.Collections.Generic.List<string> allPages = PageDatabase.GetAllPageNames();
-    if (allPages.Count <= 0) return null;
+    List<string> allPages = PageDatabase.GetAllPageNames();
+    if(allPages.Count <= 0) { return null; }
 
-    int randomIndex = (int)(GD.Randi() % (ulong)allPages.Count);
+    int randomIndex = (int)(GD.Randi() % (uint)allPages.Count);
     return PageDatabase.GetPage(allPages[randomIndex]);
   }
 }

@@ -23,22 +23,27 @@ public partial class HealthComponent : Node {
   }
 
   public override void _PhysicsProcess(double delta) {
-    if (!IsAlive) return;
-    if (bleedStacks <= 0) return;
+    if(!IsAlive) { return; }
+    if(bleedStacks <= 0) { return; }
 
     bleedTimer -= (float)delta;
-    if (bleedTimer <= 0.0f) {
+    if(bleedTimer <= 0.0f) {
       bleedTimer = bleedTickInterval;
       float bleedDmg = bleedDamagePerTick * bleedStacks;
       CurrentHealth = Mathf.Max(0.0f, CurrentHealth - bleedDmg);
       EmitSignalHealthChanged(CurrentHealth);
       GD.Print($"{GetParent().Name}: Bleed tick -{bleedDmg} (stacks: {bleedStacks}) | Health: {CurrentHealth}/{GetEffectiveMaxHealth()}");
 
-      if (CurrentHealth <= 0.0f) {
+      if(CurrentHealth <= 0.0f) {
         GD.Print($"{GetParent().Name} Died (Bleed)");
         EmitSignalDied();
       }
     }
+  }
+
+  public void Reset() {
+    ClearBleed();
+    CurrentHealth = maxHealth;
   }
 
   public void TakeDamage(float damage) {
@@ -46,13 +51,13 @@ public partial class HealthComponent : Node {
 
     // Apply DamageReduction if available
     float finalDamage = damage;
-    if (GetParent() is Player player) {
+    if(GetParent() is Player player) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
-      if (socket != null && socket.HasModifier("DamageReduction")) {
+      if(socket != null && socket.HasModifier("DamageReduction")) {
         float reduction = socket.GetModifier("DamageReduction");
         // Value is percentage reduction (e.g. 5 = 5%)
         finalDamage = damage * (1.0f - reduction / 100.0f);
-        if (!Mathf.IsEqualApprox(finalDamage, damage)) {
+        if(!Mathf.IsEqualApprox(finalDamage, damage)) {
           GD.Print($">>> DAMAGE REDUCED by {reduction}%: {damage} -> {finalDamage}");
         }
       }
@@ -85,11 +90,11 @@ public partial class HealthComponent : Node {
   /// Call this when the player defeats an elite enemy or completes an event.
   /// </summary>
   public void OnEliteKill() {
-    if (!IsAlive) return;
-    
-    if (GetParent() is Player player) {
+    if(!IsAlive) return;
+
+    if(GetParent() is Player player) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
-      if (socket != null && socket.HasModifier("BloodRitual")) {
+      if(socket != null && socket.HasModifier("BloodRitual")) {
         float healAmount = socket.GetModifier("BloodRitual");
         Heal(healAmount);
         GD.Print($">>> BLOOD RITUAL: Restored {healAmount} HP");
@@ -104,7 +109,7 @@ public partial class HealthComponent : Node {
     bool wasEmpty = bleedStacks == 0;
     bleedStacks += stacks;
     bleedDamagePerTick = Mathf.Max(bleedDamagePerTick, damagePerTick);
-    if (wasEmpty) {
+    if(wasEmpty) {
       bleedTimer = bleedTickInterval; // Only reset when starting fresh
     }
     GD.Print($"{GetParent().Name}: Bleed applied! Stacks: {bleedStacks}, DPS: {bleedDamagePerTick}");
@@ -122,9 +127,9 @@ public partial class HealthComponent : Node {
   /// </summary>
   public float GetEffectiveMaxHealth() {
     float effective = maxHealth;
-    if (GetParent() is Player player) {
+    if(GetParent() is Player player) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
-      if (socket != null) {
+      if(socket != null) {
         effective += socket.GetModifier("Health");
       }
     }

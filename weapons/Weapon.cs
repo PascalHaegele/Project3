@@ -6,12 +6,17 @@ public partial class Weapon : Node3D {
   [Export] private Marker3D projectileSpawn;
 
   private float fireCooldown;
-  protected float reloadTimer;
+  private float reloadTimer;
 
   private Projectile p;
 
   private RayCast3D aimCast;
   private RayCast3D projectileCast;
+
+  private Actor actor;
+  private InventoryComponent inventoryComponent;
+
+  public ItemType AmmoType { get; private set; }
 
   public int CurrentAmmo { get; private set; }
   public bool Reloading { get; private set; }
@@ -27,9 +32,15 @@ public partial class Weapon : Node3D {
 
   public override void _Ready() {
     aimCast = GetNode<RayCast3D>("../AimCast");
-    aimCast.TargetPosition = new (0.0f, 0.0f, -info.range);
+    aimCast.TargetPosition = new(0.0f, 0.0f, -info.range);
 
     projectileCast = GetNode<RayCast3D>("../ProjectileCast");
+
+    actor = GetParent() as Actor ?? GetParent().GetParent<Actor>();
+    inventoryComponent = actor.GetComponent<InventoryComponent>();
+
+    AmmoType =
+      info.type == WeaponType.Revolver ? ItemType.RAmmo : ItemType.SAmmo;
 
     CurrentAmmo = info.magazineSize;
 
@@ -40,10 +51,12 @@ public partial class Weapon : Node3D {
     if(fireCooldown > 0.0f) { fireCooldown -= (float)delta; }
     if(Reloading) {
       reloadTimer -= (float)delta;
-      if(reloadTimer <= 0.0f) {
-        FinishReload();
-      }
+      if(reloadTimer <= 0.0f) { FinishReload(); }
     }
+  }
+
+  public void Reset() {
+    CurrentAmmo = info.magazineSize;
   }
 
   public void Shoot() {
@@ -60,12 +73,12 @@ public partial class Weapon : Node3D {
     AddChild(p);
 
     // Track shot count for FrenziedSoul effect
-    if (GetParent() is Player player) {
+    if(actor is Player player) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
-      if (socket != null && socket.HasModifier("FrenziedSoul")) {
+      if(socket != null && socket.HasModifier("FrenziedSoul")) {
         shotCounter++;
         float empoweredThreshold = socket.GetModifier("FrenziedSoul");
-        if (shotCounter >= empoweredThreshold) {
+        if(shotCounter >= empoweredThreshold) {
           shotCounter = 0;
           p.isEmpowered = true;
           GD.Print($">>> FRENZIED SOUL! Every 10th shot empowered.");
@@ -84,14 +97,16 @@ public partial class Weapon : Node3D {
         projectileSpawn.Position += new Vector3(0.0f, 0.0f, distance + 0.05f);
         p.GlobalPosition = projectileSpawn.GlobalPosition;
         projectileSpawn.GlobalPosition = position;
+
+        p.GlobalRotation = projectileSpawn.GlobalRotation;
       } else {
-        p.LookAt(collisionPoint);
         p.GlobalPosition = projectileSpawn.GlobalPosition;
+        p.LookAt(collisionPoint);
       }
     } else {
       p.GlobalPosition = projectileSpawn.GlobalPosition;
+      p.GlobalRotation = projectileSpawn.GlobalRotation;
     }
-    p.GlobalRotation = projectileSpawn.GlobalRotation;
     p.shotPosition = p.GlobalPosition;
     p.TopLevel = true;
 
@@ -109,18 +124,25 @@ public partial class Weapon : Node3D {
   public void PlayReloadAnim() { weaponAnim?.PlayReload(); }
 
   public void Reload() {
-    if(Reloading || CurrentAmmo >= info.magazineSize) { return; }
+    if(
+      Reloading ||
+      CurrentAmmo >= info.magazineSize ||
+      inventoryComponent.AmountOf(AmmoType) <= 0
+    ) { return; }
 
     Reloading = true;
     float reloadDuration = info.reloadTime;
-    Player player = GetParent() as Player ?? GetParent()?.GetParent<Player>();
-    if (player != null) {
+
+    if(actor is Player player) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
-      if (socket != null) {
+      if(socket != null) {
         float reloadBonus = socket.GetModifier("ReloadSpeed");
         reloadDuration -= reloadBonus;
         reloadDuration = Mathf.Max(0.1f, reloadDuration);
-        GD.Print($"ReloadSpeed modifier: -{reloadBonus}, new duration: {reloadDuration:F2}");
+        GD.Print(
+          $"ReloadSpeed modifier: -{reloadBonus}, " +
+          $"new duration: {reloadDuration:F2}"
+        );
       }
     }
     reloadTimer = reloadDuration;
@@ -132,7 +154,10 @@ public partial class Weapon : Node3D {
 
   public void FinishReload() {
     Reloading = false;
-    CurrentAmmo = info.magazineSize;
+
+    CurrentAmmo +=
+      inventoryComponent
+        .RemoveItem(AmmoType, info.magazineSize - CurrentAmmo);
 
     EmitSignalReloaded();
 
