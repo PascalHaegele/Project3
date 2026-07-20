@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c7fmydcy4tvts" path="res://objects/chest/Chest.cs" id="1_f2ppc"]
 [ext_resource type="Script" uid="uid://2pt8ci63eny8" path="res://components/InteractionComponent.cs" id="1_q5muc"]
-[ext_resource type="PackedScene" uid="uid://dudmf7poy21iv" path="res://objects/items/test_pickup.tscn" id="2_5rr60"]
 [ext_resource type="PackedScene" uid="uid://ds2lv6gpvwsv7" path="res://objects/chest/Chest.glb" id="3_chest_glb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v4a0d"]
@@ -14,16 +13,16 @@ radius = 2.0
 [node name="Chest" type="StaticBody3D" unique_id=1750432848]
 collision_mask = 0
 script = ExtResource("1_f2ppc")
-pickup = ExtResource("2_5rr60")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2123959842]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("BoxShape3D_v4a0d")
 
-[node name="Model" parent="." instance=ExtResource("3_chest_glb")]
+[node name="Model" parent="." unique_id=5904261 instance=ExtResource("3_chest_glb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4426546, 0, 0)
 
 [node name="LootSpawn" type="Marker3D" parent="." unique_id=1234567890]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="InteractionComponent" type="Area3D" parent="." unique_id=2074660880]
 collision_layer = 0

@@ -46,6 +46,8 @@ public partial class Pickup : RigidBody3D {
       GetNodeOrNull<Node3D>("AmmoRev")?.Set("visible", itemType == ItemType.AMMUNITION);
       GetNodeOrNull<Node3D>("AmmoShot")?.Set("visible", itemType == ItemType.AMMUNITION);
     }).CallDeferred();
+
+    ApplyImpulse(new Vector3(0.0f, 3.0f, 2.0f));
   }
 
   public override void _PhysicsProcess(double delta) {

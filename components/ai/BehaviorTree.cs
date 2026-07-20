@@ -77,7 +77,7 @@ public partial class BehaviorTree : Node {
     SequenceNode patrolSequence = new();
     patrolSequence.AddChildren(new TaskNode(MoveToNextWaypoint));
 
-    root.AddChildren(combatSequence, investigateSequence, patrolSequence);
+    root.AddChildren(combatSequence, investigateSequence, idleSequence, patrolSequence);
     // root.AddChildren(combatSequence, patrolSequence);
     return root;
   }
