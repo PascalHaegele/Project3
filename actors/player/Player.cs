@@ -92,7 +92,7 @@ public partial class Player : Actor, IHitable {
       if(input.reload) { activeWeapon.Reload(); }
       if(input.usePotion) {
         if(healthComponent.CurrentHealth < healthComponent.maxHealth) {
-          if(inventoryComponent.RemoveItem(ItemType.Potion)) {
+          if(inventoryComponent.RemoveItem(ItemType.POTION)) {
             healthComponent.Heal(20.0f);
             RedrawPotionUI();
           }
@@ -116,7 +116,7 @@ public partial class Player : Actor, IHitable {
 
             // For pages, also add the PageData to the collected pages list
             if(
-              hoveredPickup.itemType == ItemType.Page &&
+              hoveredPickup.itemType == ItemType.PAGE &&
               hoveredPickup.pageData != null
             ) {
               inventoryComponent.AddPageItem(hoveredPickup.pageData);
@@ -186,7 +186,7 @@ public partial class Player : Actor, IHitable {
   }
 
   private void RedrawPotionUI() {
-    potionCount.Text = "P : " + inventoryComponent.AmountOf(ItemType.Potion);
+    potionCount.Text = "P : " + inventoryComponent.AmountOf(ItemType.POTION);
   }
 
   private void RedrawAmmoUI() {

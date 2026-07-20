@@ -1,13 +1,13 @@
 using Godot;
 using System.Collections.Generic;
 
-public enum ItemType { Potion, RAmmo, SAmmo, Page, Max, }
+public enum ItemType { POTION, R_AMMO, S_AMMO, PAGE, MAX, }
 
 // Tracks a collection of items held by an actor
 [GlobalClass]
 public partial class InventoryComponent : Node {
   public readonly int[] maxItems = [3, 54, 36, 100];
-  public readonly int[] items = new int[(int)ItemType.Max];
+  public readonly int[] items = new int[(int)ItemType.MAX];
   public readonly string[] itemNames = [
     "Potion",
     "Revolver Ammunition",
@@ -24,14 +24,14 @@ public partial class InventoryComponent : Node {
   [Signal] public delegate void InventoryChangedEventHandler();
 
   public override void _Ready() {
-    items[(int)ItemType.RAmmo] = maxItems[(int)ItemType.RAmmo];
-    items[(int)ItemType.SAmmo] = maxItems[(int)ItemType.SAmmo];
+    items[(int)ItemType.R_AMMO] = maxItems[(int)ItemType.R_AMMO];
+    items[(int)ItemType.S_AMMO] = maxItems[(int)ItemType.S_AMMO];
   }
 
   public void Reset() {
     ClearInventory();
-    items[(int)ItemType.RAmmo] = maxItems[(int)ItemType.RAmmo];
-    items[(int)ItemType.SAmmo] = maxItems[(int)ItemType.SAmmo];
+    items[(int)ItemType.R_AMMO] = maxItems[(int)ItemType.R_AMMO];
+    items[(int)ItemType.S_AMMO] = maxItems[(int)ItemType.S_AMMO];
   }
 
   // Adds an item if it does not exist and notifies listeners

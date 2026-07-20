@@ -44,13 +44,13 @@ public partial class Pickup : RigidBody3D {
     // Show the correct mesh; defer once to avoid transform issues
     Callable.From(() => {
       GetNodeOrNull<Node3D>("Potion")?
-        .Set("visible", itemType == ItemType.Potion);
+        .Set("visible", itemType == ItemType.POTION);
       GetNodeOrNull<Node3D>("Page")?
-        .Set("visible", itemType == ItemType.Page);
+        .Set("visible", itemType == ItemType.PAGE);
       GetNodeOrNull<Node3D>("AmmoRev")?
-        .Set("visible", itemType == ItemType.RAmmo);
+        .Set("visible", itemType == ItemType.R_AMMO);
       GetNodeOrNull<Node3D>("AmmoShot")?
-        .Set("visible", itemType == ItemType.SAmmo);
+        .Set("visible", itemType == ItemType.S_AMMO);
     }).CallDeferred();
 
     ApplyImpulse(new Vector3(0.0f, 3.0f, 2.0f));

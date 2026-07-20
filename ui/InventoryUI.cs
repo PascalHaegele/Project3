@@ -291,7 +291,7 @@ public partial class InventoryUI : Control {
 
   private void RefreshStats() {
     if (inventory == null) return;
-    if (potionLabel != null) potionLabel.Text = $"Potions: {inventory.items[(int)ItemType.Potion]}";
+    if (potionLabel != null) potionLabel.Text = $"Potions: {inventory.items[(int)ItemType.POTION]}";
     if (weapon != null && weaponNameLabel != null) weaponNameLabel.Text = $"Weapon: {weapon.Name}";
     if (weapon != null && ammoLabel != null) ammoLabel.Text = $"Ammo: {weapon.CurrentAmmo} / {weapon.info.magazineSize}";
   }

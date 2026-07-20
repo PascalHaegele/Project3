@@ -40,7 +40,7 @@ public partial class Weapon : Node3D {
     inventoryComponent = actor.GetComponent<InventoryComponent>();
 
     AmmoType =
-      info.type == WeaponType.Revolver ? ItemType.RAmmo : ItemType.SAmmo;
+      info.type == WeaponType.Revolver ? ItemType.R_AMMO : ItemType.S_AMMO;
 
     CurrentAmmo = info.magazineSize;
 

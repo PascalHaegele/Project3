@@ -77,8 +77,8 @@ public partial class LootComponent : Node {
   public ItemType? GenerateItemDrop() {
     // Simple random selection among enabled non-page drops
     List<ItemType> possibleDrops = new();
-    if(CanDropAmmo) { possibleDrops.Add(ItemType.RAmmo); }
-    if(CanDropHealth) { possibleDrops.Add(ItemType.Potion); }
+    if(CanDropAmmo) { possibleDrops.Add(ItemType.R_AMMO); }
+    if(CanDropHealth) { possibleDrops.Add(ItemType.POTION); }
 
     // Currency would need a new ItemType if needed
 
