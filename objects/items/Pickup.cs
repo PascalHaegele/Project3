@@ -33,7 +33,7 @@ public partial class Pickup : RigidBody3D {
     hoverArea.CollisionMask = (uint)CollisionLayerEnum.NONE;
 
     hoverIndicator = GetNode<Sprite3D>("HoverIndicator");
-
+    
     // Add a small box collision shape to prevent falling through floor
     CollisionShape3D floorCollision = new();
     BoxShape3D box = new();
@@ -65,4 +65,3 @@ public partial class Pickup : RigidBody3D {
     if(body is not Chest) { Freeze = true; }
   }
 }
-

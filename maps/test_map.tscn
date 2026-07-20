@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="3_pwco0"]
 [ext_resource type="Texture2D" uid="uid://brqaum1mit0q3" path="res://maps/Map 1_final_M_Brick_orm.png" id="4_qnwwd"]
 [ext_resource type="PackedScene" uid="uid://dmp0my4bhl36n" path="res://objects/chest/chest.tscn" id="5_cabd0"]
+[ext_resource type="Script" uid="uid://bbqb6u8gahdth" path="res://tools/PageDebugTool.cs" id="17"]
 [ext_resource type="Script" uid="uid://ci31eubnodj4i" path="res://core/PortalArea.cs" id="10_wd2vj"]
 [ext_resource type="PackedScene" uid="uid://b2f87vnuu8frk" path="res://objects/altar/altar.tscn" id="14_ks570"]
 
@@ -165,6 +166,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5567584, -2.3841858e-07, 0.
 
 [node name="Chest2" parent="." unique_id=1378517736 instance=ExtResource("5_cabd0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4432416, 0.03575319, 0.13444328)
+
+[node name="PageDebugTool" type="Node" parent="." unique_id=376056744]
+script = ExtResource("17")
 
 [node name="PortalArea" type="Area3D" parent="." unique_id=1281787374]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.847751, 0, 3.2392159)

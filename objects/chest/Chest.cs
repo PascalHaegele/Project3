@@ -47,6 +47,12 @@ public partial class Chest : StaticBody3D, IInteractable {
 
     if(animationPlayer == null) {
       GD.PrintErr("Chest: No AnimationPlayer available.");
+    } else {
+      string animationName = FindBestAnimation();
+      if(!string.IsNullOrEmpty(animationName)) {
+        animationPlayer.Play(animationName);
+        GD.Print($"Chest: Playing animation '{animationName}'.");
+      }
     }
 
     if(pickup == null) {
