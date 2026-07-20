@@ -47,16 +47,14 @@ public partial class Chest : StaticBody3D, IInteractable {
 
     if (animationPlayer == null) {
       GD.PrintErr("Chest: No AnimationPlayer available.");
-      return;
-    }
-
-    // Try to find a matching animation by keywords
-    string animName = FindBestAnimation();
-    if (animName != null) {
-      animationPlayer.Play(animName);
-      GD.Print($"Chest.Interact: Playing animation '{animName}'");
     } else {
-      GD.PrintErr("Chest: No suitable animation found.");
+      string animName = FindBestAnimation();
+      if (animName != null) {
+        animationPlayer.Play(animName);
+        GD.Print($"Chest.Interact: Playing animation '{animName}'");
+      } else {
+        GD.PrintErr("Chest: No suitable animation found.");
+      }
     }
 
     if (pickup == null) {
@@ -77,83 +75,85 @@ public partial class Chest : StaticBody3D, IInteractable {
     }
 
     Vector3 baseSpawnPos = lootSpawn.GlobalPosition;
+    var rng = new RandomNumberGenerator();
+    rng.Randomize();
 
-    // --- Drop 1: Page (always drop for testing) ---
-    PageData page = GeneratePageDrop();
-    GD.Print($"Chest: GeneratePageDrop returned: {(page != null ? page.PageName : "null")}");
-    if (page == null) {
-      GD.PrintErr("Chest: PageDatabase not ready or empty! Using fallback page.");
-      page = new PageData {
-        PageName = "Test Page",
-        Description = "A test page dropped from chest.",
-        Rarity = "Common"
-      };
-    }
-    {
-      Vector3 pagePos = baseSpawnPos;
-      pagePos.X += (float)GD.RandRange(-0.4, 0.4);
-      pagePos.Z += (float)GD.RandRange(-0.4, 0.4);
+    GD.Print("Chest: Generating loot...");
 
-      Pickup pagePickup = pickup.Instantiate<Pickup>();
-      GetParent().AddChild(pagePickup);
-      pagePickup.GlobalPosition = pagePos;
-      pagePickup.itemType = ItemType.PAGE;
-      pagePickup.pageData = page;
-      pagePickup.ApplyImpulse(new Vector3(
-        (float)GD.RandRange(-0.3, 0.3),
-        2.0f,
-        (float)GD.RandRange(-0.3, 0.3)
-      ));
-      GD.Print($"Chest dropped page: {page.PageName} [{page.Rarity}]");
+    // --- GUARANTEED LOOT: 1 Ammo Pack (50/50 Revolver or Shotgun) ---
+    string guaranteedAmmoType = rng.Randf() < 0.5f ? "Revolver" : "Shotgun";
+    DropAmmo(guaranteedAmmoType, baseSpawnPos, rng);
+    GD.Print($"Chest dropped guaranteed ammo: {guaranteedAmmoType}");
+
+    // --- RANDOM LOOT ---
+
+    // 60% chance: Drop 1 Health Potion
+    if (rng.Randf() < 0.6f) {
+      DropItem(ItemType.POTION, null, baseSpawnPos, rng);
+      GD.Print("Chest dropped random loot: Health Potion");
     }
 
-    // --- Drop 2: Potion (always drop for testing) ---
-    Vector3 potionPos = baseSpawnPos;
-    potionPos.X += (float)GD.RandRange(-0.4, 0.4);
-    potionPos.Z += (float)GD.RandRange(-0.4, 0.4);
+    // 45% chance: Drop 1 Page
+    if (rng.Randf() < 0.45f) {
+      PageData page = GeneratePageDrop();
+      DropItem(ItemType.PAGE, page, baseSpawnPos, rng);
+      GD.Print("Chest dropped random loot: Page");
+    }
 
-    Pickup potionPickup = pickup.Instantiate<Pickup>();
-    GetParent().AddChild(potionPickup);
-    potionPickup.GlobalPosition = potionPos;
-    potionPickup.itemType = ItemType.POTION;
-    potionPickup.ApplyImpulse(new Vector3(
+    // 20% chance: Drop an extra Ammo Pack (random type)
+    if (rng.Randf() < 0.2f) {
+      string extraAmmoType = rng.Randf() < 0.5f ? "Revolver" : "Shotgun";
+      DropAmmo(extraAmmoType, baseSpawnPos, rng);
+      GD.Print($"Chest dropped random loot: Extra Ammo Pack ({extraAmmoType})");
+    }
+
+    GD.Print("Chest: Loot generation complete.");
+  }
+
+  /// <summary>
+  /// Drops an ammo pickup with the correct model visibility.
+  /// </summary>
+  private void DropAmmo(string ammoType, Vector3 baseSpawnPos, RandomNumberGenerator rng) {
+    Pickup pickupInstance = pickup.Instantiate<Pickup>();
+    GetParent().AddChild(pickupInstance);
+    
+    Vector3 pos = baseSpawnPos;
+    pos.X += (float)GD.RandRange(-0.4, 0.4);
+    pos.Z += (float)GD.RandRange(-0.4, 0.4);
+    pickupInstance.GlobalPosition = pos;
+    
+    pickupInstance.itemType = ItemType.AMMUNITION;
+    pickupInstance.pageData = null;
+    
+    // Use same impulse as original chest
+    pickupInstance.ApplyImpulse(new Vector3(
       (float)GD.RandRange(-0.3, 0.3),
       2.0f,
       (float)GD.RandRange(-0.3, 0.3)
     ));
-    GD.Print("Chest dropped potion.");
+  }
 
-    // --- Drop 3: Ammo Revolver (always drop for testing) ---
-    Vector3 ammoRevPos = baseSpawnPos;
-    ammoRevPos.X += (float)GD.RandRange(-0.4, 0.4);
-    ammoRevPos.Z += (float)GD.RandRange(-0.4, 0.4);
-
-    Pickup ammoRevPickup = pickup.Instantiate<Pickup>();
-    GetParent().AddChild(ammoRevPickup);
-    ammoRevPickup.GlobalPosition = ammoRevPos;
-    ammoRevPickup.itemType = ItemType.AMMUNITION;
-    ammoRevPickup.ApplyImpulse(new Vector3(
+  /// <summary>
+  /// Drops a general item (potion or page) using the same spawn pattern as the original chest.
+  /// </summary>
+  private void DropItem(ItemType type, PageData page, Vector3 baseSpawnPos, RandomNumberGenerator rng) {
+    Pickup pickupInstance = pickup.Instantiate<Pickup>();
+    GetParent().AddChild(pickupInstance);
+    
+    Vector3 pos = baseSpawnPos;
+    pos.X += (float)GD.RandRange(-0.4, 0.4);
+    pos.Z += (float)GD.RandRange(-0.4, 0.4);
+    pickupInstance.GlobalPosition = pos;
+    
+    pickupInstance.itemType = type;
+    pickupInstance.pageData = page;
+    
+    // Use same impulse as original chest
+    pickupInstance.ApplyImpulse(new Vector3(
       (float)GD.RandRange(-0.3, 0.3),
       2.0f,
       (float)GD.RandRange(-0.3, 0.3)
     ));
-    GD.Print("Chest dropped ammo_rev.");
-
-    // --- Drop 4: Ammo Shot (always drop for testing) ---
-    Vector3 ammoShotPos = baseSpawnPos;
-    ammoShotPos.X += (float)GD.RandRange(-0.4, 0.4);
-    ammoShotPos.Z += (float)GD.RandRange(-0.4, 0.4);
-
-    Pickup ammoShotPickup = pickup.Instantiate<Pickup>();
-    GetParent().AddChild(ammoShotPickup);
-    ammoShotPickup.GlobalPosition = ammoShotPos;
-    ammoShotPickup.itemType = ItemType.AMMUNITION;
-    ammoShotPickup.ApplyImpulse(new Vector3(
-      (float)GD.RandRange(-0.3, 0.3),
-      2.0f,
-      (float)GD.RandRange(-0.3, 0.3)
-    ));
-    GD.Print("Chest dropped ammo_shot.");
   }
 
   private string FindBestAnimation() {
@@ -174,15 +174,41 @@ public partial class Chest : StaticBody3D, IInteractable {
   }
 
   /// <summary>
-  /// Generates a random page from the database.
+  /// Generates a random page from the database, with rarity weights:
+  /// 70% Common, 25% Magic, 5% Rare.
   /// </summary>
   private PageData GeneratePageDrop() {
     if (PageDatabase.PageCount <= 0) return null;
 
-    System.Collections.Generic.List<string> allPages = PageDatabase.GetAllPageNames();
+    System.Collections.Generic.List<PageData> allPages = new(PageDatabase.GetPagesByCategory(""));
     if (allPages.Count <= 0) return null;
 
-    int randomIndex = (int)(GD.Randi() % (ulong)allPages.Count);
-    return PageDatabase.GetPage(allPages[randomIndex]);
+    // Split pages by rarity
+    var commonPages = new System.Collections.Generic.List<PageData>();
+    var magicPages = new System.Collections.Generic.List<PageData>();
+    var rarePages = new System.Collections.Generic.List<PageData>();
+
+    foreach (PageData page in allPages) {
+      if (page.Rarity == "Common") commonPages.Add(page);
+      else if (page.Rarity == "Magic") magicPages.Add(page);
+      else if (page.Rarity == "Rare") rarePages.Add(page);
+    }
+
+    // Roll rarity: 70% Common, 25% Magic, 5% Rare
+    float rarityRoll = GD.Randf();
+    if (rarityRoll < 0.70f && commonPages.Count > 0) {
+      int idx = (int)(GD.Randi() % (ulong)commonPages.Count);
+      return commonPages[idx];
+    } else if (rarityRoll < 0.95f && magicPages.Count > 0) {
+      int idx = (int)(GD.Randi() % (ulong)magicPages.Count);
+      return magicPages[idx];
+    } else if (rarePages.Count > 0) {
+      int idx = (int)(GD.Randi() % (ulong)rarePages.Count);
+      return rarePages[idx];
+    }
+
+    // Fallback to any page if specific rarity pool is empty
+    int fallbackIdx = (int)(GD.Randi() % (ulong)allPages.Count);
+    return allPages[fallbackIdx];
   }
 }
