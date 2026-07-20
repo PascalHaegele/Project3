@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dopwjsnwnb3xp"
-path="res://.godot/imported/Potion.glb-76935afbcb3fac4840570920cb39e4ec.scn"
+uid="uid://bkwtylyuh5t3n"
+path="res://.godot/imported/Shotgun.glb-19349c698147962cb7f20219e1f59c8a.scn"
 
 [deps]
 
-source_file="res://objects/items/Potion.glb"
-dest_files=["res://.godot/imported/Potion.glb-76935afbcb3fac4840570920cb39e4ec.scn"]
+source_file="res://weapons/shotgun/Shotgun.glb"
+dest_files=["res://.godot/imported/Shotgun.glb-19349c698147962cb7f20219e1f59c8a.scn"]
 
 [params]
 

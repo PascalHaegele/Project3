@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://caymu5dlqoral"
-path.s3tc="res://.godot/imported/Ammo2_Image.png-1e5d1f7242a41ed220502dd17e0ac986.s3tc.ctex"
+uid="uid://cxyjgmwpyrsra"
+path.s3tc="res://.godot/imported/Chest_Chest_top.png-e8c166e60efa3313d2d5ab2be1e95a1d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "8597d4e7e65352a302b63e07bc01a7da"
+"md5": "10dce38fb12ebc9658b04ca5c7cedd38"
 }
 
 [deps]
 
-source_file="res://objects/chest/Ammo2_Image.png"
-dest_files=["res://.godot/imported/Ammo2_Image.png-1e5d1f7242a41ed220502dd17e0ac986.s3tc.ctex"]
+source_file="res://objects/chest/Chest_Chest_top.png"
+dest_files=["res://.godot/imported/Chest_Chest_top.png-e8c166e60efa3313d2d5ab2be1e95a1d.s3tc.ctex"]
 
 [params]
 

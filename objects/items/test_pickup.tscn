@@ -2,7 +2,10 @@
 
 [ext_resource type="Script" uid="uid://6p00olcusefr" path="res://objects/items/Pickup.cs" id="1_k4x88"]
 [ext_resource type="PackedScene" uid="uid://4ujh60nwrugk" path="res://ui/pickup_indicator.tscn" id="2_y4gfl"]
-[ext_resource type="PackedScene" uid="uid://ddv0r0abyl5w4" path="res://objects/items/Potion.glb" id="3_hykmt"]
+[ext_resource type="PackedScene" path="res://objects/items/Potion.glb" id="3_hykmt"]
+[ext_resource type="PackedScene" path="res://objects/items/Page.glb" id="4_dx4of"]
+[ext_resource type="PackedScene" path="res://objects/items/Ammo_Rev.glb" id="5_cd2i0"]
+[ext_resource type="PackedScene" path="res://objects/items/Ammo_Shot.glb" id="6_bebdir"]
 
 [sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_hykmt"]
 length = 0.5
@@ -48,3 +51,15 @@ texture = SubResource("ViewportTexture_hykmt")
 
 [node name="Potion" parent="." unique_id=1105336233 instance=ExtResource("3_hykmt")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.221334, 0, 0)
+
+[node name="Page" parent="." unique_id=1105336234 instance=ExtResource("4_dx4of")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.221334, 0, 0)
+visible = false
+
+[node name="AmmoRev" parent="." unique_id=1105336235 instance=ExtResource("5_cd2i0")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.221334, 0, 0)
+visible = false
+
+[node name="AmmoShot" parent="." unique_id=1105336236 instance=ExtResource("6_bebdir")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.221334, 0, 0)
+visible = false

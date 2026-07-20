@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b1jekm4na8kap"
-path="res://.godot/imported/Ammo2.glb-dedd16cd102f63ed00c5efc6d4735bfe.scn"
+uid="uid://ds2lv6gpvwsv7"
+path="res://.godot/imported/Chest.glb-39213d597cc9b5434a1622982e0b37e2.scn"
 
 [deps]
 
-source_file="res://objects/chest/Ammo2.glb"
-dest_files=["res://.godot/imported/Ammo2.glb-dedd16cd102f63ed00c5efc6d4735bfe.scn"]
+source_file="res://objects/chest/Chest.glb"
+dest_files=["res://.godot/imported/Chest.glb-39213d597cc9b5434a1622982e0b37e2.scn"]
 
 [params]
 
