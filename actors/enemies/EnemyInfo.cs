@@ -9,6 +9,6 @@ public partial class EnemyInfo : Resource {
 
   [Export] public float attackRange = 3.0f;
 
-  public bool HasPatrol => patrolPath?.Length > 0;
+  public bool HasPatrol => patrolPath != null && patrolPath.Length > 0;
 }
 

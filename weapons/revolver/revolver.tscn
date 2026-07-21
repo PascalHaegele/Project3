@@ -21,7 +21,7 @@ projectileSpawn = NodePath("ProjectileSpawn")
 metadata/_custom_type_script = "uid://cohnw7rgixh8v"
 
 [node name="Revolver" parent="." unique_id=954033130 instance=ExtResource("3_b7g5s")]
-transform = Transform3D(0.15498623, -0.024547407, -1.9938344, 0.009494752, 1.9998348, -0.023883225, 1.9939632, -0.0076146573, 0.15509, 0.18996693, -2.5001462, 1.3474247)
+transform = Transform3D(0.045719188, -0.024094293, -1.9993318, 0.009494751, 1.9998349, -0.023883231, 1.9994552, -0.008945582, 0.04582986, 0.0025663525, -2.5001462, 1.3474247)
 
 [node name="ProjectileSpawn" type="Marker3D" parent="." unique_id=1622763174]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.135, -0.1)

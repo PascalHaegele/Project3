@@ -104,9 +104,9 @@ public partial class Player : Actor, IHitable {
         Area3D? collider = pickupCast.GetCollider() as Area3D;
         if(collider?.GetParent() is Pickup pickup) {
           if(pickup != hoveredPickup) {
-            hoveredPickup?.hovering = false;
+            if(hoveredPickup != null) { hoveredPickup.hovering = false; }
             hoveredPickup = pickup;
-            hoveredPickup?.hovering = true;
+            if(hoveredPickup != null) { hoveredPickup.hovering = true; }
           }
           if(input.interact) {
             GD.Print($"Interacted with {hoveredPickup.Name}");
@@ -127,7 +127,7 @@ public partial class Player : Actor, IHitable {
         }
       } else {
         hoveringPickup = false;
-        hoveredPickup?.hovering = false;
+        if(hoveredPickup != null) { hoveredPickup.hovering = false; }
         hoveredPickup = null;
       }
     }
