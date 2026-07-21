@@ -123,8 +123,10 @@ public partial class Chest : StaticBody3D, IInteractable {
     pickupInstance.pageData = null;
     if (ammoType == "Shotgun") {
       pickupInstance.itemType = ItemType.S_AMMO;
+      pickupInstance.amount = 12;
     } else {
       pickupInstance.itemType = ItemType.R_AMMO;
+      pickupInstance.amount = 18;
     }
 
     // Use same impulse as original chest

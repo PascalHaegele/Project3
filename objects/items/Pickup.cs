@@ -16,7 +16,7 @@ public partial class Pickup : RigidBody3D {
 
   public bool hovering;
 
-  public int amount;
+  public int amount = 1;
 
   private Area3D hoverArea;
   private Sprite3D hoverIndicator;
@@ -33,7 +33,7 @@ public partial class Pickup : RigidBody3D {
     hoverArea.CollisionMask = (uint)CollisionLayerEnum.NONE;
 
     hoverIndicator = GetNode<Sprite3D>("HoverIndicator");
-    
+
     // Add a small box collision shape to prevent falling through floor
     CollisionShape3D floorCollision = new();
     BoxShape3D box = new();
@@ -53,7 +53,7 @@ public partial class Pickup : RigidBody3D {
         .Set("visible", itemType == ItemType.S_AMMO);
     }).CallDeferred();
 
-    ApplyImpulse(new Vector3(0.0f, 3.0f, 2.0f));
+    ApplyImpulse(new Vector3(0.0f, 3.0f, -2.0f));
   }
 
   public override void _PhysicsProcess(double delta) {

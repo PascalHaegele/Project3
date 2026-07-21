@@ -38,11 +38,6 @@ polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Arr
 agent_height = 2.0
 agent_radius = 0.6
 
-[sub_resource type="Resource" id="Resource_24hbc"]
-resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
-
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_bfp77"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ui8i3"]
@@ -65,7 +60,7 @@ top_radius = 2.0
 bottom_radius = 2.0
 height = 0.1
 
-[sub_resource type="Resource" id="Resource_cwhf6"]
+[sub_resource type="Resource" id="Resource_24hbc"]
 resource_local_to_scene = true
 script = ExtResource("15_24hbc")
 patrolPath = PackedVector3Array(198.98447, 2.3929415, -77.59601, 222.45242, 2.3929415, -83.08097, 210.82509, 2.3929417, -138.87424, 211.3043, 2.3929415, -178.16626, 178.69817, 2.3929415, -174.86392, 184.66585, 2.3929415, -122.25662)
@@ -73,47 +68,47 @@ leashPoint = Vector3(202.16212, 3.6080508, -114.568054)
 leashLength = 75.0
 attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
+
+[sub_resource type="Resource" id="Resource_cwhf6"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 3.0
+sprintSpeed = 6.0
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="Resource" id="Resource_ck1tj"]
 resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-walkSpeed = 3.0
-sprintSpeed = 6.0
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+script = ExtResource("15_24hbc")
+patrolPath = PackedVector3Array(198.98447, 2.3929415, -77.59601, 222.45242, 2.3929415, -83.08097, 210.82509, 2.3929417, -138.87424, 211.3043, 2.3929415, -178.16626, 178.69817, 2.3929415, -174.86392, 184.66585, 2.3929415, -122.25662)
+leashPoint = Vector3(202.16212, 3.6080508, -114.568054)
+leashLength = 75.0
+attackRange = 2.0
+metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [sub_resource type="Resource" id="Resource_jdm1q"]
 resource_local_to_scene = true
-script = ExtResource("15_24hbc")
-patrolPath = PackedVector3Array(198.98447, 2.3929415, -77.59601, 222.45242, 2.3929415, -83.08097, 210.82509, 2.3929417, -138.87424, 211.3043, 2.3929415, -178.16626, 178.69817, 2.3929415, -174.86392, 184.66585, 2.3929415, -122.25662)
-leashPoint = Vector3(202.16212, 3.6080508, -114.568054)
-leashLength = 75.0
-attackRange = 2.0
-metadata/_custom_type_script = "uid://46wwp5gewpfd"
+script = ExtResource("4_a1t7w")
+walkSpeed = 3.0
+sprintSpeed = 6.0
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="Resource" id="Resource_pwarq"]
 resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-walkSpeed = 3.0
-sprintSpeed = 6.0
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+script = ExtResource("15_24hbc")
+patrolPath = PackedVector3Array(198.98447, 2.3929415, -77.59601, 222.45242, 2.3929415, -83.08097, 210.82509, 2.3929417, -138.87424, 211.3043, 2.3929415, -178.16626, 178.69817, 2.3929415, -174.86392, 184.66585, 2.3929415, -122.25662)
+leashPoint = Vector3(202.16212, 3.6080508, -114.568054)
+leashLength = 75.0
+attackRange = 2.0
+metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [sub_resource type="Resource" id="Resource_8wn1s"]
 resource_local_to_scene = true
-script = ExtResource("15_24hbc")
-patrolPath = PackedVector3Array(198.98447, 2.3929415, -77.59601, 222.45242, 2.3929415, -83.08097, 210.82509, 2.3929417, -138.87424, 211.3043, 2.3929415, -178.16626, 178.69817, 2.3929415, -174.86392, 184.66585, 2.3929415, -122.25662)
-leashPoint = Vector3(202.16212, 3.6080508, -114.568054)
-leashLength = 75.0
-attackRange = 2.0
-metadata/_custom_type_script = "uid://46wwp5gewpfd"
-
-[sub_resource type="Resource" id="Resource_f7lwg"]
-resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 walkSpeed = 3.0
 sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
-[sub_resource type="Resource" id="Resource_22v2i"]
+[sub_resource type="Resource" id="Resource_f7lwg"]
 resource_local_to_scene = true
 script = ExtResource("15_24hbc")
 patrolPath = PackedVector3Array(198.98447, 2.3929415, -77.59601, 222.45242, 2.3929415, -83.08097, 210.82509, 2.3929417, -138.87424, 211.3043, 2.3929415, -178.16626, 178.69817, 2.3929415, -174.86392, 184.66585, 2.3929415, -122.25662)
@@ -122,7 +117,7 @@ leashLength = 75.0
 attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_0nuwe"]
+[sub_resource type="Resource" id="Resource_22v2i"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 walkSpeed = 3.0
@@ -727,7 +722,6 @@ size = Vector3(0.26939064, 1.9098358, 3.9516842)
 
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("3_ui8i3")]
 transform = Transform3D(-0.99981666, 0, 0.019146591, 0, 1, 0, -0.019146591, 0, -0.99981666, 245.39957, 2.350244, -12.280858)
-velocityInfo = SubResource("Resource_24hbc")
 
 [node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=2016545012]
 mesh = SubResource("ImmediateMesh_bfp77")
@@ -758,7 +752,7 @@ transform = Transform3D(-0.62799466, 0, 0.7782177, 0, 1, 0, -0.7782177, 0, -0.62
 transform = Transform3D(-0.62799466, 0, 0.7782177, 0, 1, 0, -0.7782177, 0, -0.62799466, 2.804947, 3.011866, 2.3909378)
 
 [node name="Chest" parent="SpawnArea" unique_id=1750432848 instance=ExtResource("10_oxeun")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.1045227, 2.3306193, -4.863062)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.1045227, 2.3306193, -6.3499103)
 
 [node name="SpawnArea2" type="Area3D" parent="." unique_id=882140401]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 259.4424, 2.827221, 48.288475)
@@ -778,7 +772,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8043823, 0, 1.4483109)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.733551, 0, 2.0860748)
 
 [node name="Chest" parent="SpawnArea2" unique_id=299135658 instance=ExtResource("10_oxeun")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.1059875, -0.46157527, 7.6417313)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.1059875, -0.46157527, 6.519005)
 
 [node name="Altar2" parent="." unique_id=286822846 instance=ExtResource("13_oxeun")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 169.79832, -6.0413146, -12.601194)
@@ -819,25 +813,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 202.16212, 3.6080508, -114.56
 
 [node name="TestEnemy" parent="EnemyArea" unique_id=952052820 instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.50000006, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.50000006, -2.8052979, -1.0958891, 31.533607)
-enemyInfo = SubResource("Resource_cwhf6")
-velocityInfo = SubResource("Resource_ck1tj")
+enemyInfo = SubResource("Resource_24hbc")
+velocityInfo = SubResource("Resource_cwhf6")
 
 [node name="TestEnemy2" parent="EnemyArea" unique_id=553945428 node_paths=PackedStringArray("components") instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.7075805, 0, -0.7066328, 0, 1, 0, 0.7066328, 0, -0.7075805, -10.215012, -1.095891, 21.573769)
-enemyInfo = SubResource("Resource_jdm1q")
-velocityInfo = SubResource("Resource_pwarq")
+enemyInfo = SubResource("Resource_ck1tj")
+velocityInfo = SubResource("Resource_jdm1q")
 components = [NodePath("../TestEnemy/VelocityComponent"), NodePath("../TestEnemy/HealthComponent"), NodePath("../TestEnemy/HurtboxComponent"), NodePath("../TestEnemy/AIDetectionComponent"), NodePath("../TestEnemy/MeshInstance3D/MeshInstance3D2/HitboxComponent"), NodePath("../TestEnemy/SubViewport/HealthBar"), NodePath("../TestEnemy/TestEnemyStateMachine"), NodePath("../TestEnemy/BehaviorTree")]
 
 [node name="TestEnemy3" parent="EnemyArea" unique_id=1571251397 node_paths=PackedStringArray("components") instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.7975809, 0, -0.60321206, 0, 1, 0, 0.60321206, 0, -0.7975809, -13.789047, -1.095891, 9.177757)
-enemyInfo = SubResource("Resource_8wn1s")
-velocityInfo = SubResource("Resource_f7lwg")
+enemyInfo = SubResource("Resource_pwarq")
+velocityInfo = SubResource("Resource_8wn1s")
 components = [NodePath("../TestEnemy/VelocityComponent"), NodePath("../TestEnemy/HealthComponent"), NodePath("../TestEnemy/HurtboxComponent"), NodePath("../TestEnemy/AIDetectionComponent"), NodePath("../TestEnemy/MeshInstance3D/MeshInstance3D2/HitboxComponent"), NodePath("../TestEnemy/SubViewport/HealthBar"), NodePath("../TestEnemy/TestEnemyStateMachine"), NodePath("../TestEnemy/BehaviorTree")]
 
 [node name="TestEnemy4" parent="EnemyArea" unique_id=1286514005 node_paths=PackedStringArray("components") instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.50000006, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.50000006, -18.005249, -1.095891, -5.88501)
-enemyInfo = SubResource("Resource_22v2i")
-velocityInfo = SubResource("Resource_0nuwe")
+enemyInfo = SubResource("Resource_f7lwg")
+velocityInfo = SubResource("Resource_22v2i")
 components = [NodePath("../TestEnemy/VelocityComponent"), NodePath("../TestEnemy/HealthComponent"), NodePath("../TestEnemy/HurtboxComponent"), NodePath("../TestEnemy/AIDetectionComponent"), NodePath("../TestEnemy/MeshInstance3D/MeshInstance3D2/HitboxComponent"), NodePath("../TestEnemy/SubViewport/HealthBar"), NodePath("../TestEnemy/TestEnemyStateMachine"), NodePath("../TestEnemy/BehaviorTree")]
 
 [node name="Patrol" type="Node3D" parent="EnemyArea" unique_id=2018451793]
@@ -867,7 +861,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.92548, 2.3850918, -265.904
 destination = NodePath("Marker3D")
 
 [node name="Marker3D" type="Marker3D" parent="Portal" unique_id=492238885]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 285.95972)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 285.95972)
 
 [node name="Altar" parent="." unique_id=1471931379 instance=ExtResource("13_oxeun")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.42548, 2.3850918, -265.36526)
@@ -881,10 +875,10 @@ effect = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.67478, 2.3530731, 28.972717)
 
 [node name="Chest" parent="." unique_id=949298663 instance=ExtResource("10_oxeun")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.17478, 2.3530731, 27.616596)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 91.17478, 2.3530731, 27.616596)
 
 [node name="Chest2" parent="." unique_id=114783849 instance=ExtResource("10_oxeun")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.17478, 2.3530731, 27.616596)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 82.17478, 2.3530731, 27.616596)
 
 [node name="Portal2" parent="." unique_id=574168270 node_paths=PackedStringArray("destination") instance=ExtResource("12_k8dp5")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 97.54355, 2.429808, 20.682245)

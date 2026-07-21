@@ -18,6 +18,8 @@
 [sub_resource type="Resource" id="Resource_pwco0"]
 resource_local_to_scene = true
 script = ExtResource("2_0wchr")
+sprintSpeed = 14.0
+airborneSpeed = 5.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
