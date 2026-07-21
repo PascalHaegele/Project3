@@ -24,19 +24,21 @@ metadata/_custom_type_script = "uid://cohnw7rgixh8v"
 transform = Transform3D(0.045719188, -0.024094293, -1.9993318, 0.009494751, 1.9998349, -0.023883231, 1.9994552, -0.008945582, 0.04582986, 0.0025663525, -2.5001462, 1.3474247)
 
 [node name="ProjectileSpawn" type="Marker3D" parent="." unique_id=1622763174]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.135, -0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.014598787, 0.1497822, -0.20895934)
 
 [node name="MuzzleFlash" type="OmniLight3D" parent="." unique_id=1699990001]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.135, -0.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.014598787, 0.1497822, -0.20895934)
+visible = false
 light_color = Color(1, 0.95, 0.8, 1)
-light_energy = 0.0
+light_energy = 9.684
 light_indirect_energy = 2.0
 omni_range = 6.0
 omni_attenuation = 0.3
-visible = false
 
 [node name="WeaponAnimation" type="Node3D" parent="." unique_id=229667078]
 script = ExtResource("4_k6yiw")
-reloadDropDuration = 0.15
-reloadHoldDuration = 1.1
+reloadRotX = 1.0
+reloadRotY = 0.85
+reloadRotZ = 1.5
+reloadDropDuration = 0.5
 reloadReturnDuration = 0.2

@@ -14,7 +14,7 @@ public partial class WeaponAnimation : Node3D {
 
   // Events
   [Signal] public delegate void ReloadVisualCompleteEventHandler();
-  [Signal] public delegate void MuzzleFlashEventHandler();
+  [Signal] public delegate void MuzzleFlashEventHandler(Vector3 globalPosition, Vector3 forward);
   [Signal] public delegate void CameraShakeEventHandler(float amount, float duration);
   [Signal] public delegate void CameraRecoilEventHandler(float amount);
 
@@ -83,9 +83,9 @@ public partial class WeaponAnimation : Node3D {
   [Export] private float reloadDropX = 0.18f;
   [Export] private float reloadDropY = -0.28f;
   [Export] private float reloadDropZ = 0.15f;
-  [Export] private float reloadRotX = -0.45f;
-  [Export] private float reloadRotY = 0.70f;
-  [Export] private float reloadRotZ = 0.25f;
+  [Export] private float reloadRotX = -0.20f;
+  [Export] private float reloadRotY = 0.25f;
+  [Export] private float reloadRotZ = 0.08f;
   [Export] private float reloadDropDuration = 0.10f;
   [Export] private float reloadHoldDuration = 0.20f;
   [Export] private float reloadReturnDuration = 0.14f;
@@ -334,12 +334,18 @@ public partial class WeaponAnimation : Node3D {
   }
 
   private void PlayMuzzleFlash() {
-    if(muzzleFlash == null) { return; }
-    muzzleFlash.Visible = true;
-    muzzleFlash.LightEnergy = 6.0f;
-    Tween t = CreateTween();
-    t.TweenProperty(muzzleFlash, "light_energy", 0.0f, 0.07f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
-    t.TweenCallback(Callable.From(() => muzzleFlash.Visible = false));
+    if(weaponNode == null) { return; }
+    Vector3 globalPos = weaponNode.GlobalPosition;
+    Vector3 forward = -weaponNode.GlobalTransform.Basis.Z;
+    EmitSignalMuzzleFlash(globalPos, forward);
+
+    if(muzzleFlash != null) {
+      muzzleFlash.Visible = true;
+      muzzleFlash.LightEnergy = 6.0f;
+      Tween t = CreateTween();
+      t.TweenProperty(muzzleFlash, "light_energy", 0.0f, 0.07f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
+      t.TweenCallback(Callable.From(() => muzzleFlash.Visible = false));
+    }
   }
 
   // ============================================================
@@ -368,18 +374,17 @@ public partial class WeaponAnimation : Node3D {
   // ============================================================
   //  RELOAD
   // ============================================================
-  public void PlayReload() {
+  public void PlayReload(float totalDuration = 0.0f) {
     if(weaponNode == null) { return; }
     StopAction();
     ResetToOriginal();
     actionTween = CreateTween();
     isActionPlaying = true;
 
-    // Emit signal only at the very end of the full reload animation
-    actionTween.Finished += () => {
-      isActionPlaying = false;
-      EmitSignalReloadVisualComplete();
-    };
+    float hold = reloadHoldDuration;
+    if(totalDuration > 0.0f) {
+      hold = Mathf.Max(0.0f, totalDuration - reloadDropDuration - reloadReturnDuration);
+    }
 
     Vector3 dropPos = originalPos + new Vector3(reloadDropX, reloadDropY, reloadDropZ);
     Vector3 dropRot = originalRot + new Vector3(reloadRotX, reloadRotY, reloadRotZ);
@@ -389,12 +394,32 @@ public partial class WeaponAnimation : Node3D {
     actionTween.Parallel().TweenProperty(weaponNode, "rotation", dropRot, reloadDropDuration)
       .SetEase(Tween.EaseType.In).SetTrans(Tween.TransitionType.Quad);
 
-    actionTween.TweenInterval(reloadHoldDuration);
+    actionTween.TweenInterval(hold);
 
-    actionTween.Parallel().TweenProperty(weaponNode, "position", originalPos, reloadReturnDuration)
+    var returnTween = actionTween.Parallel();
+    returnTween.TweenProperty(weaponNode, "position", originalPos, reloadReturnDuration)
       .SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Back);
-    actionTween.Parallel().TweenProperty(weaponNode, "rotation", originalRot, reloadReturnDuration)
+    returnTween.TweenProperty(weaponNode, "rotation", originalRot, reloadReturnDuration)
       .SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Back);
+
+    // Use a reliable timer to ensure ammo refills exactly when animation ends
+    Timer endTimer = new Timer();
+    AddChild(endTimer);
+    endTimer.OneShot = true;
+    endTimer.Timeout += () => {
+      isActionPlaying = false;
+      EmitSignalReloadVisualComplete();
+      endTimer.QueueFree();
+    };
+    endTimer.Start(reloadDropDuration + hold + reloadReturnDuration);
+  }
+
+  public void ForceFinishReload() {
+    if(weaponNode == null) { return; }
+    StopAction();
+    ResetToOriginal();
+    isActionPlaying = false;
+    EmitSignalReloadVisualComplete();
   }
 
   // ============================================================

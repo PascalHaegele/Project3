@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bq0v8k2mz4r1x"]
+
+[ext_resource type="Script" path="res://weapons/muzzle_flash/MuzzleFlashEffect.cs" id="1_script"]
+
+[node name="MuzzleFlashEffect" type="Node3D"]
+script = ExtResource("1_script")

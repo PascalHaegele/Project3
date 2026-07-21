@@ -49,6 +49,7 @@ public partial class Weapon : Node3D {
       weaponAnim.ReloadVisualComplete += OnReloadVisualComplete;
       weaponAnim.CameraShake += OnWeaponCameraShake;
       weaponAnim.CameraRecoil += OnWeaponCameraRecoil;
+      weaponAnim.MuzzleFlash += OnMuzzleFlash;
     }
   }
 
@@ -57,6 +58,7 @@ public partial class Weapon : Node3D {
       weaponAnim.ReloadVisualComplete -= OnReloadVisualComplete;
       weaponAnim.CameraShake -= OnWeaponCameraShake;
       weaponAnim.CameraRecoil -= OnWeaponCameraRecoil;
+      weaponAnim.MuzzleFlash -= OnMuzzleFlash;
     }
   }
 
@@ -158,7 +160,7 @@ public partial class Weapon : Node3D {
       }
     }
 
-    weaponAnim?.PlayReload();
+    weaponAnim?.PlayReload(reloadDuration);
 
     GD.Print($"{Name} Reloading (duration: {reloadDuration:F2})");
   }
@@ -198,5 +200,16 @@ public partial class Weapon : Node3D {
       CameraComponent cam = player.GetComponent<CameraComponent>();
       cam?.RecoilKick(amount);
     }
+  }
+
+  private void OnMuzzleFlash(Vector3 globalPosition, Vector3 forward) {
+    PackedScene flashScene = GD.Load<PackedScene>("res://weapons/muzzle_flash/MuzzleFlashEffect.tscn");
+    if(flashScene == null) { return; }
+    Node3D flash = flashScene.Instantiate<Node3D>();
+    GetTree().Root.AddChild(flash);
+    // Use projectileSpawn position (barrel tip) instead of weapon handle
+    flash.GlobalPosition = projectileSpawn.GlobalPosition;
+    float yaw = Mathf.Atan2(forward.X, -forward.Z);
+    flash.GlobalRotation = new Vector3(0.0f, yaw, 0.0f);
   }
 }
