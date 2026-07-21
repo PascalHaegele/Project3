@@ -20,6 +20,8 @@ public partial class Projectile : RigidBody3D {
   private float homingRange = 12.0f;
   private Vector3 currentDirection;
 
+  [Signal] public delegate void HitLandedEventHandler(float damage, Vector3 hitPoint);
+
   public override void _Ready() {
     freeTimer = new();
     AddChild(freeTimer);
@@ -133,6 +135,8 @@ public partial class Projectile : RigidBody3D {
         body.AddChild(this);
         TopLevel = false;
       } else { hitbox.DisableCollisionShapes(); }
+
+      EmitSignalHitLanded(hitbox.damage, GlobalPosition);
     }
 
     if(GlobalPosition.DistanceTo(shotPosition) > weapon.info.range) {
