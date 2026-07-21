@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://dgu1dmh0xqo3v"]
+
+[ext_resource type="Script" uid="uid://brk017fs3frnd" path="res://objects/traps/CleaverTrap.cs" id="1_f0on1"]
+[ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="2_xuijj"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_o8bm0"]
+size = Vector3(0.5, 1, 10)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_f0on1"]
+points = PackedVector3Array(-0.25, -0.5, -5, 0.25, -0.5, -5, -0.25, -0.5, 5, 0, 0.5, -5, 0.25, -0.5, 5, 0, 0.5, 5)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
+height = 10.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_bfp77"]
+size = Vector3(0.5, 5.5004883, 0.5)
+
+[sub_resource type="Animation" id="Animation_f0on1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 5, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_xuijj"]
+resource_name = "activate"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 2.5),
+"transitions": PackedFloat32Array(3.7023177, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 5, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 5, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatableBody3D/HitboxComponent")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"DisableCollisionShapes"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rhxct"]
+_data = {
+&"RESET": SubResource("Animation_f0on1"),
+&"activate": SubResource("Animation_xuijj")
+}
+
+[node name="CleaverTrap" type="Node3D" unique_id=841648696 node_paths=PackedStringArray("hitbox")]
+script = ExtResource("1_f0on1")
+hitbox = NodePath("AnimatableBody3D/HitboxComponent")
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="." unique_id=1979286106]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="AnimatableBody3D" unique_id=1419093498]
+transform = Transform3D(-4.371139e-08, -8.742278e-08, -1, 0, -1, 8.742278e-08, -1, 3.821371e-15, 4.371139e-08, 0, 0, 0)
+mesh = SubResource("PrismMesh_o8bm0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D" unique_id=893288819]
+transform = Transform3D(-4.371139e-08, -8.742278e-08, -1, 0, -1, 8.742278e-08, -1, 3.821371e-15, 4.371139e-08, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_f0on1")
+
+[node name="HitboxComponent" type="Area3D" parent="AnimatableBody3D" unique_id=880630224]
+collision_layer = 64
+collision_mask = 32
+script = ExtResource("2_xuijj")
+metadata/_custom_type_script = "uid://lc0clvytiu8r"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D/HitboxComponent" unique_id=1123739040]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_bfp77")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=801155328]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 2.7499433, 0)
+mesh = SubResource("BoxMesh_bfp77")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=659154580]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.25, 2.75, 0)
+mesh = SubResource("BoxMesh_bfp77")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1294051094]
+libraries/ = SubResource("AnimationLibrary_rhxct")

@@ -3,10 +3,12 @@ using Godot.Collections;
 
 [Tool, GlobalClass]
 public partial class PatrolPathConverter : EditorScript {
-  private EditorInterface? ei;
-  private Window? window;
+  private EditorInterface ei;
+  private Window window;
   private readonly Array<Vector3> patrolPoints = [];
   private Vector3 leashPoint = new();
+  private float leashLength;
+  private float attackRange;
 
   public override void _Run() {
     ei = EditorInterface.Singleton;
@@ -16,41 +18,66 @@ public partial class PatrolPathConverter : EditorScript {
     window.CloseRequested += window.QueueFree;
     window.Size = new Vector2I(640, 480);
 
+    VBoxContainer vBox = new();
+    window.AddChild(vBox);
+
     Button closeButton = new();
-    closeButton.Text = "close";
-    closeButton.Pressed += () => { window?.QueueFree(); };
-    window.AddChild(closeButton);
+    closeButton.Text = "Close";
+    closeButton.Pressed += () => { window.QueueFree(); };
+    vBox.AddChild(closeButton);
 
     Button patrolButton = new();
-    patrolButton.Text = "patrol";
+    patrolButton.Text = "Patrol";
     patrolButton.Pressed += () => {
       if(ei == null) { return; }
-      ei.PopupNodeSelector(Callable.From<NodePath>(OnPatrolSelected), [nameof(Node3D)]);
+      ei.PopupNodeSelector(
+        Callable.From<NodePath>(OnPatrolSelected),
+        [nameof(Node3D)]
+      );
     };
-    window.AddChild(patrolButton);
+    vBox.AddChild(patrolButton);
 
     Button leashButton = new();
-    leashButton.Text = "leash";
+    leashButton.Text = "Leash Point";
     leashButton.Pressed += () => {
       if(ei == null) { return; }
-      ei.PopupNodeSelector(Callable.From<NodePath>(OnLeashSelected), [nameof(Marker3D)]);
+      ei.PopupNodeSelector(
+        Callable.From<NodePath>(OnLeashSelected),
+        [nameof(Marker3D)]
+      );
     };
-    window.AddChild(leashButton);
+    vBox.AddChild(leashButton);
 
     Button enemyButton = new();
-    enemyButton.Text = "enemy";
+    enemyButton.Text = "Enemy";
     enemyButton.Pressed += () => {
       if(ei == null) { return; }
-      ei.PopupNodeSelector(Callable.From<NodePath>(OnEnemySelected), [nameof(Node)]);
+      ei.PopupNodeSelector(
+        Callable.From<NodePath>(OnEnemySelected),
+        [nameof(Node)]
+      );
     };
-    window.AddChild(enemyButton);
+    vBox.AddChild(enemyButton);
 
-    ei.PopupDialog(window, new Rect2I(100, 100, (int)window.Size.X, (int)window.Size.Y));
+    HBoxContainer leashLengthBox = new();
+    vBox.AddChild(leashLengthBox);
 
-    patrolButton.Position = new Vector2I((int)(window.Size.X / 2), 20);
-    leashButton.Position = new Vector2I((int)(window.Size.X / 2), (int)(patrolButton.Position.Y + 100));
-    enemyButton.Position = new Vector2I((int)(window.Size.X / 2), (int)(leashButton.Position.Y + 100));
-    closeButton.Position = new Vector2I((int)(window.Size.X / 2), (int)(enemyButton.Position.Y + 100));
+    LineEdit leashLengthEdit = new();
+    leashLengthBox.AddChild(leashLengthEdit);
+
+    Button leashLengthButton = new();
+    leashLengthBox.AddChild(leashLengthButton);
+    leashLengthButton.Text = "Submit";
+
+    ei.PopupDialog(window, new Rect2I(100, 100, window.Size.X, window.Size.Y));
+
+    // patrolButton.Position = new Vector2I(window.Size.X / 2, 20);
+    // leashButton.Position =
+    //   new Vector2I(window.Size.X / 2, (int)(patrolButton.Position.Y + 100));
+    // enemyButton.Position =
+    //   new Vector2I(window.Size.X / 2, (int)(leashButton.Position.Y + 100));
+    // closeButton.Position =
+    //   new Vector2I(window.Size.X / 2, (int)(enemyButton.Position.Y + 100));
   }
 
   private void OnPatrolSelected(NodePath nodePath) {

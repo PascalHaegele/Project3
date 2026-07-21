@@ -3,9 +3,11 @@ render_mode unshaded;
 
 uniform sampler2D noise_tex;
 
-uniform int layers = 8;
-uniform float depth_amount = 1.0;
+uniform int layers = 4;
+uniform float depth_amount = 0.2;
 uniform float fade_amount = 1.0;
+
+uniform vec3 color: source_color = vec3(1.0, 1.0, 0.5);
 
 vec2 parallax(float depth, vec3 n, vec3 t, vec3 v) {
 	vec3 normal = normalize(n);
@@ -56,6 +58,6 @@ void fragment() {
 	}
 	
 	if(value >= 1.0) { discard; }
-	vec3 col = vec3(value, value, value * 0.5);
+	vec3 col = color * value;
 	ALBEDO = col;
 }
