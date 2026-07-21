@@ -28,7 +28,7 @@ public partial class Weapon : Node3D {
   private WeaponAnimation weaponAnim;
 
   // Track shots for FrenziedSoul
-  private int shotCounter;
+  private bool empowerNextShot = false;
 
   public override void _Ready() {
     aimCast = GetNode<RayCast3D>("../AimCast");
@@ -57,6 +57,7 @@ public partial class Weapon : Node3D {
 
   public void Reset() {
     CurrentAmmo = info.magazineSize;
+    empowerNextShot = false;
   }
 
   public void Shoot() {
@@ -70,21 +71,21 @@ public partial class Weapon : Node3D {
     p = info.projectile.Instantiate<Projectile>();
     // p.hitbox.EnableCollisionShapes();
     if(p == null) { return; }
-    AddChild(p);
 
     // Track shot count for FrenziedSoul effect
     if(actor is Player player) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
       if(socket != null && socket.HasModifier("FrenziedSoul")) {
-        shotCounter++;
-        float empoweredThreshold = socket.GetModifier("FrenziedSoul");
-        if(shotCounter >= empoweredThreshold) {
-          shotCounter = 0;
+        if(empowerNextShot) {
           p.isEmpowered = true;
-          GD.Print($">>> FRENZIED SOUL! Every 10th shot empowered.");
+          GD.Print($">>> DEBUG FrenziedSoul: EMPOWERED SHOT after reload!");
+          empowerNextShot = false;
         }
       }
     }
+
+    AddChild(p);
+    p.RecalculateDamage();
 
     if(aimCast.IsColliding()) {
       Vector3 collisionPoint = aimCast.GetCollisionPoint();
@@ -158,6 +159,15 @@ public partial class Weapon : Node3D {
     CurrentAmmo +=
       inventoryComponent
         .RemoveItem(AmmoType, info.magazineSize - CurrentAmmo);
+
+    // Empower next shot after reload if FrenziedSoul is active
+    if(actor is Player player) {
+      SocketComponent socket = player.GetComponent<SocketComponent>();
+      if(socket != null && socket.HasModifier("FrenziedSoul")) {
+        empowerNextShot = true;
+        GD.Print($">>> DEBUG FrenziedSoul: reload finished, next shot will be empowered");
+      }
+    }
 
     EmitSignalReloaded();
 

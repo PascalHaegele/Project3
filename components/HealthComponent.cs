@@ -91,13 +91,16 @@ public partial class HealthComponent : Node {
   /// </summary>
   public void OnEliteKill() {
     if(!IsAlive) return;
+    TryApplyBloodRitual();
+  }
 
+  private void TryApplyBloodRitual() {
     if(GetParent() is Player player) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
       if(socket != null && socket.HasModifier("BloodRitual")) {
         float healAmount = socket.GetModifier("BloodRitual");
         Heal(healAmount);
-        GD.Print($">>> BLOOD RITUAL: Restored {healAmount} HP");
+        GD.Print($">>> DEBUG BloodRitual: healed={healAmount} HP, current={CurrentHealth:F1}/{GetEffectiveMaxHealth():F1}");
       }
     }
   }

@@ -68,6 +68,11 @@ public partial class TestEnemy : Enemy, IHitable {
     // SetDeferred(Node.PropertyName.ProcessMode, (int)ProcessModeEnum.Disabled);
     dead = true;
 
+    if(GetTree().Root.FindChild("Player", true, false) is Player player) {
+      player.GetComponent<HealthComponent>()?.OnEliteKill();
+      GD.Print($">>> DEBUG BloodRitual trigger: enemy defeated, player health={player.GetComponent<HealthComponent>()?.CurrentHealth:F1}");
+    }
+
     if(dissolveMaterial != null) {
       MeshInstance3D mesh = GetNode<MeshInstance3D>("MeshInstance3D");
       mesh.MaterialOverride = dissolveMaterial;

@@ -120,8 +120,12 @@ public partial class Chest : StaticBody3D, IInteractable {
     pos.Z += (float)GD.RandRange(-0.4, 0.4);
     pickupInstance.GlobalPosition = pos;
 
-    pickupInstance.itemType = ItemType.R_AMMO;
     pickupInstance.pageData = null;
+    if (ammoType == "Shotgun") {
+      pickupInstance.itemType = ItemType.S_AMMO;
+    } else {
+      pickupInstance.itemType = ItemType.R_AMMO;
+    }
 
     // Use same impulse as original chest
     pickupInstance.ApplyImpulse(new Vector3(

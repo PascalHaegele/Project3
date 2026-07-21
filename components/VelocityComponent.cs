@@ -4,6 +4,7 @@ using Godot;
 public partial class VelocityComponent : Node {
   private Vector3 velocity;
   private VelocityInfo info;
+  private float dashBoost;
 
   public override void _Ready() {
     info = GetParent<Actor>().velocityInfo;
@@ -29,6 +30,14 @@ public partial class VelocityComponent : Node {
     velocity.Y = direction * magnitude;
   }
 
+  public void SetDashBoost(float value) {
+    dashBoost = value;
+  }
+
+  public void ClearDashBoost() {
+    dashBoost = 0.0f;
+  }
+
   public void Decelerate() {
     velocity.X = Mathf.Lerp(velocity.X, 0.0f, info.decelerationCoefficient);
     velocity.Z = Mathf.Lerp(velocity.Z, 0.0f, info.decelerationCoefficient);
@@ -40,7 +49,11 @@ public partial class VelocityComponent : Node {
   }
 
   public void Move(CharacterBody3D body) {
-    body.Velocity = velocity;
+    Vector3 movement = velocity;
+    if(dashBoost > 0.0f) {
+      movement += body.Transform.Basis.Z * dashBoost;
+    }
+    body.Velocity = movement;
     _ = body.MoveAndSlide();
   }
 

@@ -13,6 +13,32 @@ public abstract partial class ActorState : State {
     velocityComponent = actor.GetComponent<VelocityComponent>();
     animationPlayer = actor.GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
   }
+
+  protected float ApplyMovementSpeedModifier(float baseSpeed) {
+    if(actor is Player player) {
+      SocketComponent socket = player.GetComponent<SocketComponent>();
+      if(socket != null && socket.HasModifier("MovementSpeed")) {
+        float bonusPercent = socket.GetModifier("MovementSpeed") / 100.0f;
+        float effectiveSpeed = baseSpeed * (1.0f + bonusPercent);
+        GD.Print($">>> DEBUG MovementSpeed: base={baseSpeed:F2}, modifier={socket.GetModifier("MovementSpeed")}, result={effectiveSpeed:F2}");
+        return effectiveSpeed;
+      }
+    }
+    return baseSpeed;
+  }
+
+  protected float ApplyDashDistanceModifier(float baseDistance) {
+    if(actor is Player player) {
+      SocketComponent socket = player.GetComponent<SocketComponent>();
+      if(socket != null && socket.HasModifier("DashDistance")) {
+        float bonusPercent = socket.GetModifier("DashDistance") / 100.0f;
+        float effectiveDistance = baseDistance * (1.0f + bonusPercent);
+        GD.Print($">>> DEBUG DashDistance: base={baseDistance:F2}, modifier={socket.GetModifier("DashDistance")}, result={effectiveDistance:F2}");
+        return effectiveDistance;
+      }
+    }
+    return baseDistance;
+  }
 }
 
 public partial class ActorStateIdle : ActorState {
@@ -41,7 +67,7 @@ public partial class ActorStateWalk : ActorState {
   public override void Enter() {
     base.Enter();
 
-    actor.velocityInfo.Speed = actor.velocityInfo.walkSpeed;
+    actor.velocityInfo.Speed = ApplyMovementSpeedModifier(actor.velocityInfo.walkSpeed);
   }
 
   public override void PhysicsUpdate(double delta) {
@@ -58,7 +84,7 @@ public partial class ActorStateSprint : ActorState {
   public override void Enter() {
     base.Enter();
 
-    actor.velocityInfo.Speed = actor.velocityInfo.sprintSpeed;
+    actor.velocityInfo.Speed = ApplyMovementSpeedModifier(actor.velocityInfo.sprintSpeed);
   }
 
   public override void PhysicsUpdate(double delta) {
@@ -75,7 +101,7 @@ public partial class ActorStateJump : ActorState {
   public override void Enter() {
     base.Enter();
 
-    actor.velocityInfo.Speed = actor.velocityInfo.airborneSpeed;
+    actor.velocityInfo.Speed = ApplyMovementSpeedModifier(actor.velocityInfo.airborneSpeed);
     velocityComponent.
       SetYVelocity(actor.velocityInfo.jumpVelocity);
   }
@@ -94,7 +120,7 @@ public partial class ActorStateFall : ActorState {
   public override void Enter() {
     base.Enter();
 
-    actor.velocityInfo.Speed = actor.velocityInfo.airborneSpeed;
+    actor.velocityInfo.Speed = ApplyMovementSpeedModifier(actor.velocityInfo.airborneSpeed);
   }
 
   public override void PhysicsUpdate(double delta) {
@@ -111,7 +137,7 @@ public partial class ActorStateLand : ActorState {
   public override void Enter() {
     base.Enter();
 
-    actor.velocityInfo.Speed = actor.velocityInfo.airborneSpeed;
+    actor.velocityInfo.Speed = ApplyMovementSpeedModifier(actor.velocityInfo.airborneSpeed);
   }
 
   public override void PhysicsUpdate(double delta) {
@@ -141,17 +167,32 @@ public partial class ActorStateDash : ActorState {
     direction = actor.Direction;
     if(direction == Vector3.Zero) { direction = -actor.Basis.Z; }
 
+    float effectiveDashDistance = ApplyDashDistanceModifier(actor.velocityInfo.dashDistance);
+    if(actor is Player player) {
+      SocketComponent socket = player.GetComponent<SocketComponent>();
+      if(socket != null && socket.HasModifier("EchoStep")) {
+        float echoDistance = socket.GetModifier("EchoStep") * 0.25f;
+        actor.GlobalPosition += direction * echoDistance;
+        GD.Print($">>> DEBUG EchoStep: value={socket.GetModifier("EchoStep")}, added={echoDistance:F2} units during dash");
+      }
+    }
+
+    velocityComponent.SetDashBoost(effectiveDashDistance * 0.4f);
     actor.velocityInfo.Speed = 1.0f;
+    GD.Print($">>> DEBUG Dash: distance={effectiveDashDistance:F2}, duration={actor.velocityInfo.dashDuration:F2}, cooldown={actor.velocityInfo.dashCooldown:F2}");
   }
 
   public override void PhysicsUpdate(double delta) {
+    float effectiveDashDistance = ApplyDashDistanceModifier(actor.velocityInfo.dashDistance);
     velocityComponent
       .AccelerateInDirection(
-        direction *
-        (actor.velocityInfo.dashDistance / actor.velocityInfo.dashDuration)
+        direction * (effectiveDashDistance / actor.velocityInfo.dashDuration)
       );
   }
 
-  public override void Exit() => velocityComponent.Stop();
+  public override void Exit() {
+    velocityComponent.ClearDashBoost();
+    velocityComponent.Stop();
+  }
 }
 

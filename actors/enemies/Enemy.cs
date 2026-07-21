@@ -43,6 +43,9 @@ public abstract partial class Enemy : Actor {
     velocityComponent = GetComponent<VelocityComponent>();
     healthComponent = GetComponent<HealthComponent>();
     detectionComponent = GetComponent<AIDetectionComponent>();
+
+    // Add to "enemies" group for homing projectile targeting
+    AddToGroup("enemies");
   }
 }
 
