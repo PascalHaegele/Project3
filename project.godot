@@ -8,12 +8,20 @@
 
 config_version=5
 
+[Fmod]
+
+General/banks_path="res://FmodBank/Desktop"
+
 [application]
 
 config/name="Project3"
 run/main_scene="uid://c5qt8u5hbysnw"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+FmodManager="*uid://cds10pm7hwn3p"
 
 [display]
 
@@ -22,10 +30,15 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 display_server/driver.linuxbsd="wayland"
+window/vsync/vsync_mode=0
 
 [dotnet]
 
 project/assembly_name="Project3"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/fmod/plugin.cfg")
 
 [input]
 
