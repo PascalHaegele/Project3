@@ -6,7 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://c55wv856x1kmu" path="res://actors/enemies/test_enemy.tscn" id="2_3soxs"]
 [ext_resource type="Texture2D" uid="uid://da7jcsvmhja8y" path="res://maps/skybox.png" id="2_a1t7w"]
 [ext_resource type="PackedScene" uid="uid://co62vn6pet0yj" path="res://actors/player/player.tscn" id="3_ui8i3"]
+[ext_resource type="Texture2D" uid="uid://lv4ptmsm7xpg" path="res://maps/Map 1_final_M_Brick_albedo.png" id="4_8wn1s"]
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="4_a1t7w"]
+[ext_resource type="Texture2D" uid="uid://kwnbrnpp1w4" path="res://maps/Map 1_final_M_Brick_normal.png" id="5_8wn1s"]
+[ext_resource type="Texture2D" uid="uid://brqaum1mit0q3" path="res://maps/Map 1_final_M_Brick_orm.png" id="5_f7lwg"]
 [ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="7_a1t7w"]
 [ext_resource type="Resource" uid="uid://dj5esj56ptnvn" path="res://enemy_info_spawn_01.tres" id="8_x1dlt"]
 [ext_resource type="Resource" uid="uid://bbbge8lcs34lm" path="res://enemy_info_spawn_02.tres" id="10_5qq3c"]
@@ -42,7 +45,31 @@ polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Arr
 agent_height = 2.0
 agent_radius = 0.6
 
-[sub_resource type="Resource" id="Resource_ck1tj"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gdp6c"]
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_o0ahx"]
+albedo_texture = ExtResource("4_8wn1s")
+orm_texture = ExtResource("5_f7lwg")
+normal_enabled = true
+normal_texture = ExtResource("5_8wn1s")
+subsurf_scatter_strength = 0.54
+refraction_scale = 0.35
+refraction_texture = SubResource("NoiseTexture2D_gdp6c")
+refraction_texture_channel = 2
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8wn1s"]
+albedo_texture = ExtResource("4_8wn1s")
+normal_enabled = true
+normal_scale = 10.6
+normal_texture = ExtResource("5_8wn1s")
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_8vqkf"]
+material = SubResource("StandardMaterial3D_8wn1s")
+size = Vector3(5.371338, 4.820801, 1)
+
+[sub_resource type="Resource" id="Resource_8wn1s"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 sprintSpeed = 14.0
@@ -72,10 +99,10 @@ bottom_radius = 2.0
 height = 0.1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
-radius = 2.5
+radius = 3.0
 height = 17.5
 
-[sub_resource type="Resource" id="Resource_jdm1q"]
+[sub_resource type="Resource" id="Resource_f7lwg"]
 resource_local_to_scene = true
 script = ExtResource("15_24hbc")
 patrolPath = PackedVector3Array(181.4789, 2.3929415, -136.71298, 182.76384, 2.3929405, -130.47568, 184.49522, 2.3929405, -128.45308)
@@ -84,7 +111,7 @@ leashLength = 50.0
 attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_pwarq"]
+[sub_resource type="Resource" id="Resource_22v2i"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 walkSpeed = 3.0
@@ -131,20 +158,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.536156, 1.8530712, -120.51
 use_collision = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Bos Layer" unique_id=61060599]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.535095)
 use_collision = true
-size = Vector3(35.558716, 1, 308.95313)
+size = Vector3(35.558716, 1, 330.02332)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Bos Layer" unique_id=420156372]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.17492, -0.08709097, 30.125092)
 size = Vector3(32.281128, 1, 16.662476)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Bos Layer" unique_id=933988669]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.954994, -0.215024, -101.07512)
 size = Vector3(46.341553, 1, 20.05957)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Bos Layer" unique_id=295147568]
 transform = Transform3D(-0.9740234, 0, -0.2264473, 0, 1, 0, 0.2264473, 0, -0.9740234, 46.8592, -0.017900467, -52.507004)
 size = Vector3(64.75769, 1, 24.492554)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Room3" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS" unique_id=861085693]
 transform = Transform3D(0.6559405, 0, -0.7548126, 0, 1, 0, 0.7548126, 0, 0.6559405, 158.68962, 1.5958328, -207.70947)
@@ -153,128 +185,228 @@ use_collision = true
 [node name="CSGBox3D5" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=1017389559]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10386658, 0)
 size = Vector3(46.341553, 1, 20.05957)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=1485659633]
 transform = Transform3D(0.82464963, 0, -0.5656436, 0, 1, 0, 0.5656436, 0, 0.82464963, 33.752518, 0.2971077, 9.620773)
 size = Vector3(46.341553, 1, 20.05957)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=1288030225]
 transform = Transform3D(0.90510935, 0, -0.42517924, 0, 1, 0, 0.42517924, 0, 0.90510935, 88.51683, 0.2971077, 39.329346)
 size = Vector3(90.53296, 1, 20.05957)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D8" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=94531073]
 transform = Transform3D(0.90510935, 0, -0.42517924, 0, 1, 0, 0.42517924, 0, 0.90510935, 113.45852, 0.2971077, 19.548843)
 size = Vector3(72.33505, 1, 20.05957)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D12" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=815363270]
 transform = Transform3D(0.90510935, 0, -0.42517924, 0, 1, 0, 0.42517924, 0, 0.90510935, 113.45852, 0.2971077, 19.548843)
 size = Vector3(72.33505, 1, 20.05957)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=906257605]
 transform = Transform3D(-0.4704576, 0, -0.8824227, 0, 1, 0, 0.8824227, 0, -0.4704576, 128.77841, 0.2971077, 48.18524)
 size = Vector3(38.047997, 1, 18.832031)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=1295203308]
 transform = Transform3D(0.6017314, 0, -0.7986987, 0, 1, 0, 0.7986987, 0, 0.6017314, 64.12309, 0.2971077, -19.329315)
 size = Vector3(66.12567, 1, 20.05957)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=115851105]
 transform = Transform3D(-0.5856937, 0, -0.8105326, 0, 1, 0, 0.8105326, 0, -0.5856937, 48.192688, 0.2971077, -9.8871765)
 size = Vector3(32.64921, 1, 30.41858)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Room3_Wall" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=936155309]
 
 [node name="CSGBox3D15" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1378894145]
 transform = Transform3D(0.9608421, 0, -0.27709672, 0, 1, 0, 0.27709672, 0, 0.9608421, 139.80577, 3.6847897, 22.002853)
 size = Vector3(25.365326, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D16" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=206610127]
 transform = Transform3D(0.8511697, 0, -0.52489024, 0, 1, 0, 0.52489024, 0, 0.8511697, 118.69337, 3.6847897, 13.000732)
 size = Vector3(21.664597, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D17" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1163906409]
 transform = Transform3D(0.9187113, 0, -0.39492837, 0, 1, 0, 0.39492837, 0, 0.9187113, 99.70904, 3.6847897, 3.1101074)
 size = Vector3(21.745872, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D18" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1089693398]
 transform = Transform3D(0.6478992, 0, -0.76172507, 0, 1, 0, 0.76172507, 0, 0.6478992, 69.98276, 3.6847897, -25.12381)
 size = Vector3(62.327827, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D19" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1613592925]
 transform = Transform3D(0.5217335, 0, -0.8531076, 0, 1, 0, 0.8531076, 0, 0.5217335, 41.408997, 3.6847897, -34.39023)
 size = Vector3(14.742578, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D20" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=653980412]
 transform = Transform3D(-0.8434409, 0, -0.5372205, 0, 1, 0, 0.5372205, 0, -0.8434409, 43.470856, 3.6847897, -44.993317)
 size = Vector3(15.771679, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D21" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=802214727]
 transform = Transform3D(-0.6043699, 0, -0.7967031, 0, 1, 0, 0.7967031, 0, -0.6043699, 36.843338, 3.6847897, -17.649902)
 size = Vector3(27.158619, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D30" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1471106027]
 transform = Transform3D(-0.99681664, 0, 0.07971907, 0, 1, 0, -0.07971907, 0, -0.99681664, 15.532288, 3.6847897, -8.347992)
 size = Vector3(27.158619, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D31" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=2093858499]
 transform = Transform3D(-0.9997893, 0, -0.020494312, 0, 1, 0, 0.020494312, 0, -0.9997893, -9.592247, 3.6847897, -9.2388)
 size = Vector3(23.276453, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D32" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=255239196]
-transform = Transform3D(-0.67774385, 0, -0.73529726, 0, 1, 0, 0.73529726, 0, -0.67774385, -37.154648, 3.6847897, 7.9802246)
-size = Vector3(46.12246, 6.3116455, 1.1013184)
+transform = Transform3D(-0.67774385, 0, -0.73529726, 0, 1, 0, 0.73529726, 0, -0.67774385, -37.626656, 3.6474533, 8.553116)
+size = Vector3(47.55781, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D33" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1302029866]
 transform = Transform3D(-0.67774385, 0, -0.73529726, 0, 1, 0, 0.73529726, 0, -0.67774385, -26.487106, 3.6847897, 23.263092)
 size = Vector3(37.0417, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D34" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1429468189]
 transform = Transform3D(-0.45921808, 0, -0.8883222, 0, 1, 0, 0.8883222, 0, -0.45921808, -0.32806396, 3.6847897, 34.530304)
 size = Vector3(55.687428, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D35" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=265319147]
 transform = Transform3D(-0.9999962, 0, -0.0021023154, 0, 1, 0, 0.0021023154, 0, -0.9999962, -1.0669174, 3.6847897, 9.207916)
 size = Vector3(28.29241, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D36" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1587073049]
 transform = Transform3D(-0.7589291, 0, 0.6511703, 0, 1, 0, -0.6511703, 0, -0.7589291, -26.248428, 3.6847897, 48.564728)
 size = Vector3(34.71318, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D37" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1719462564]
 transform = Transform3D(-0.7589291, 0, 0.6511703, 0, 1, 0, -0.6511703, 0, -0.7589291, -26.248428, 3.6847897, 48.564728)
 size = Vector3(34.71318, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D22" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=549236651]
 transform = Transform3D(-0.6043699, 0, -0.796703, 0, 1, 0, 0.796703, 0, -0.6043699, 56.88566, 3.6847897, 2.3403015)
 size = Vector3(20.630535, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D28" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=351605365]
 transform = Transform3D(-0.690806, 0, 0.7230394, 0, 1, 0, -0.7230394, 0, -0.690806, 70.827225, 3.6847897, 2.9283142)
 size = Vector3(24.3691, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D29" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=964146922]
 transform = Transform3D(-0.8893053, 0, 0.4573117, 0, 1, 0, -0.4573117, 0, -0.8893053, 102.50039, 3.6847897, 23.983215)
 size = Vector3(52.862774, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D27" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1466814071]
-transform = Transform3D(-0.50345695, 0, -0.8640196, 0, 1, 0, 0.8640196, 0, -0.50345695, 18.699142, 3.6847897, 45.970673)
-size = Vector3(60.979168, 6.3116455, 1.1013184)
+transform = Transform3D(-0.50345695, 0, -0.8640196, 0, 1, 0, 0.8640196, 0, -0.50345695, 18.104675, 3.6847897, 46.99083)
+size = Vector3(63.34066, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D23" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=621256502]
 transform = Transform3D(-0.47563735, 0, -0.8796401, 0, 1, 0, 0.8796401, 0, -0.47563735, 135.57925, 3.6847897, 54.614685)
 size = Vector3(33.063763, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D24" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1263882362]
 transform = Transform3D(-0.47563735, 0, -0.8796401, 0, 1, 0, 0.8796401, 0, -0.47563735, 122.86513, 3.6847897, 40.31212)
 size = Vector3(10.177562, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D25" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1557371929]
 transform = Transform3D(0.8890067, 0, -0.45789084, 0, 1, 0, 0.45789084, 0, 0.8890067, 81.231026, 3.1579285, 44.986603)
 size = Vector3(106.477974, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D26" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1211618693]
 transform = Transform3D(0.8952631, 0, -0.4455345, 0, 1, 0, 0.4455345, 0, 0.8952631, 85.79989, 3.1579285, 27.237335)
 size = Vector3(79.008896, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D38" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1925481780]
+transform = Transform3D(0.6285085, -2.2110628e-16, 0.7778104, -1.9556977e-16, 1, 4.423e-16, -0.7778104, -4.3010475e-16, 0.6285085, -97.73233, 3.4908943, 10.507294)
+size = Vector3(35.42855, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D39" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1711168214]
+transform = Transform3D(-0.7569543, -3.1872087e-16, 0.653472, -3.1185495e-16, 1, 1.2649487e-16, -0.653472, -1.08037636e-16, -0.7569543, -70.45567, 3.7729778, 12.552292)
+size = Vector3(44.670116, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D40" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1818090838]
+transform = Transform3D(-0.7515154, -1.130025e-15, 0.65973324, -9.268547e-16, 1, 6.5707427e-16, -0.65973324, -1.1767273e-16, -0.7515154, 7.91206, 2.636858, 124.18756)
+size = Vector3(308.17145, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D41" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=820301675]
+transform = Transform3D(-0.7566337, -1.2951248e-16, 0.65384054, -1.4923286e-16, 1, 2.538526e-17, -0.65384054, -7.836724e-17, -0.7566337, 24.052193, 2.9488096, 93.08511)
+size = Vector3(59.787926, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D42" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=172953722]
+transform = Transform3D(-0.44862992, -1.116075e-16, 0.8937241, -1.3827755e-16, 1, 5.546573e-17, -0.8937241, -9.8699065e-17, -0.44862992, 111.54083, 3.255951, 179.89923)
+size = Vector3(30.62554, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D43" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=634815893]
+transform = Transform3D(-0.95796144, -1.5967303e-16, -0.28691056, -1.5101795e-16, 1, -5.2290732e-17, 0.28691056, -6.763406e-18, -0.95796144, 75.35324, 1.3257694, 166.54832)
+size = Vector3(30.62554, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D44" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1433986766]
+transform = Transform3D(-0.6538415, -1.2917604e-16, -0.7566463, -1.2706278e-16, 1, -6.0922157e-17, 0.7566463, 5.630935e-17, -0.6538415, 126.713, 2.3727007, 220.58095)
+size = Vector3(12.348768, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D45" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1006889155]
+transform = Transform3D(-0.7717807, -4.1772324e-16, 0.63592386, -3.9116236e-16, 1, 1.8216889e-16, -0.63592386, -1.0815233e-16, -0.7717807, 125.39056, 2.3805876, 183.44772)
+size = Vector3(52.23677, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D46" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1864838450]
+transform = Transform3D(-0.6338117, -1.0700996e-16, -0.77351636, -8.3507507e-16, 1, 1.6930293e-16, 0.77351636, 4.1801738e-16, -0.6338117, 138.90283, 2.3784466, 206.2971)
+size = Vector3(17.932117, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=428549650]
+transform = Transform3D(0.6575074, -3.5232552e-16, 0.753448, 1.5279212e-16, 1, 3.342814e-16, -0.753448, -1.0467158e-16, 0.6575074, 131.67184, 3.0758219, 214.77144)
+mesh = SubResource("BoxMesh_8vqkf")
+
+[node name="CSGBox3D47" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1953735001]
+transform = Transform3D(-0.64324045, -3.6899037e-16, -0.76566887, -2.1982421e-16, 1, -2.9724684e-16, 0.76566887, -2.2888008e-17, -0.64324045, 55.964493, 2.40382, 104.07747)
+size = Vector3(24.99847, 8.139221, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D47" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall/CSGBox3D47" unique_id=667091286]
+transform = Transform3D(-0.9996467, -3.540162e-16, 0.026632953, -3.6954721e-16, 1, -5.781823e-16, -0.026632953, -5.878164e-16, -0.9996467, 1.3066864, 1.2152367, -13.616241)
+size = Vector3(26.786833, 5.7620544, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D41" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=1459248237]
+transform = Transform3D(0.14498699, -8.275865e-17, -0.98943555, -5.2916186e-17, 1, -9.1396576e-17, 0.98943555, 6.5608565e-17, 0.14498699, 49.925125, 3.2722187, 131.61127)
+size = Vector3(38.209435, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D42" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3" unique_id=1920301645]
+transform = Transform3D(-0.7446549, 6.9102615e-17, 0.6674545, 2.3102307e-16, 1, 1.5421108e-16, -0.6674545, 2.690289e-16, -0.7446549, 80.61208, 1.7948751, 144.70343)
+size = Vector3(64.969505, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Room1" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS" unique_id=1247034904]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 206.92583, 1.8502464, -13.20612)
@@ -282,96 +414,124 @@ use_collision = true
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1" unique_id=1855919103]
 size = Vector3(30.125732, 1, 20.05957)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1" unique_id=700911130]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2914124, 0, 22.15783)
 size = Vector3(23.542908, 1, 25.675293)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D8" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1" unique_id=2080182045]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2914124, 0, -19.37502)
 size = Vector3(23.542908, 1, 19.795898)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1" unique_id=2087985262]
 transform = Transform3D(0.89246774, 0, 0.4511112, 0, 1, 0, -0.4511112, 0, 0.89246774, 6.966675, 0, -28.484112)
 size = Vector3(26.575653, 1, 19.795898)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1" unique_id=382274978]
 transform = Transform3D(0.89246774, 0, 0.4511112, 0, 1, 0, -0.4511112, 0, 0.89246774, 29.269089, 0, -39.84957)
 size = Vector3(26.575653, 1, 19.795898)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1" unique_id=1057055258]
 transform = Transform3D(0.89246774, 0, 0.4511112, 0, 1, 0, -0.4511112, 0, 0.89246774, 25.035156, 0, -58.21606)
 size = Vector3(17.08751, 1, 19.795898)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Room1_Walls" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS/Room1" unique_id=604314491]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=1369848373]
-transform = Transform3D(0.82901806, 0, -0.55922186, 0, 1, 0, 0.55922186, 0, 0.82901806, 6.3220673, 3.656239, 36.820183)
+transform = Transform3D(0.33548927, -8.6624815e-17, -0.942044, -2.1917081e-16, 1, -1.7000719e-16, 0.942044, 2.6350411e-16, 0.33548927, 4.0547028, 3.656239, 37.11917)
 size = Vector3(7.900299, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=132307341]
 transform = Transform3D(0.9995934, 0, 0.028514802, 0, 1, 0, -0.028514802, 0, 0.9995934, -2.5541992, 3.656239, 34.306988)
 size = Vector3(12.002663, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=774880759]
 transform = Transform3D(-0.0027226713, 0, -0.99999624, 0, 1, 0, 0.99999624, 0, -0.0027226713, -8.126724, 3.656239, 22.236155)
 size = Vector3(24.384151, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=1010840180]
 transform = Transform3D(0.4210992, 0, -0.9070147, 0, 1, 0, 0.9070147, 0, 0.4210992, 18.424393, 3.430376, -53.348003)
 size = Vector3(13.432798, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=1745175668]
 transform = Transform3D(0.82901806, 0, -0.55922186, 0, 1, 0, 0.55922186, 0, 0.82901806, 12.553421, 3.8184648, 32.49493)
 size = Vector3(6.070221, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls/CSGBox3D2" unique_id=299567721]
+transform = Transform3D(0.9991559, -2.18888e-16, 0.041090578, 2.117202e-16, 1, 1.7875709e-16, -0.041090578, -1.6990631e-16, 0.9991559, 18.445923, -0.23904085, -0.6831207)
+size = Vector3(33.25733, 6.9317017, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=1630677894]
 transform = Transform3D(-0.061309826, 0, -0.9981187, 0, 1, 0, 0.9981187, 0, -0.061309826, 12.577667, 3.5040798, 11.732806)
 size = Vector3(38.65856, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=654007835]
 transform = Transform3D(-0.061309826, 0, -0.9981187, 0, 1, 0, 0.9981187, 0, -0.061309826, 14.0785675, 3.5040798, -13.766344)
 size = Vector3(17.688534, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=1444518305]
 transform = Transform3D(-0.8992449, 0, -0.4374453, 0, 1, 0, 0.4374453, 0, -0.8992449, 30.293701, 3.5040798, -29.544151)
 size = Vector3(34.041763, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=1076750896]
 transform = Transform3D(-0.8798144, 0, -0.47531706, 0, 1, 0, 0.47531706, 0, -0.8798144, 5.982071, 3.5040798, -38.820274)
 size = Vector3(34.041763, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D8" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=79360135]
 transform = Transform3D(0.46270815, 0, -0.88651043, 0, 1, 0, 0.88651043, 0, 0.46270815, 38.982376, 3.5040798, -50.022087)
 size = Vector3(30.28046, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=514622708]
 transform = Transform3D(0.007085949, 0, -0.9999747, 0, 1, 0, 0.9999747, 0, 0.007085949, -8.11087, 3.5040798, -19.991676)
 size = Vector3(20.60408, 6.3116455, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D12" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=1051518432]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8179626, 2.698038, 21.260334)
 size = Vector3(8.81665, 4.279175, 1.7993164)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D13" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=710865202]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19841, 2.698038, -11.256779)
 size = Vector3(8.81665, 4.279175, 1.7993164)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D15" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=530948632]
 transform = Transform3D(0.4940692, 0, -0.8694226, 0, 1, 0, 0.8694226, 0, 0.4940692, 15.563416, 2.698038, -27.020077)
 size = Vector3(8.81665, 4.279175, 1.7993164)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D16" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=2049239786]
 transform = Transform3D(0.7725163, 0, -0.634995, 0, 1, 0, 0.634995, 0, 0.7725163, 19.325241, 2.698038, -42.34199)
 size = Vector3(8.81665, 4.279175, 1.7993164)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D17" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=1745054289]
 transform = Transform3D(0.7725163, 0, -0.634995, 0, 1, 0, 0.634995, 0, 0.7725163, 33.27559, 2.698038, -42.34199)
 size = Vector3(8.81665, 4.279175, 1.7993164)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D14" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1/Room1_Walls" unique_id=1382748308]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026611328, 0.95805407, 1.831131)
 size = Vector3(8.377502, 1.6019897, 7.766968)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Start" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS" unique_id=1421738651]
 transform = Transform3D(0.8246993, 0, -0.5655717, 0, 1, 0, 0.5655717, 0, 0.8246993, 228.97835, 1.8502464, 31.503162)
@@ -380,175 +540,222 @@ use_collision = true
 [node name="CSGBox3D6" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=2107438278]
 transform = Transform3D(0.59917724, 0, -0.8006163, 0, 1, 0, 0.8006163, 0, 0.59917724, -9.856079, 0, -41.540398)
 size = Vector3(25.108551, 1, 27.61676)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=960231595]
 transform = Transform3D(0.59917724, 0, -0.8006163, 0, 1, 0, 0.8006163, 0, 0.59917724, 2.4874573, 0, -27.806969)
 size = Vector3(15.340897, 1, 8.650162)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D8" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=2071093910]
 transform = Transform3D(0.9577774, 0, -0.28751105, 0, 1, 0, 0.28751105, 0, 0.9577774, 13.821838, 0, -20.3032)
 size = Vector3(18.65034, 1, 8.650162)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=137333364]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.046173, 0, -18.019882)
 size = Vector3(20.045383, 1, 8.650162)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=1022909184]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.788666, 0, -3.7243958)
 size = Vector3(20.045383, 1, 20.494148)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=1958225930]
 size = Vector3(51.660385, 1, 10.978883)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Walls_Start" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=1542068366]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=540984310]
 transform = Transform3D(3.3779783, 0, 2.5126448, 0, 4.21, 0, -2.5126448, 0, 3.3779783, -21.206451, 3.5967846, -33.013786)
 size = Vector3(0.238, 1.5, 5.95)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1808849744]
 transform = Transform3D(-2.431586, 0, 3.436794, 0, 4.2100005, 0, -3.436794, 0, -2.431586, -8.898865, 3.5967846, -26.165901)
 size = Vector3(0.2880674, 1.5, 2.967)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1925496448]
 transform = Transform3D(-3.372713, 0, -2.5197177, 0, 4.2099996, 0, 2.5197177, 0, -3.372713, -0.1424408, 2.5933237, -24.044334)
 size = Vector3(0.238, 1, 2.967)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D8" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=504904991]
 transform = Transform3D(-1.2476697, 0, -4.020882, 0, 4.2099996, 0, 4.020882, 0, -1.2476697, 11.133606, 1.8450108, -16.577988)
 size = Vector3(0.238, 1, 3.639)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D12" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1572294937]
 transform = Transform3D(-1.2476697, 0, -4.020882, 0, 4.2099996, 0, 4.020882, 0, -1.2476697, 15.578537, 1.8450108, -21.230515)
 size = Vector3(0.238, 1, 3.639)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D13" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=629729724]
 transform = Transform3D(0.081557035, 0, -4.209219, 0, 4.21, 0, 4.209219, 0, 0.081557035, 30.325424, 1.8450108, -19.195518)
 size = Vector3(0.238, 1, 3.639)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D14" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=920458635]
 transform = Transform3D(0.081557035, 0, -4.209219, 0, 4.21, 0, 4.209219, 0, 0.081557035, 25.548157, 1.8450108, -14.467033)
 size = Vector3(0.238, 1, 3.639)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D15" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1670626865]
 transform = Transform3D(-3.9492612, 0, 1.4586031, 0, 4.21, 0, -1.4586031, 0, -3.9492612, 31.618713, 2.5860777, -11.392097)
 size = Vector3(0.238, 1.3520508, 1.5332451)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start/CSGBox3D15" unique_id=1334764617]
+transform = Transform3D(-1.4693959, -7.8125766e-16, 3.9452581, -1.5375863e-15, 4.2099953, 2.610202e-16, -3.9452581, -1.3497862e-15, -1.4693959, 1.4282112, -0.21324092, -0.31355286)
+size = Vector3(0.28114966, 0.17877197, 0.04617834)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D16" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1028274724]
 transform = Transform3D(-4.197507, 0, -0.32423413, 0, 4.2099996, 0, 0.32423413, 0, -4.197507, 37.71692, 1.8450108, -14.997818)
 size = Vector3(0.238, 1, 1.8330288)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D17" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=983806185]
 transform = Transform3D(-2.2556498, 0, -3.5547485, 0, 4.209999, 0, 3.5547485, 0, -2.2556498, 41.1763, 1.8450108, -9.442986)
 size = Vector3(0.238, 1, 1.8330288)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D18" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=544848537]
 transform = Transform3D(-4.209839, 0, -0.038356304, 0, 4.209999, 0, 0.038356304, 0, -4.209839, 44.59053, 1.8450108, -3.2705383)
 size = Vector3(0.238, 1, 1.8330288)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D19" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=301787091]
 transform = Transform3D(-2.5326526, 0, 3.3630178, 0, 4.209999, 0, -3.3630178, 0, -2.5326526, 41.35399, 1.835362, 3.1683578)
 size = Vector3(0.238, 1, 1.8330288)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D20" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1623820397]
 transform = Transform3D(0.36802387, 0, 4.1938972, 0, 4.209999, 0, -4.1938972, 0, 0.36802387, 34.17949, 1.835362, 5.212906)
 size = Vector3(0.238, 1, 1.8330288)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D21" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=830862139]
 transform = Transform3D(-1.672136, 0, -3.86371, 0, 4.209999, 0, 3.86371, 0, -1.672136, 26.890778, 2.6882052, 3.401352)
 size = Vector3(0.238, 1.4051514, 1.7291365)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D27" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=736657681]
 transform = Transform3D(0.28847313, 0, -4.2001276, 0, 4.21, 0, 4.2001276, 0, 0.28847313, 3.3002014, 2.764779, 3.130165)
 size = Vector3(0.238, 1.4415283, 9.8144865)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D30" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1621194355]
 transform = Transform3D(0.28847313, 0, -4.2001276, 0, 4.21, 0, 4.2001276, 0, 0.28847313, 0.95228577, 6.054458, 3.2914276)
 size = Vector3(0.238, 1, 8.659258)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D31" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=534146676]
 transform = Transform3D(0.03357841, -0.18140197, -4.205983, 4.2096267, 0.048416976, 0.0315206, 0.04701293, -4.2058153, 0.18177187, 1.0578003, 8.429137, 0.10126495)
 size = Vector3(0.238, 1.9745483, 8.702959)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D28" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1409089788]
 transform = Transform3D(0.28847313, 0, -4.2001276, 0, 4.21, 0, 4.2001276, 0, 0.28847313, 2.9182587, 2.764779, -2.9165192)
 size = Vector3(0.238, 1.4415283, 9.997104)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D29" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=291644788]
-transform = Transform3D(0.28847313, 0, -4.2001276, 0, 4.21, 0, 4.2001276, 0, 0.28847313, 1.0648499, 5.9001203, -2.7892456)
+transform = Transform3D(0.28847313, 0, -4.2001276, 0, 4.21, 0, 4.2001276, 0, 0.28847313, 0.9627991, 5.9001203, -2.938057)
 size = Vector3(0.238, 1, 8.789995)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D32" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1992685979]
 transform = Transform3D(0.28847313, 0, -4.2001276, 0, 4.21, 0, 4.2001276, 0, 0.28847313, 14.359558, 3.1024451, -0.62818146)
 size = Vector3(1.2097427, 0.2594757, 1.1083875)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D33" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=173200812]
 transform = Transform3D(0.28847313, 0, -4.2001276, 0, 4.21, 0, 4.2001276, 0, 0.28847313, 7.445511, 2.8714724, -0.11860657)
 size = Vector3(1.2097427, 0.54673004, 1.1083875)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D22" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1308027111]
 transform = Transform3D(2.2465892, 0, -3.5604887, 0, 4.209999, 0, 3.5604887, 0, 2.2465892, 27.203674, 2.7676053, -6.5423813)
 size = Vector3(0.238, 1.4428711, 1.9555106)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D23" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=2090404605]
 transform = Transform3D(2.2465892, 0, -3.5604887, 0, 4.209999, 0, 3.5604887, 0, 2.2465892, 38.814148, 2.5777135, -4.9735336)
 size = Vector3(0.238, 1.3526611, 0.25754046)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D24" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=21774253]
 transform = Transform3D(2.2465892, 0, -3.5604887, 0, 4.209999, 0, 3.5604887, 0, 2.2465892, 33.439392, 2.5777135, -5.9881287)
 size = Vector3(0.238, 1.3526611, 0.25754046)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D25" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=418673742]
 transform = Transform3D(2.2465892, 0, -3.5604887, 0, 4.209999, 0, 3.5604887, 0, 2.2465892, 37.192276, 1.7972038, -0.5157852)
 size = Vector3(0.238, 0.98187256, 0.25754046)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D26" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1864372832]
 transform = Transform3D(2.2465892, 0, -3.5604887, 0, 4.209999, 0, 3.5604887, 0, 2.2465892, 37.24214, 3.8244681, -0.5039444)
 size = Vector3(0.67107224, 0.083602905, 0.7544486)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1198705118]
 transform = Transform3D(-3.3727136, 0, -2.519718, 0, 4.2099996, 0, 2.519718, 0, -3.3727136, 4.7321014, 2.3867655, -27.993065)
 size = Vector3(0.238, 1, 2.967)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=249561229]
 transform = Transform3D(0.030313661, -3.473597, -2.3785162, -4.209849, -0.036738705, 0, -0.020756194, 2.3784215, -3.473735, 2.3548737, 5.049947, -26.362831)
 size = Vector3(0.238, 1.639801, 2.967)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1410233317]
 transform = Transform3D(-0.02976783, 3.411051, 2.4673824, -4.2098484, -0.0367387, 0, 0.021531688, -2.4672844, 3.411187, -9.850845, 7.037675, -41.40293)
 size = Vector3(0.238, 7.0035896, 6.014872)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=910424829]
 transform = Transform3D(-0.029767836, 3.411051, 2.4673824, -4.2098484, -0.0367387, 0, 0.021531694, -2.4672844, 3.411187, -1.0643158, 5.9095397, -30.562218)
 size = Vector3(0.32358986, 1.379741, 0.6155344)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=936013050]
 transform = Transform3D(-2.431586, 0, 3.436794, 0, 4.2100005, 0, -3.436794, 0, -2.431586, 5.0735474, 3.4126635, -36.44747)
 size = Vector3(0.238, 1.5, 2.823667)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1286342852]
 transform = Transform3D(3.3779783, 0, 2.5126448, 0, 4.21, 0, -2.5126448, 0, 3.3779783, 2.0820007, 3.5967846, -49.57981)
 size = Vector3(0.238, 1.5, 6.184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1210431753]
 transform = Transform3D(-2.4840212, 0, 3.3990836, 0, 4.2100005, 0, -3.3990836, 0, -2.4840212, -17.337677, 3.5967846, -52.030968)
 size = Vector3(0.238, 1.5, 7.034)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Stairs" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=2115715387]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Stairs" unique_id=1878409485]
 transform = Transform3D(0.99976265, 0, 0.021797389, 0, 1, 0, -0.021797389, 0, 0.99976265, 3.0144653, 1.4540951, 0.12844086)
 size = Vector3(41.240784, 2.2564087, 7.1101074)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Stairs" unique_id=1881342256]
 transform = Transform3D(0.99905026, 0, 0.043584406, 0, 1, 0, -0.043584406, 0, 0.99905026, 23.820862, 2.5496297, -1.0547714)
 operation = 2
 size = Vector3(4.491211, 2.2564087, 5.1862793)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Stairs" unique_id=1141163111]
 transform = Transform3D(0.99905026, 0, 0.043584406, 0, 1, 0, -0.043584406, 0, 0.99905026, -18.281326, 3.0693984, 1.4525604)
 operation = 2
 size = Vector3(4.491211, 2.2564087, 5.1862793)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Room2" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS" unique_id=704993237]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.9009132, 0)
@@ -557,10 +764,12 @@ use_collision = true
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2" unique_id=1973932948]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 169.34192, -2.6384392, -28.783524)
 size = Vector3(42.01013, 1, 73.05878)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2" unique_id=2037822496]
 transform = Transform3D(-0.5367401, 0, 0.8437476, 0, 1, 0, -0.8437476, 0, -0.5367401, 164.4784, -2.7985725, -71.840836)
 size = Vector3(48.92514, 1, 34.29167)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Room2_Walls" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS/Room2" unique_id=524248961]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.368057, 0, 0)
@@ -568,74 +777,92 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.368057, 0, 0)
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=1558079477]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 152.68352, 3.4270182, 7.2067842)
 size = Vector3(41.155823, 11.472015, 0.9262085)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=1466013041]
 transform = Transform3D(0.29415706, 0, -0.9557571, 0, 1, 0, 0.9557571, 0, 0.29415706, 145.33177, 1.4805307, -2.7020693)
 size = Vector3(7.0199127, 7.5790405, 0.9262085)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=1105461589]
 transform = Transform3D(-0.5581363, 0, -0.82974946, 0, 1, 0, 0.82974946, 0, -0.5581363, 145.33177, 1.4805307, -23.462997)
 size = Vector3(7.0199127, 7.5790405, 0.9262085)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D12" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=1889816731]
 transform = Transform3D(-0.5581363, 0, -0.82974946, 0, 1, 0, 0.82974946, 0, -0.5581363, 139.07182, 1.4805307, -12.817277)
 size = Vector3(7.0199127, 7.5790405, 4.365448)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=991824638]
 transform = Transform3D(0.0448573, 0, 0.9989934, 0, 1, 0, -0.9989934, 0, 0.0448573, 173.28995, 3.409501, -0.062035084)
 size = Vector3(13.655922, 11.436981, 0.9262085)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=617776977]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 132.76804, 3.2056437, -29.104439)
 size = Vector3(1.6372414, 11.029266, 71.639336)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=1899925197]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 173.03342, 3.582841, -41.177483)
 size = Vector3(1.6372414, 11.783661, 47.02684)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D14" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=919367243]
 transform = Transform3D(0.8280016, 0, 0.5607257, 0, 1, 0, -0.5607257, 0, 0.8280016, 161.37083, 2.3901134, -80.57635)
 size = Vector3(1.6372414, 12.279648, 47.02684)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D18" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=1793056682]
 transform = Transform3D(-0.5177582, 0, 0.855527, 0, 1, 0, -0.855527, 0, -0.5177582, 142.44398, 2.663219, -94.85137)
 size = Vector3(1.6372414, 12.825859, 12.928947)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D15" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=772244054]
 transform = Transform3D(0.8280016, 0, 0.5607257, 0, 1, 0, -0.5607257, 0, 0.8280016, 127.05621, 2.9957304, -73.16898)
 size = Vector3(1.6372414, 11.783661, 26.230343)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D16" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=463127667]
 transform = Transform3D(0.8280016, 0, 0.5607257, 0, 1, 0, -0.5607257, 0, 0.8280016, 127.05621, 2.9957304, -73.16898)
 size = Vector3(1.6372414, 11.783661, 26.230343)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D17" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=1948230718]
 transform = Transform3D(0.8280016, 0, 0.5607257, 0, 1, 0, -0.5607257, 0, 0.8280016, 127.05621, 2.9957304, -73.16898)
 size = Vector3(1.6372414, 11.783661, 26.230343)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=260059671]
 transform = Transform3D(0.007941118, 0, 0.99996847, 0, 1, 0, -0.99996847, 0, 0.007941118, 154.02702, 1.4805307, -32.12995)
 size = Vector3(1.6372414, 7.5790405, 9.913662)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=1386088451]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 179.05164, 9.321235, -3.682972)
 size = Vector3(6.8967285, 6.5546265, 1)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=429363461]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 179.05164, 9.321235, -22.412699)
 size = Vector3(6.8967285, 6.5546265, 1)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D8" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=2144904689]
 transform = Transform3D(0.017504709, 0, -0.99984676, 0, 1, 0, 0.99984676, 0, 0.017504709, 176.08192, 9.321235, -19.080212)
 size = Vector3(6.8967285, 6.5546265, 1)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=1431768286]
 transform = Transform3D(0.017504709, 0, -0.99984676, 0, 1, 0, 0.99984676, 0, 0.017504709, 176.08192, 9.321235, -7.5264854)
 size = Vector3(6.8967285, 6.5546265, 1)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D13" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Walls" unique_id=526954464]
 transform = Transform3D(0.017504709, 0, -0.99984676, 0, 1, 0, 0.99984676, 0, 0.017504709, 176.08192, 9.321235, -7.5264854)
 size = Vector3(6.8967285, 6.5546265, 1)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Room2_Stairs" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS/Room2" unique_id=1960604804]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.66342926, 0, 0)
@@ -643,53 +870,79 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.66342926, 0, 0)
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Stairs" unique_id=1533392388]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186.05276, 0.9568, -12.189252)
 size = Vector3(8.443359, 9.128876, 11.0095215)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Stairs" unique_id=1454051635]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 142.07559, 6.1678658, -96.65741)
 size = Vector3(22.96877, 20.601006, 26.720062)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Stairs/CSGBox3D5" unique_id=1377746912]
 transform = Transform3D(0.91923153, 0.39371732, 0, -0.39371732, 0.91923153, 0, 0, 0, 1, 1.4657288, 0.06454229, 8.546265)
 operation = 2
 size = Vector3(31.221092, 8.184338, 6.552165)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Stairs" unique_id=432024100]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 188.64304, 8.956387, -12.189252)
 size = Vector3(8.293854, 7.352646, 11.0095215)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Stairs/CSGBox3D4" unique_id=646500519]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.7251077, -0.30776787)
 operation = 2
 size = Vector3(8.443359, 7.352646, 7.8336983)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Stairs" unique_id=1061819107]
 transform = Transform3D(0.7987405, -0.6016756, 0, 0.6016756, 0.7987405, 0, 0, 0, 1, 184.37518, 4.293975, -12.217043)
 operation = 2
 size = Vector3(11.908203, 6.1967773, 9)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2/Room2_Stairs" unique_id=990317975]
 transform = Transform3D(0.9876774, -0.15650342, 0, 0.15650342, 0.9876774, 0, 0, 0, 1, 191.81308, 5.093486, -12.15692)
 size = Vector3(3.7911377, 1.3383789, 10.146057)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D34" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2" unique_id=1637754403]
 transform = Transform3D(0.022614598, 4.209939, 0.0008691661, -4.209877, 0.022609463, 0.023440674, 0.023435682, -0.0009950597, 4.209937, 166.38538, 9.161526, -27.196266)
 size = Vector3(0.238, 8.544067, 17.673435)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D35" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2" unique_id=28120004]
 transform = Transform3D(0.022614598, 4.209939, 0.0008691661, -4.209877, 0.022609463, 0.023440674, 0.023435682, -0.0009950597, 4.209937, 186.227, 9.129229, -41.195026)
 size = Vector3(0.238, 1.9098358, 11.124194)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D37" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2" unique_id=1825960874]
 transform = Transform3D(0.031881433, 3.4797873, 2.3694236, -4.2098765, 0.022609463, 0.02344067, 0.006650205, -2.3695288, 3.4798565, 163.33951, 8.891351, -73.19944)
 size = Vector3(0.238, 8.197918, 10.296613)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D36" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room2" unique_id=293314776]
 transform = Transform3D(0.022614598, 4.209939, 0.0008691661, -4.209877, 0.022609463, 0.023440674, 0.023435682, -0.0009950597, 4.209937, 186.22998, 9.284924, 1.5699527)
 size = Vector3(0.26939064, 1.9098358, 3.9516842)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D46" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS" unique_id=351081037]
+transform = Transform3D(-0.99994296, -5.604042e-16, 0.01260829, -9.9767e-16, 1, 5.1841243e-16, -0.01260829, 5.24244e-16, -0.99994296, 85.57465, 3.942669, 51.685078)
+size = Vector3(17.932117, 5.7339478, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D46" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/CSGBox3D46" unique_id=485732634]
+transform = Transform3D(0.13938418, -5.6407736e-16, 0.9902545, 1.344181e-16, 1, 4.7538305e-16, -0.9902545, 5.046165e-16, 0.13938418, 8.024567, -0.053437233, 8.794769)
+size = Vector3(19.944883, 4.2871704, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D46" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/CSGBox3D46/CSGBox3D46" unique_id=139370097]
+transform = Transform3D(0.9999883, -9.677077e-16, 0.0074272156, 5.2349977e-16, 1, 3.372058e-17, -0.0074272156, -3.9395198e-17, 0.9999883, -3.1994934, 0.017261505, -17.356056)
+size = Vector3(19.522896, 4.2871704, 1.1013184)
+material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("3_ui8i3")]
-transform = Transform3D(0.9505068, 0, 0.3107044, 0, 1, 0, -0.3107044, 0, 0.9505068, 223.69843, 2.392941, -90.52791)
-velocityInfo = SubResource("Resource_ck1tj")
+transform = Transform3D(0.9505068, 0, 0.3107044, 0, 1, 0, -0.3107044, 0, 0.9505068, 175.55298, 2.392941, -169.15819)
+velocityInfo = SubResource("Resource_8wn1s")
 
 [node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=2016545012]
 mesh = SubResource("ImmediateMesh_bfp77")
@@ -858,5 +1111,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.45947, 2.3929405, -144.50
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 177, 3, -147)
-enemyInfo = SubResource("Resource_jdm1q")
-velocityInfo = SubResource("Resource_pwarq")
+enemyInfo = SubResource("Resource_f7lwg")
+velocityInfo = SubResource("Resource_22v2i")
