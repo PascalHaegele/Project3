@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public partial class EventManager : Node {
   private Player player;
@@ -13,7 +14,10 @@ public partial class EventManager : Node {
   private readonly List<PortalArea> portalAreas = new();
   private readonly List<Altar> altars = new();
 
-  public override void _Ready() {
+  // Da wir nativ über die GDExtension gehen, ist die Instanz ein rohes GodotObject
+  private GodotObject _ambientInstance; 
+
+  public override async void _Ready() {
     player = GetTree().Root.FindChild("Player", true, false) as Player;
     playerInsanityComponent = player.GetComponent<InsanityComponent>();
 
@@ -39,7 +43,35 @@ public partial class EventManager : Node {
       if(child is PortalArea portalArea) { portalAreas.Add(portalArea); }
       if(child is Altar altar) { altars.Add(altar); }
     }
+
+    // Wartet 1 Frame, bis das FMOD C++ Plugin im Hintergrund voll hochgefahren ist
+    await Task.Yield();
+    // ÄNDERN SIE DIESE ZEILE:
+  StartAmbientSound("event:Ambient_Timeline");
+
   }
+private void StartAmbientSound(string eventPath) {
+  var fmodServer = Engine.GetSingleton("FmodServer");
+  if (fmodServer != null) {
+    
+    // Deine exakte GUID aus FMOD Studio
+    string eventGuid = "{22611b6c-032c-4b1b-a497-3a42ec10800a}";
+
+    // BEHEBT DEN ABSTURZ: Wir nutzen die offizielle GUID-Methode des Plugins!
+    // Dadurch parst das C++ Plugin den String intern korrekt als ID.
+    _ambientInstance = fmodServer.Call("create_event_instance_with_guid", eventGuid).As<GodotObject>();
+    
+    if (_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
+      _ambientInstance.Call("start");
+      GD.Print("FMOD GDExtension: Ambient Sound erfolgreich über GUID gestartet!");
+    } else {
+      GD.PrintErr("FMOD Fehler: Instanz konnte über die GUID nicht erstellt werden. Sind die Banks im Ordner FmodBank/Desktop?");
+    }
+  } else {
+    GD.PrintErr("FMOD Fehler: FmodServer-Singleton nicht gefunden!");
+  }
+}
+
 
   public override void _UnhandledInput(InputEvent @event) {
     if(@event is InputEventKey keyEvent) {
@@ -86,6 +118,11 @@ public partial class EventManager : Node {
       intensityValue,
       0.5
     );
+
+    // Reiner nativer Parameter-Aufruf an das GDExtension-Event
+    if (_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
+      _ambientInstance.Call("set_parameter", "Insanity", insanity);
+    }
   }
 
   private void OnInsanityLevelChanged(InsanityLevel level) {
@@ -102,5 +139,13 @@ public partial class EventManager : Node {
       default: break;
     }
   }
-}
 
+  // Stoppt den Sound beim Szenenwechsel sauber und gibt den RAM frei
+  protected override void Dispose(bool disposing) {
+    if (_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
+      _ambientInstance.Call("stop", 0); // 0 = FMOD_STUDIO_STOP_ALLOW_FADEOUT
+      _ambientInstance.Call("release");
+    }
+    base.Dispose(disposing);
+  }
+}
