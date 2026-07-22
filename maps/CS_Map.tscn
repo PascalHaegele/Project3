@@ -17,7 +17,6 @@
 [ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="15_24hbc"]
 [ext_resource type="Script" uid="uid://rxe51n18487c" path="res://core/TrapArea.cs" id="16_ck1tj"]
 [ext_resource type="PackedScene" uid="uid://dgu1dmh0xqo3v" path="res://objects/traps/cleaver_trap.tscn" id="17_jdm1q"]
-[ext_resource type="Resource" uid="uid://dogr5g4rklt3l" path="res://actors/enemies/infos/test.res" id="18_jdm1q"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsga6"]
 shader = ExtResource("1_ui8i3")
@@ -73,8 +72,17 @@ bottom_radius = 2.0
 height = 0.1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
-radius = 3.0
+radius = 2.5
 height = 17.5
+
+[sub_resource type="Resource" id="Resource_jdm1q"]
+resource_local_to_scene = true
+script = ExtResource("15_24hbc")
+patrolPath = PackedVector3Array(181.4789, 2.3929415, -136.71298, 182.76384, 2.3929405, -130.47568, 184.49522, 2.3929405, -128.45308)
+leashPoint = Vector3(177.45947, 2.3929405, -144.50302)
+leashLength = 50.0
+attackRange = 2.0
+metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [sub_resource type="Resource" id="Resource_pwarq"]
 resource_local_to_scene = true
@@ -680,7 +688,7 @@ transform = Transform3D(0.022614598, 4.209939, 0.0008691661, -4.209877, 0.022609
 size = Vector3(0.26939064, 1.9098358, 3.9516842)
 
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("3_ui8i3")]
-transform = Transform3D(0.9505068, 0, 0.3107044, 0, 1, 0, -0.3107044, 0, 0.9505068, 175.55298, 2.392941, -169.15819)
+transform = Transform3D(0.9505068, 0, 0.3107044, 0, 1, 0, -0.3107044, 0, 0.9505068, 223.69843, 2.392941, -90.52791)
 velocityInfo = SubResource("Resource_ck1tj")
 
 [node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=2016545012]
@@ -850,5 +858,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.45947, 2.3929405, -144.50
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 177, 3, -147)
-enemyInfo = ExtResource("18_jdm1q")
+enemyInfo = SubResource("Resource_jdm1q")
 velocityInfo = SubResource("Resource_pwarq")

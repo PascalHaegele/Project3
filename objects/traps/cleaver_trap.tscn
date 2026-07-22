@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://dgu1dmh0xqo3v"]
 
 [ext_resource type="Script" uid="uid://brk017fs3frnd" path="res://objects/traps/CleaverTrap.cs" id="1_f0on1"]
+[ext_resource type="PackedScene" uid="uid://mfdbe72fefq2" path="res://objects/traps/Cleaver.glb" id="2_rhxct"]
 [ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="2_xuijj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e8ah5"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_o8bm0"]
 size = Vector3(0.5, 1, 10)
@@ -73,8 +76,13 @@ hitbox = NodePath("AnimatableBody3D/HitboxComponent")
 [node name="AnimatableBody3D" type="AnimatableBody3D" parent="." unique_id=1979286106]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 
+[node name="Cleaver2" parent="AnimatableBody3D" unique_id=129755903 instance=ExtResource("2_rhxct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13766956, 0)
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="AnimatableBody3D" unique_id=1419093498]
 transform = Transform3D(-4.371139e-08, -8.742278e-08, -1, 0, -1, 8.742278e-08, -1, 3.821371e-15, 4.371139e-08, 0, 0, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_e8ah5")
 mesh = SubResource("PrismMesh_o8bm0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D" unique_id=893288819]
