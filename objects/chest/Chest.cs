@@ -133,7 +133,7 @@ public partial class Chest : StaticBody3D, IInteractable {
     pickupInstance.ApplyImpulse(new Vector3(
       (float)GD.RandRange(-0.3, 0.3),
       2.0f,
-      (float)GD.RandRange(-0.3, 0.3)
+      (float)GD.RandRange(-0.3, 0.3) + 4.0f
     ));
   }
 
@@ -156,7 +156,7 @@ public partial class Chest : StaticBody3D, IInteractable {
     pickupInstance.ApplyImpulse(new Vector3(
       (float)GD.RandRange(-0.3, 0.3),
       2.0f,
-      (float)GD.RandRange(-0.3, 0.3)
+      (float)GD.RandRange(-0.3, 0.3) + 4.0f
     ));
   }
 

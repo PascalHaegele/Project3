@@ -113,7 +113,9 @@ public partial class Projectile : RigidBody3D {
     if(isHoming && homingStrength > 0.0f) {
       Node3D? target = FindNearestTarget();
       if(target != null) {
-        Vector3 toTarget = (target.GlobalPosition - GlobalPosition).Normalized();
+        Vector3 targetPosition = target.GlobalPosition;
+        targetPosition.Y += 1.0f;
+        Vector3 toTarget = (targetPosition - GlobalPosition).Normalized();
         // Higher turn rate for reliable hits (cyberpunk-style tracking)
         float turnAmount = Mathf.Clamp(homingStrength * 0.6f, 0.3f, 0.9f);
         moveDirection = moveDirection.Slerp(toTarget, turnAmount).Normalized();
