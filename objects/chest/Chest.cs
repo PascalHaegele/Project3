@@ -113,7 +113,7 @@ public partial class Chest : StaticBody3D, IInteractable {
   /// </summary>
   private void DropAmmo(string ammoType, Vector3 baseSpawnPos, RandomNumberGenerator rng) {
     Pickup pickupInstance = pickup.Instantiate<Pickup>();
-    GetParent().AddChild(pickupInstance);
+    AddChild(pickupInstance);
 
     Vector3 pos = baseSpawnPos;
     pos.X += (float)GD.RandRange(-0.4, 0.4);
@@ -138,7 +138,7 @@ public partial class Chest : StaticBody3D, IInteractable {
   /// </summary>
   private void DropItem(ItemType type, PageData page, Vector3 baseSpawnPos, RandomNumberGenerator rng) {
     Pickup pickupInstance = pickup.Instantiate<Pickup>();
-    GetParent().AddChild(pickupInstance);
+    AddChild(pickupInstance);
 
     Vector3 pos = baseSpawnPos;
     pos.X += (float)GD.RandRange(-0.4, 0.4);
@@ -155,10 +155,12 @@ public partial class Chest : StaticBody3D, IInteractable {
   private Vector3 GetImpulseVector() {
     Vector3 impulse = new(
       (float)GD.RandRange(-0.3, 0.3),
-      2.0f,
-      (float)GD.RandRange(-0.3, 0.3) + 1.5f
+      3.0f,
+      (float)GD.RandRange(-0.3, 0.3) + 3.0f
     );
     impulse = impulse.Rotated(Vector3.Up, GlobalRotation.Y);
+    // impulse = GlobalBasis.Z * impulse;
+    GD.Print(impulse);
     return impulse;
   }
 
