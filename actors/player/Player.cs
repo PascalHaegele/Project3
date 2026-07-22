@@ -24,6 +24,9 @@ public partial class Player : Actor, IHitable {
   private Label potionCount;
   private InventoryUI inventoryUI;
 
+  private HealingAnimation healingAnim;
+  private bool isHealing;
+
   [Signal] public delegate void InteractingEventHandler();
 
   public override void _Ready() {
@@ -38,6 +41,11 @@ public partial class Player : Actor, IHitable {
     healthComponent = GetComponent<HealthComponent>();
     inventoryComponent = GetComponent<InventoryComponent>();
     insanityComponent = GetComponent<InsanityComponent>();
+
+    healingAnim = GetNode<HealingAnimation>("CameraPivot/HealingAnimation");
+    if(healingAnim != null) {
+      healingAnim.HealingComplete += OnHealingComplete;
+    }
 
     healthComponent.HealthChanged += OnHealthChanged;
 
@@ -90,11 +98,11 @@ public partial class Player : Actor, IHitable {
       if(input.interact) { EmitSignalInteracting(); }
       if(input.shoot) { activeWeapon.Shoot(); }
       if(input.reload) { activeWeapon.Reload(); }
-      if(input.usePotion) {
+      if(input.usePotion && !isHealing) {
         if(healthComponent.CurrentHealth < healthComponent.maxHealth) {
-          if(inventoryComponent.RemoveItem(ItemType.POTION)) {
-            healthComponent.Heal(20.0f);
-            RedrawPotionUI();
+          if(inventoryComponent.AmountOf(ItemType.POTION) > 0) {
+            isHealing = true;
+            healingAnim?.PlayHeal();
           }
         }
       }
@@ -204,6 +212,14 @@ public partial class Player : Actor, IHitable {
 
   private void RedrawPotionUI() {
     potionCount.Text = "P : " + inventoryComponent.AmountOf(ItemType.POTION);
+  }
+
+  private void OnHealingComplete() {
+    if(inventoryComponent.RemoveItem(ItemType.POTION)) {
+      healthComponent.Heal(20.0f);
+      RedrawPotionUI();
+    }
+    isHealing = false;
   }
 
   private void RedrawAmmoUI() {
