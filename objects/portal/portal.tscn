@@ -32,6 +32,7 @@ shader_parameter/noise_tex = SubResource("NoiseTexture2D_litht")
 shader_parameter/layers = 4
 shader_parameter/depth_amount = 0.2
 shader_parameter/fade_amount = 1.0
+shader_parameter/color = Color(1, 1, 0.5, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_bfp77"]
 size = Vector2(1, 2)

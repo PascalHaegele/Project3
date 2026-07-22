@@ -5,31 +5,33 @@ public struct HitInfo {
   public Vector3 direction;
 }
 
-[GlobalClass]
-public partial class HitboxComponent : Area3D {
-  public float damage;
+  [GlobalClass]
+  public partial class HitboxComponent : Area3D {
+    public float damage;
 
-  public double? lifetime;
-  public Shape3D? shape;
-  public HitLog? hitLog;
+    public double? lifetime;
+    public Shape3D? shape;
+    public HitLog? hitLog;
 
-  public override void _Ready() {
-    SetDeferred(Area3D.PropertyName.Monitorable, false);
-    AreaEntered += OnAreaEntered;
+    [Signal] public delegate void HitLandedEventHandler(float damage, Vector3 hitPoint);
 
-    if(lifetime.HasValue) {
-      Timer lifetimeTimer = new();
-      AddChild(lifetimeTimer);
-      lifetimeTimer.Timeout += QueueFree;
-      lifetimeTimer.Start(lifetime.Value);
+    public override void _Ready() {
+      SetDeferred(Area3D.PropertyName.Monitorable, false);
+      AreaEntered += OnAreaEntered;
+
+      if(lifetime.HasValue) {
+        Timer lifetimeTimer = new();
+        AddChild(lifetimeTimer);
+        lifetimeTimer.Timeout += QueueFree;
+        lifetimeTimer.Start(lifetime.Value);
+      }
+
+      if(shape != null) {
+        CollisionShape3D collisionShape = new();
+        AddChild(collisionShape);
+        collisionShape.Shape = shape;
+      }
     }
-
-    if(shape != null) {
-      CollisionShape3D collisionShape = new();
-      AddChild(collisionShape);
-      collisionShape.Shape = shape;
-    }
-  }
 
   public void DisableCollisionShapes() {
     for(int i = 0; i < GetChildCount(); i++) {
@@ -79,6 +81,9 @@ public partial class HitboxComponent : Area3D {
 
       // Apply bleed on hit
       ApplyBleed(hurtbox);
+
+      // Notify weapon system about hit for effects
+      EmitSignalHitLanded(damage, GlobalPosition);
     }
     if(GetParent() is Projectile) { DisableCollisionShapes(); }
   }

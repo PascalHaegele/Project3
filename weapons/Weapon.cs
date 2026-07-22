@@ -6,7 +6,6 @@ public partial class Weapon : Node3D {
   [Export] private Marker3D projectileSpawn;
 
   private float fireCooldown;
-  private float reloadTimer;
 
   private Projectile p;
 
@@ -25,7 +24,8 @@ public partial class Weapon : Node3D {
   [Signal] public delegate void ReloadedEventHandler();
 
   // --- Animation (delegiert an WeaponAnimation-Child) ---
-  private WeaponAnimation weaponAnim;
+  public WeaponAnimation weaponAnim;
+  private bool waitingForReloadAnimation;
 
   // Track shots for FrenziedSoul
   private bool empowerNextShot = false;
@@ -45,14 +45,25 @@ public partial class Weapon : Node3D {
     CurrentAmmo = info.magazineSize;
 
     weaponAnim = GetNodeOrNull<WeaponAnimation>("WeaponAnimation");
+    if(weaponAnim != null) {
+      weaponAnim.ReloadVisualComplete += OnReloadVisualComplete;
+      weaponAnim.CameraShake += OnWeaponCameraShake;
+      weaponAnim.CameraRecoil += OnWeaponCameraRecoil;
+      weaponAnim.MuzzleFlash += OnMuzzleFlash;
+    }
+  }
+
+  public override void _ExitTree() {
+    if(weaponAnim != null) {
+      weaponAnim.ReloadVisualComplete -= OnReloadVisualComplete;
+      weaponAnim.CameraShake -= OnWeaponCameraShake;
+      weaponAnim.CameraRecoil -= OnWeaponCameraRecoil;
+      weaponAnim.MuzzleFlash -= OnMuzzleFlash;
+    }
   }
 
   public override void _PhysicsProcess(double delta) {
     if(fireCooldown > 0.0f) { fireCooldown -= (float)delta; }
-    if(Reloading) {
-      reloadTimer -= (float)delta;
-      if(reloadTimer <= 0.0f) { FinishReload(); }
-    }
   }
 
   public void Reset() {
@@ -122,16 +133,18 @@ public partial class Weapon : Node3D {
   public void PlayJumpAnim() { weaponAnim?.PlayJump(); }
   public void PlayDashAnim() { weaponAnim?.PlayDash(); }
   public void PlaySprintAnim(bool active) { weaponAnim?.PlaySprint(active); }
-  public void PlayReloadAnim() { weaponAnim?.PlayReload(); }
 
   public void Reload() {
     if(
       Reloading ||
+      waitingForReloadAnimation ||
       CurrentAmmo >= info.magazineSize ||
       inventoryComponent.AmountOf(AmmoType) <= 0
     ) { return; }
 
     Reloading = true;
+    waitingForReloadAnimation = true;
+
     float reloadDuration = info.reloadTime;
 
     if(actor is Player player) {
@@ -146,14 +159,14 @@ public partial class Weapon : Node3D {
         );
       }
     }
-    reloadTimer = reloadDuration;
 
-    weaponAnim?.PlayReload();
+    weaponAnim?.PlayReload(reloadDuration);
 
     GD.Print($"{Name} Reloading (duration: {reloadDuration:F2})");
   }
 
-  public void FinishReload() {
+  private void OnReloadVisualComplete() {
+    waitingForReloadAnimation = false;
     Reloading = false;
 
     CurrentAmmo +=
@@ -171,7 +184,32 @@ public partial class Weapon : Node3D {
 
     EmitSignalReloaded();
 
-    GD.Print($"{Name} reload finished");
+    GD.Print($"{Name} reload finished (magazine refilled)");
     GD.Print($"{Name} Ammo: {CurrentAmmo}");
+  }
+
+  private void OnWeaponCameraShake(float amount, float duration) {
+    if(actor is Player player) {
+      CameraComponent cam = player.GetComponent<CameraComponent>();
+      cam?.Shake(amount, duration);
+    }
+  }
+
+  private void OnWeaponCameraRecoil(float amount) {
+    if(actor is Player player) {
+      CameraComponent cam = player.GetComponent<CameraComponent>();
+      cam?.RecoilKick(amount);
+    }
+  }
+
+  private void OnMuzzleFlash(Vector3 globalPosition, Vector3 forward) {
+    PackedScene flashScene = GD.Load<PackedScene>("res://weapons/muzzle_flash/MuzzleFlashEffect.tscn");
+    if(flashScene == null) { return; }
+    Node3D flash = flashScene.Instantiate<Node3D>();
+    GetTree().Root.AddChild(flash);
+    // Use projectileSpawn position (barrel tip) instead of weapon handle
+    flash.GlobalPosition = projectileSpawn.GlobalPosition;
+    float yaw = Mathf.Atan2(forward.X, -forward.Z);
+    flash.GlobalRotation = new Vector3(0.0f, yaw, 0.0f);
   }
 }

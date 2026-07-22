@@ -150,6 +150,18 @@ public partial class Player : Actor, IHitable {
       velocityComponent.AddVelocityInDirection(GetGravity() * (float)delta);
     }
     velocityComponent.Move(this);
+
+    // --- Update weapon animation motion state ---
+    UpdateWeaponMotion();
+  }
+
+  private void UpdateWeaponMotion() {
+    if(activeWeapon == null || activeWeapon.weaponAnim == null) { return; }
+    Vector2 flat = new(Velocity.X, Velocity.Z);
+    float speed = flat.Length();
+    bool sprinting = Input.IsActionPressed("sprint");
+    activeWeapon.weaponAnim.SetMotionState(speed, sprinting);
+    activeWeapon.weaponAnim.SetGrounded(IsOnFloor(), Velocity.Y);
   }
 
   public override void _UnhandledInput(InputEvent @event) {
@@ -159,6 +171,11 @@ public partial class Player : Actor, IHitable {
       Input.MouseMode =
         Input.MouseMode == Input.MouseModeEnum.Captured ?
         Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
+    }
+
+    // Feed mouse look velocity into weapon animation for inertia
+    if(activeWeapon?.weaponAnim != null && @event is InputEventMouseMotion motion) {
+      activeWeapon.weaponAnim.SetLookVelocity(motion.Relative);
     }
   }
 

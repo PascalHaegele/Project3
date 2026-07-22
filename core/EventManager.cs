@@ -31,6 +31,10 @@ public partial class EventManager : Node {
 
     skyShader = environment.Environment.Sky.SkyMaterial as ShaderMaterial;
 
+    if(GetNodeOrNull("HitstopManager") == null) {
+      AddChild(new HitstopManager());
+    }
+
     foreach(Node child in GetChildren()) {
       if(child is PortalArea portalArea) { portalAreas.Add(portalArea); }
       if(child is Altar altar) { altars.Add(altar); }

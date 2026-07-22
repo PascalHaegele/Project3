@@ -23,8 +23,12 @@ airborneSpeed = 5.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
+radius = 0.4
+height = 1.8
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5k4qt"]
+radius = 0.4
+height = 1.8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yibi5"]
 bg_color = Color(0.14117648, 0.14117648, 0.14117648, 0.49803922)
@@ -98,7 +102,7 @@ velocityInfo = SubResource("Resource_pwco0")
 components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("PlayerStateMachine"), NodePath("HealthComponent"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent"), NodePath("InsanityComponent"), NodePath("SocketComponent")]
 
 [node name="BodyCollision" type="CollisionShape3D" parent="." unique_id=859779642]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_v4a0d")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=1853229366]
@@ -156,7 +160,7 @@ script = ExtResource("15_qrxv1")
 metadata/_custom_type_script = "uid://t8p3r0lninay"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent" unique_id=2036225698]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_5k4qt")
 
 [node name="InventoryComponent" type="Node" parent="." unique_id=1260849864]
