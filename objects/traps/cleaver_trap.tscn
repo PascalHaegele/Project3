@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://brk017fs3frnd" path="res://objects/traps/CleaverTrap.cs" id="1_f0on1"]
 [ext_resource type="PackedScene" uid="uid://mfdbe72fefq2" path="res://objects/traps/Cleaver.glb" id="2_rhxct"]
 [ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="2_xuijj"]
+[ext_resource type="Texture2D" uid="uid://lv4ptmsm7xpg" path="res://maps/Map 1_final_M_Brick_albedo.png" id="4_iwc05"]
+[ext_resource type="Texture2D" uid="uid://kwnbrnpp1w4" path="res://maps/Map 1_final_M_Brick_normal.png" id="5_pftkn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e8ah5"]
 
@@ -15,7 +17,14 @@ points = PackedVector3Array(-0.25, -0.5, -5, 0.25, -0.5, -5, -0.25, -0.5, 5, 0, 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
 height = 10.0
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dw125"]
+albedo_texture = ExtResource("4_iwc05")
+normal_enabled = true
+normal_texture = ExtResource("5_pftkn")
+uv1_triplanar = true
+
 [sub_resource type="BoxMesh" id="BoxMesh_bfp77"]
+material = SubResource("StandardMaterial3D_dw125")
 size = Vector3(0.5, 5.5004883, 0.5)
 
 [sub_resource type="Animation" id="Animation_f0on1"]
