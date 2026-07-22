@@ -130,11 +130,7 @@ public partial class Chest : StaticBody3D, IInteractable {
     }
 
     // Use same impulse as original chest
-    pickupInstance.ApplyImpulse(new Vector3(
-      (float)GD.RandRange(-0.3, 0.3),
-      2.0f,
-      (float)GD.RandRange(-0.3, 0.3) + 4.0f
-    ));
+    pickupInstance.ApplyImpulse(GetImpulseVector());
   }
 
   /// <summary>
@@ -153,11 +149,17 @@ public partial class Chest : StaticBody3D, IInteractable {
     pickupInstance.pageData = page;
 
     // Use same impulse as original chest
-    pickupInstance.ApplyImpulse(new Vector3(
+    pickupInstance.ApplyImpulse(GetImpulseVector());
+  }
+
+  private Vector3 GetImpulseVector() {
+    Vector3 impulse = new(
       (float)GD.RandRange(-0.3, 0.3),
       2.0f,
-      (float)GD.RandRange(-0.3, 0.3) + 4.0f
-    ));
+      (float)GD.RandRange(-0.3, 0.3) + 1.5f
+    );
+    impulse = impulse.Rotated(Vector3.Up, GlobalRotation.Y);
+    return impulse;
   }
 
   private string FindBestAnimation() {
