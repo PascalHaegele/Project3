@@ -940,6 +940,9 @@ transform = Transform3D(0.9999883, -9.677077e-16, 0.0074272156, 5.2349977e-16, 1
 size = Vector3(19.522896, 4.2871704, 1.1013184)
 material = SubResource("ORMMaterial3D_o0ahx")
 
+[node name="FmodBankLoader" type="FmodBankLoader" parent="NavigationRegion3D" unique_id=1724278068]
+bank_paths = ["res://FmodBank/Desktop/Master.strings.bank", "res://FmodBank/Desktop/Master.bank", "res://FmodBank/Desktop/SFX_Common.bank"]
+
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("3_ui8i3")]
 transform = Transform3D(0.9505068, 0, 0.3107044, 0, 1, 0, -0.3107044, 0, 0.9505068, 175.55298, 2.392941, -169.15819)
 velocityInfo = SubResource("Resource_8wn1s")

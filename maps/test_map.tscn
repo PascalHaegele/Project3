@@ -204,3 +204,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.392482, 0, -0.7654152)
 
 [node name="PlayerSpawn" type="Marker3D" parent="." unique_id=160749305]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.403597)
+
+[node name="FmodBankLoader" type="FmodBankLoader" parent="." unique_id=810912414]
+bank_paths = ["res://FmodBank/Desktop/Master.strings.bank", "res://FmodBank/Desktop/Master.bank", "res://FmodBank/Desktop/SFX_Common.bank"]
