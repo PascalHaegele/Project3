@@ -81,7 +81,7 @@ spot_attenuation = 0.03
 transform = Transform3D(-0.18309447, 0, -0.98309535, 0, 1, 0, 0.98309535, 0, -0.18309447, 82.183334, 1.9073486e-06, -41.74434)
 velocityInfo = SubResource("Resource_e0egg")
 
-[node name="FmodListener3D" type="FmodListener3D" parent="Player" unique_id=1167833107]
+[node name="FmodListener2D" type="FmodListener2D" parent="Player" unique_id=2118825060]
 
 [node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=1294511446]
 mesh = SubResource("ImmediateMesh_bfp77")
