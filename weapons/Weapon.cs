@@ -1,10 +1,16 @@
 using Godot;
 
+public enum WeaponSoundType {
+    Shot,
+    Reload,
+    EmptyShot,
+    Empty
+}
 [GlobalClass]
 public partial class Weapon : Node3D {
   [Export] public WeaponInfo info;
   [Export] private Marker3D projectileSpawn;
-
+  //[Export] private Node3D fmodEventEmitterNode;
   private float fireCooldown;
 
   private Projectile p;
@@ -31,6 +37,7 @@ public partial class Weapon : Node3D {
   private bool empowerNextShot = false;
 
   public override void _Ready() {
+
     aimCast = GetNode<RayCast3D>("../AimCast");
     aimCast.TargetPosition = new(0.0f, 0.0f, -info.range);
 
@@ -73,13 +80,20 @@ public partial class Weapon : Node3D {
 
   public void Shoot() {
     if(Reloading || fireCooldown > 0.0f) { return; }
-    if(CurrentAmmo <= 0) { Reload(); return; }
+    if(CurrentAmmo <= 0) {
+       PlayWeaponSound(WeaponSoundType.EmptyShot);
+
+       return;
+
+       }
 
     CurrentAmmo--;
 
     fireCooldown = 1.0f / info.fireRate;
 
     p = info.projectile.Instantiate<Projectile>();
+    PlayWeaponSound(WeaponSoundType.Shot);
+
     if(p == null) { return; }
 
     // Track shot count for FrenziedSoul effect
@@ -160,7 +174,7 @@ public partial class Weapon : Node3D {
     }
 
     weaponAnim?.PlayReload(reloadDuration);
-
+    PlayWeaponSound(WeaponSoundType.Reload);
     GD.Print($"{Name} Reloading (duration: {reloadDuration:F2})");
   }
 
@@ -215,4 +229,43 @@ public partial class Weapon : Node3D {
       if(child is GpuParticles3D particle) { particle.Emitting = true; }
     }
   }
+  private string GetEventPathForType(WeaponSoundType soundType) {
+        switch (soundType) {
+            case WeaponSoundType.Shot:
+                return "event:/GunShot_Timeline";
+            case WeaponSoundType.Reload:
+                return "event:/Gun_Reload_Timeline";
+            case WeaponSoundType.EmptyShot:
+                return "event:/EmptyWeapon_Action";
+            default:
+                return string.Empty;
+        }
+    }
+
+public void PlayWeaponSound(WeaponSoundType soundType) {
+    string eventPath = GetEventPathForType(soundType);
+
+    if (!string.IsNullOrEmpty(eventPath)) {
+        var fmodServer = Engine.GetSingleton("FmodServer");
+        if (fmodServer != null) {
+            if (soundType == WeaponSoundType.Reload) {
+                var eventInstance = fmodServer.Call("create_event_instance", eventPath).As<GodotObject>();
+                if (eventInstance != null && GodotObject.IsInstanceValid(eventInstance)) {
+                    eventInstance.Call("set_parameter_by_name", "ShotCount", (float)CurrentAmmo);
+                    eventInstance.Call("start");
+                    eventInstance.Call("release");
+                    GD.Print($">>> FMOD Reload (mit Parameter {CurrentAmmo}) gespielt");
+                }
+            }
+            else {
+
+                fmodServer.Call("play_one_shot", eventPath);
+                GD.Print($">>> FMOD 2D-Sound gespielt: {soundType} ({eventPath})");
+            }
+
+        } else {
+            GD.PrintErr(">>> FMOD Fehler: FmodServer-Singleton nicht gefunden!");
+        }
+    }
+}
 }

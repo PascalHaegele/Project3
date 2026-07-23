@@ -180,6 +180,8 @@ velocityInfo = SubResource("Resource_7wt56")
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("1_k1jtb")]
 velocityInfo = SubResource("Resource_6emo8")
 
+[node name="FmodListener2D" type="FmodListener2D" parent="Player" unique_id=989207962]
+
 [node name="Chest" parent="." unique_id=1750432848 instance=ExtResource("5_cabd0")]
 transform = Transform3D(0.2525325, 0, 0.96758854, 0, 1, 0, -0.96758854, 0, 0.2525325, 4.5567584, -2.3841858e-07, 0.13444328)
 

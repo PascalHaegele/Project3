@@ -1,5 +1,9 @@
 using Godot;
-
+public enum ItemSoundType {
+    Page,
+    Ammo,
+    Empty
+}
 public partial class Player : Actor, IHitable {
   private VelocityComponent velocityComponent;
   private CameraComponent camera;
@@ -128,6 +132,7 @@ public partial class Player : Actor, IHitable {
               hoveredPickup.pageData != null
             ) {
               inventoryComponent.AddPageItem(hoveredPickup.pageData);
+              PlayItemSound(ItemSoundType.Page);
             }
 
             RedrawUI();
@@ -236,4 +241,35 @@ public partial class Player : Actor, IHitable {
   private void OnInsanityChanged(float insanity) {
     insanityMeter.Value = insanity;
   }
+  private string GetEventPathForType(ItemSoundType soundType) {
+        switch (soundType) {
+            case ItemSoundType.Page:
+                return "event:/Pages_Interaction_Action";
+            case ItemSoundType.Ammo:
+                return "event:/Pages_Interaction_Action";
+            default:
+                return string.Empty;
+        }
+    }
+
+
+
+
+  public void PlayItemSound(ItemSoundType soundType) {
+    string eventPath = GetEventPathForType(soundType);
+
+    if (!string.IsNullOrEmpty(eventPath)) {
+        var fmodServer = Engine.GetSingleton("FmodServer");
+        if (fmodServer != null) {
+            
+          
+            fmodServer.Call("play_one_shot", eventPath);
+
+            GD.Print($">>> FMOD 2D Sound abgespielt: {soundType} ({eventPath})");
+
+        } else {
+            GD.PrintErr(">>> FMOD Fehler: FmodServer-Singleton nicht gefunden!");
+        }
+    }
+}
 }
