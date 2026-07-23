@@ -58,6 +58,9 @@ public partial class TestEnemy : Enemy, IHitable {
       direction.Y = GlobalPosition.Y;
       LookAt(GlobalPosition + direction);
     }
+    if(!healthComponent.IsAlive && hitInfo.shooter is Player player) {
+      player.GetComponent<InsanityComponent>().AddInsanity(10.0f);
+    }
   }
 
   private void OnHealthChanged(float newHealth) {

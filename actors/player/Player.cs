@@ -189,7 +189,7 @@ public partial class Player : Actor, IHitable {
 
   public void RecieveHit(HitInfo info) {
     healthComponent.TakeDamage(info.damage);
-    insanityComponent.AddInsanity(5.0f);
+    insanityComponent.AddInsanity(10.0f);
   }
 
   public void Reset() {

@@ -10,12 +10,14 @@ public partial class EventManager : Node {
 
   private WorldEnvironment environment;
   private ShaderMaterial skyShader;
+  private float sunLayer;
+  private float sunLayerTime;
 
   private readonly List<PortalArea> portalAreas = new();
   private readonly List<Altar> altars = new();
 
   // Da wir nativ über die GDExtension gehen, ist die Instanz ein rohes GodotObject
-  private GodotObject _ambientInstance; 
+  private GodotObject _ambientInstance;
 
   public override async void _Ready() {
     player = GetTree().Root.FindChild("Player", true, false) as Player;
@@ -47,30 +49,39 @@ public partial class EventManager : Node {
     // Wartet 1 Frame, bis das FMOD C++ Plugin im Hintergrund voll hochgefahren ist
     await Task.Yield();
     // ÄNDERN SIE DIESE ZEILE:
-  StartAmbientSound("event:Ambient_Timeline");
-
+    StartAmbientSound("event:Ambient_Timeline");
   }
-private void StartAmbientSound(string eventPath) {
-  var fmodServer = Engine.GetSingleton("FmodServer");
-  if (fmodServer != null) {
-    
-    // Deine exakte GUID aus FMOD Studio
-    string eventGuid = "{22611b6c-032c-4b1b-a497-3a42ec10800a}";
 
-    // BEHEBT DEN ABSTURZ: Wir nutzen die offizielle GUID-Methode des Plugins!
-    // Dadurch parst das C++ Plugin den String intern korrekt als ID.
-    _ambientInstance = fmodServer.Call("create_event_instance_with_guid", eventGuid).As<GodotObject>();
-    
-    if (_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
-      _ambientInstance.Call("start");
-      GD.Print("FMOD GDExtension: Ambient Sound erfolgreich über GUID gestartet!");
-    } else {
-      GD.PrintErr("FMOD Fehler: Instanz konnte über die GUID nicht erstellt werden. Sind die Banks im Ordner FmodBank/Desktop?");
+  public override void _PhysicsProcess(double delta) {
+    sunLayerTime += (float)delta;
+    if(sunLayerTime >= 1.0f / 30.0f) {
+      sunLayerTime = 0.0f;
+      sunLayer = Mathf.PosMod(++sunLayer, 60.0f);
+      skyShader.SetShaderParameter("sun_tex_layer", sunLayer);
     }
-  } else {
-    GD.PrintErr("FMOD Fehler: FmodServer-Singleton nicht gefunden!");
   }
-}
+
+  private void StartAmbientSound(string eventPath) {
+    var fmodServer = Engine.GetSingleton("FmodServer");
+    if(fmodServer != null) {
+
+      // Deine exakte GUID aus FMOD Studio
+      string eventGuid = "{22611b6c-032c-4b1b-a497-3a42ec10800a}";
+
+      // BEHEBT DEN ABSTURZ: Wir nutzen die offizielle GUID-Methode des Plugins!
+      // Dadurch parst das C++ Plugin den String intern korrekt als ID.
+      _ambientInstance = fmodServer.Call("create_event_instance_with_guid", eventGuid).As<GodotObject>();
+
+      if(_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
+        _ambientInstance.Call("start");
+        GD.Print("FMOD GDExtension: Ambient Sound erfolgreich über GUID gestartet!");
+      } else {
+        GD.PrintErr("FMOD Fehler: Instanz konnte über die GUID nicht erstellt werden. Sind die Banks im Ordner FmodBank/Desktop?");
+      }
+    } else {
+      GD.PrintErr("FMOD Fehler: FmodServer-Singleton nicht gefunden!");
+    }
+  }
 
 
   public override void _UnhandledInput(InputEvent @event) {
@@ -120,7 +131,7 @@ private void StartAmbientSound(string eventPath) {
     );
 
     // Reiner nativer Parameter-Aufruf an das GDExtension-Event
-    if (_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
+    if(_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
       _ambientInstance.Call("set_parameter", "Insanity", insanity);
     }
   }
@@ -142,7 +153,7 @@ private void StartAmbientSound(string eventPath) {
 
   // Stoppt den Sound beim Szenenwechsel sauber und gibt den RAM frei
   protected override void Dispose(bool disposing) {
-    if (_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
+    if(_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
       _ambientInstance.Call("stop", 0); // 0 = FMOD_STUDIO_STOP_ALLOW_FADEOUT
       _ambientInstance.Call("release");
     }

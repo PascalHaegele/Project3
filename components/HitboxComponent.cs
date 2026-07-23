@@ -3,10 +3,13 @@ using Godot;
 public struct HitInfo {
   public float damage;
   public Vector3 direction;
+  public Actor shooter;
 }
 
   [GlobalClass]
   public partial class HitboxComponent : Area3D {
+    public Actor actor;
+
     public float damage;
 
     public double? lifetime;
@@ -70,6 +73,7 @@ public struct HitInfo {
       if(GetParent() is Projectile p) {
         info.direction = GlobalPosition.DirectionTo(p.shotPosition);
       }
+      info.shooter = actor;
 
       if(hitLog != null) {
         Node hurtboxOwner = hurtbox.GetParent();

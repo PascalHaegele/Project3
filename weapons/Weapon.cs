@@ -12,7 +12,7 @@ public partial class Weapon : Node3D {
   private RayCast3D aimCast;
   private RayCast3D projectileCast;
 
-  private Actor actor;
+  public Actor actor;
   private InventoryComponent inventoryComponent;
 
   public ItemType AmmoType { get; private set; }
@@ -80,7 +80,6 @@ public partial class Weapon : Node3D {
     fireCooldown = 1.0f / info.fireRate;
 
     p = info.projectile.Instantiate<Projectile>();
-    // p.hitbox.EnableCollisionShapes();
     if(p == null) { return; }
 
     // Track shot count for FrenziedSoul effect
@@ -203,13 +202,17 @@ public partial class Weapon : Node3D {
   }
 
   private void OnMuzzleFlash(Vector3 globalPosition, Vector3 forward) {
-    PackedScene flashScene = GD.Load<PackedScene>("res://weapons/muzzle_flash/MuzzleFlashEffect.tscn");
-    if(flashScene == null) { return; }
-    Node3D flash = flashScene.Instantiate<Node3D>();
-    GetTree().Root.AddChild(flash);
-    // Use projectileSpawn position (barrel tip) instead of weapon handle
-    flash.GlobalPosition = projectileSpawn.GlobalPosition;
-    float yaw = Mathf.Atan2(forward.X, -forward.Z);
-    flash.GlobalRotation = new Vector3(0.0f, yaw, 0.0f);
+    // PackedScene flashScene = GD.Load<PackedScene>("res://weapons/muzzle_flash/MuzzleFlashEffect.tscn");
+    // if(flashScene == null) { return; }
+    // Node3D flash = flashScene.Instantiate<Node3D>();
+    // GetTree().Root.AddChild(flash);
+    // // Use projectileSpawn position (barrel tip) instead of weapon handle
+    // flash.GlobalPosition = projectileSpawn.GlobalPosition;
+    // float yaw = Mathf.Atan2(forward.X, -forward.Z);
+    // flash.GlobalRotation = new Vector3(0.0f, yaw, 0.0f);
+
+    foreach(Node child in GetNode("MuzzleFlash2").GetChildren()) {
+      if(child is GpuParticles3D particle) { particle.Emitting = true; }
+    }
   }
 }

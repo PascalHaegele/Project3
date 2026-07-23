@@ -1,5 +1,4 @@
 using Godot;
-using System.Collections.Generic;
 
 [GlobalClass]
 public partial class Projectile : RigidBody3D {
@@ -35,9 +34,10 @@ public partial class Projectile : RigidBody3D {
 
     weapon = GetParent<Weapon>();
     hitbox = GetNode<HitboxComponent>("HitboxComponent");
+    hitbox.actor = weapon.actor;
 
     // Initialize current direction to forward so homing starts smoothly
-    currentDirection = -GlobalBasis.Z;
+    // currentDirection = -GlobalBasis.Z;
 
     if (weapon.GetParent() is Player) {
       hitbox.CollisionLayer = (uint)CollisionLayerEnum.PLAYER_HITBOX;
@@ -108,7 +108,8 @@ public partial class Projectile : RigidBody3D {
   public override void _PhysicsProcess(double delta) {
     if(hit) { return; }
 
-    Vector3 moveDirection = currentDirection;
+    Vector3 moveDirection =
+      currentDirection == Vector3.Zero ? -GlobalBasis.Z : currentDirection;
 
     if(isHoming && homingStrength > 0.0f) {
       Node3D? target = FindNearestTarget();
@@ -124,13 +125,21 @@ public partial class Projectile : RigidBody3D {
     }
 
     KinematicCollision3D collision3D =
-      MoveAndCollide(moveDirection * weapon.info.projectileSpeed * (float)delta);
+      MoveAndCollide(
+        moveDirection *
+        weapon.info.projectileSpeed *
+        (float)delta
+      );
 
     if(collision3D != null) {
       hit = true;
       hitPosition = GlobalPosition;
       Freeze = true;
       freeTimer.Start(5.0);
+
+      foreach(Node child in GetNode("ProjectileHit").GetChildren()) {
+        if(child is GpuParticles3D particle) { particle.Emitting = true; }
+      }
 
       if(collision3D.GetCollider() is PhysicsBody3D body) {
         weapon.RemoveChild(this);

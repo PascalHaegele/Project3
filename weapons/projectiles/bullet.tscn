@@ -2,6 +2,13 @@
 
 [ext_resource type="Script" uid="uid://bl7eube2r4d4u" path="res://weapons/projectiles/Projectile.cs" id="1_7y75p"]
 [ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="3_156db"]
+[ext_resource type="PackedScene" uid="uid://df611nipwbaja" path="res://weapons/projectiles/projectile_hit.tscn" id="3_spl0t"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6wg76"]
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_color = Color(0.76, 0.65967995, 0.48639998, 1)
+emission_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gpvnp"]
 
@@ -53,6 +60,7 @@ metadata/_custom_type_script = "uid://bl7eube2r4d4u"
 
 [node name="Ammo_Mu1" type="MeshInstance3D" parent="." unique_id=982766451]
 transform = Transform3D(-0.004, 0, 0, 0, 1.7484555e-10, -0.004, 0, 0.004, 1.7484555e-10, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_6wg76")
 mesh = SubResource("ArrayMesh_xfe3t")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=730526649]
@@ -68,3 +76,5 @@ metadata/_custom_type_script = "uid://lc0clvytiu8r"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent" unique_id=596898562]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.019409088)
 shape = SubResource("SphereShape3D_bfp77")
+
+[node name="ProjectileHit" parent="." unique_id=184866971 instance=ExtResource("3_spl0t")]

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://di3l0krand30c" path="res://weapons/revolver/Revolver.glb" id="3_b7g5s"]
 [ext_resource type="PackedScene" uid="uid://cvm5xga0cvc2f" path="res://weapons/projectiles/bullet.tscn" id="3_cffpg"]
 [ext_resource type="Script" uid="uid://h1ny242on8kv" path="res://weapons/WeaponAnimation.cs" id="4_k6yiw"]
+[ext_resource type="PackedScene" uid="uid://c80pqtjcmd17u" path="res://weapons/muzzle_flash/muzzle_flash.tscn" id="6_5h0lk"]
 
 [sub_resource type="Resource" id="Resource_bfp77"]
 script = ExtResource("2_cffpg")
@@ -42,3 +43,11 @@ reloadRotY = 0.85
 reloadRotZ = 1.5
 reloadDropDuration = 0.5
 reloadReturnDuration = 0.2
+
+[node name="MuzzleFlash2" parent="." unique_id=23082700 instance=ExtResource("6_5h0lk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1473462, -0.23711106)
+
+[node name="ShockWave" parent="MuzzleFlash2" index="0" unique_id=625417336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.009905532)
+
+[editable path="MuzzleFlash2"]

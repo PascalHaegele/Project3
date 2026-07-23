@@ -24,8 +24,11 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsga6"]
 shader = ExtResource("1_ui8i3")
 shader_parameter/sky_tex = ExtResource("2_a1t7w")
+shader_parameter/sun_tex_layer = 1.0
+shader_parameter/sun_size = 0.99
+shader_parameter/sun_softness = 0.002
 shader_parameter/background_color = Color(0.027685335, 0.05360575, 0.117052, 1)
-shader_parameter/accent_color = Color(0.7925, 0.62001187, 0.28809097, 1)
+shader_parameter/accent_color = Color(0.7921569, 0.61960787, 0.28627452, 1)
 shader_parameter/accent_intensity = 0.0
 
 [sub_resource type="Sky" id="Sky_pbr4s"]

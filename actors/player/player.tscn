@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_0wchr"]
 [ext_resource type="Script" uid="uid://dc3slcqxdplvw" path="res://components/CameraComponent.cs" id="3_lsln6"]
 [ext_resource type="PackedScene" uid="uid://cohtww8gqmevr" path="res://weapons/revolver/revolver.tscn" id="4_0wchr"]
+[ext_resource type="Script" uid="uid://c7wf3qnrj2nqd" path="res://actors/player/HealingAnimation.cs" id="5_healing"]
 [ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="7_hiosj"]
 [ext_resource type="Script" uid="uid://dtal7j6ccfpjj" path="res://components/InputComponent.cs" id="8_hiosj"]
 [ext_resource type="Script" uid="uid://blliffgtkxkfr" path="res://components/InsanityComponent.cs" id="11_7aotg"]
@@ -14,7 +15,6 @@
 [ext_resource type="PackedScene" uid="uid://dn261xqm15ik0" path="res://ui/health_bar.tscn" id="18_qrxv1"]
 [ext_resource type="Script" uid="uid://cvmxf2r8l8urx" path="res://actors/player/PlayerStateMachine.cs" id="19_dqf5y"]
 [ext_resource type="Script" uid="uid://dgu23pvwogb43" path="res://components/SocketComponent.cs" id="20_socket"]
-[ext_resource type="Script" path="res://actors/player/HealingAnimation.cs" id="5_healing"]
 
 [sub_resource type="Resource" id="Resource_pwco0"]
 resource_local_to_scene = true
@@ -134,8 +134,9 @@ debug_shape_thickness = 1
 
 [node name="ProjectileCast" type="RayCast3D" parent="CameraPivot" unique_id=943272919]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12808561, -0.11406362, 0)
+collision_mask = 5
 
-[node name="HealingAnimation" type="Node3D" parent="CameraPivot"]
+[node name="HealingAnimation" type="Node3D" parent="CameraPivot" unique_id=1974506671]
 script = ExtResource("5_healing")
 
 [node name="InputComponent" type="Node" parent="." unique_id=536807353]
@@ -243,10 +244,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -5.0
-offset_top = -5.0
-offset_right = 5.0
-offset_bottom = 5.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
