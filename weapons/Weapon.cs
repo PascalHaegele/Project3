@@ -3,6 +3,7 @@ using Godot;
 public enum WeaponSoundType {
     Shot,
     Reload,
+    EmptyShot,
     Empty
 }
 [GlobalClass]
@@ -79,14 +80,18 @@ public partial class Weapon : Node3D {
 
   public void Shoot() {
     if(Reloading || fireCooldown > 0.0f) { return; }
-    if(CurrentAmmo <= 0) { Reload(); return; }
+    if(CurrentAmmo <= 0) {
+       PlayWeaponSound(WeaponSoundType.EmptyShot);
+  
+       return; 
+       
+       }
 
     CurrentAmmo--;
     
     fireCooldown = 1.0f / info.fireRate;
 
     p = info.projectile.Instantiate<Projectile>();
-
     PlayWeaponSound(WeaponSoundType.Shot);
 
 
@@ -228,6 +233,8 @@ public partial class Weapon : Node3D {
                 return "event:/GunShot_Timeline";
             case WeaponSoundType.Reload:
                 return "event:/Gun_Reload_Timeline";
+            case WeaponSoundType.EmptyShot:
+                return "event:/EmptyWeapon_Action";
             default:
                 return string.Empty;
         }
@@ -239,31 +246,19 @@ public void PlayWeaponSound(WeaponSoundType soundType) {
     if (!string.IsNullOrEmpty(eventPath)) {
         var fmodServer = Engine.GetSingleton("FmodServer");
         if (fmodServer != null) {
-            
-            var eventInstance = fmodServer.Call("create_event_instance", eventPath).As<GodotObject>();
-
-            if (eventInstance != null && GodotObject.IsInstanceValid(eventInstance)) {
-                
-              
-                Vector3 soundPos = projectileSpawn != null ? projectileSpawn.GlobalPosition : GlobalPosition;
-
-             
-                Transform3D soundTransform = new Transform3D(Basis.Identity, soundPos);
-                eventInstance.Call("set_3d_attributes", soundTransform);
-
-               
-                if (soundType == WeaponSoundType.Reload) {
+            if (soundType == WeaponSoundType.Reload) {
+                var eventInstance = fmodServer.Call("create_event_instance", eventPath).As<GodotObject>();
+                if (eventInstance != null && GodotObject.IsInstanceValid(eventInstance)) {
                     eventInstance.Call("set_parameter_by_name", "ShotCount", (float)CurrentAmmo);
-                    GD.Print($">>> FMOD Parameter 'ShotCount' gesetzt auf: {CurrentAmmo}");
+                    eventInstance.Call("start");
+                    eventInstance.Call("release");
+                    GD.Print($">>> FMOD Reload (mit Parameter {CurrentAmmo}) gespielt");
                 }
-
-              
-                eventInstance.Call("start");
-                eventInstance.Call("release");
-
-                GD.Print($">>> FMOD Timeline gespielt: {soundType} ({eventPath}) an Position {soundPos}");
-            } else {
-                GD.PrintErr($">>> FMOD Fehler: Konnte Event-Instanz für {eventPath} nicht erstellen!");
+            } 
+            else {
+          
+                fmodServer.Call("play_one_shot", eventPath);
+                GD.Print($">>> FMOD 2D-Sound gespielt: {soundType} ({eventPath})");
             }
 
         } else {
