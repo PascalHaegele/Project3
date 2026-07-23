@@ -19,7 +19,14 @@ void sky() {
 	if(length(COLOR) < 0.1) {
 		COLOR = background_color;
 	}
+	
 	float sun_dot = max(0.0, dot(EYEDIR, LIGHT0_DIRECTION));
 	float sun = smoothstep(sun_size, sun_size + sun_softness, sun_dot);
-	COLOR += sun * texture(sun_tex, vec3(EYEDIR.xz * 4.4 + vec2(0.4), sun_tex_layer)).rgb;
+	vec3 sun_col = sun * texture(sun_tex, vec3(EYEDIR.xz * 4.4 + vec2(0.4), sun_tex_layer)).rgb;
+	
+	if(sun_dot >= sun_size + 0.0075) {
+		COLOR = sun_col;
+	} else {
+		COLOR += sun_col;
+	}
 }
