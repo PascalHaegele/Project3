@@ -1,12 +1,17 @@
 using Godot;
 
+public enum WeaponSoundType {
+    Shot,
+    Reload,
+    Empty
+}
 [GlobalClass]
 public partial class Weapon : Node3D {
   [Export] public WeaponInfo info;
   [Export] private Marker3D projectileSpawn;
-
+  //[Export] private Node3D fmodEventEmitterNode;
   private float fireCooldown;
-
+  
   private Projectile p;
 
   private RayCast3D aimCast;
@@ -31,6 +36,7 @@ public partial class Weapon : Node3D {
   private bool empowerNextShot = false;
 
   public override void _Ready() {
+    
     aimCast = GetNode<RayCast3D>("../AimCast");
     aimCast.TargetPosition = new(0.0f, 0.0f, -info.range);
 
@@ -76,10 +82,14 @@ public partial class Weapon : Node3D {
     if(CurrentAmmo <= 0) { Reload(); return; }
 
     CurrentAmmo--;
-
+    
     fireCooldown = 1.0f / info.fireRate;
 
     p = info.projectile.Instantiate<Projectile>();
+
+    PlayWeaponSound(WeaponSoundType.Shot);
+
+
     // p.hitbox.EnableCollisionShapes();
     if(p == null) { return; }
 
@@ -161,7 +171,7 @@ public partial class Weapon : Node3D {
     }
 
     weaponAnim?.PlayReload(reloadDuration);
-
+    PlayWeaponSound(WeaponSoundType.Reload);
     GD.Print($"{Name} Reloading (duration: {reloadDuration:F2})");
   }
 
@@ -212,4 +222,53 @@ public partial class Weapon : Node3D {
     float yaw = Mathf.Atan2(forward.X, -forward.Z);
     flash.GlobalRotation = new Vector3(0.0f, yaw, 0.0f);
   }
+  private string GetEventPathForType(WeaponSoundType soundType) {
+        switch (soundType) {
+            case WeaponSoundType.Shot:
+                return "event:/GunShot_Timeline";
+            case WeaponSoundType.Reload:
+                return "event:/Gun_Reload_Timeline";
+            default:
+                return string.Empty;
+        }
+    }
+
+public void PlayWeaponSound(WeaponSoundType soundType) {
+    string eventPath = GetEventPathForType(soundType);
+
+    if (!string.IsNullOrEmpty(eventPath)) {
+        var fmodServer = Engine.GetSingleton("FmodServer");
+        if (fmodServer != null) {
+            
+            var eventInstance = fmodServer.Call("create_event_instance", eventPath).As<GodotObject>();
+
+            if (eventInstance != null && GodotObject.IsInstanceValid(eventInstance)) {
+                
+              
+                Vector3 soundPos = projectileSpawn != null ? projectileSpawn.GlobalPosition : GlobalPosition;
+
+             
+                Transform3D soundTransform = new Transform3D(Basis.Identity, soundPos);
+                eventInstance.Call("set_3d_attributes", soundTransform);
+
+               
+                if (soundType == WeaponSoundType.Reload) {
+                    eventInstance.Call("set_parameter_by_name", "ShotCount", (float)CurrentAmmo);
+                    GD.Print($">>> FMOD Parameter 'ShotCount' gesetzt auf: {CurrentAmmo}");
+                }
+
+              
+                eventInstance.Call("start");
+                eventInstance.Call("release");
+
+                GD.Print($">>> FMOD Timeline gespielt: {soundType} ({eventPath}) an Position {soundPos}");
+            } else {
+                GD.PrintErr($">>> FMOD Fehler: Konnte Event-Instanz für {eventPath} nicht erstellen!");
+            }
+
+        } else {
+            GD.PrintErr(">>> FMOD Fehler: FmodServer-Singleton nicht gefunden!");
+        }
+    }
+}
 }
