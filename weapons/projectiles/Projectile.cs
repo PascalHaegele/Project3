@@ -43,6 +43,8 @@ public partial class Projectile : RigidBody3D {
       hitbox.CollisionLayer = (uint)CollisionLayerEnum.PLAYER_HITBOX;
       hitbox.CollisionMask = (uint)CollisionLayerEnum.ENEMY_HURTBOX;
     }
+
+    ApplyDamageFalloff();
   }
 
   /// <summary>
@@ -64,10 +66,25 @@ public partial class Projectile : RigidBody3D {
     }
 
     hitbox.damage = baseDamage;
+    ApplyDamageFalloff();
     if (isEmpowered) {
       hitbox.damage *= 2.0f;
     }
-    GD.Print($">>> DEBUG Projectile.RecalculateDamage: empowered={isEmpowered}, baseDamage={baseDamage:F1}, finalDamage={hitbox.damage:F1}");
+    GD.Print($">>> DEBUG Projectile.RecalculateDamage: empowered={isEmpowered}, baseDamage={baseDamage:F1}, falloffApplied={hitbox.damage:F1}");
+  }
+
+  public void ApplyDamageFalloff() {
+    if (weapon == null || weapon.info == null) { return; }
+    float distance = GlobalPosition.DistanceTo(shotPosition);
+    float start = weapon.info.damageFalloffStart;
+    float end = weapon.info.damageFalloffEnd;
+    float minMult = weapon.info.minDamageMultiplier;
+
+    if (distance <= start || end <= start) { return; }
+
+    float t = Mathf.Clamp((distance - start) / (end - start), 0.0f, 1.0f);
+    float multiplier = Mathf.Lerp(1.0f, minMult, t);
+    hitbox.damage *= multiplier;
   }
 
   public override void _Process(double delta) {

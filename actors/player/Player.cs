@@ -22,6 +22,8 @@ private GodotObject footstepInstance;
 
   [Export] private Weapon[] weapons;
   private Weapon activeWeapon;
+  private int activeWeaponIndex = 0;
+  private bool switchingWeapon;
 
   private RayCast3D pickupCast;
 
@@ -96,6 +98,17 @@ private GodotObject footstepInstance;
     }
     inventoryUI
       .Initialize(inventoryComponent, GetComponent<SocketComponent>(), activeWeapon);
+    inventoryUI.Visible = false;
+
+    GD.Print("Player ready. activeWeaponIndex=" + activeWeaponIndex + ", weaponsCount=" + weapons.Length + ", active=" + (activeWeapon != null ? activeWeapon.Name : "null"));
+    for(int i = 0; i < weapons.Length; i++) {
+      string path = weaponsArrayPath(i);
+      GD.Print("  weapon[" + i + "] path=" + path + ", valid=" + (weapons[i] != null) + ", name=" + (weapons[i] != null ? weapons[i].Name : "null") + ", visible=" + (weapons[i] != null ? weapons[i].Visible : false));
+      if(weapons[i] != null && weapons[i].info != null) {
+        GD.Print("      ammo=" + weapons[i].CurrentAmmo + "/" + weapons[i].info.magazineSize + ", ammoType=" + weapons[i].AmmoType);
+      }
+    }
+    GD.Print("Input weapon1=" + input.weapon1 + ", weapon2=" + input.weapon2);
   }
 
   public override void _Process(double delta) {
@@ -111,14 +124,28 @@ private GodotObject footstepInstance;
     if(input.openInventory) { inventoryUI?.Toggle(); }
     if(!inventoryUI.Visible) {
       if(input.interact) { EmitSignalInteracting(); }
-      if(input.shoot) { activeWeapon.Shoot(); }
-      if(input.reload) { activeWeapon.Reload(); }
+      if(input.shoot && !switchingWeapon) {
+        GD.Print("[Diag] shoot pressed, active=" + (activeWeapon != null ? activeWeapon.Name : "null"));
+        activeWeapon.Shoot();
+      }
+      if(input.reload && !switchingWeapon) { activeWeapon.Reload(); }
       if(input.usePotion && !isHealing) {
         if(healthComponent.CurrentHealth < healthComponent.maxHealth) {
           if(inventoryComponent.AmountOf(ItemType.POTION) > 0) {
             isHealing = true;
             healingAnim?.PlayHeal();
           }
+        }
+      }
+
+      // Weapon switching
+      if(!switchingWeapon) {
+        if(input.weapon1 && activeWeaponIndex != 0) {
+          GD.Print("Switch requested: weapon1");
+          StartWeaponSwitch(0);
+        } else if(input.weapon2 && activeWeaponIndex != 1 && weapons.Length > 1) {
+          GD.Print("Switch requested: weapon2, weaponsCount=" + weapons.Length + ", index1Null=" + (weapons[1] == null));
+          StartWeaponSwitch(1);
         }
       }
 
@@ -231,6 +258,18 @@ private GodotObject footstepInstance;
     if(activeWeapon?.weaponAnim != null && @event is InputEventMouseMotion motion) {
       activeWeapon.weaponAnim.SetLookVelocity(motion.Relative);
     }
+
+    // Fallback switching with number keys if Input Map actions are missing
+    if(@event is InputEventKey keyEvent && keyEvent.Pressed) {
+      if(keyEvent.Keycode == Key.Key1 && activeWeaponIndex != 0) {
+        GD.Print("Fallback switch requested: 1");
+        StartWeaponSwitch(0);
+      }
+      if(keyEvent.Keycode == Key.Key2 && activeWeaponIndex != 1 && weapons.Length > 1) {
+        GD.Print("Fallback switch requested: 2");
+        StartWeaponSwitch(1);
+      }
+    }
   }
 
   public void RecieveHit(HitInfo info) {
@@ -266,6 +305,51 @@ private GodotObject footstepInstance;
       RedrawPotionUI();
     }
     isHealing = false;
+  }
+
+  private string weaponsArrayPath(int i) {
+    try {
+      if(i < 0 || i >= weapons.Length) { return "out-of-range"; }
+      var path = weapons[i]?.GetPath();
+      return path ?? "null";
+    } catch { return "err"; }
+  }
+
+  private void StartWeaponSwitch(int index) {
+    if(switchingWeapon || index == activeWeaponIndex || weapons[index] == null) {
+      GD.Print("Switch blocked: switching=" + switchingWeapon + ", same=" + (index == activeWeaponIndex) + ", null=" + (weapons[index] == null));
+      return;
+    }
+    switchingWeapon = true;
+
+    Weapon next = weapons[index];
+    Weapon current = activeWeapon;
+
+    if(current != null && current.weaponAnim != null) {
+      current.weaponAnim.ForceFinishReload();
+      current.Visible = false;
+      current.ProcessMode = ProcessModeEnum.Disabled;
+    }
+
+    if(next != null) {
+      next.weaponAnim?.SetWeaponNode(next);
+      next.weaponAnim?.ForceFinishReload();
+      next.Visible = true;
+      next.ProcessMode = ProcessModeEnum.Inherit;
+
+      activeWeapon = next;
+      activeWeaponIndex = index;
+
+      activeWeapon.Shot -= RedrawAmmoUI;
+      activeWeapon.Reloaded -= RedrawAmmoUI;
+      activeWeapon.Shot += RedrawAmmoUI;
+      activeWeapon.Reloaded += RedrawAmmoUI;
+
+      RedrawAmmoUI();
+      GD.Print("Switched to " + activeWeapon.Name + ", path=" + weaponsArrayPath(index) + ", visible=" + activeWeapon.Visible + ", processMode=" + activeWeapon.ProcessMode);
+    }
+
+    switchingWeapon = false;
   }
 
   private void RedrawAmmoUI() {

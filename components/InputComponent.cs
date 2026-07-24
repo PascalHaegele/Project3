@@ -18,6 +18,8 @@ public partial class InputPackage : Resource {
   public bool reload;
   public bool openInventory;
   public bool pause;
+  public bool weapon1;
+  public bool weapon2;
 }
 
 [GlobalClass]
@@ -45,6 +47,9 @@ public partial class InputComponent : Node {
     input.reload = Input.IsActionJustPressed("reload");
     input.openInventory = Input.IsActionJustPressed("inventory");
     input.pause = Input.IsActionJustPressed("pause");
+
+    if(InputMap.HasAction("weapon1")) { input.weapon1 = Input.IsActionJustPressed("weapon1"); }
+    if(InputMap.HasAction("weapon2")) { input.weapon2 = Input.IsActionJustPressed("weapon2"); }
 
     // Debug Output
     // if(input.direction != Vector2.Zero) {
