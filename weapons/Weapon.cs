@@ -36,6 +36,10 @@ public partial class Weapon : Node3D {
   // Track shots for FrenziedSoul
   private bool empowerNextShot = false;
 
+  private bool hasInitializedAmmo = false;
+  // --- DER AMMO-PEILSENDER ---
+  private int _currentAmmo;
+ 
   public override void _Ready() {
 
     aimCast = GetNode<RayCast3D>("../AimCast");
@@ -49,7 +53,14 @@ public partial class Weapon : Node3D {
     AmmoType =
       info.type == WeaponType.Revolver ? ItemType.R_AMMO : ItemType.S_AMMO;
 
-    CurrentAmmo = info.magazineSize;
+    
+    if (!hasInitializedAmmo) {
+        CurrentAmmo = info.magazineSize;
+        hasInitializedAmmo = true;
+        GD.Print($"[LEBENSZYKLUS] Waffe {Name} wird neu erstellt! (Ready)");
+    }
+
+    weaponAnim = GetNodeOrNull<WeaponAnimation>("WeaponAnimation");
 
     weaponAnim = GetNodeOrNull<WeaponAnimation>("WeaponAnimation");
     if(weaponAnim != null) {
@@ -65,6 +76,9 @@ public partial class Weapon : Node3D {
 
     GD.Print($"[Weapon] {Name} ready: spawn={(projectileSpawn != null)}, info={(info != null)}, anim={(weaponAnim != null)}, pellets={info?.projectileCount ?? 0}, spread={info?.projectileSpread ?? 0}");
   }
+  public void SetCurrentAmmo(int ammo) {
+    CurrentAmmo = Mathf.Clamp(ammo, 0, info.magazineSize);
+}
 
   public override void _ExitTree() {
     if(weaponAnim != null) {
@@ -73,6 +87,7 @@ public partial class Weapon : Node3D {
       weaponAnim.CameraRecoil -= OnWeaponCameraRecoil;
       weaponAnim.MuzzleFlash -= OnMuzzleFlash;
     }
+    GD.Print($"[LEBENSZYKLUS] Waffe {Name} wird gelöscht/entfernt! (ExitTree)");
   }
 
   public override void _PhysicsProcess(double delta) {
@@ -80,8 +95,12 @@ public partial class Weapon : Node3D {
   }
 
   public void Reset() {
-    CurrentAmmo = info.magazineSize;
+    
+    
     empowerNextShot = false;
+    fireCooldown = 0.0f; 
+    Reloading = false;   
+    waitingForReloadAnimation = false;
   }
 
   public void Shoot() {
@@ -188,7 +207,7 @@ public partial class Weapon : Node3D {
     GD.Print($"{Name} Reloading (duration: {reloadDuration:F2})");
   }
 
-  private void OnReloadVisualComplete() {
+  public void OnReloadVisualComplete() {
     waitingForReloadAnimation = false;
     Reloading = false;
 

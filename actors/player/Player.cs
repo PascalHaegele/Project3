@@ -40,6 +40,7 @@ private GodotObject footstepInstance;
   private HealingAnimation healingAnim;
   private bool isHealing;
 
+  private System.Collections.Generic.Dictionary<WeaponType, int> savedAmmo = new();
   [Signal] public delegate void InteractingEventHandler();
 
   public override void _Ready() {
@@ -317,7 +318,6 @@ private GodotObject footstepInstance;
 
   private void StartWeaponSwitch(int index) {
     if(switchingWeapon || index == activeWeaponIndex || weapons[index] == null) {
-      GD.Print("Switch blocked: switching=" + switchingWeapon + ", same=" + (index == activeWeaponIndex) + ", null=" + (weapons[index] == null));
       return;
     }
     switchingWeapon = true;
@@ -325,15 +325,38 @@ private GodotObject footstepInstance;
     Weapon next = weapons[index];
     Weapon current = activeWeapon;
 
-    if(current != null && current.weaponAnim != null) {
-      current.weaponAnim.ForceFinishReload();
+    // --- ALTE WAFFE WEGSTECKEN ---
+    if(current != null) {
+      if (current.weaponAnim != null) {
+          // 1. Signal temporär KAPPEN, damit der Reload-Bug unmöglich wird!
+          current.weaponAnim.ReloadVisualComplete -= current.OnReloadVisualComplete;
+          
+          // 2. Jetzt die Animation sicher abwürgen
+          current.weaponAnim.ForceFinishReload();
+          
+          // 3. Signal wieder verbinden (für das nächste Mal)
+          current.weaponAnim.ReloadVisualComplete += current.OnReloadVisualComplete;
+      }
+      current.Reset();
       current.Visible = false;
       current.ProcessMode = ProcessModeEnum.Disabled;
     }
 
+    // --- NEUE WAFFE ZIEHEN ---
     if(next != null) {
-      next.weaponAnim?.SetWeaponNode(next);
-      next.weaponAnim?.ForceFinishReload();
+      if (next.weaponAnim != null) {
+          // 1. Auch hier das Signal kappen
+          next.weaponAnim.ReloadVisualComplete -= next.OnReloadVisualComplete;
+          
+          // 2. Animation sicher zurücksetzen
+          next.weaponAnim.SetWeaponNode(next);
+          next.weaponAnim.ForceFinishReload();
+          
+          // 3. Signal wieder verbinden
+          next.weaponAnim.ReloadVisualComplete += next.OnReloadVisualComplete;
+      }
+      
+      next.Reset();
       next.Visible = true;
       next.ProcessMode = ProcessModeEnum.Inherit;
 
@@ -346,7 +369,6 @@ private GodotObject footstepInstance;
       activeWeapon.Reloaded += RedrawAmmoUI;
 
       RedrawAmmoUI();
-      GD.Print("Switched to " + activeWeapon.Name + ", path=" + weaponsArrayPath(index) + ", visible=" + activeWeapon.Visible + ", processMode=" + activeWeapon.ProcessMode);
     }
 
     switchingWeapon = false;
@@ -366,6 +388,32 @@ private GodotObject footstepInstance;
   private void OnInsanityChanged(float insanity) {
     insanityMeter.Value = insanity;
   }
+  public void SwitchWeapon(Weapon newWeapon) {
+    if (activeWeapon == newWeapon) return;
+
+   
+    if (activeWeapon != null && activeWeapon.info != null) {
+        savedAmmo[activeWeapon.info.type] = activeWeapon.CurrentAmmo;
+        activeWeapon.Hide(); // Oder QueueFree(), falls du sie löschst
+    }
+
+   
+    activeWeapon = newWeapon;
+    activeWeapon.Show();
+
+   
+    if (savedAmmo.TryGetValue(activeWeapon.info.type, out int savedAmount)) {
+       
+        activeWeapon.SetCurrentAmmo(savedAmount);
+    } 
+    else {
+       
+        activeWeapon.SetCurrentAmmo(activeWeapon.info.magazineSize);
+    }
+
+    // UI aktualisieren
+    RedrawAmmoUI();
+}
   private string GetEventPathForType(ItemSoundType soundType) {
         switch (soundType) {
             case ItemSoundType.Page:
