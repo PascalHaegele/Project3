@@ -4,7 +4,14 @@ public enum ItemSoundType {
     Ammo,
     Empty
 }
+public enum PlayerSoundType {
+    Footstep
+}
 public partial class Player : Actor, IHitable {
+  private float footstepTimer = 0.0f;
+private float footstepInterval = 0.35f;
+private GodotObject footstepInstance;
+  private bool isFootstepPlaying = false;
   private VelocityComponent velocityComponent;
   private CameraComponent camera;
   private InputComponent inputComponent;
@@ -36,6 +43,10 @@ public partial class Player : Actor, IHitable {
   public override void _Ready() {
     base._Ready();
 
+    var fmodServer = Engine.GetSingleton("FmodServer");
+    if (fmodServer != null) {
+      footstepInstance = fmodServer.Call("create_event_instance", "event:/Walk_Timeline").As<GodotObject>();
+    }
     Input.MouseMode = Input.MouseModeEnum.Captured;
 
     camera = GetComponent<CameraComponent>();
@@ -157,13 +168,42 @@ public partial class Player : Actor, IHitable {
     Vector3 inputDirection = new(input.direction.X, 0.0f, input.direction.Y);
     Direction = (Transform.Basis * inputDirection).Normalized();
     Direction = Direction.Rotated(UpDirection, camera.Direction.Y);
-
+  
     // --- Gravity & move ---
     if(!IsOnFloor()) {
       velocityComponent.AddVelocityInDirection(GetGravity() * (float)delta);
     }
     velocityComponent.Move(this);
+  // ==========================================
+    // GODOT TIMER FÜR SCHRITTE (KORRIGIERT!)
+    // ==========================================
+    if (footstepInstance != null && GodotObject.IsInstanceValid(footstepInstance)) {
+        
+        // Exakte Laufgeschwindigkeit am Boden ermitteln
+        Vector3 flatVelocity = new Vector3(Velocity.X, 0.0f, Velocity.Z);
+        float currentSpeed = flatVelocity.Length();
 
+        if (currentSpeed > 0.1f && IsOnFloor()) {
+            
+            // Parameter ans Loop-Event in FMOD senden
+            GD.Print(currentSpeed);
+            footstepInstance.Call("set_parameter_by_name", "WalkSpeed", currentSpeed);
+
+            // Sound starten, falls er noch pausiert ist
+            if (!isFootstepPlaying) {
+                footstepInstance.Call("start");
+                isFootstepPlaying = true;
+            }
+        } 
+        else {
+            // Spieler steht oder springt -> Sound sanft stoppen
+            if (isFootstepPlaying) {
+                footstepInstance.Call("stop", 0); // 0 = FMOD_STUDIO_STOP_ALLOWFADEOUT
+                isFootstepPlaying = false;
+            }
+        }
+    }
+    // ==========================================
     // --- Update weapon animation motion state ---
     UpdateWeaponMotion();
   }
@@ -175,6 +215,7 @@ public partial class Player : Actor, IHitable {
     bool sprinting = Input.IsActionPressed("sprint");
     activeWeapon.weaponAnim.SetMotionState(speed, sprinting);
     activeWeapon.weaponAnim.SetGrounded(IsOnFloor(), Velocity.Y);
+
   }
 
   public override void _UnhandledInput(InputEvent @event) {
@@ -251,7 +292,7 @@ public partial class Player : Actor, IHitable {
                 return string.Empty;
         }
     }
-
+  
 
 
 
@@ -272,4 +313,15 @@ public partial class Player : Actor, IHitable {
         }
     }
 }
+public override void _ExitTree() {
+    base._ExitTree(); // Falls deine Actor-Klasse das braucht
+    
+    // ... deine bisherigen weaponAnim Abmeldungen ...
+
+    // Sound hart stoppen und aufräumen, wenn der Player verschwindet
+    if (footstepInstance != null && GodotObject.IsInstanceValid(footstepInstance)) {
+      footstepInstance.Call("stop", 1); // 1 = FMOD_STUDIO_STOP_IMMEDIATE
+      footstepInstance.Call("release");
+    }
+  }
 }
