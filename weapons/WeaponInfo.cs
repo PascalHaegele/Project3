@@ -21,6 +21,11 @@ public partial class WeaponInfo : Resource {
   [Export] public int projectileCount = 1;
   [Export] public float projectileSpread = 0.0f;
 
+  [ExportGroup("Damage Falloff")]
+  [Export] public float damageFalloffStart = 5.0f;
+  [Export] public float damageFalloffEnd = 25.0f;
+  [Export] public float minDamageMultiplier = 0.2f;
+
   [Signal] public delegate void EmptyEventHandler();
 }
 
