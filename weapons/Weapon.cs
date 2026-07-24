@@ -243,13 +243,19 @@ public partial class Weapon : Node3D {
     }
   }
   private string GetEventPathForType(WeaponSoundType soundType) {
+        
+        bool isRevolver = (info != null && info.type == WeaponType.Revolver);
+
         switch (soundType) {
             case WeaponSoundType.Shot:
-                return "event:/GunShot_Timeline";
+                return isRevolver ? "event:/GunShot_Timeline" : "event:/ShotgunShot_Timeline";
+            
             case WeaponSoundType.Reload:
-                return "event:/Gun_Reload_Timeline";
+                return isRevolver ? "event:/Gun_Reload_Timeline" : "event:/Shotgun_Reload_Timeline";
+            
             case WeaponSoundType.EmptyShot:
                 return "event:/EmptyWeapon_Action";
+                
             default:
                 return string.Empty;
         }
@@ -261,16 +267,23 @@ public void PlayWeaponSound(WeaponSoundType soundType) {
     if (!string.IsNullOrEmpty(eventPath)) {
         var fmodServer = Engine.GetSingleton("FmodServer");
         if (fmodServer != null) {
+            
             if (soundType == WeaponSoundType.Reload) {
                 var eventInstance = fmodServer.Call("create_event_instance", eventPath).As<GodotObject>();
+                
                 if (eventInstance != null && GodotObject.IsInstanceValid(eventInstance)) {
+                    
+                  
+                    eventInstance.Call("set_parameter_by_name", "ShotCount", (float)CurrentAmmo);
+                    
                     eventInstance.Call("start");
                     eventInstance.Call("release");
-                    GD.Print($">>> FMOD Reload gespielt");
+                    
+                    GD.Print($">>> FMOD Reload gespielt ({info.type} | Ammo: {CurrentAmmo})");
                 }
             }
             else {
-
+             
                 fmodServer.Call("play_one_shot", eventPath);
                 GD.Print($">>> FMOD 2D-Sound gespielt: {soundType} ({eventPath})");
             }
