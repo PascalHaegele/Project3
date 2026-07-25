@@ -134,7 +134,9 @@ debug_shape_thickness = 1
 
 [node name="ProjectileCast" type="RayCast3D" parent="CameraPivot" unique_id=943272919]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12808561, -0.11406362, 0)
+target_position = Vector3(0, 0, -0.71)
 collision_mask = 5
+debug_shape_thickness = 1
 
 [node name="HealingAnimation" type="Node3D" parent="CameraPivot" unique_id=1974506671]
 script = ExtResource("5_healing")

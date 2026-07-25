@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="2_robej"]
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="3_l1sbr"]
 [ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="3_p5iym"]
+[ext_resource type="Shader" uid="uid://cgb6bnciw6bua" path="res://actors/enemies/outline.gdshader" id="5_ad4r6"]
 [ext_resource type="Script" uid="uid://bvmpjaulofawh" path="res://actors/enemies/TestEnemyStateMachine.cs" id="12_kstis"]
 [ext_resource type="Script" uid="uid://bh1wcy7x4xxqk" path="res://components/ai/AIDetectionComponent.cs" id="17_da4by"]
 [ext_resource type="Script" uid="uid://wnjheg6xmkdy" path="res://components/ai/BehaviorTree.cs" id="17_v554o"]
@@ -41,10 +42,40 @@ walkSpeed = 3.0
 sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_heuud"]
+render_priority = 0
+shader = ExtResource("5_ad4r6")
+shader_parameter/weight = 0.01
+shader_parameter/color = Color(0.75, 0.55, 0, 1)
+shader_parameter/intensity = 4.0
+shader_parameter/scale = 4.0
+shader_parameter/depth_normal_threshold = 0.1
+shader_parameter/depth_normal_threshold_scale = 9.0
+shader_parameter/depth_threshold = 1.5
+shader_parameter/normal_threshold = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rxiim"]
+next_pass = SubResource("ShaderMaterial_heuud")
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_v4a0d"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_bfp77"]
 size = Vector3(0.2, 0.2, 0.6)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2pf2u"]
+render_priority = 0
+shader = ExtResource("5_ad4r6")
+shader_parameter/weight = 0.0150000007125
+shader_parameter/color = Color(0.75, 0.55, 0, 1)
+shader_parameter/intensity = 4.0
+shader_parameter/scale = 1.0
+shader_parameter/depth_normal_threshold = 0.1
+shader_parameter/depth_normal_threshold_scale = 3.0
+shader_parameter/depth_threshold = 1.5
+shader_parameter/normal_threshold = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gc3ev"]
+next_pass = SubResource("ShaderMaterial_2pf2u")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bfp77"]
 radius = 0.1
@@ -140,6 +171,7 @@ components = [NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePa
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1364863915]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = SubResource("StandardMaterial3D_rxiim")
 mesh = SubResource("CapsuleMesh_v4a0d")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1951825375]
@@ -148,6 +180,7 @@ mesh = SubResource("BoxMesh_bfp77")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1251135289]
 transform = Transform3D(0.9166701, -0.38602713, -0.10343566, -0.37184048, -0.7289828, -0.57473356, 0.14645992, 0.56530267, -0.81177735, 0.7832922, 0.53795135, -0.5512289)
+material_override = SubResource("StandardMaterial3D_gc3ev")
 mesh = SubResource("CapsuleMesh_bfp77")
 
 [node name="HitboxComponent" type="Area3D" parent="MeshInstance3D/MeshInstance3D2" unique_id=1875458621]

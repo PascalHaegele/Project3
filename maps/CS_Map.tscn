@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://co62vn6pet0yj" path="res://actors/player/player.tscn" id="3_ui8i3"]
 [ext_resource type="Texture2D" uid="uid://lv4ptmsm7xpg" path="res://maps/Map 1_final_M_Brick_albedo.png" id="4_8wn1s"]
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="4_a1t7w"]
+[ext_resource type="CompressedTexture2DArray" uid="uid://c20yn5tfpeeb2" path="res://maps/sun.png" id="4_f7lwg"]
 [ext_resource type="Texture2D" uid="uid://kwnbrnpp1w4" path="res://maps/Map 1_final_M_Brick_normal.png" id="5_8wn1s"]
 [ext_resource type="Texture2D" uid="uid://brqaum1mit0q3" path="res://maps/Map 1_final_M_Brick_orm.png" id="5_f7lwg"]
 [ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="7_a1t7w"]
@@ -24,10 +25,10 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsga6"]
 shader = ExtResource("1_ui8i3")
 shader_parameter/sky_tex = ExtResource("2_a1t7w")
-shader_parameter/sun_tex_layer = 1.0
+shader_parameter/sun_tex = ExtResource("4_f7lwg")
 shader_parameter/sun_size = 0.99
 shader_parameter/sun_softness = 0.002
-shader_parameter/background_color = Color(0.027685335, 0.05360575, 0.117052, 1)
+shader_parameter/background_color = Color(0, 0, 0, 1)
 shader_parameter/accent_color = Color(0.7921569, 0.61960787, 0.28627452, 1)
 shader_parameter/accent_intensity = 0.0
 
@@ -72,7 +73,7 @@ uv1_triplanar = true
 material = SubResource("StandardMaterial3D_8wn1s")
 size = Vector3(5.371338, 4.820801, 1)
 
-[sub_resource type="Resource" id="Resource_8wn1s"]
+[sub_resource type="Resource" id="Resource_f7lwg"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 sprintSpeed = 14.0
@@ -105,7 +106,7 @@ height = 0.1
 radius = 3.0
 height = 17.5
 
-[sub_resource type="Resource" id="Resource_f7lwg"]
+[sub_resource type="Resource" id="Resource_22v2i"]
 resource_local_to_scene = true
 script = ExtResource("15_24hbc")
 patrolPath = PackedVector3Array(181.4789, 2.3929415, -136.71298, 182.76384, 2.3929405, -130.47568, 184.49522, 2.3929405, -128.45308)
@@ -114,7 +115,7 @@ leashLength = 50.0
 attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_22v2i"]
+[sub_resource type="Resource" id="Resource_0nuwe"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 walkSpeed = 3.0
@@ -948,7 +949,7 @@ bank_paths = ["res://FmodBank/Desktop/Master.strings.bank", "res://FmodBank/Desk
 
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("3_ui8i3")]
 transform = Transform3D(0.9505068, 0, 0.3107044, 0, 1, 0, -0.3107044, 0, 0.9505068, 175.55298, 2.392941, -169.15819)
-velocityInfo = SubResource("Resource_8wn1s")
+velocityInfo = SubResource("Resource_f7lwg")
 
 [node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=2016545012]
 mesh = SubResource("ImmediateMesh_bfp77")
@@ -1039,6 +1040,9 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 91.1
 [node name="Chest2" parent="Chests" unique_id=114783849 instance=ExtResource("10_oxeun")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 82.17478, 2.3530731, 27.616596)
 
+[node name="Chest3" parent="Chests" unique_id=590264712 instance=ExtResource("10_oxeun")]
+transform = Transform3D(0.96581817, 0, -0.2592206, 0, 1, 0, 0.2592206, 0, 0.96581817, 220.17175, 2.3996954, -198.7591)
+
 [node name="PortalAreas|Portals" type="Node" parent="." unique_id=1549579445]
 
 [node name="PortalArea2" type="Area3D" parent="PortalAreas|Portals" unique_id=883824118]
@@ -1059,9 +1063,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.964821)
 
 [node name="PortalDestination" type="Marker3D" parent="PortalAreas|Portals/PortalArea2" unique_id=10082753]
 transform = Transform3D(0.9801943, 0, -0.1980381, 0, 1, 0, 0.1980381, 0, 0.9801943, 49.874054, 8.432295, -138.52164)
-
-[node name="Chest" parent="PortalAreas|Portals/PortalArea2" unique_id=590264712 instance=ExtResource("10_oxeun")]
-transform = Transform3D(0.96581817, 0, -0.2592206, 0, 1, 0, 0.2592206, 0, 0.96581817, 51.269135, 8.43905, -146.64606)
 
 [node name="Portal" parent="PortalAreas|Portals" unique_id=1171833219 node_paths=PackedStringArray("destination") instance=ExtResource("12_k8dp5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.92548, 2.3850918, -265.90442)
@@ -1117,5 +1118,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.45947, 2.3929405, -144.50
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 177, 3, -147)
-enemyInfo = SubResource("Resource_f7lwg")
-velocityInfo = SubResource("Resource_22v2i")
+enemyInfo = SubResource("Resource_22v2i")
+velocityInfo = SubResource("Resource_0nuwe")

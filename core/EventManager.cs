@@ -10,8 +10,6 @@ public partial class EventManager : Node {
 
   private WorldEnvironment environment;
   private ShaderMaterial skyShader;
-  private float sunLayer;
-  private float sunLayerTime;
 
   private readonly List<PortalArea> portalAreas = new();
   private readonly List<Altar> altars = new();
@@ -50,15 +48,6 @@ public partial class EventManager : Node {
     await Task.Yield();
     // ÄNDERN SIE DIESE ZEILE:
     StartAmbientSound("event:Ambient_Timeline");
-  }
-
-  public override void _PhysicsProcess(double delta) {
-    sunLayerTime += (float)delta;
-    if(sunLayerTime >= 1.0f / 30.0f) {
-      sunLayerTime = 0.0f;
-      sunLayer = Mathf.PosMod(++sunLayer, 60.0f);
-      skyShader.SetShaderParameter("sun_tex_layer", sunLayer);
-    }
   }
 
   private void StartAmbientSound(string eventPath) {
