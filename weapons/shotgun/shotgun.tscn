@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://cwlsusxyigjxm"]
+
+[ext_resource type="Script" uid="uid://cohnw7rgixh8v" path="res://weapons/Weapon.cs" id="1_weapon"]
+[ext_resource type="Script" uid="uid://bv03t2orsyg68" path="res://weapons/WeaponInfo.cs" id="2_info"]
+[ext_resource type="PackedScene" uid="uid://bkwtylyuh5t3n" path="res://weapons/shotgun/Shotgun.glb" id="3_model"]
+[ext_resource type="Script" uid="uid://h1ny242on8kv" path="res://weapons/WeaponAnimation.cs" id="4_anim"]
+[ext_resource type="PackedScene" uid="uid://cvm5xga0cvc2f" path="res://weapons/projectiles/bullet.tscn" id="5_projectile"]
+[ext_resource type="PackedScene" uid="uid://c80pqtjcmd17u" path="res://weapons/muzzle_flash/muzzle_flash.tscn" id="6_muzzle"]
+
+[sub_resource type="Resource" id="Resource_shotgun_info"]
+script = ExtResource("2_info")
+type = 1
+range = 20.0
+fireRate = 1.0
+reloadTime = 1.4
+magazineSize = 2
+projectile = ExtResource("5_projectile")
+projectileSpeed = 70.0
+projectileDamage = 18.0
+projectileRange = 20.0
+projectileCount = 10
+projectileSpread = 0.08
+damageFalloffStart = 6.0
+damageFalloffEnd = 22.0
+minDamageMultiplier = 0.15
+
+[node name="Shotgun" type="Node3D" unique_id=2010702447]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.25, -0.5)
+script = ExtResource("1_weapon")
+info = SubResource("Resource_shotgun_info")
+
+[node name="ShotgunModel" parent="." unique_id=1870765779 instance=ExtResource("3_model")]
+transform = Transform3D(-0.99999887, 0, 0.0014940812, 0, 1, 0, -0.0014940812, 0, -0.99999887, -0.23776984, -0.77131414, 0.7862717)
+
+[node name="ProjectileSpawn" type="Marker3D" parent="." unique_id=254832811]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.604458, -0.49013114)
+
+[node name="MuzzleFlash" type="OmniLight3D" parent="." unique_id=657921804]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.43184793, 0, -2)
+visible = false
+light_color = Color(1, 0.95, 0.8, 1)
+light_energy = 18.0
+light_indirect_energy = 5.0
+omni_range = 12.0
+omni_attenuation = 0.35
+
+[node name="MuzzleFlash2" parent="." unique_id=23082701 instance=ExtResource("6_muzzle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="WeaponAnimation" type="Node3D" parent="." unique_id=1995375402]
+script = ExtResource("4_anim")
+recoilKickZ = 1.1
+recoilKickPitch = 1.4
+recoilSideDriftMax = 0.28
+cameraShakeAmount = 0.08
+cameraShakeDuration = 0.24
+reloadDropX = 0.28
+reloadDropY = -0.42
+reloadRotX = -0.25
+reloadRotY = 0.32
+reloadRotZ = 0.16
+reloadDropDuration = 0.1
+reloadHoldDuration = 0.16
+reloadReturnDuration = 0.12
