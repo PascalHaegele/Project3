@@ -11,7 +11,6 @@
 script = ExtResource("2_info")
 type = 1
 range = 20.0
-fireRate = 1.0
 reloadTime = 1.4
 magazineSize = 2
 projectile = ExtResource("5_projectile")
@@ -24,16 +23,16 @@ damageFalloffStart = 6.0
 damageFalloffEnd = 22.0
 minDamageMultiplier = 0.15
 
-[node name="Shotgun" type="Node3D" unique_id=2010702447]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.25, -0.5)
+[node name="Shotgun" type="Node3D" unique_id=2010702447 node_paths=PackedStringArray("projectileSpawn")]
 script = ExtResource("1_weapon")
 info = SubResource("Resource_shotgun_info")
+projectileSpawn = NodePath("ProjectileSpawn")
 
 [node name="ShotgunModel" parent="." unique_id=1870765779 instance=ExtResource("3_model")]
-transform = Transform3D(-0.99999887, 0, 0.0014940812, 0, 1, 0, -0.0014940812, 0, -0.99999887, -0.23776984, -0.77131414, 0.7862717)
+transform = Transform3D(-0.9994681, 0, -0.032612976, 0, 1, 0, 0.032612976, 0, -0.9994681, -0.1450879, -1.3333198, 0.7862717)
 
 [node name="ProjectileSpawn" type="Marker3D" parent="." unique_id=254832811]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.604458, -0.49013114)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.053230405, -0.412)
 
 [node name="MuzzleFlash" type="OmniLight3D" parent="." unique_id=657921804]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.43184793, 0, -2)
@@ -59,6 +58,5 @@ reloadDropY = -0.42
 reloadRotX = -0.25
 reloadRotY = 0.32
 reloadRotZ = 0.16
-reloadDropDuration = 0.1
 reloadHoldDuration = 0.16
 reloadReturnDuration = 0.12

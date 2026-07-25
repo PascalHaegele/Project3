@@ -97,19 +97,8 @@ private GodotObject footstepInstance;
       inventoryUI.Name = "InventoryUI";
       GetNode("HUD").AddChild(inventoryUI);
     }
-    inventoryUI
-      .Initialize(inventoryComponent, GetComponent<SocketComponent>(), activeWeapon);
+    inventoryUI .Initialize(inventoryComponent, GetComponent<SocketComponent>(), activeWeapon);
     inventoryUI.Visible = false;
-
-    GD.Print("Player ready. activeWeaponIndex=" + activeWeaponIndex + ", weaponsCount=" + weapons.Length + ", active=" + (activeWeapon != null ? activeWeapon.Name : "null"));
-    for(int i = 0; i < weapons.Length; i++) {
-      string path = weaponsArrayPath(i);
-      GD.Print("  weapon[" + i + "] path=" + path + ", valid=" + (weapons[i] != null) + ", name=" + (weapons[i] != null ? weapons[i].Name : "null") + ", visible=" + (weapons[i] != null ? weapons[i].Visible : false));
-      if(weapons[i] != null && weapons[i].info != null) {
-        GD.Print("      ammo=" + weapons[i].CurrentAmmo + "/" + weapons[i].info.magazineSize + ", ammoType=" + weapons[i].AmmoType);
-      }
-    }
-    GD.Print("Input weapon1=" + input.weapon1 + ", weapon2=" + input.weapon2);
   }
 
   public override void _Process(double delta) {
@@ -196,7 +185,7 @@ private GodotObject footstepInstance;
     Vector3 inputDirection = new(input.direction.X, 0.0f, input.direction.Y);
     Direction = (Transform.Basis * inputDirection).Normalized();
     Direction = Direction.Rotated(UpDirection, camera.Direction.Y);
-  
+
     // --- Gravity & move ---
     if(!IsOnFloor()) {
       velocityComponent.AddVelocityInDirection(GetGravity() * (float)delta);
@@ -206,15 +195,14 @@ private GodotObject footstepInstance;
     // GODOT TIMER FÜR SCHRITTE (KORRIGIERT!)
     // ==========================================
     if (footstepInstance != null && GodotObject.IsInstanceValid(footstepInstance)) {
-        
+
         // Exakte Laufgeschwindigkeit am Boden ermitteln
         Vector3 flatVelocity = new Vector3(Velocity.X, 0.0f, Velocity.Z);
         float currentSpeed = flatVelocity.Length();
 
         if (currentSpeed > 0.1f && IsOnFloor()) {
-            
+
             // Parameter ans Loop-Event in FMOD senden
-            GD.Print(currentSpeed);
             footstepInstance.Call("set_parameter_by_name", "WalkSpeed", currentSpeed);
 
             // Sound starten, falls er noch pausiert ist
@@ -222,7 +210,7 @@ private GodotObject footstepInstance;
                 footstepInstance.Call("start");
                 isFootstepPlaying = true;
             }
-        } 
+        }
         else {
             // Spieler steht oder springt -> Sound sanft stoppen
             if (isFootstepPlaying) {
@@ -330,10 +318,10 @@ private GodotObject footstepInstance;
       if (current.weaponAnim != null) {
           // 1. Signal temporär KAPPEN, damit der Reload-Bug unmöglich wird!
           current.weaponAnim.ReloadVisualComplete -= current.OnReloadVisualComplete;
-          
+
           // 2. Jetzt die Animation sicher abwürgen
           current.weaponAnim.ForceFinishReload();
-          
+
           // 3. Signal wieder verbinden (für das nächste Mal)
           current.weaponAnim.ReloadVisualComplete += current.OnReloadVisualComplete;
       }
@@ -347,15 +335,15 @@ private GodotObject footstepInstance;
       if (next.weaponAnim != null) {
           // 1. Auch hier das Signal kappen
           next.weaponAnim.ReloadVisualComplete -= next.OnReloadVisualComplete;
-          
+
           // 2. Animation sicher zurücksetzen
           next.weaponAnim.SetWeaponNode(next);
           next.weaponAnim.ForceFinishReload();
-          
+
           // 3. Signal wieder verbinden
           next.weaponAnim.ReloadVisualComplete += next.OnReloadVisualComplete;
       }
-      
+
       next.Reset();
       next.Visible = true;
       next.ProcessMode = ProcessModeEnum.Inherit;
@@ -391,23 +379,23 @@ private GodotObject footstepInstance;
   public void SwitchWeapon(Weapon newWeapon) {
     if (activeWeapon == newWeapon) return;
 
-   
+
     if (activeWeapon != null && activeWeapon.info != null) {
         savedAmmo[activeWeapon.info.type] = activeWeapon.CurrentAmmo;
         activeWeapon.Hide(); // Oder QueueFree(), falls du sie löschst
     }
 
-   
+
     activeWeapon = newWeapon;
     activeWeapon.Show();
 
-   
+
     if (savedAmmo.TryGetValue(activeWeapon.info.type, out int savedAmount)) {
-       
+
         activeWeapon.SetCurrentAmmo(savedAmount);
-    } 
+    }
     else {
-       
+
         activeWeapon.SetCurrentAmmo(activeWeapon.info.magazineSize);
     }
 
@@ -424,7 +412,7 @@ private GodotObject footstepInstance;
                 return string.Empty;
         }
     }
-  
+
 
 
 
@@ -434,8 +422,8 @@ private GodotObject footstepInstance;
     if (!string.IsNullOrEmpty(eventPath)) {
         var fmodServer = Engine.GetSingleton("FmodServer");
         if (fmodServer != null) {
-            
-          
+
+
             fmodServer.Call("play_one_shot", eventPath);
 
             GD.Print($">>> FMOD 2D Sound abgespielt: {soundType} ({eventPath})");
@@ -447,7 +435,7 @@ private GodotObject footstepInstance;
 }
 public override void _ExitTree() {
     base._ExitTree(); // Falls deine Actor-Klasse das braucht
-    
+
     // ... deine bisherigen weaponAnim Abmeldungen ...
 
     // Sound hart stoppen und aufräumen, wenn der Player verschwindet

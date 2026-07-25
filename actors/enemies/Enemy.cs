@@ -28,9 +28,9 @@ public abstract partial class Enemy : Actor {
 
   public float LeashDistance => GlobalPosition.DistanceTo(enemyInfo.leashPoint);
 
-  public override void _Ready() {
-    // enemyInfo.ResourceLocalToScene = true;
+  [Signal] public delegate void KilledEventHandler(Enemy enemy);
 
+  public override void _Ready() {
     CollisionLayer = (uint)CollisionLayerEnum.ENEMY;
     CollisionMask =
       (uint)CollisionLayerEnum.WORLD |

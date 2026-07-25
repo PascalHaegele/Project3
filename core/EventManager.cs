@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,13 +12,15 @@ public partial class EventManager : Node {
   private WorldEnvironment environment;
   private ShaderMaterial skyShader;
 
+  private readonly List<Enemy> enemies = new();
+
   private readonly List<PortalArea> portalAreas = new();
   private readonly List<Altar> altars = new();
 
   // Da wir nativ über die GDExtension gehen, ist die Instanz ein rohes GodotObject
   private GodotObject _ambientInstance;
 
-  public override async void _Ready() {
+  public override /*async*/ void _Ready() {
     player = GetTree().Root.FindChild("Player", true, false) as Player;
     playerInsanityComponent = player.GetComponent<InsanityComponent>();
 
@@ -40,14 +43,35 @@ public partial class EventManager : Node {
     }
 
     foreach(Node child in GetChildren()) {
+      if(child is Enemy enemy) { AddEnemy(enemy); }
       if(child is PortalArea portalArea) { portalAreas.Add(portalArea); }
       if(child is Altar altar) { altars.Add(altar); }
     }
 
+    GetTree().NodeAdded += (node) => {
+      if(node is Enemy enemy) { AddEnemy(enemy); }
+    };
+
     // Wartet 1 Frame, bis das FMOD C++ Plugin im Hintergrund voll hochgefahren ist
-    await Task.Yield();
+    // await Task.Yield();
     // ÄNDERN SIE DIESE ZEILE:
-    StartAmbientSound("event:Ambient_Timeline");
+    // StartAmbientSound("event:Ambient_Timeline");
+  }
+
+  public void AddEnemy(Enemy enemy) {
+    enemies.Add(enemy);
+    _ = enemy.Connect(
+      Enemy.SignalName.Killed,
+      Callable.From<Enemy>(OnEnemyKilled),
+      (uint)ConnectFlags.OneShot
+    );
+  }
+
+  private void OnEnemyKilled(Enemy enemy) {
+    if(enemies.Remove(enemy)) {
+      playerInsanityComponent.AddInsanity(10.0f);
+      player.GetComponent<HealthComponent>().OnEliteKill();
+    }
   }
 
   private void StartAmbientSound(string eventPath) {
@@ -120,9 +144,9 @@ public partial class EventManager : Node {
     );
 
     // Reiner nativer Parameter-Aufruf an das GDExtension-Event
-    if(_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
-      _ambientInstance.Call("set_parameter", "Insanity", insanity);
-    }
+    // if(_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
+    //   _ambientInstance.Call("set_parameter", "Insanity", insanity);
+    // }
   }
 
   private void OnInsanityLevelChanged(InsanityLevel level) {

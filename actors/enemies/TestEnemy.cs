@@ -7,8 +7,6 @@ public partial class TestEnemy : Enemy, IHitable {
 
   private ProgressBar healthBar;
 
-  private bool dead;
-
   [Export] private ShaderMaterial dissolveMaterial;
 
   public override void _Ready() {
@@ -29,14 +27,13 @@ public partial class TestEnemy : Enemy, IHitable {
     hurtboxComponent.CollisionLayer = (uint)CollisionLayerEnum.ENEMY_HURTBOX;
     hurtboxComponent.CollisionMask = (uint)CollisionLayerEnum.NONE;
 
-
     healthBar = GetComponent<ProgressBar>();
     healthBar.MaxValue = healthComponent.maxHealth;
     healthBar.Value = healthComponent.CurrentHealth;
   }
 
   public override void _PhysicsProcess(double delta) {
-    if(dead) { return; }
+    if(!healthComponent.IsAlive) { return; }
 
     input = behaviorTree.GetInput;
     behaviorTree.UpdateInfo(aiInfo);
@@ -55,11 +52,11 @@ public partial class TestEnemy : Enemy, IHitable {
     healthComponent.TakeDamage(hitInfo.damage);
     if(hitInfo.direction != Vector3.Zero && !playerInVision) {
       Vector3 direction = hitInfo.direction;
-      direction.Y = GlobalPosition.Y;
+      direction.Y = 0.0f;
       LookAt(GlobalPosition + direction);
     }
-    if(!healthComponent.IsAlive && hitInfo.shooter is Player player) {
-      player.GetComponent<InsanityComponent>().AddInsanity(10.0f);
+    if(!healthComponent.IsAlive && hitInfo.shooter is Player) {
+      EmitSignalKilled(this);
     }
   }
 
@@ -68,14 +65,6 @@ public partial class TestEnemy : Enemy, IHitable {
   }
 
   private async void OnDeath() {
-    // SetDeferred(Node.PropertyName.ProcessMode, (int)ProcessModeEnum.Disabled);
-    dead = true;
-
-    if(GetTree().Root.FindChild("Player", true, false) is Player player) {
-      player.GetComponent<HealthComponent>()?.OnEliteKill();
-      GD.Print($">>> DEBUG BloodRitual trigger: enemy defeated, player health={player.GetComponent<HealthComponent>()?.CurrentHealth:F1}");
-    }
-
     if(dissolveMaterial != null) {
       MeshInstance3D mesh = GetNode<MeshInstance3D>("MeshInstance3D");
       mesh.MaterialOverride = dissolveMaterial;

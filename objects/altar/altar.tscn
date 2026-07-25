@@ -8,7 +8,7 @@
 radius = 1.3924251
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bfp77"]
-size = Vector3(1.6542969, 1.6933594, 1.9204712)
+size = Vector3(1.5, 1.3, 1.5)
 
 [node name="Altar" type="StaticBody3D" unique_id=1471931379]
 script = ExtResource("1_4fo7c")
@@ -21,11 +21,8 @@ metadata/_custom_type_script = "uid://2pt8ci63eny8"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 shape = SubResource("SphereShape3D_bfp77")
 
-[node name="Model" type="Node3D" parent="." unique_id=1621770253]
-
-[node name="AltarModel" parent="Model" unique_id=994214795 instance=ExtResource("3_e0q88")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0018782616, 0.024608374, -0.033533216)
+[node name="AltarModel" parent="." unique_id=994214795 instance=ExtResource("3_e0q88")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=849729109]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.032439232, 0.62871194, 0.00701344)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
 shape = SubResource("BoxShape3D_bfp77")
