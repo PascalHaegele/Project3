@@ -80,6 +80,9 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 55.6
 spot_range = 15.6541815
 spot_attenuation = 0.03
 
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Map 1_final" unique_id=1209790654]
+transform = Transform3D(0.9999683, 0, -0.0079754945, 0, 1, 0, 0.0079754945, 0, 0.9999683, -0.19451141, 0, 38.81392)
+
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("4_y0ld0")]
 transform = Transform3D(-0.18309447, 0, -0.98309535, 0, 1, 0, 0.98309535, 0, -0.18309447, 82.183334, 1.9073486e-06, -41.74434)
 velocityInfo = SubResource("Resource_e0egg")

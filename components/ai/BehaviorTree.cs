@@ -2,11 +2,11 @@ using Godot;
 
 [GlobalClass]
 public partial class BehaviorTree : Node {
-  private AIInfo aiInfo;
+  protected AIInfo aiInfo;
 
-  private Enemy enemy;
+  protected Enemy enemy;
 
-  [Export] private NavigationAgent3D navAgent;
+  [Export] protected NavigationAgent3D navAgent;
 
   private BehaviorTreeNode rootNode;
   private BehaviorTreeNode runningNode;
@@ -14,9 +14,9 @@ public partial class BehaviorTree : Node {
   [Export] private float updateInterval = 0.1f;
   private float timeSinceLastUpdate;
 
-  private int patrolIndex;
+  protected int patrolIndex;
 
-  private InputPackage input = new();
+  protected InputPackage input = new();
   public InputPackage GetInput => input;
 
   public override void _Ready() {
@@ -48,7 +48,7 @@ public partial class BehaviorTree : Node {
 
   public void UpdateInfo(AIInfo info) => aiInfo = info;
 
-  private BehaviorTreeNode ConstructTree() {
+  protected virtual BehaviorTreeNode ConstructTree() {
     SelectorNode root = new();
 
     SequenceNode combatSequence = new();
@@ -87,7 +87,7 @@ public partial class BehaviorTree : Node {
     return root;
   }
 
-  private NodeState MoveToPlayer() {
+  protected NodeState MoveToPlayer() {
     float distance = enemy.GlobalPosition.DistanceTo(aiInfo.targetPosition);
     if(distance <= enemy.enemyInfo.attackRange) { return NodeState.SUCCESS; }
 

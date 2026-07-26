@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c55wv856x1kmu" path="res://actors/enemies/test_enemy.tscn" id="2_pbr4s"]
 [ext_resource type="Texture2D" uid="uid://da7jcsvmhja8y" path="res://maps/skybox.png" id="2_svl6s"]
 [ext_resource type="Texture2D" uid="uid://kwnbrnpp1w4" path="res://maps/Map 1_final_M_Brick_normal.png" id="3_ad6p3"]
+[ext_resource type="PackedScene" uid="uid://dmv381xyx8dyw" path="res://actors/enemies/mage_enemy.tscn" id="3_mage"]
 [ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="3_pbr4s"]
 [ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="3_pwco0"]
 [ext_resource type="Texture2D" uid="uid://brqaum1mit0q3" path="res://maps/Map 1_final_M_Brick_orm.png" id="4_qnwwd"]
@@ -52,7 +53,7 @@ ambient_light_sky_contribution = 0.01
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_bfp77"]
 
-[sub_resource type="Resource" id="Resource_qnwwd"]
+[sub_resource type="Resource" id="Resource_7wt56"]
 resource_local_to_scene = true
 script = ExtResource("3_pbr4s")
 patrolPath = PackedVector3Array(-8, 0, -17, 6.77744, 0, -16.653843, 15.346003, 0, -4.8959856, 0.55296326, 0, -5.0219855, -14.483469, 0, -2.364942, -16.650803, 0, -12.929461)
@@ -60,14 +61,27 @@ leashPoint = Vector3(0, 0, -14.593309)
 attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_7wt56"]
+[sub_resource type="Resource" id="Resource_6emo8"]
 resource_local_to_scene = true
 script = ExtResource("2_6b7mj")
 walkSpeed = 3.0
 sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
-[sub_resource type="Resource" id="Resource_6emo8"]
+[sub_resource type="Resource" id="Resource_tiop4"]
+resource_local_to_scene = true
+script = ExtResource("3_pbr4s")
+attackRange = 2.0
+metadata/_custom_type_script = "uid://46wwp5gewpfd"
+
+[sub_resource type="Resource" id="Resource_lqwt6"]
+resource_local_to_scene = true
+script = ExtResource("2_6b7mj")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_w0ppd"]
 resource_local_to_scene = true
 script = ExtResource("2_6b7mj")
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
@@ -174,11 +188,16 @@ metadata/_custom_type_script = "uid://cq4ddchn0vss"
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_pbr4s")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -11.255119, 0, -17.172976)
-enemyInfo = SubResource("Resource_qnwwd")
-velocityInfo = SubResource("Resource_7wt56")
+enemyInfo = SubResource("Resource_7wt56")
+velocityInfo = SubResource("Resource_6emo8")
+
+[node name="MageEnemy" parent="." unique_id=1902247724 instance=ExtResource("3_mage")]
+transform = Transform3D(-0.020375142, 0, 0.9997924, 0, 1, 0, -0.9997924, 0, -0.020375142, 1.8428822, 0.21478271, -8.425738)
+enemyInfo = SubResource("Resource_tiop4")
+velocityInfo = SubResource("Resource_lqwt6")
 
 [node name="Player" parent="." unique_id=134350 instance=ExtResource("1_k1jtb")]
-velocityInfo = SubResource("Resource_6emo8")
+velocityInfo = SubResource("Resource_w0ppd")
 
 [node name="FmodListener2D" type="FmodListener2D" parent="Player" unique_id=989207962]
 
