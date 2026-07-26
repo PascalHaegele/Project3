@@ -23,7 +23,8 @@ public partial class HealingAnimation : Node3D {
     AddChild(potionHoldPoint);
 
     // Load the potion model
-    PackedScene potionScene = GD.Load<PackedScene>("res://objects/items/Potion.glb");
+    PackedScene potionScene =
+      GD.Load<PackedScene>("res://objects/items/potion/Potion.glb");
     if(potionScene != null) {
       potionModel = potionScene.Instantiate<Node3D>();
       potionHoldPoint.AddChild(potionModel);
@@ -95,7 +96,7 @@ public partial class HealingAnimation : Node3D {
           // Camera tilt up
           t4.TweenProperty(camera, "rotation", originalCamRot + new Vector3(0.02f, 0.0f, 0.0f), 0.15f)
             .SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
-          
+
           t4.TweenInterval(0.4f);
 
           // Drink bob (during hold)
@@ -114,7 +115,7 @@ public partial class HealingAnimation : Node3D {
               .SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
             t5.TweenProperty(potionHoldPoint, "rotation", new Vector3(-0.1f, 0.0f, -0.05f), 0.1f)
               .SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
-            
+
             t5.Finished += () => {
               // Phase 6: Throw away far left (0.12s)
               Tween t6 = CreateTween();

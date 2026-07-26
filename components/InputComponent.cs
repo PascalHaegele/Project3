@@ -2,31 +2,32 @@ using Godot;
 
 // Input actions are stored as booleans
 public partial class InputPackage : Resource {
-  // Movement
   public Vector2 direction = Vector2.Zero;
 
-  // Actions
   public bool jump;
   public bool sprint;
   public bool dash;
+
   public bool shoot;
   public bool special;
+
+  public bool interact;
+  public bool openInventory;
   public bool usePotion;
 
-  // Future actions
-  public bool interact;
-  public bool reload;
-  public bool openInventory;
   public bool pause;
+
+  public bool reload;
   public bool weapon1;
   public bool weapon2;
+  public bool switchWeapon;
 }
 
 [GlobalClass]
 public partial class InputComponent : Node {
   public InputPackage GetInput() {
     InputPackage input = new();
-    // Movement (WASD)
+
     input.direction = Input.GetVector(
       "move_left",
       "move_right",
@@ -34,22 +35,24 @@ public partial class InputComponent : Node {
       "move_backward"
     );
 
-    // Actions
     input.jump = Input.IsActionJustPressed("jump");
     input.sprint = Input.IsActionPressed("sprint");
     input.dash = Input.IsActionJustPressed("dash");
+
     input.shoot = Input.IsActionJustPressed("shoot");
     input.special = Input.IsActionJustPressed("special");
+
+    input.interact = Input.IsActionJustPressed("interact");
+    input.openInventory = Input.IsActionJustPressed("inventory");
+
     input.usePotion = Input.IsActionJustPressed("use_potion");
 
-    // Future actions
-    input.interact = Input.IsActionJustPressed("interact");
-    input.reload = Input.IsActionJustPressed("reload");
-    input.openInventory = Input.IsActionJustPressed("inventory");
     input.pause = Input.IsActionJustPressed("pause");
 
-    if(InputMap.HasAction("weapon1")) { input.weapon1 = Input.IsActionJustPressed("weapon1"); }
-    if(InputMap.HasAction("weapon2")) { input.weapon2 = Input.IsActionJustPressed("weapon2"); }
+    input.reload = Input.IsActionJustPressed("reload");
+    input.weapon1 = Input.IsActionJustPressed("weapon1");
+    input.weapon2 = Input.IsActionJustPressed("weapon2");
+    input.switchWeapon = Input.IsActionJustPressed("switch_weapon");
 
     // Debug Output
     // if(input.direction != Vector2.Zero) {

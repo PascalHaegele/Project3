@@ -45,14 +45,14 @@ metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_heuud"]
 render_priority = 0
 shader = ExtResource("5_ad4r6")
-shader_parameter/weight = 0.01
+shader_parameter/weight = 1.0000000475
 shader_parameter/color = Color(0.75, 0.55, 0, 1)
 shader_parameter/intensity = 4.0
-shader_parameter/scale = 4.0
+shader_parameter/scale = 1.0
 shader_parameter/depth_normal_threshold = 0.1
-shader_parameter/depth_normal_threshold_scale = 9.0
+shader_parameter/depth_normal_threshold_scale = 10.0
 shader_parameter/depth_threshold = 1.5
-shader_parameter/normal_threshold = 2.0
+shader_parameter/normal_threshold = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rxiim"]
 next_pass = SubResource("ShaderMaterial_heuud")

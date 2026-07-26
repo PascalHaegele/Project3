@@ -1,7 +1,7 @@
 shader_type spatial;
 render_mode unshaded;
 
-uniform float weight: hint_range(0.0, 0.1, 0.001) = 0.01;
+uniform float weight: hint_range(0.0, 10.0, 0.1) = 1.0;
 uniform vec4 color: source_color = vec4(0.75, 0.55, 0.0, 1.0);
 uniform float intensity = 4.0;
 
@@ -69,7 +69,7 @@ void fragment() {
   };
   
   for(int i = 0; i < 4; i++) {
-    vec2 offset_uv = SCREEN_UV + offsets[i] * 1.0;
+    vec2 offset_uv = SCREEN_UV + offsets[i] * weight;
     
     float depth_n = texture(depth_texture, offset_uv).r;
     vec3 normal_n = texture(normal_roughness_texture, offset_uv).rgb;
@@ -78,7 +78,7 @@ void fragment() {
     vec3 normal_diff = normal_n - normal0;
     
     float edge_depth_n = (sqrt(depth_diff * depth_diff) * 100.0 > d_threshold) ? 1.0 : 0.0;
-    float edge_normal_n = (length(normal_diff) > n_threshold) ? 1.0 : 0.0;
+    float edge_normal_n = (length(normal_diff) > normal_threshold) ? 1.0 : 0.0;
     
     edge = max(edge, max(edge_depth_n, edge_normal_n));
   }

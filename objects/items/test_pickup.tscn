@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://6p00olcusefr" path="res://objects/items/Pickup.cs" id="1_k4x88"]
 [ext_resource type="PackedScene" uid="uid://4ujh60nwrugk" path="res://ui/pickup_indicator.tscn" id="2_y4gfl"]
-[ext_resource type="PackedScene" uid="uid://dopwjsnwnb3xp" path="res://objects/items/Potion.glb" id="3_hykmt"]
-[ext_resource type="PackedScene" uid="uid://bwal2q4p5kty1" path="res://objects/items/Page.glb" id="4_dx4of"]
-[ext_resource type="PackedScene" uid="uid://dyk2updk2j23k" path="res://objects/items/Ammo_Rev.glb" id="5_cd2i0"]
-[ext_resource type="PackedScene" uid="uid://bebdirxcpmgiu" path="res://objects/items/Ammo_Shot.glb" id="6_bebdir"]
+[ext_resource type="PackedScene" uid="uid://dopwjsnwnb3xp" path="res://objects/items/potion/Potion.glb" id="3_hykmt"]
+[ext_resource type="PackedScene" uid="uid://bwal2q4p5kty1" path="res://objects/items/page/Page.glb" id="4_dx4of"]
+[ext_resource type="PackedScene" uid="uid://dyk2updk2j23k" path="res://objects/items/r_ammo/Ammo_Rev.glb" id="5_cd2i0"]
+[ext_resource type="PackedScene" uid="uid://bebdirxcpmgiu" path="res://objects/items/s_ammo/Ammo_Shot.glb" id="6_bebdir"]
 
 [sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_hykmt"]
 length = 0.5

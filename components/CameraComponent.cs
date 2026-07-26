@@ -21,6 +21,8 @@ public partial class CameraComponent : Camera3D {
     set => pivot.Rotation = value;
   }
 
+  public Vector2 Motion { get; private set; }
+
   public override void _Ready() {
     pivot = GetParent<Node3D>();
   }
@@ -47,33 +49,55 @@ public partial class CameraComponent : Camera3D {
       Input.MouseMode == Input.MouseModeEnum.Captured;
 
     if(mouseInput) {
-      InputEventMouseMotion mouseMotion = (InputEventMouseMotion)@event;
+      InputEventMouseMotion mouseMotion = @event as InputEventMouseMotion;
 
-      yawInput = -mouseMotion.Relative.X;
-      pitchInput = -mouseMotion.Relative.Y;
+      Motion = mouseMotion.Relative;
+
+      yawInput = -Motion.X;
+      pitchInput = -Motion.Y;
     }
   }
 
   public void Shake(float amount, float duration) {
     if(amount <= 0.0f || duration <= 0.0f) { return; }
+
+    float halfDuration = duration * 0.5f;
+    Vector3 oldRotation = Rotation;
+    Vector3 newRotation =
+      Rotation +
+      new Vector3(
+        (float)GD.RandRange(-amount, amount),
+        (float)GD.RandRange(-amount, amount),
+        (float)GD.RandRange(-amount, amount)
+      );
+
     Tween t = CreateTween();
-    Vector3 baseRot = Rotation;
-    float half = duration * 0.5f;
-    t.TweenProperty(this, "rotation", baseRot + new Vector3(
-      (float)GD.RandRange(-amount, amount),
-      (float)GD.RandRange(-amount, amount),
-      (float)GD.RandRange(-amount, amount)
-    ), half).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
-    t.TweenProperty(this, "rotation", baseRot, half).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
+
+    _ = t
+      .TweenProperty(this, "rotation", newRotation, halfDuration)
+      .SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
+
+    _ = t
+      .TweenProperty(this, "rotation", oldRotation, halfDuration)
+      .SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
   }
 
   public void RecoilKick(float amount) {
     if(amount <= 0.0f) { return; }
-    Vector3 basePos = Position;
+
+    Vector3 oldPosition = Position;
+    Vector3 newPosition = Position + new Vector3(0.0f, amount * 0.6f, -amount);
+
     Tween t = CreateTween();
-    t.TweenProperty(this, "position", basePos + new Vector3(0.0f, amount * 0.6f, -amount), 0.04f)
+
+    _ = t
+      .TweenProperty(this, "position", newPosition, 0.04f)
       .SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
-    t.TweenProperty(this, "position", basePos, 0.12f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Sine);
+
+    _ = t
+      .TweenProperty(this, "position", oldPosition, 0.12f)
+      .SetEase(Tween.EaseType.Out)
+      .SetTrans(Tween.TransitionType.Sine);
   }
 }
 

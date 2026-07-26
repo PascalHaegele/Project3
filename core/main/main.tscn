@@ -1,25 +1,10 @@
 [gd_scene format=3 uid="uid://c5qt8u5hbysnw"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vwfi5"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-
-[sub_resource type="Sky" id="Sky_yibi5"]
-sky_material = SubResource("ProceduralSkyMaterial_vwfi5")
-
-[sub_resource type="Environment" id="Environment_k5wvu"]
-background_mode = 2
-sky = SubResource("Sky_yibi5")
-glow_enabled = true
+[ext_resource type="PackedScene" uid="uid://conkdp2ortyi4" path="res://core/main/main_menu.tscn" id="1_8fcwd"]
 
 [node name="Main" type="Node" unique_id=686021068]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=792852438]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
-shadow_enabled = true
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1239141895]
-environment = SubResource("Environment_k5wvu")
+[node name="MainMenu" parent="." unique_id=2022624294 instance=ExtResource("1_8fcwd")]
 
 [node name="World" type="Node" parent="." unique_id=673644353]
 
@@ -28,3 +13,6 @@ environment = SubResource("Environment_k5wvu")
 [node name="Actors" type="Node3D" parent="World" unique_id=629470526]
 
 [node name="Systems" type="Node" parent="." unique_id=560121007]
+
+[node name="FmodBankLoader" type="FmodBankLoader" parent="Systems" unique_id=1245912200]
+bank_paths = ["res://FmodBank/Desktop/Master.strings.bank", "res://FmodBank/Desktop/Master.bank", "res://FmodBank/Desktop/SFX_Common.bank"]

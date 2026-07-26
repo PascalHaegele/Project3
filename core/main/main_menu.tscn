@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://conkdp2ortyi4"]
+
+[ext_resource type="Script" uid="uid://bdaltlsv5bds7" path="res://core/main/MainMenu.cs" id="1_aoog5"]
+
+[node name="MainMenu" type="Control" unique_id=2022624294]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_aoog5")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=459716546]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1584723, 0.15847233, 0.1584723, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1556025225]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2103847847]
+layout_mode = 2
+
+[node name="Start" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1561640804]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Start"
+
+[node name="Quit" type="Button" parent="CenterContainer/VBoxContainer" unique_id=567778928]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quit"

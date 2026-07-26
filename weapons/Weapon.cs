@@ -1,25 +1,36 @@
+using FmodSharp;
 using Godot;
 
 public enum WeaponSoundType {
-    Shot,
-    Reload,
-    EmptyShot,
-    Empty
+  Shot,
+  Reload,
+  EmptyShot,
 }
+
 [GlobalClass]
 public partial class Weapon : Node3D {
   [Export] public WeaponInfo info;
   [Export] private Marker3D projectileSpawn;
   //[Export] private Node3D fmodEventEmitterNode;
-  private float fireCooldown;
 
-  private Projectile p;
+  private float fireCooldown;
 
   private RayCast3D aimCast;
   private RayCast3D projectileCast;
 
   public Actor actor;
   private InventoryComponent inventoryComponent;
+
+  // --- Animation (delegiert an WeaponAnimation-Child) ---
+  public WeaponAnimation weaponAnim;
+  private bool waitingForReloadAnimation;
+
+  // Track shots for FrenziedSoul
+  private bool empowerNextShot;
+
+  private FmodEvent shootEvent;
+  private FmodEvent emptyShootEvent;
+  private FmodEvent reloadEvent;
 
   public ItemType AmmoType { get; private set; }
 
@@ -29,19 +40,7 @@ public partial class Weapon : Node3D {
   [Signal] public delegate void ShotEventHandler();
   [Signal] public delegate void ReloadedEventHandler();
 
-  // --- Animation (delegiert an WeaponAnimation-Child) ---
-  public WeaponAnimation weaponAnim;
-  private bool waitingForReloadAnimation;
-
-  // Track shots for FrenziedSoul
-  private bool empowerNextShot = false;
-
-  private bool hasInitializedAmmo = false;
-  // --- DER AMMO-PEILSENDER ---
-  private int _currentAmmo;
- 
   public override void _Ready() {
-
     aimCast = GetNode<RayCast3D>("../AimCast");
     aimCast.TargetPosition = new(0.0f, 0.0f, -info.range);
 
@@ -53,14 +52,7 @@ public partial class Weapon : Node3D {
     AmmoType =
       info.type == WeaponType.Revolver ? ItemType.R_AMMO : ItemType.S_AMMO;
 
-    
-    if (!hasInitializedAmmo) {
-        CurrentAmmo = info.magazineSize;
-        hasInitializedAmmo = true;
-        GD.Print($"[LEBENSZYKLUS] Waffe {Name} wird neu erstellt! (Ready)");
-    }
-
-    weaponAnim = GetNodeOrNull<WeaponAnimation>("WeaponAnimation");
+    CurrentAmmo = info.magazineSize;
 
     weaponAnim = GetNodeOrNull<WeaponAnimation>("WeaponAnimation");
     if(weaponAnim != null) {
@@ -70,24 +62,29 @@ public partial class Weapon : Node3D {
       weaponAnim.MuzzleFlash += OnMuzzleFlash;
     }
 
-    if(projectileSpawn == null) {
-      projectileSpawn = GetNodeOrNull<Marker3D>("ProjectileSpawn");
-    }
+    projectileSpawn ??= GetNode<Marker3D>("ProjectileSpawn");
 
-    GD.Print($"[Weapon] {Name} ready: spawn={(projectileSpawn != null)}, info={(info != null)}, anim={(weaponAnim != null)}, pellets={info?.projectileCount ?? 0}, spread={info?.projectileSpread ?? 0}");
-  }
-  public void SetCurrentAmmo(int ammo) {
-    CurrentAmmo = Mathf.Clamp(ammo, 0, info.magazineSize);
-}
+    shootEvent =
+      FmodServerWrapper
+        .CreateEventInstance(
+          info.type == WeaponType.Revolver ?
+          "event:/GunShot_Timeline" :
+          "event:/ShotgunShot_Timeline"
+        );
+    AddChild(shootEvent);
 
-  public override void _ExitTree() {
-    if(weaponAnim != null) {
-      weaponAnim.ReloadVisualComplete -= OnReloadVisualComplete;
-      weaponAnim.CameraShake -= OnWeaponCameraShake;
-      weaponAnim.CameraRecoil -= OnWeaponCameraRecoil;
-      weaponAnim.MuzzleFlash -= OnMuzzleFlash;
-    }
-    GD.Print($"[LEBENSZYKLUS] Waffe {Name} wird gelöscht/entfernt! (ExitTree)");
+    emptyShootEvent =
+      FmodServerWrapper.CreateEventInstance("event:/EmptyWeapon_Action");
+    AddChild(emptyShootEvent);
+
+    reloadEvent =
+      FmodServerWrapper
+        .CreateEventInstance(
+          info.type == WeaponType.Revolver ?
+          "event:/Gun_Reload_Timeline" :
+          "event:/Shotgun_Reload_Timeline"
+        );
+    AddChild(reloadEvent);
   }
 
   public override void _PhysicsProcess(double delta) {
@@ -95,22 +92,19 @@ public partial class Weapon : Node3D {
   }
 
   public void Reset() {
-    
-    
     empowerNextShot = false;
-    fireCooldown = 0.0f; 
-    Reloading = false;   
+    fireCooldown = 0.0f;
+    Reloading = false;
     waitingForReloadAnimation = false;
   }
 
   public void Shoot() {
     if(Reloading || fireCooldown > 0.0f) { return; }
     if(CurrentAmmo <= 0) {
-       PlayWeaponSound(WeaponSoundType.EmptyShot);
-
-       return;
-
-       }
+      // PlayWeaponSound(WeaponSoundType.EmptyShot);
+      emptyShootEvent.Start();
+      return;
+    }
 
     CurrentAmmo--;
 
@@ -118,7 +112,7 @@ public partial class Weapon : Node3D {
 
     int pellets = Mathf.Max(1, info.projectileCount);
     for(int i = 0; i < pellets; i++) {
-      p = info.projectile.Instantiate<Projectile>();
+      Projectile p = info.projectile.Instantiate<Projectile>();
       if(p == null) { continue; }
 
       // Track shot count for FrenziedSoul effect
@@ -136,40 +130,48 @@ public partial class Weapon : Node3D {
       AddChild(p);
       p.RecalculateDamage();
 
-      Vector3 spawnPos = projectileSpawn.GlobalPosition;
-      p.GlobalPosition = spawnPos;
-      p.shotPosition = spawnPos;
-      p.TopLevel = true;
+      p.GlobalPosition = projectileSpawn.GlobalPosition;
+      p.GlobalRotation = projectileSpawn.GlobalRotation;
 
-      Vector3 forward = -projectileSpawn.GlobalTransform.Basis.Z;
+      if(aimCast.IsColliding()) {
+        Vector3 collisionPoint = aimCast.GetCollisionPoint();
+
+        if(projectileCast.IsColliding()) {
+          float distance =
+            projectileCast.GlobalPosition.DistanceTo(collisionPoint);
+
+          Vector3 position = projectileSpawn.GlobalPosition;
+          projectileSpawn.Position += new Vector3(0.0f, 0.0f, distance + 0.05f);
+
+          p.GlobalPosition = projectileSpawn.GlobalPosition;
+          p.GlobalRotation = projectileSpawn.GlobalRotation;
+
+          projectileSpawn.GlobalPosition = position;
+        } else {
+          p.GlobalPosition = projectileSpawn.GlobalPosition;
+          p.LookAt(collisionPoint);
+        }
+      }
+
       float spread = info.projectileSpread;
       if(spread > 0.0f) {
-        Vector3 right = projectileSpawn.GlobalTransform.Basis.X;
-        Vector3 up = projectileSpawn.GlobalTransform.Basis.Y;
         float yaw = (float)GD.RandRange(-spread, spread);
         float pitch = (float)GD.RandRange(-spread, spread);
-        Basis spreadBasis = new Basis();
-        spreadBasis = spreadBasis.Rotated(right, pitch);
-        spreadBasis = spreadBasis.Rotated(up, yaw);
-        forward = (spreadBasis * forward).Normalized();
+
+        p.RotateX(pitch);
+        p.RotateY(yaw);
       }
 
-      if(forward.LengthSquared() < 1e-4f) {
-        forward = -projectileSpawn.GlobalTransform.Basis.Z;
-      }
-      forward = forward.Normalized();
-
-      Vector3 target = spawnPos + forward;
-      if((target - spawnPos).LengthSquared() > 1e-4f) {
-        p.LookAt(target, Vector3.Up);
-      }
+      p.shotPosition = p.GlobalPosition;
+      p.TopLevel = true;
     }
 
-    PlayWeaponSound(WeaponSoundType.Shot);
     weaponAnim?.PlayRecoil();
-    EmitSignalShot();
 
-    GD.Print($"[Diag] {Name} fired {pellets} pellets, ammo={CurrentAmmo}");
+    // PlayWeaponSound(WeaponSoundType.Shot);
+    shootEvent.Start();
+
+    EmitSignalShot();
   }
 
   public void PlayJumpAnim() { weaponAnim?.PlayJump(); }
@@ -203,8 +205,10 @@ public partial class Weapon : Node3D {
     }
 
     weaponAnim?.PlayReload(reloadDuration);
-    PlayWeaponSound(WeaponSoundType.Reload);
-    GD.Print($"{Name} Reloading (duration: {reloadDuration:F2})");
+
+    // PlayWeaponSound(WeaponSoundType.Reload);
+    reloadEvent.SetParameterByName("ShotCount", CurrentAmmo);
+    reloadEvent.Start();
   }
 
   public void OnReloadVisualComplete() {
@@ -220,7 +224,6 @@ public partial class Weapon : Node3D {
       SocketComponent socket = player.GetComponent<SocketComponent>();
       if(socket != null && socket.HasModifier("FrenziedSoul")) {
         empowerNextShot = true;
-        GD.Print($">>> DEBUG FrenziedSoul: reload finished, next shot will be empowered");
       }
     }
 
@@ -245,15 +248,6 @@ public partial class Weapon : Node3D {
   }
 
   private void OnMuzzleFlash(Vector3 globalPosition, Vector3 forward) {
-    // PackedScene flashScene = GD.Load<PackedScene>("res://weapons/muzzle_flash/MuzzleFlashEffect.tscn");
-    // if(flashScene == null) { return; }
-    // Node3D flash = flashScene.Instantiate<Node3D>();
-    // GetTree().Root.AddChild(flash);
-    // // Use projectileSpawn position (barrel tip) instead of weapon handle
-    // flash.GlobalPosition = projectileSpawn.GlobalPosition;
-    // float yaw = Mathf.Atan2(forward.X, -forward.Z);
-    // flash.GlobalRotation = new Vector3(0.0f, yaw, 0.0f);
-
     Node3D muzzleRoot = GetNodeOrNull<Node3D>("MuzzleFlash");
     if(muzzleRoot != null) {
       foreach(Node child in muzzleRoot.GetChildren()) {
@@ -261,55 +255,40 @@ public partial class Weapon : Node3D {
       }
     }
   }
+
   private string GetEventPathForType(WeaponSoundType soundType) {
-        
-        bool isRevolver = (info != null && info.type == WeaponType.Revolver);
+    bool isRevolver = info != null && info.type == WeaponType.Revolver;
 
-        switch (soundType) {
-            case WeaponSoundType.Shot:
-                return isRevolver ? "event:/GunShot_Timeline" : "event:/ShotgunShot_Timeline";
-            
-            case WeaponSoundType.Reload:
-                return isRevolver ? "event:/Gun_Reload_Timeline" : "event:/Shotgun_Reload_Timeline";
-            
-            case WeaponSoundType.EmptyShot:
-                return "event:/EmptyWeapon_Action";
-                
-            default:
-                return string.Empty;
-        }
-    }
+    return soundType switch {
+      WeaponSoundType.Shot =>
+        isRevolver ?
+        "event:/GunShot_Timeline" :
+        "event:/ShotgunShot_Timeline",
+      WeaponSoundType.Reload =>
+        isRevolver ?
+        "event:/Gun_Reload_Timeline" :
+        "event:/Shotgun_Reload_Timeline",
+      WeaponSoundType.EmptyShot => "event:/EmptyWeapon_Action",
+      _ => string.Empty,
+    };
 
-public void PlayWeaponSound(WeaponSoundType soundType) {
+  }
+
+  public void PlayWeaponSound(WeaponSoundType soundType) {
     string eventPath = GetEventPathForType(soundType);
 
-    if (!string.IsNullOrEmpty(eventPath)) {
-        var fmodServer = Engine.GetSingleton("FmodServer");
-        if (fmodServer != null) {
-            
-            if (soundType == WeaponSoundType.Reload) {
-                var eventInstance = fmodServer.Call("create_event_instance", eventPath).As<GodotObject>();
-                
-                if (eventInstance != null && GodotObject.IsInstanceValid(eventInstance)) {
-                    
-                  
-                    eventInstance.Call("set_parameter_by_name", "ShotCount", (float)CurrentAmmo);
-                    
-                    eventInstance.Call("start");
-                    eventInstance.Call("release");
-                    
-                    GD.Print($">>> FMOD Reload gespielt ({info.type} | Ammo: {CurrentAmmo})");
-                }
-            }
-            else {
-             
-                fmodServer.Call("play_one_shot", eventPath);
-                GD.Print($">>> FMOD 2D-Sound gespielt: {soundType} ({eventPath})");
-            }
+    if(!string.IsNullOrEmpty(eventPath)) { return; }
 
-        } else {
-            GD.PrintErr(">>> FMOD Fehler: FmodServer-Singleton nicht gefunden!");
-        }
+    if(soundType == WeaponSoundType.Reload) {
+      FmodEvent eventInstance =
+        FmodServerWrapper.CreateEventInstance(eventPath);
+      if(eventInstance != null) {
+        eventInstance.SetParameterByName("ShotCount", CurrentAmmo);
+        eventInstance.Start();
+        eventInstance.Release();
+      }
+    } else {
+      FmodServerWrapper.PlayOneShot(eventPath);
     }
-}
+  }
 }
