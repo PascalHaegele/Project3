@@ -10,6 +10,9 @@
 script = ExtResource("1_hfse1")
 info = ExtResource("2_b7g5s")
 projectileSpawn = NodePath("ProjectileSpawn")
+shootEventPath = &"event:/GunShot_Timeline"
+emptyShootEventPath = &"event:/EmptyWeapon_Action"
+reloadEventPath = &"event:/Gun_Reload_Timeline"
 metadata/_custom_type_script = "uid://cohnw7rgixh8v"
 
 [node name="Revolver" parent="." unique_id=954033130 instance=ExtResource("3_b7g5s")]

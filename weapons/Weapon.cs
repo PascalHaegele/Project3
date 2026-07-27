@@ -11,7 +11,6 @@ public enum WeaponSoundType {
 public partial class Weapon : Node3D {
   [Export] public WeaponInfo info;
   [Export] private Marker3D projectileSpawn;
-  //[Export] private Node3D fmodEventEmitterNode;
 
   private float fireCooldown;
 
@@ -28,8 +27,9 @@ public partial class Weapon : Node3D {
   // Track shots for FrenziedSoul
   private bool empowerNextShot;
 
-  private FmodEvent shootEvent;
-  private FmodEvent emptyShootEvent;
+  [Export] private StringName shootEventPath;
+  [Export] private StringName emptyShootEventPath;
+  [Export] private StringName reloadEventPath;
   private FmodEvent reloadEvent;
 
   public ItemType AmmoType { get; private set; }
@@ -64,27 +64,10 @@ public partial class Weapon : Node3D {
 
     projectileSpawn ??= GetNode<Marker3D>("ProjectileSpawn");
 
-    shootEvent =
-      FmodServerWrapper
-        .CreateEventInstance(
-          info.type == WeaponType.Revolver ?
-          "event:/GunShot_Timeline" :
-          "event:/ShotgunShot_Timeline"
-        );
-    AddChild(shootEvent);
-
-    emptyShootEvent =
-      FmodServerWrapper.CreateEventInstance("event:/EmptyWeapon_Action");
-    AddChild(emptyShootEvent);
-
-    reloadEvent =
-      FmodServerWrapper
-        .CreateEventInstance(
-          info.type == WeaponType.Revolver ?
-          "event:/Gun_Reload_Timeline" :
-          "event:/Shotgun_Reload_Timeline"
-        );
-    AddChild(reloadEvent);
+    if(reloadEventPath != null) {
+      reloadEvent = FmodServerWrapper.CreateEventInstance(reloadEventPath);
+      AddChild(reloadEvent);
+    }
   }
 
   public override void _PhysicsProcess(double delta) {
@@ -102,7 +85,9 @@ public partial class Weapon : Node3D {
     if(Reloading || fireCooldown > 0.0f) { return; }
     if(CurrentAmmo <= 0) {
       // PlayWeaponSound(WeaponSoundType.EmptyShot);
-      emptyShootEvent.Start();
+      if(emptyShootEventPath != null) {
+        FmodServerWrapper.PlayOneShotAttached(emptyShootEventPath, this);
+      }
       return;
     }
 
@@ -169,7 +154,9 @@ public partial class Weapon : Node3D {
     weaponAnim?.PlayRecoil();
 
     // PlayWeaponSound(WeaponSoundType.Shot);
-    shootEvent.Start();
+    if(shootEventPath != null) {
+      FmodServerWrapper.PlayOneShotAttached(shootEventPath, this);
+    }
 
     EmitSignalShot();
   }
@@ -207,8 +194,8 @@ public partial class Weapon : Node3D {
     weaponAnim?.PlayReload(reloadDuration);
 
     // PlayWeaponSound(WeaponSoundType.Reload);
-    reloadEvent.SetParameterByName("ShotCount", CurrentAmmo);
-    reloadEvent.Start();
+    reloadEvent?.SetParameterByName("ShotCount", CurrentAmmo);
+    reloadEvent?.Start();
   }
 
   public void OnReloadVisualComplete() {
@@ -257,38 +244,62 @@ public partial class Weapon : Node3D {
   }
 
   private string GetEventPathForType(WeaponSoundType soundType) {
-    bool isRevolver = info != null && info.type == WeaponType.Revolver;
+    bool isRevolver = (info != null && info.type == WeaponType.Revolver);
 
-    return soundType switch {
-      WeaponSoundType.Shot =>
-        isRevolver ?
-        "event:/GunShot_Timeline" :
-        "event:/ShotgunShot_Timeline",
-      WeaponSoundType.Reload =>
-        isRevolver ?
-        "event:/Gun_Reload_Timeline" :
-        "event:/Shotgun_Reload_Timeline",
-      WeaponSoundType.EmptyShot => "event:/EmptyWeapon_Action",
-      _ => string.Empty,
-    };
+    switch(soundType) {
+      case WeaponSoundType.Shot:
+        return
+          isRevolver ?
+          "event:/GunShot_Timeline" :
+          "event:/ShotgunShot_Timeline";
 
+      case WeaponSoundType.Reload:
+        return
+          isRevolver ?
+          "event:/Gun_Reload_Timeline" :
+          "event:/Shotgun_Reload_Timeline";
+
+      case WeaponSoundType.EmptyShot:
+        return "event:/EmptyWeapon_Action";
+
+      default:
+        return string.Empty;
+    }
   }
 
   public void PlayWeaponSound(WeaponSoundType soundType) {
     string eventPath = GetEventPathForType(soundType);
 
-    if(!string.IsNullOrEmpty(eventPath)) { return; }
+    if(!string.IsNullOrEmpty(eventPath)) {
+      var fmodServer = Engine.GetSingleton("FmodServer");
+      if(fmodServer != null) {
 
-    if(soundType == WeaponSoundType.Reload) {
-      FmodEvent eventInstance =
-        FmodServerWrapper.CreateEventInstance(eventPath);
-      if(eventInstance != null) {
-        eventInstance.SetParameterByName("ShotCount", CurrentAmmo);
-        eventInstance.Start();
-        eventInstance.Release();
+        if(soundType == WeaponSoundType.Reload) {
+          var eventInstance =
+            fmodServer
+              .Call("create_event_instance", eventPath)
+              .As<GodotObject>();
+
+          if(eventInstance != null && IsInstanceValid(eventInstance)) {
+            _ = eventInstance
+              .Call("set_parameter_by_name", "ShotCount", (float)CurrentAmmo);
+
+            _ = eventInstance.Call("start");
+            _ = eventInstance.Call("release");
+
+            GD.Print(
+              $">>> FMOD Reload gespielt ({info.type} | Ammo: {CurrentAmmo})"
+            );
+          }
+        } else {
+
+          _ = fmodServer.Call("play_one_shot", eventPath);
+          GD.Print($">>> FMOD 2D-Sound gespielt: {soundType} ({eventPath})");
+        }
+
+      } else {
+        GD.PrintErr(">>> FMOD Fehler: FmodServer-Singleton nicht gefunden!");
       }
-    } else {
-      FmodServerWrapper.PlayOneShot(eventPath);
     }
   }
 }

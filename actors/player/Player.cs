@@ -40,9 +40,12 @@ public partial class Player : Actor, IHitable {
   private HealingAnimation healingAnim;
   private bool isHealing;
 
+  [Export] private StringName footstepEventPath;
+  private FmodEvent footstepEvent;
+
   private float footstepTimer;
   private float footstepInterval = 0.35f;
-  private FmodEvent footstepInstance;
+  private GodotObject footstepInstance;
   private bool isFootstepPlaying;
 
   [Signal] public delegate void InteractingEventHandler();
@@ -108,9 +111,18 @@ public partial class Player : Actor, IHitable {
       );
     inventoryUI.Visible = false;
 
-    footstepInstance
-      = FmodServerWrapper.CreateEventInstance("event:/Walk_Timeline");
-    AddChild(footstepInstance);
+    var fmodServer = Engine.GetSingleton("FmodServer");
+    if(fmodServer != null) {
+      footstepInstance =
+        fmodServer
+          .Call("create_event_instance", "event:/Walk_Timeline")
+          .As<GodotObject>();
+    }
+
+    if(footstepEventPath != null) {
+      footstepEvent = FmodServerWrapper.CreateEventInstance(footstepEventPath);
+      AddChild(footstepEvent);
+    }
   }
 
   public override void _Process(double delta) {
@@ -178,7 +190,33 @@ public partial class Player : Actor, IHitable {
     // ==========================================
     // GODOT TIMER FÜR SCHRITTE (KORRIGIERT!)
     // ==========================================
-    if(footstepInstance != null) {
+
+    // if(footstepInstance != null && IsInstanceValid(footstepInstance)) {
+    //   // Exakte Laufgeschwindigkeit am Boden ermitteln
+    //   Vector3 flatVelocity = new Vector3(Velocity.X, 0.0f, Velocity.Z);
+    //   float currentSpeed = flatVelocity.Length();
+    //
+    //   if(currentSpeed > 0.1f && IsOnFloor()) {
+    //     // Parameter ans Loop-Event in FMOD senden
+    //     GD.Print(currentSpeed);
+    //     _ = footstepInstance
+    //       .Call("set_parameter_by_name", "WalkSpeed", currentSpeed);
+    //
+    //     // Sound starten, falls er noch pausiert ist
+    //     if(!isFootstepPlaying) {
+    //       _ = footstepInstance.Call("start");
+    //       isFootstepPlaying = true;
+    //     }
+    //   } else {
+    //     // Spieler steht oder springt -> Sound sanft stoppen
+    //     if(isFootstepPlaying) {
+    //       _ = footstepInstance.Call("stop", 0); // 0 = FMOD_STUDIO_STOP_ALLOWFADEOUT
+    //       isFootstepPlaying = false;
+    //     }
+    //   }
+    // }
+
+    if(footstepEvent != null) {
       // Exakte Laufgeschwindigkeit am Boden ermitteln
       Vector3 flatVelocity = new(Velocity.X, 0.0f, Velocity.Z);
       float currentSpeed = flatVelocity.Length();
@@ -186,17 +224,17 @@ public partial class Player : Actor, IHitable {
       if(currentSpeed > 0.1f && IsOnFloor()) {
 
         // Parameter ans Loop-Event in FMOD senden
-        footstepInstance.SetParameterByName("WalkSpeed", currentSpeed);
+        footstepEvent.SetParameterByName("WalkSpeed", currentSpeed);
 
         // Sound starten, falls er noch pausiert ist
         if(!isFootstepPlaying) {
-          footstepInstance.Start();
+          footstepEvent.Start();
           isFootstepPlaying = true;
         }
       } else {
         // Spieler steht oder springt -> Sound sanft stoppen
         if(isFootstepPlaying) {
-          footstepInstance.Stop(FmodServerWrapper.FMOD_STUDIO_STOP_ALLOWFADEOUT);
+          footstepEvent.Stop(FmodServerWrapper.FMOD_STUDIO_STOP_ALLOWFADEOUT);
           isFootstepPlaying = false;
         }
       }
@@ -285,9 +323,11 @@ public partial class Player : Actor, IHitable {
   }
 
   private void StartWeaponSwitch(int index) {
-    if(switchingWeapon || index == activeWeaponIndex || weapons[index] == null) {
-      return;
-    }
+    if(
+      switchingWeapon ||
+      index == activeWeaponIndex ||
+      weapons[index] == null
+    ) { return; }
     switchingWeapon = true;
 
     Weapon next = weapons[index];
@@ -297,13 +337,15 @@ public partial class Player : Actor, IHitable {
     if(current != null) {
       if(current.weaponAnim != null) {
         // 1. Signal temporär KAPPEN, damit der Reload-Bug unmöglich wird!
-        current.weaponAnim.ReloadVisualComplete -= current.OnReloadVisualComplete;
+        current.weaponAnim.ReloadVisualComplete -=
+          current.OnReloadVisualComplete;
 
         // 2. Jetzt die Animation sicher abwürgen
         current.weaponAnim.ForceFinishReload();
 
         // 3. Signal wieder verbinden (für das nächste Mal)
-        current.weaponAnim.ReloadVisualComplete += current.OnReloadVisualComplete;
+        current.weaponAnim.ReloadVisualComplete +=
+          current.OnReloadVisualComplete;
       }
       current.Reset();
       current.Visible = false;
@@ -366,11 +408,14 @@ public partial class Player : Actor, IHitable {
   }
 
   private string GetEventPathForType(ItemSoundType soundType) {
-    return soundType switch {
-      ItemSoundType.Page => "event:/Pages_Interaction_Action",
-      ItemSoundType.Ammo => "event:/Pages_Interaction_Action",
-      _ => string.Empty,
-    };
+    switch(soundType) {
+      case ItemSoundType.Page:
+        return "event:/Pages_Interaction_Action";
+      case ItemSoundType.Ammo:
+        return "event:/Pages_Interaction_Action";
+      default:
+        return string.Empty;
+    }
   }
 
   public void PlayItemSound(ItemSoundType soundType) {
@@ -380,13 +425,25 @@ public partial class Player : Actor, IHitable {
       FmodServerWrapper.PlayOneShot(eventPath);
       FmodServerWrapper.PlayOneShotAttached(eventPath, this);
     }
+
+    if(!string.IsNullOrEmpty(eventPath)) {
+      var fmodServer = Engine.GetSingleton("FmodServer");
+      if(fmodServer != null) {
+        _ = fmodServer.Call("play_one_shot", eventPath);
+
+        GD.Print($">>> FMOD 2D Sound abgespielt: {soundType} ({eventPath})");
+
+      } else {
+        GD.PrintErr(">>> FMOD Fehler: FmodServer-Singleton nicht gefunden!");
+      }
+    }
   }
 
   public override void _ExitTree() {
     // Sound hart stoppen und aufräumen, wenn der Player verschwindet
-    if(footstepInstance != null && IsInstanceValid(footstepInstance)) {
-      footstepInstance.Call("stop", 1); // 1 = FMOD_STUDIO_STOP_IMMEDIATE
-      footstepInstance.Call("release");
+    if (footstepInstance != null && IsInstanceValid(footstepInstance)) {
+      _ = footstepInstance.Call("stop", 1); // 1 = FMOD_STUDIO_STOP_IMMEDIATE
+      _ = footstepInstance.Call("release");
     }
   }
 }

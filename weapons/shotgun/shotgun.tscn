@@ -10,6 +10,9 @@
 script = ExtResource("1_weapon")
 info = ExtResource("2_f42wg")
 projectileSpawn = NodePath("ProjectileSpawn")
+shootEventPath = &"event:/ShotgunShot_Timeline"
+emptyShootEventPath = &"event:/EmptyWeapon_Action"
+reloadEventPath = &"event:/Shotgun_Reload_Timeline"
 metadata/_custom_type_script = "uid://cohnw7rgixh8v"
 
 [node name="ShotgunModel" parent="." unique_id=1870765779 instance=ExtResource("3_model")]

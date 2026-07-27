@@ -5,8 +5,6 @@
 [resource]
 resource_local_to_scene = true
 script = ExtResource("1_ld23n")
-patrolPath = PackedVector3Array()
-leashPoint = Vector3(0, 0, 0)
 leashLength = 30.0
 attackRange = 14.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"

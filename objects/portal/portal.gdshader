@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded;
+render_mode unshaded, shadows_disabled;
 
 uniform sampler2D noise_tex;
 

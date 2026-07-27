@@ -173,8 +173,8 @@ spot_angle = 73.30244
 [node name="SpotLight3D2" type="SpotLight3D" parent="." unique_id=1350080260]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 169.27217, 4.725664, -12.861076)
 spot_range = 14.822939
-spot_attenuation = 0.15
-spot_angle = 55.02994
+spot_attenuation = 0.1
+spot_angle = 52.742313
 
 [node name="SpotLight3D3" type="SpotLight3D" parent="." unique_id=1592457691]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 169.27217, 4.725664, -52.61523)
