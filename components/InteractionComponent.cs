@@ -10,7 +10,7 @@ public partial class InteractionComponent : Area3D {
   public override void _Ready() {
     CollisionLayer = (uint)CollisionLayerEnum.NONE;
     CollisionMask = (uint)CollisionLayerEnum.PLAYER;
-    Monitorable = false;
+    SetDeferred(Area3D.PropertyName.Monitorable, false);
 
     owner = GetParent<Node3D>();
     callable = Callable.From(TryInteract);

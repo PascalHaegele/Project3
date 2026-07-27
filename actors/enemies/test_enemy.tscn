@@ -200,7 +200,6 @@ shape = SubResource("CapsuleShape3D_v4a0d")
 path_desired_distance = 0.5
 target_desired_distance = 0.5
 path_height_offset = 0.25
-debug_enabled = true
 
 [node name="VelocityComponent" type="Node" parent="." unique_id=1302938011]
 script = ExtResource("2_k4hf1")

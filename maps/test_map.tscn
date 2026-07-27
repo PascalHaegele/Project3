@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://cad0jomcq3ndd"]
 
 [ext_resource type="Shader" uid="uid://cgo4kfkp8kqls" path="res://maps/sky.gdshader" id="1_svl6s"]
-[ext_resource type="Script" uid="uid://b20cok5elpx03" path="res://core/EventManager.cs" id="1_wd2vj"]
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_6b7mj"]
 [ext_resource type="Texture2D" uid="uid://lv4ptmsm7xpg" path="res://maps/map_1/Map 1_final_M_Brick_albedo.png" id="2_ks570"]
 [ext_resource type="PackedScene" uid="uid://c55wv856x1kmu" path="res://actors/enemies/test_enemy.tscn" id="2_pbr4s"]
@@ -13,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dmp0my4bhl36n" path="res://objects/chest/chest.tscn" id="5_cabd0"]
 [ext_resource type="Script" uid="uid://ci31eubnodj4i" path="res://core/PortalArea.cs" id="10_wd2vj"]
 [ext_resource type="PackedScene" uid="uid://b2f87vnuu8frk" path="res://objects/altar/altar.tscn" id="14_ks570"]
+[ext_resource type="PackedScene" uid="uid://cn8nhwdvhamst" path="res://objects/portal/portal.tscn" id="15_ad6p3"]
 [ext_resource type="Script" uid="uid://bbqb6u8gahdth" path="res://tools/PageDebugTool.cs" id="17"]
 [ext_resource type="CompressedTexture2DArray" uid="uid://c20yn5tfpeeb2" path="res://maps/sun.png" id="17_7wt56"]
 
@@ -76,7 +76,6 @@ script = ExtResource("3_pbr4s")
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [node name="TestMap" type="Node3D" unique_id=1304355676]
-script = ExtResource("1_wd2vj")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=37054548]
 navigation_mesh = SubResource("NavigationMesh_bfp77")
@@ -202,3 +201,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.392482, 0, -0.7654152)
 
 [node name="PlayerSpawn" type="Marker3D" parent="." unique_id=160749305]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.403597)
+
+[node name="Portal" parent="." unique_id=1171833219 instance=ExtResource("15_ad6p3")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -17.406115, 0, 0)
+isLevelChange = true
+newLevelPath = &"res://maps/CS_Map.tscn"

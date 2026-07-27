@@ -1,11 +1,9 @@
 [gd_scene format=3 uid="uid://b1557xgv14uto"]
 
-[ext_resource type="Script" uid="uid://b20cok5elpx03" path="res://core/EventManager.cs" id="1_e5prk"]
 [ext_resource type="Script" uid="uid://c8525x2xugj2n" path="res://core/SpawnArea.cs" id="1_jvdko"]
 [ext_resource type="Shader" uid="uid://cgo4kfkp8kqls" path="res://maps/sky.gdshader" id="1_ui8i3"]
 [ext_resource type="PackedScene" uid="uid://c55wv856x1kmu" path="res://actors/enemies/test_enemy.tscn" id="2_3soxs"]
 [ext_resource type="Texture2D" uid="uid://da7jcsvmhja8y" path="res://maps/skybox.png" id="2_a1t7w"]
-[ext_resource type="PackedScene" uid="uid://co62vn6pet0yj" path="res://actors/player/player.tscn" id="3_ui8i3"]
 [ext_resource type="Texture2D" uid="uid://lv4ptmsm7xpg" path="res://maps/map_1/Map 1_final_M_Brick_albedo.png" id="4_8wn1s"]
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="4_a1t7w"]
 [ext_resource type="CompressedTexture2DArray" uid="uid://c20yn5tfpeeb2" path="res://maps/sun.png" id="4_f7lwg"]
@@ -73,13 +71,6 @@ uv1_triplanar = true
 material = SubResource("StandardMaterial3D_8wn1s")
 size = Vector3(5.371338, 4.820801, 1)
 
-[sub_resource type="Resource" id="Resource_f7lwg"]
-resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-sprintSpeed = 14.0
-airborneSpeed = 5.0
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
-
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_bfp77"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ui8i3"]
@@ -106,7 +97,7 @@ height = 0.1
 radius = 3.0
 height = 17.5
 
-[sub_resource type="Resource" id="Resource_22v2i"]
+[sub_resource type="Resource" id="Resource_f7lwg"]
 resource_local_to_scene = true
 script = ExtResource("15_24hbc")
 patrolPath = PackedVector3Array(181.4789, 2.3929415, -136.71298, 182.76384, 2.3929405, -130.47568, 184.49522, 2.3929405, -128.45308)
@@ -115,7 +106,7 @@ leashLength = 50.0
 attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_0nuwe"]
+[sub_resource type="Resource" id="Resource_22v2i"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 walkSpeed = 3.0
@@ -123,7 +114,6 @@ sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [node name="Main" type="Node3D" unique_id=7192887]
-script = ExtResource("1_e5prk")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1193041950]
 environment = SubResource("Environment_x1dlt")
@@ -947,10 +937,6 @@ material = SubResource("ORMMaterial3D_o0ahx")
 [node name="FmodBankLoader" type="FmodBankLoader" parent="NavigationRegion3D" unique_id=1724278068]
 bank_paths = ["res://FmodBank/Desktop/Master.strings.bank", "res://FmodBank/Desktop/Master.bank", "res://FmodBank/Desktop/SFX_Common.bank"]
 
-[node name="Player" parent="." unique_id=134350 instance=ExtResource("3_ui8i3")]
-transform = Transform3D(0.9505068, 0, 0.3107044, 0, 1, 0, -0.3107044, 0, 0.9505068, 175.55298, 2.392941, -169.15819)
-velocityInfo = SubResource("Resource_f7lwg")
-
 [node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=2016545012]
 mesh = SubResource("ImmediateMesh_bfp77")
 script = ExtResource("7_a1t7w")
@@ -1075,6 +1061,11 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 97.54355, 2.429808, 20.682245)
 destination = NodePath("../../PlayerSpawn")
 
+[node name="Portal3" parent="." unique_id=233690659 instance=ExtResource("12_k8dp5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 208.79567, 2.889122, 10.464765)
+isLevelChange = true
+newLevelPath = &"res://maps/map_1/level_1.tscn"
+
 [node name="Traps" type="Node" parent="." unique_id=2121430909]
 
 [node name="TrapArea" type="Area3D" parent="Traps" unique_id=1536478327]
@@ -1118,5 +1109,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.45947, 2.3929405, -144.50
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 177, 3, -147)
-enemyInfo = SubResource("Resource_22v2i")
-velocityInfo = SubResource("Resource_0nuwe")
+enemyInfo = SubResource("Resource_f7lwg")
+velocityInfo = SubResource("Resource_22v2i")

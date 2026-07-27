@@ -14,68 +14,32 @@ public partial class EventManager : Node {
   private readonly List<Enemy> enemies = new();
 
   private readonly List<PortalArea> portalAreas = new();
+  private readonly List<Portal> portals = new();
+
   private readonly List<Altar> altars = new();
 
-  // Da wir nativ über die GDExtension gehen, ist die Instanz ein rohes GodotObject
   private FmodEvent ambientEvent;
 
+  private Node3D currentMap;
+
+  public Node3D CurrentMap {
+    set {
+      currentMap = value;
+      MapChange();
+    }
+  }
+
+  [Signal]
+  public delegate void PortalLevelChangeEventHandler(StringName newLevelPath);
+
   public override void _Ready() {
-    player = GetTree().Root.FindChild("Player", true, false) as Player;
-    playerInsanityComponent = player.GetComponent<InsanityComponent>();
-
-    playerInsanityComponent.InsanityChanged += OnInsanityChanged;
-    playerInsanityComponent.InsanityLevelChanged += OnInsanityLevelChanged;
-
-    playerSpawn = GetNode<Marker3D>("PlayerSpawn");
-
-    player.GetComponent<HealthComponent>().Died += OnPlayerDeath;
-
-    environment =
-      GetTree()
-        .Root
-        .FindChild("WorldEnvironment", true, false) as WorldEnvironment;
-
-    skyShader = environment.Environment.Sky.SkyMaterial as ShaderMaterial;
-
     if(GetNodeOrNull("HitstopManager") == null) {
       AddChild(new HitstopManager());
-    }
-
-    foreach(Node child in GetChildren()) {
-      if(child is Enemy enemy) { AddEnemy(enemy); }
-      if(child is PortalArea portalArea) { portalAreas.Add(portalArea); }
-      if(child is Altar altar) { altars.Add(altar); }
     }
 
     GetTree().NodeAdded += (node) => {
       if(node is Enemy enemy) { AddEnemy(enemy); }
     };
-
-    ambientEvent =
-      FmodServerWrapper.CreateEventInstance("event:/Walk_Timeline");
-    AddChild(ambientEvent);
-    ambientEvent.Start();
-  }
-
-  public void AddEnemy(Enemy enemy) {
-    enemies.Add(enemy);
-    _ = enemy.Connect(
-      Enemy.SignalName.Killed,
-      Callable.From<Enemy>(OnEnemyKilled),
-      (uint)ConnectFlags.OneShot
-    );
-  }
-
-  private void OnEnemyKilled(Enemy enemy) {
-    if(enemies.Remove(enemy)) {
-      playerInsanityComponent.AddInsanity(10.0f);
-      player.GetComponent<HealthComponent>().OnEliteKill();
-    }
-  }
-
-  private void StartAmbientSound(string eventPath) {
-    ambientEvent = FmodServerWrapper.CreateEventInstance(eventPath);
-    _ = ambientEvent?.Call("start");
   }
 
   public override void _UnhandledInput(InputEvent @event) {
@@ -87,6 +51,69 @@ public partial class EventManager : Node {
         playerInsanityComponent.AddInsanity(-10.0f);
       }
     }
+  }
+
+  public void SetPlayer(Player player) {
+    this.player = player;
+    playerInsanityComponent = this.player.GetComponent<InsanityComponent>();
+
+    playerInsanityComponent.InsanityChanged += OnInsanityChanged;
+    playerInsanityComponent.InsanityLevelChanged += OnInsanityLevelChanged;
+
+    this.player.GetComponent<HealthComponent>().Died += OnPlayerDeath;
+
+    ambientEvent =
+      FmodServerWrapper.CreateEventInstance("event:/Walk_Timeline");
+    this.player.AddChild(ambientEvent);
+    ambientEvent.Start();
+  }
+
+  public void AddEnemy(Enemy enemy) {
+    enemies.Add(enemy);
+
+    _ = enemy.Connect(
+      Enemy.SignalName.Killed,
+      Callable.From<Enemy>(OnEnemyKilled),
+      (uint)ConnectFlags.OneShot
+    );
+  }
+
+  private void MapChange() {
+    environment = currentMap.GetNode<WorldEnvironment>("WorldEnvironment");
+    skyShader = environment.Environment.Sky.SkyMaterial as ShaderMaterial;
+
+    playerSpawn = currentMap.GetNode<Marker3D>("PlayerSpawn");
+
+    enemies.Clear();
+    portalAreas.Clear();
+    portals.Clear();
+    altars.Clear();
+    foreach(Node child in currentMap.GetChildren()) {
+      if(child is PortalArea portalArea) { portalAreas.Add(portalArea); }
+      if(child is Portal portal) {
+        portals.Add(portal);
+        if(portal.isLevelChange) {
+          portal.ChangeLevel += EmitSignalPortalLevelChange;
+        }
+      }
+      if(child is Altar altar) { altars.Add(altar); }
+    }
+
+    OnInsanityChanged(playerInsanityComponent.CurrentInsanity);
+    OnInsanityLevelChanged(playerInsanityComponent.CurrentLevel);
+  }
+
+  private void OnEnemyKilled(Enemy enemy) {
+    if(enemies.Remove(enemy)) {
+      enemy.Killed -= OnEnemyKilled;
+      playerInsanityComponent.AddInsanity(10.0f);
+      player.GetComponent<HealthComponent>().OnEliteKill();
+    }
+  }
+
+  private void StartAmbientSound(string eventPath) {
+    ambientEvent = FmodServerWrapper.CreateEventInstance(eventPath);
+    _ = ambientEvent?.Call("start");
   }
 
   private void OnPlayerDeath() {
@@ -125,7 +152,7 @@ public partial class EventManager : Node {
     );
 
     // Reiner nativer Parameter-Aufruf an das GDExtension-Event
-    // if(_ambientInstance != null && GodotObject.IsInstanceValid(_ambientInstance)) {
+    // if(_ambientInstance != null && IsInstanceValid(_ambientInstance)) {
     //   _ambientInstance.Call("set_parameter", "Insanity", insanity);
     // }
   }

@@ -29,6 +29,7 @@ public partial class Player : Actor, IHitable {
   private bool hoveringPickup;
   private Pickup? hoveredPickup;
 
+  private Control hud;
   private ProgressBar healthBar;
   private ProgressBar insanityMeter;
 
@@ -48,8 +49,6 @@ public partial class Player : Actor, IHitable {
 
   public override void _Ready() {
     base._Ready();
-
-    Input.MouseMode = Input.MouseModeEnum.Captured;
 
     camera = GetComponent<CameraComponent>();
     inputComponent = GetComponent<InputComponent>();
@@ -76,22 +75,24 @@ public partial class Player : Actor, IHitable {
 
     pickupCast = GetNode<RayCast3D>("CameraPivot/PickupCast");
 
-    healthBar = GetNode<ProgressBar>("HUD/HealthBar");
+    hud = GetNode<Control>("HUD");
+
+    healthBar = hud.GetNode<ProgressBar>("HealthBar");
     healthBar.MaxValue = healthComponent.maxHealth;
     healthBar.Value = healthComponent.CurrentHealth;
 
-    insanityMeter = GetNode<ProgressBar>("HUD/InsanityMeter");
+    insanityMeter = hud.GetNode<ProgressBar>("InsanityMeter");
     insanityMeter.MaxValue = insanityComponent.MaxInsanity;
     insanityMeter.Value = insanityComponent.CurrentInsanity;
 
-    ammoDisplay = GetNode<Label>("HUD/AmmoDisplay");
+    ammoDisplay = hud.GetNode<Label>("AmmoDisplay");
     RedrawAmmoUI();
 
-    potionCount = GetNode<Label>("HUD/PotionCount");
+    potionCount = hud.GetNode<Label>("PotionCount");
     RedrawPotionUI();
 
     // Setup InventoryUI
-    inventoryUI = GetNodeOrNull<InventoryUI>("HUD/InventoryUI");
+    inventoryUI = hud.GetNodeOrNull<InventoryUI>("InventoryUI");
     if(inventoryUI == null) {
       // Create it dynamically if not in scene
       inventoryUI = new InventoryUI();
@@ -206,15 +207,9 @@ public partial class Player : Actor, IHitable {
     UpdateWeaponMotion();
   }
 
-  public override void _UnhandledInput(InputEvent @event) {
-    if(Input.IsActionJustPressed("exit")) { GetTree().Quit(); }
+  public void ShowHUD() => hud.Visible = true;
 
-    if(Input.IsActionJustPressed("mouse_capture")) {
-      Input.MouseMode =
-        Input.MouseMode == Input.MouseModeEnum.Captured ?
-        Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
-    }
-  }
+  public void HideHUD() => hud.Visible = false;
 
   private void HandlePickup() {
     hoveringPickup = true;

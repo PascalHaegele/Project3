@@ -1,10 +1,7 @@
 [gd_scene format=3 uid="uid://bc32niwsqbkfs"]
 
-[ext_resource type="Script" uid="uid://b20cok5elpx03" path="res://core/EventManager.cs" id="1_y0ld0"]
 [ext_resource type="Shader" uid="uid://cgo4kfkp8kqls" path="res://maps/sky.gdshader" id="1_yrkou"]
 [ext_resource type="Texture2D" uid="uid://da7jcsvmhja8y" path="res://maps/skybox.png" id="2_egu6l"]
-[ext_resource type="PackedScene" uid="uid://co62vn6pet0yj" path="res://actors/player/player.tscn" id="4_y0ld0"]
-[ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="5_166p4"]
 [ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="6_egu6l"]
 [ext_resource type="PackedScene" uid="uid://dl26jt5glq5e0" path="res://maps/map_1/Map 1_final.glb" id="7_y0ld0"]
 [ext_resource type="Script" uid="uid://c8525x2xugj2n" path="res://core/SpawnArea.cs" id="8_e0egg"]
@@ -14,7 +11,6 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_75as7"]
 shader = ExtResource("1_yrkou")
 shader_parameter/sky_tex = ExtResource("2_egu6l")
-shader_parameter/sun_tex_layer = 1.0
 shader_parameter/sun_size = 0.99
 shader_parameter/sun_softness = 0.002
 shader_parameter/background_color = Color(0, 0, 0, 1)
@@ -38,18 +34,12 @@ size = Vector2(150, 150)
 
 [sub_resource type="HeightMapShape3D" id="HeightMapShape3D_litht"]
 
-[sub_resource type="Resource" id="Resource_e0egg"]
-resource_local_to_scene = true
-script = ExtResource("5_166p4")
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
-
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_bfp77"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_bfp77"]
 radius = 1.4587605
 
 [node name="Level_1" type="Node3D" unique_id=1131382981]
-script = ExtResource("1_y0ld0")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=52826338]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
@@ -79,12 +69,6 @@ shape = SubResource("HeightMapShape3D_litht")
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 55.649925, 6.7604938, -47.79516)
 spot_range = 15.6541815
 spot_attenuation = 0.03
-
-[node name="Player" parent="." unique_id=134350 instance=ExtResource("4_y0ld0")]
-transform = Transform3D(-0.18309447, 0, -0.98309535, 0, 1, 0, 0.98309535, 0, -0.18309447, 82.183334, 1.9073486e-06, -41.74434)
-velocityInfo = SubResource("Resource_e0egg")
-
-[node name="FmodListener2D" type="FmodListener2D" parent="Player" unique_id=2118825060]
 
 [node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=1294511446]
 mesh = SubResource("ImmediateMesh_bfp77")

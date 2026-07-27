@@ -1,10 +1,14 @@
 [gd_scene format=3 uid="uid://c5qt8u5hbysnw"]
 
 [ext_resource type="PackedScene" uid="uid://conkdp2ortyi4" path="res://core/main/main_menu.tscn" id="1_8fcwd"]
+[ext_resource type="Script" uid="uid://bbp6ef46df7tw" path="res://core/main/GameManager.cs" id="1_vwfi5"]
+[ext_resource type="Script" uid="uid://b20cok5elpx03" path="res://core/EventManager.cs" id="2_6vymn"]
 
 [node name="Main" type="Node" unique_id=686021068]
+script = ExtResource("1_vwfi5")
 
 [node name="MainMenu" parent="." unique_id=2022624294 instance=ExtResource("1_8fcwd")]
+startMapPath = &"res://maps/test_map.tscn"
 
 [node name="World" type="Node" parent="." unique_id=673644353]
 
@@ -13,6 +17,9 @@
 [node name="Actors" type="Node3D" parent="World" unique_id=629470526]
 
 [node name="Systems" type="Node" parent="." unique_id=560121007]
+
+[node name="EventManager" type="Node" parent="Systems" unique_id=890112031]
+script = ExtResource("2_6vymn")
 
 [node name="FmodBankLoader" type="FmodBankLoader" parent="Systems" unique_id=1245912200]
 bank_paths = ["res://FmodBank/Desktop/Master.strings.bank", "res://FmodBank/Desktop/Master.bank", "res://FmodBank/Desktop/SFX_Common.bank"]

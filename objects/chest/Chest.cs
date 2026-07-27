@@ -25,9 +25,6 @@ public partial class Chest : StaticBody3D, IInteractable {
 
     if(animationPlayer != null) {
       availableAnimations = animationPlayer.GetAnimationList();
-      GD.Print($"Chest animations found: {string.Join(", ", availableAnimations)}");
-    } else {
-      GD.PrintErr("Chest: No AnimationPlayer found!");
     }
   }
 
@@ -46,12 +43,10 @@ public partial class Chest : StaticBody3D, IInteractable {
     opened = true;
 
     if(animationPlayer == null) {
-      GD.PrintErr("Chest: No AnimationPlayer available.");
     } else {
       string animationName = FindBestAnimation();
       if(!string.IsNullOrEmpty(animationName)) {
         animationPlayer.Play(animationName);
-        GD.Print($"Chest: Playing animation '{animationName}'.");
       }
     }
 
@@ -188,13 +183,13 @@ public partial class Chest : StaticBody3D, IInteractable {
   private PageData GeneratePageDrop() {
     if(PageDatabase.PageCount <= 0) { return null; }
 
-    System.Collections.Generic.List<PageData> allPages = new(PageDatabase.GetPagesByCategory(""));
+    List<PageData> allPages = new(PageDatabase.GetPagesByCategory(""));
     if (allPages.Count <= 0) return null;
 
     // Split pages by rarity
-    var commonPages = new System.Collections.Generic.List<PageData>();
-    var magicPages = new System.Collections.Generic.List<PageData>();
-    var rarePages = new System.Collections.Generic.List<PageData>();
+    var commonPages = new List<PageData>();
+    var magicPages = new List<PageData>();
+    var rarePages = new List<PageData>();
 
     foreach (PageData page in allPages) {
       if (page.Rarity == "Common") commonPages.Add(page);

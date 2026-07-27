@@ -13,13 +13,14 @@ public partial class Projectile : RigidBody3D {
   private Vector3 hitPosition;
 
   // Empowered shot flag
-  public bool isEmpowered = false;
+  public bool isEmpowered;
   private bool isHoming;
   private float homingStrength;
   private float homingRange = 12.0f;
   private Vector3 currentDirection;
 
-  [Signal] public delegate void HitLandedEventHandler(float damage, Vector3 hitPoint);
+  [Signal]
+  public delegate void HitLandedEventHandler(float damage, Vector3 hitPoint);
 
   public override void _Ready() {
     freeTimer = new();
@@ -36,23 +37,21 @@ public partial class Projectile : RigidBody3D {
     hitbox = GetNode<HitboxComponent>("HitboxComponent");
     hitbox.actor = weapon.actor;
 
-    // Initialize current direction to forward so homing starts smoothly
-    // currentDirection = -GlobalBasis.Z;
-
     if (weapon.GetParent() is Player) {
       hitbox.CollisionLayer = (uint)CollisionLayerEnum.PLAYER_HITBOX;
       hitbox.CollisionMask = (uint)CollisionLayerEnum.ENEMY_HURTBOX;
     }
-
-    ApplyDamageFalloff();
   }
 
   /// <summary>
   /// Recalculate damage now that isEmpowered and socket modifiers are finalized.
   /// </summary>
   public void RecalculateDamage() {
-    float baseDamage = weapon.info.projectileDamage * weapon.info.damageMulitplier;
-    Player player = weapon.GetParent() as Player ?? weapon.GetParent()?.GetParent<Player>();
+    float baseDamage =
+      weapon.info.projectileDamage * weapon.info.damageMulitplier;
+
+    Player player =
+      weapon.GetParent() as Player ?? weapon.GetParent()?.GetParent<Player>();
     if (player != null) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
       if (socket != null) {
@@ -60,31 +59,12 @@ public partial class Projectile : RigidBody3D {
         if (socket.HasModifier("HomingProjectiles")) {
           isHoming = true;
           homingStrength = socket.GetModifier("HomingProjectiles");
-          GD.Print($">>> DEBUG HomingProjectiles: strength={homingStrength}, range={homingRange}");
         }
       }
     }
 
     hitbox.damage = baseDamage;
-    ApplyDamageFalloff();
-    if (isEmpowered) {
-      hitbox.damage *= 2.0f;
-    }
-    GD.Print($">>> DEBUG Projectile.RecalculateDamage: empowered={isEmpowered}, baseDamage={baseDamage:F1}, falloffApplied={hitbox.damage:F1}");
-  }
-
-  public void ApplyDamageFalloff() {
-    if (weapon == null || weapon.info == null) { return; }
-    float distance = GlobalPosition.DistanceTo(shotPosition);
-    float start = weapon.info.damageFalloffStart;
-    float end = weapon.info.damageFalloffEnd;
-    float minMult = weapon.info.minDamageMultiplier;
-
-    if (distance <= start || end <= start) { return; }
-
-    float t = Mathf.Clamp((distance - start) / (end - start), 0.0f, 1.0f);
-    float multiplier = Mathf.Lerp(1.0f, minMult, t);
-    hitbox.damage *= multiplier;
+    if (isEmpowered) { hitbox.damage *= 2.0f; }
   }
 
   public override void _Process(double delta) {
@@ -113,10 +93,6 @@ public partial class Projectile : RigidBody3D {
         bestDistance = distance;
         nearestTarget = target;
       }
-    }
-
-    if(nearestTarget != null) {
-      GD.Print($">>> DEBUG Homing: Found target at distance {bestDistance:F2}");
     }
 
     return nearestTarget;

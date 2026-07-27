@@ -2,7 +2,7 @@ using Godot;
 
 [GlobalClass]
 public partial class PortalArea : Area3D {
-  public float chance = 0.0f;
+  public float chance;
 
   private PackedScene portal =
     ResourceLoader.Load<PackedScene>("res://objects/portal/portal.tscn");
@@ -15,7 +15,7 @@ public partial class PortalArea : Area3D {
   public override void _Ready() {
     CollisionLayer = (uint)CollisionLayerEnum.NONE;
     CollisionMask = (uint)CollisionLayerEnum.PLAYER;
-    Monitorable = false;
+    SetDeferred(Area3D.PropertyName.Monitorable, false);
 
     BodyEntered += OnBodyEntered;
 
