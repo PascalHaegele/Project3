@@ -4,18 +4,19 @@ using Godot;
 [GlobalClass]
 public partial class HealthComponent : Node {
   [Export] public float maxHealth = 100.0f;
+  public float multiplier = 1.0f;
 
   public float CurrentHealth { get; private set; }
   public bool IsAlive => CurrentHealth > 0.0f;
-
-  [Signal] public delegate void DiedEventHandler();
-  [Signal] public delegate void HealthChangedEventHandler(float newHealth);
 
   // Track active bleed effects: stack count and remaining tick timer
   private int bleedStacks;
   private float bleedTimer;
   private float bleedTickInterval = 1.0f;
   private float bleedDamagePerTick = 0.0f;
+
+  [Signal] public delegate void DiedEventHandler();
+  [Signal] public delegate void HealthChangedEventHandler(float newHealth);
 
   public override void _Ready() {
     maxHealth = GetEffectiveMaxHealth();
@@ -43,7 +44,7 @@ public partial class HealthComponent : Node {
 
   public void Reset() {
     ClearBleed();
-    CurrentHealth = maxHealth;
+    CurrentHealth = maxHealth * multiplier;
   }
 
   public void TakeDamage(float damage) {

@@ -32,10 +32,12 @@ public partial class VelocityInfo : Resource {
   [Export(PropertyHint.Range, "0.0f, 10.0f, 0.1f")]
   public float dashCooldown = 0.8f;
 
+  public float multiplier = 1.0f;
+
   private float speed;
   public float Speed {
     get => speed;
-    set => speed = Mathf.Clamp(value, 0.0f, maxSpeed);
+    set => speed = Mathf.Clamp(value * multiplier, 0.0f, maxSpeed * multiplier);
   }
 }
 

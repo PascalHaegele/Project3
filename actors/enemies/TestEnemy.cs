@@ -30,6 +30,9 @@ public partial class TestEnemy : Enemy, IHitable {
     healthBar = GetComponent<ProgressBar>();
     healthBar.MaxValue = healthComponent.maxHealth;
     healthBar.Value = healthComponent.CurrentHealth;
+
+    ApplyDifficulty();
+    healthComponent.Reset();
   }
 
   public override void _PhysicsProcess(double delta) {
@@ -58,6 +61,12 @@ public partial class TestEnemy : Enemy, IHitable {
     if(!healthComponent.IsAlive && hitInfo.shooter is Player) {
       EmitSignalKilled(this);
     }
+  }
+
+  protected override void ApplyDifficulty() {
+    velocityInfo.multiplier = difficultyInfo.speedMultiplier;
+    hitboxComponent.damageMultiplier = difficultyInfo.damageMultiplier;
+    healthComponent.multiplier = difficultyInfo.healthMultiplier;
   }
 
   private void OnHealthChanged(float newHealth) {

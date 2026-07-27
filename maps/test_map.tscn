@@ -193,37 +193,41 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4432416, 0.03575319, 0.134
 [node name="PageDebugTool" type="Node" parent="." unique_id=376056744]
 script = ExtResource("17")
 
-[node name="PortalArea" type="Area3D" parent="." unique_id=1281787374]
+[node name="PlayerSpawn" type="Marker3D" parent="." unique_id=160749305]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.403597)
+
+[node name="Portals" type="Node" parent="." unique_id=1577152081]
+
+[node name="PortalArea" type="Area3D" parent="Portals" unique_id=1281787374]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.847751, 0, 3.2392159)
 script = ExtResource("10_wd2vj")
 metadata/_custom_type_script = "uid://ci31eubnodj4i"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PortalArea" unique_id=1583301807]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Portals/PortalArea" unique_id=1583301807]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2368274, 1.5360279)
 shape = SubResource("SphereShape3D_bfp77")
 
-[node name="PortalPosition" type="Marker3D" parent="PortalArea" unique_id=1316368675]
+[node name="PortalPosition" type="Marker3D" parent="Portals/PortalArea" unique_id=1316368675]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6.758111, 0, 0)
 
-[node name="PortalDestination" type="Marker3D" parent="PortalArea" unique_id=529210212]
+[node name="PortalDestination" type="Marker3D" parent="Portals/PortalArea" unique_id=529210212]
 transform = Transform3D(0.2588191, 0, 0.9659258, 0, 1, 0, -0.9659258, 0, 0.2588191, -8.755252, 0, 8.567996)
 
-[node name="Altar" parent="." unique_id=1471931379 instance=ExtResource("14_ks570")]
+[node name="Portal" parent="Portals" unique_id=1171833219 instance=ExtResource("15_ad6p3")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -17.406115, 0, 0)
+isLevelChange = true
+newLevelPath = &"res://maps/CS_Map.tscn"
+
+[node name="Altars" type="Node" parent="." unique_id=1682190162]
+
+[node name="Altar" parent="Altars" unique_id=1471931379 instance=ExtResource("14_ks570")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1182463, 0, 4.1087008)
 effect = 4
 enemy = ExtResource("2_pbr4s")
 enemyInfo = SubResource("Resource_rw4qe")
 
-[node name="Marker3D" type="Marker3D" parent="Altar" unique_id=267007834]
+[node name="Marker3D" type="Marker3D" parent="Altars/Altar" unique_id=267007834]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.070607185, 0, 4.032242)
 
-[node name="Marker3D2" type="Marker3D" parent="Altar" unique_id=1758417777]
+[node name="Marker3D2" type="Marker3D" parent="Altars/Altar" unique_id=1758417777]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.392482, 0, -0.7654152)
-
-[node name="PlayerSpawn" type="Marker3D" parent="." unique_id=160749305]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.403597)
-
-[node name="Portal" parent="." unique_id=1171833219 instance=ExtResource("15_ad6p3")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -17.406115, 0, 0)
-isLevelChange = true
-newLevelPath = &"res://maps/CS_Map.tscn"

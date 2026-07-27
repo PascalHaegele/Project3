@@ -6,35 +6,37 @@ public struct HitInfo {
   public Actor shooter;
 }
 
-  [GlobalClass]
-  public partial class HitboxComponent : Area3D {
-    public Actor actor;
+[GlobalClass]
+public partial class HitboxComponent : Area3D {
+  public Actor actor;
 
-    public float damage;
+  public float damage;
+  public float damageMultiplier = 1.0f;
 
-    public double? lifetime;
-    public Shape3D? shape;
-    public HitLog? hitLog;
+  public double? lifetime;
+  public Shape3D? shape;
+  public HitLog? hitLog;
 
-    [Signal] public delegate void HitLandedEventHandler(float damage, Vector3 hitPoint);
+  [Signal]
+  public delegate void HitLandedEventHandler(float damage, Vector3 hitPoint);
 
-    public override void _Ready() {
-      SetDeferred(Area3D.PropertyName.Monitorable, false);
-      AreaEntered += OnAreaEntered;
+  public override void _Ready() {
+    SetDeferred(Area3D.PropertyName.Monitorable, false);
+    AreaEntered += OnAreaEntered;
 
-      if(lifetime.HasValue) {
-        Timer lifetimeTimer = new();
-        AddChild(lifetimeTimer);
-        lifetimeTimer.Timeout += QueueFree;
-        lifetimeTimer.Start(lifetime.Value);
-      }
-
-      if(shape != null) {
-        CollisionShape3D collisionShape = new();
-        AddChild(collisionShape);
-        collisionShape.Shape = shape;
-      }
+    if(lifetime.HasValue) {
+      Timer lifetimeTimer = new();
+      AddChild(lifetimeTimer);
+      lifetimeTimer.Timeout += QueueFree;
+      lifetimeTimer.Start(lifetime.Value);
     }
+
+    if(shape != null) {
+      CollisionShape3D collisionShape = new();
+      AddChild(collisionShape);
+      collisionShape.Shape = shape;
+    }
+  }
 
   public void DisableCollisionShapes() {
     for(int i = 0; i < GetChildCount(); i++) {
@@ -69,7 +71,7 @@ public struct HitInfo {
   private void OnAreaEntered(Area3D area) {
     if(area is HurtboxComponent hurtbox) {
       HitInfo info = new();
-      info.damage = ApplyCrit(damage);
+      info.damage = ApplyCrit(damage * damageMultiplier);
       if(GetParent() is Projectile p) {
         info.direction = GlobalPosition.DirectionTo(p.shotPosition);
       }
@@ -77,8 +79,7 @@ public struct HitInfo {
 
       if(hitLog != null) {
         Node hurtboxOwner = hurtbox.GetParent();
-        if(hitLog.HasHit(hurtboxOwner)) { return; }
-        else { hitLog.LogHit(hurtboxOwner); }
+        if(hitLog.HasHit(hurtboxOwner)) { return; } else { hitLog.LogHit(hurtboxOwner); }
       }
 
       hurtbox.RecieveHit(info);

@@ -1071,39 +1071,39 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 82.1
 [node name="Chest3" parent="Chests" unique_id=590264712 instance=ExtResource("10_oxeun")]
 transform = Transform3D(0.96581817, 0, -0.2592206, 0, 1, 0, 0.2592206, 0, 0.96581817, 220.17175, 2.3996954, -198.7591)
 
-[node name="PortalAreas|Portals" type="Node" parent="." unique_id=1549579445]
+[node name="Portals" type="Node" parent="." unique_id=1549579445]
 
-[node name="PortalArea2" type="Area3D" parent="PortalAreas|Portals" unique_id=883824118]
+[node name="PortalArea2" type="Area3D" parent="Portals" unique_id=883824118]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 168.90262, -6.0393543, -52.11303)
 script = ExtResource("11_6t5b2")
 metadata/_custom_type_script = "uid://ci31eubnodj4i"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PortalAreas|Portals/PortalArea2" unique_id=1943435239]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Portals/PortalArea2" unique_id=1943435239]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("SphereShape3D_litht")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PortalAreas|Portals/PortalArea2" unique_id=1176077432]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Portals/PortalArea2" unique_id=1176077432]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.049999237, 0)
 mesh = SubResource("CylinderMesh_bfp77")
 
-[node name="PortalPosition" type="Marker3D" parent="PortalAreas|Portals/PortalArea2" unique_id=1399322728]
+[node name="PortalPosition" type="Marker3D" parent="Portals/PortalArea2" unique_id=1399322728]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.964821)
 
-[node name="PortalDestination" type="Marker3D" parent="PortalAreas|Portals/PortalArea2" unique_id=10082753]
+[node name="PortalDestination" type="Marker3D" parent="Portals/PortalArea2" unique_id=10082753]
 transform = Transform3D(0.9801943, 0, -0.1980381, 0, 1, 0, 0.1980381, 0, 0.9801943, 49.874054, 8.432295, -138.52164)
 
-[node name="Portal" parent="PortalAreas|Portals" unique_id=1171833219 node_paths=PackedStringArray("destination") instance=ExtResource("12_k8dp5")]
+[node name="Portal" parent="Portals" unique_id=1171833219 node_paths=PackedStringArray("destination") instance=ExtResource("12_k8dp5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.95053, 2.3850918, -265.90442)
 destination = NodePath("../Portal3/Marker3D")
 
-[node name="Portal2" parent="PortalAreas|Portals" unique_id=574168270 node_paths=PackedStringArray("destination") instance=ExtResource("12_k8dp5")]
+[node name="Portal2" parent="Portals" unique_id=574168270 node_paths=PackedStringArray("destination") instance=ExtResource("12_k8dp5")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 97.54355, 2.429808, 20.682245)
 destination = NodePath("../../PlayerSpawn")
 
-[node name="Portal3" parent="PortalAreas|Portals" unique_id=785998237 instance=ExtResource("12_k8dp5")]
+[node name="Portal3" parent="Portals" unique_id=785998237 instance=ExtResource("12_k8dp5")]
 transform = Transform3D(-0.9999682, 0, -0.007975581, 0, 1, 0, 0.007975581, 0, -0.9999682, 86.95053, 2.3850918, 44.44347)
 
-[node name="Marker3D" type="Marker3D" parent="PortalAreas|Portals/Portal3" unique_id=492238885]
+[node name="Marker3D" type="Marker3D" parent="Portals/Portal3" unique_id=492238885]
 transform = Transform3D(0.9999683, 0, -0.0079754945, 0, 1, 0, 0.0079754945, 0, 0.9999683, -0.19451141, 0, 24.3874)
 
 [node name="Portal4" parent="." unique_id=233690659 instance=ExtResource("12_k8dp5")]

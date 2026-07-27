@@ -2,6 +2,8 @@ using Godot;
 
 [GlobalClass]
 public partial class TrapArea : Area3D {
+  public float activationChance = 0.2f;
+
   public override void _Ready() {
     CollisionLayer = (uint)CollisionLayerEnum.NONE;
     CollisionMask = (uint)CollisionLayerEnum.PLAYER;
@@ -11,8 +13,11 @@ public partial class TrapArea : Area3D {
   }
 
   private void OnBodyEntered(Node3D body) {
+    if(GD.Randf() >= activationChance) { return; }
     foreach(Node child in GetChildren()) {
-      if(child is ITrap trap) { trap.Activate(); }
+      if(child is ITrap trap) {
+        trap.Activate();
+      }
     }
   }
 }

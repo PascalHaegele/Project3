@@ -15,6 +15,7 @@ public struct AIInfo {
 public abstract partial class Enemy : Actor {
   [Export] public EnemyInfo enemyInfo;
   public AIInfo aiInfo;
+  public EnemyDifficultyInfo difficultyInfo;
 
   public AnimationPlayer animationPlayer;
 
@@ -44,8 +45,12 @@ public abstract partial class Enemy : Actor {
     healthComponent = GetComponent<HealthComponent>();
     detectionComponent = GetComponent<AIDetectionComponent>();
 
+    difficultyInfo.Changed += ApplyDifficulty;
+
     // Add to "enemies" group for homing projectile targeting
     AddToGroup("enemies");
   }
+
+  protected virtual void ApplyDifficulty() { }
 }
 

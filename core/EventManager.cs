@@ -12,9 +12,33 @@ public partial class EventManager : Node {
   private ShaderMaterial skyShader;
 
   private readonly List<Enemy> enemies = new();
+  private EnemyDifficultyInfo enemyDifficultyInfo = new();
+
+  [ExportGroup("Enemy Difficulty")]
+  [Export] private float difficultyMultiplierNormal = 1.0f;
+  [Export] private float difficultyMultiplierMedium = 1.2f;
+  [Export] private float difficultyMultiplierHigh = 1.5f;
+
+  [ExportGroup("Portal Activation Chances")]
+  [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
+  private float portalChanceNormal = 0.0f;
+  [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
+  private float portalChanceMedium = 0.35f;
+  [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
+  private float portalChanceHigh = 0.7f;
+
+  [ExportGroup("Trap Activation Chances")]
+  [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
+  private float trapChanceNormal = 0.2f;
+  [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
+  private float trapChanceMedium = 0.65f;
+  [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
+  private float trapChanceHigh = 1.0f;
 
   private readonly List<PortalArea> portalAreas = new();
   private readonly List<Portal> portals = new();
+
+  private readonly List<TrapArea> trapAreas = new();
 
   private readonly List<Altar> altars = new();
 
@@ -63,13 +87,15 @@ public partial class EventManager : Node {
     this.player.GetComponent<HealthComponent>().Died += OnPlayerDeath;
 
     ambientEvent =
-      FmodServerWrapper.CreateEventInstance("event:/Walk_Timeline");
+      FmodServerWrapper.CreateEventInstance("event:/Ambient_Timeline");
     this.player.AddChild(ambientEvent);
     ambientEvent.Start();
   }
 
   public void AddEnemy(Enemy enemy) {
     enemies.Add(enemy);
+
+    enemy.difficultyInfo = enemyDifficultyInfo;
 
     _ = enemy.Connect(
       Enemy.SignalName.Killed,
@@ -87,16 +113,35 @@ public partial class EventManager : Node {
     enemies.Clear();
     portalAreas.Clear();
     portals.Clear();
+    trapAreas.Clear();
     altars.Clear();
-    foreach(Node child in currentMap.GetChildren()) {
-      if(child is PortalArea portalArea) { portalAreas.Add(portalArea); }
-      if(child is Portal portal) {
-        portals.Add(portal);
-        if(portal.isLevelChange) {
-          portal.ChangeLevel += EmitSignalPortalLevelChange;
+
+    Node? p = currentMap.GetNodeOrNull("Portals");
+    Node? t = currentMap.GetNodeOrNull("Traps");
+    Node? a = currentMap.GetNodeOrNull("Altars");
+
+    if(p != null) {
+      foreach(Node child in p.GetChildren()) {
+        if(child is PortalArea portalArea) { portalAreas.Add(portalArea); }
+        if(child is Portal portal) {
+          portals.Add(portal);
+          if(portal.isLevelChange) {
+            portal.ChangeLevel += EmitSignalPortalLevelChange;
+          }
         }
       }
-      if(child is Altar altar) { altars.Add(altar); }
+    }
+
+    if(t != null) {
+      foreach(Node child in t.GetChildren()) {
+        if(child is TrapArea trapArea) { trapAreas.Add(trapArea); }
+      }
+    }
+
+    if(a != null) {
+      foreach(Node child in a.GetChildren()) {
+        if(child is Altar altar) { altars.Add(altar); }
+      }
     }
 
     OnInsanityChanged(playerInsanityComponent.CurrentInsanity);
@@ -122,7 +167,7 @@ public partial class EventManager : Node {
     Timer deathTimer = new();
     AddChild(deathTimer);
     deathTimer.OneShot = true;
-    deathTimer.Start(5.0);
+    deathTimer.Start(4.0);
     deathTimer.Timeout += () => {
       player.Reset();
       player.GlobalPosition = playerSpawn.GlobalPosition;
@@ -150,23 +195,51 @@ public partial class EventManager : Node {
       intensityValue,
       0.5
     );
-
-    // Reiner nativer Parameter-Aufruf an das GDExtension-Event
-    // if(_ambientInstance != null && IsInstanceValid(_ambientInstance)) {
-    //   _ambientInstance.Call("set_parameter", "Insanity", insanity);
-    // }
   }
 
   private void OnInsanityLevelChanged(InsanityLevel level) {
     switch(level) {
       case InsanityLevel.Normal:
-        foreach(PortalArea area in portalAreas) { area.chance = 0.0f; }
+        foreach(PortalArea area in portalAreas) {
+          area.activationChance = portalChanceNormal;
+        }
+        foreach(TrapArea area in trapAreas) {
+          area.activationChance = trapChanceNormal;
+        }
+
+        enemyDifficultyInfo.damageMultiplier = difficultyMultiplierNormal;
+        enemyDifficultyInfo.healthMultiplier = difficultyMultiplierNormal;
+        enemyDifficultyInfo.speedMultiplier = difficultyMultiplierNormal;
+        _ = enemyDifficultyInfo.EmitSignal(Resource.SignalName.Changed);
+
         break;
       case InsanityLevel.Medium:
-        foreach(PortalArea area in portalAreas) { area.chance = 0.35f; }
+        foreach(PortalArea area in portalAreas) {
+          area.activationChance = portalChanceMedium;
+        }
+        foreach(TrapArea area in trapAreas) {
+          area.activationChance = trapChanceMedium;
+        }
+
+        enemyDifficultyInfo.damageMultiplier = difficultyMultiplierMedium;
+        enemyDifficultyInfo.healthMultiplier = difficultyMultiplierMedium;
+        enemyDifficultyInfo.speedMultiplier = difficultyMultiplierMedium;
+        _ = enemyDifficultyInfo.EmitSignal(Resource.SignalName.Changed);
+
         break;
       case InsanityLevel.High:
-        foreach(PortalArea area in portalAreas) { area.chance = 0.7f; }
+        foreach(PortalArea area in portalAreas) {
+          area.activationChance = portalChanceHigh;
+        }
+        foreach(TrapArea area in trapAreas) {
+          area.activationChance = trapChanceHigh;
+        }
+
+        enemyDifficultyInfo.damageMultiplier = difficultyMultiplierHigh;
+        enemyDifficultyInfo.healthMultiplier = difficultyMultiplierHigh;
+        enemyDifficultyInfo.speedMultiplier = difficultyMultiplierHigh;
+        _ = enemyDifficultyInfo.EmitSignal(Resource.SignalName.Changed);
+
         break;
       default: break;
     }
