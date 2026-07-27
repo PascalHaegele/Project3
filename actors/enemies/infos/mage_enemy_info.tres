@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemyInfo" format=3 uid="uid://b5k2ifw2t7ki1"]
+
+[ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="1_ld23n"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_ld23n")
+patrolPath = PackedVector3Array()
+leashPoint = Vector3(0, 0, 0)
+leashLength = 30.0
+attackRange = 14.0
+metadata/_custom_type_script = "uid://46wwp5gewpfd"

@@ -69,7 +69,11 @@ public partial class GameManager : Node {
       GetNode<Node3D>("World/Actors").AddChild(player);
       eventManager.SetPlayer(player);
     }
-    player.GlobalPosition = map.GetNode<Marker3D>("PlayerSpawn").GlobalPosition;
+
+    Marker3D playerSpawn = map.GetNode<Marker3D>("PlayerSpawn");
+
+    player.GlobalPosition = playerSpawn.GlobalPosition;
+    player.GlobalRotation = playerSpawn.GlobalRotation;
 
     oldMap?.QueueFree();
   }
