@@ -86,10 +86,10 @@ public partial class EventManager : Node {
 
     this.player.GetComponent<HealthComponent>().Died += OnPlayerDeath;
 
-    ambientEvent =
-      FmodServerWrapper.CreateEventInstance("event:/Ambient_Timeline");
+    ambientEvent = FmodServerWrapper.CreateEventInstance("event:/Ambient_Timeline");
     this.player.AddChild(ambientEvent);
     ambientEvent.Start();
+    OnInsanityChanged(playerInsanityComponent.CurrentInsanity);
   }
 
   public void AddEnemy(Enemy enemy) {
@@ -177,6 +177,13 @@ public partial class EventManager : Node {
   }
 
   private void OnInsanityChanged(float insanity) {
+    if (ambientEvent != null) {
+    
+    ambientEvent.SetParameterByName("Insanity", insanity); 
+  }
+  if(playerInsanityComponent == null || skyShader == null) {
+      return;
+    }
     float intensityValue =
       Mathf.Remap(
         insanity,

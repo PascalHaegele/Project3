@@ -4,6 +4,7 @@ using Godot;
 public enum ItemSoundType {
   Page,
   Ammo,
+  Potion
 }
 
 public enum PlayerSoundType {
@@ -270,6 +271,12 @@ public partial class Player : Actor, IHitable {
         ) {
           inventoryComponent.AddPageItem(hoveredPickup.pageData);
           PlayItemSound(ItemSoundType.Page);
+        } 
+        else if (hoveredPickup.itemType == ItemType.POTION) {
+          PlayItemSound(ItemSoundType.Potion);
+        } 
+        else if (hoveredPickup.itemType == ItemType.R_AMMO || hoveredPickup.itemType == ItemType.S_AMMO ) {
+          PlayItemSound(ItemSoundType.Ammo);
         }
 
         RedrawUI();
@@ -412,7 +419,9 @@ public partial class Player : Actor, IHitable {
       case ItemSoundType.Page:
         return "event:/Pages_Interaction_Action";
       case ItemSoundType.Ammo:
-        return "event:/Pages_Interaction_Action";
+        return "event:/Ammo_Interaction_Action";
+      case ItemSoundType.Potion:
+        return "event:/Potion_Interaction_Action";
       default:
         return string.Empty;
     }
