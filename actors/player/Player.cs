@@ -19,6 +19,7 @@ public partial class Player : Actor, IHitable {
   private HealthComponent healthComponent;
   private InventoryComponent inventoryComponent;
   private InsanityComponent insanityComponent;
+  private InsanityBuffComponent insanityBuffComponent;
 
   [Export] private Weapon[] weapons;
   private Weapon activeWeapon;
@@ -37,6 +38,9 @@ public partial class Player : Actor, IHitable {
   private Label ammoDisplay;
   private Label potionCount;
   private InventoryUI inventoryUI;
+  private Control buffIndicatorContainer;
+  private Panel buffIcon;
+  private Panel cooldownOverlay;
 
   private HealingAnimation healingAnim;
   private bool isHealing;
@@ -61,6 +65,7 @@ public partial class Player : Actor, IHitable {
     healthComponent = GetComponent<HealthComponent>();
     inventoryComponent = GetComponent<InventoryComponent>();
     insanityComponent = GetComponent<InsanityComponent>();
+    insanityBuffComponent = GetComponent<InsanityBuffComponent>();
 
     healingAnim = GetNode<HealingAnimation>("CameraPivot/HealingAnimation");
     if(healingAnim != null) {
@@ -94,6 +99,23 @@ public partial class Player : Actor, IHitable {
 
     potionCount = hud.GetNode<Label>("PotionCount");
     RedrawPotionUI();
+
+    // Setup buff indicator UI
+    buffIndicatorContainer = hud.GetNodeOrNull<Control>("BuffIndicatorContainer");
+    if(buffIndicatorContainer != null) {
+      buffIcon = buffIndicatorContainer.GetNodeOrNull<Panel>("BuffIcon");
+      cooldownOverlay = buffIndicatorContainer.GetNodeOrNull<Panel>("CooldownOverlay");
+      buffIndicatorContainer.Visible = true;
+    }
+
+    // Insanity Buff signals
+    if(insanityBuffComponent != null) {
+      insanityBuffComponent.BuffActivated += OnBuffActivated;
+      insanityBuffComponent.BuffExpired += OnBuffExpired;
+      insanityBuffComponent.CooldownStarted += OnBuffCooldownStarted;
+      insanityBuffComponent.CooldownUpdated += OnBuffCooldownUpdated;
+      insanityBuffComponent.CooldownFinished += OnBuffCooldownFinished;
+    }
 
     // Setup InventoryUI
     inventoryUI = hud.GetNodeOrNull<InventoryUI>("InventoryUI");
@@ -149,6 +171,11 @@ public partial class Player : Actor, IHitable {
             healingAnim?.PlayHeal();
           }
         }
+      }
+
+      // Right Click Insanity Buff
+      if(input.special && insanityBuffComponent != null) {
+        insanityBuffComponent.Activate();
       }
 
       if(input.weapon1 && activeWeaponIndex != 0) {
@@ -305,6 +332,11 @@ public partial class Player : Actor, IHitable {
     inventoryComponent.Reset();
     foreach(Weapon weapon in weapons) { weapon.Reset(); }
 
+    // Clean up buff state on reset/restart
+    if(insanityBuffComponent != null && insanityBuffComponent.IsBuffActive) {
+      insanityBuffComponent.ForceDeactivate();
+    }
+
     healthBar.MaxValue = healthComponent.maxHealth;
     healthBar.Value = healthComponent.CurrentHealth;
 
@@ -399,6 +431,50 @@ public partial class Player : Actor, IHitable {
 
   private void OnInsanityChanged(float insanity) {
     insanityMeter.Value = insanity;
+  }
+
+  // =========================
+  // Insanity Buff Event Handlers
+  // =========================
+
+  private void OnBuffActivated() {
+    if(buffIcon != null) {
+      // Show golden circle
+      buffIcon.Modulate = new Color(0.85f, 0.65f, 0.0f, 1.0f); // Solid gold
+    }
+    if(cooldownOverlay != null) {
+      cooldownOverlay.Modulate = new Color(0.0f, 0.0f, 0.0f, 0.0f); // Transparent
+    }
+  }
+
+  private void OnBuffExpired() {
+    if(buffIcon != null) {
+      buffIcon.Modulate = new Color(0.85f, 0.65f, 0.0f, 0.0f); // Hidden
+    }
+  }
+
+  private void OnBuffCooldownStarted(float duration) {
+    if(cooldownOverlay != null) {
+      // Start fully covered (black)
+      cooldownOverlay.Modulate = new Color(0.0f, 0.0f, 0.0f, 0.8f);
+    }
+  }
+
+  private void OnBuffCooldownUpdated(float remaining) {
+    if(cooldownOverlay != null && buffIndicatorContainer != null) {
+      // Scale the overlay alpha from 0.8 (full cooldown) to 0 (ready)
+      float cooldownRatio = remaining / 20.0f; // 20s total cooldown
+      cooldownOverlay.Modulate = new Color(0.0f, 0.0f, 0.0f, 0.8f * cooldownRatio);
+    }
+  }
+
+  private void OnBuffCooldownFinished() {
+    if(buffIcon != null) {
+      buffIcon.Modulate = new Color(0.3f, 0.8f, 0.3f, 1.0f); // Green = ready
+    }
+    if(cooldownOverlay != null) {
+      cooldownOverlay.Modulate = new Color(0.0f, 0.0f, 0.0f, 0.0f); // No overlay
+    }
   }
 
   public void SwitchWeapon(Weapon newWeapon) {

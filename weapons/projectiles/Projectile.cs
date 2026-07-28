@@ -61,6 +61,12 @@ public partial class Projectile : RigidBody3D {
           homingStrength = socket.GetModifier("HomingProjectiles");
         }
       }
+
+      // Apply Insanity Buff damage multiplier (+25% when active)
+      InsanityBuffComponent buff = player.GetComponent<InsanityBuffComponent>();
+      if (buff != null) {
+        baseDamage *= buff.GetDamageMultiplier();
+      }
     }
 
     hitbox.damage = baseDamage;

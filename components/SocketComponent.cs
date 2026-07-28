@@ -185,4 +185,18 @@ public partial class SocketComponent : Node {
     GD.Print("All sockets cleared.");
     _ = EmitSignal(SignalName.SocketChanged);
   }
+
+  /// <summary>
+  /// Internal method to add a modifier directly (used by buff systems like InsanityBuffComponent).
+  /// </summary>
+  public void AddModifierInternal(string effectName, float value) {
+    AddModifier(effectName, value);
+  }
+
+  /// <summary>
+  /// Internal method to remove a modifier directly (used by buff systems like InsanityBuffComponent).
+  /// </summary>
+  public void RemoveModifierInternal(string effectName, float value) {
+    RemoveModifier(effectName, value);
+  }
 }
