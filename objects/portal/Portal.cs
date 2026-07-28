@@ -25,6 +25,7 @@ public partial class Portal : StaticBody3D {
     ShaderMaterial material =
       GetNode<MeshInstance3D>("MeshInstance3D")
         .MaterialOverride as ShaderMaterial;
+    material.ResourceLocalToScene = true;
 
     if(isLevelChange) {
       material.SetShaderParameter("color", new Vector3(0.2f, 1.0f, 0.2f));
@@ -35,16 +36,17 @@ public partial class Portal : StaticBody3D {
   }
 
   private void OnBodyEntered(Node3D body) {
-    if(!isLevelChange) {
-      body.GlobalPosition =
-        destination.GlobalPosition +
-        destination.GlobalBasis *
-        new Vector3(0.0f, 0.0f, 4.0f);
-      body.GlobalRotation = destination.GlobalRotation;
-      (body as Actor).GetComponent<VelocityComponent>().Stop();
-    } else {
+    if(isLevelChange && newLevelPath != null) {
       EmitSignalChangeLevel(newLevelPath);
+      return;
     }
+
+    body.GlobalPosition =
+      destination.GlobalPosition +
+      destination.GlobalBasis *
+      new Vector3(0.0f, 0.0f, 4.0f);
+    body.GlobalRotation = destination.GlobalRotation;
+    (body as Actor).GetComponent<VelocityComponent>().Stop();
   }
 }
 

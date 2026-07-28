@@ -2,6 +2,7 @@
 
 [ext_resource type="Shader" uid="uid://cgo4kfkp8kqls" path="res://maps/sky.gdshader" id="1_yrkou"]
 [ext_resource type="Texture2D" uid="uid://da7jcsvmhja8y" path="res://maps/skybox.png" id="2_egu6l"]
+[ext_resource type="CompressedTexture2DArray" uid="uid://c20yn5tfpeeb2" path="res://maps/sun.png" id="3_eewdw"]
 [ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="6_egu6l"]
 [ext_resource type="PackedScene" uid="uid://dl26jt5glq5e0" path="res://maps/map_1/Map 1_final.glb" id="7_y0ld0"]
 [ext_resource type="Script" uid="uid://c8525x2xugj2n" path="res://core/SpawnArea.cs" id="8_e0egg"]
@@ -11,6 +12,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_75as7"]
 shader = ExtResource("1_yrkou")
 shader_parameter/sky_tex = ExtResource("2_egu6l")
+shader_parameter/sun_tex = ExtResource("3_eewdw")
 shader_parameter/sun_size = 0.99
 shader_parameter/sun_softness = 0.002
 shader_parameter/background_color = Color(0, 0, 0, 1)

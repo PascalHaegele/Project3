@@ -56,6 +56,8 @@ public partial class EventManager : Node {
   [Signal]
   public delegate void PortalLevelChangeEventHandler(StringName newLevelPath);
 
+  [Signal] public delegate void RestartEventHandler();
+
   public override void _Ready() {
     if(GetNodeOrNull("HitstopManager") == null) {
       AddChild(new HitstopManager());
@@ -169,21 +171,25 @@ public partial class EventManager : Node {
     deathTimer.OneShot = true;
     deathTimer.Start(4.0);
     deathTimer.Timeout += () => {
-      player.Reset();
-      player.GlobalPosition = playerSpawn.GlobalPosition;
-      player.GlobalRotation = playerSpawn.GlobalRotation;
-      player.ProcessMode = ProcessModeEnum.Inherit;
+      // player.Reset();
+      // player.GlobalPosition = playerSpawn.GlobalPosition;
+      // player.GlobalRotation = playerSpawn.GlobalRotation;
+      // player.ProcessMode = ProcessModeEnum.Inherit;
+
+      currentMap.QueueFree();
+      EmitSignalRestart();
     };
   }
 
   private void OnInsanityChanged(float insanity) {
-    if (ambientEvent != null) {
-    
-    ambientEvent.SetParameterByName("Insanity", insanity); 
-  }
-  if(playerInsanityComponent == null || skyShader == null) {
+    if(ambientEvent != null) {
+      ambientEvent.SetParameterByName("Insanity", insanity);
+    }
+
+    if(playerInsanityComponent == null || skyShader == null) {
       return;
     }
+
     float intensityValue =
       Mathf.Remap(
         insanity,
