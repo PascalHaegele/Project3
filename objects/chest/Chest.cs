@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using FmodSharp;
 
 public partial class Chest : StaticBody3D, IInteractable {
   private PackedScene pickup;
@@ -41,7 +42,7 @@ public partial class Chest : StaticBody3D, IInteractable {
     if(opened) { return; }
 
     opened = true;
-
+    FmodServerWrapper.PlayOneShotAttached("event:/Chest_Interaction_Action", this);
     if(animationPlayer == null) {
     } else {
       string animationName = FindBestAnimation();
