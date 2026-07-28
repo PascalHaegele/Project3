@@ -12,18 +12,16 @@ public partial class GameManager : Node {
   public override void _Ready() {
     eventManager = GetNode<EventManager>("Systems/EventManager");
     eventManager.PortalLevelChange += LoadNewMap;
+    eventManager.Restart += OnRestart;
 
     mainMenu = GetNode<MainMenu>("MainMenu");
-    mainMenu.Start += (mapPath) => { HideMainMenu(); LoadNewMap(mapPath); };
+    mainMenu.Start += (mapPath) => {
+      LoadPlayer();
+      HideMainMenu();
+      LoadNewMap(mapPath);
+    };
 
-    if(createPlayer) {
-      player =
-        ResourceLoader
-        .Load<PackedScene>("res://actors/player/player.tscn")
-        .Instantiate<Player>();
-      GetNode<Node3D>("World/Actors").AddChild(player);
-      eventManager.SetPlayer(player);
-    }
+    // if(createPlayer) { LoadPlayer(); }
 
     ShowMainMenu();
   }
@@ -38,13 +36,29 @@ public partial class GameManager : Node {
     }
   }
 
+  private void OnRestart() {
+    player.QueueFree();
+    ShowMainMenu();
+  }
+
+  private void LoadPlayer() {
+    player = ResourceLoader
+    .Load<PackedScene>("res://actors/player/player.tscn")
+    .Instantiate<Player>();
+
+    GetNode<Node3D>("World/Actors").AddChild(player);
+    eventManager.SetPlayer(player);
+  }
+
   private void ShowMainMenu() {
     Input.MouseMode = Input.MouseModeEnum.Visible;
     mainMenu.ProcessMode = ProcessModeEnum.Always;
     mainMenu.Show();
-    player.HideHUD();
-    player.Hide();
-    player.ProcessMode = ProcessModeEnum.Disabled;
+    if(player != null) {
+      player.HideHUD();
+      player.Hide();
+      player.ProcessMode = ProcessModeEnum.Disabled;
+    }
     GetTree().Paused = true;
   }
 
@@ -52,9 +66,11 @@ public partial class GameManager : Node {
     GetTree().Paused = false;
     mainMenu.Hide();
     mainMenu.ProcessMode = ProcessModeEnum.Disabled;
-    player.Show();
-    player.ShowHUD();
-    player.ProcessMode = ProcessModeEnum.Inherit;
+    if(player != null) {
+      player.Show();
+      player.ShowHUD();
+      player.ProcessMode = ProcessModeEnum.Inherit;
+    }
     Input.MouseMode = Input.MouseModeEnum.Captured;
   }
 
