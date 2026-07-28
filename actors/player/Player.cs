@@ -37,6 +37,9 @@ public partial class Player : Actor, IHitable {
 
   private Label ammoDisplay;
   private Label potionCount;
+  private Label currency1Count;
+  private Label currency2Count;
+  private Label currency3Count;
   private InventoryUI inventoryUI;
   private Control buffIndicatorContainer;
   private Panel buffIcon;
@@ -100,6 +103,36 @@ public partial class Player : Actor, IHitable {
     potionCount = hud.GetNode<Label>("PotionCount");
     RedrawPotionUI();
 
+    // Setup currency labels
+    currency1Count = hud.GetNodeOrNull<Label>("Currency1Count");
+    currency2Count = hud.GetNodeOrNull<Label>("Currency2Count");
+    currency3Count = hud.GetNodeOrNull<Label>("Currency3Count");
+    
+    // If currency labels don't exist in scene, create them dynamically
+    if (currency1Count == null) {
+      currency1Count = new Label();
+      currency1Count.Name = "Currency1Count";
+      currency1Count.Text = "Echo: 0";
+      currency1Count.Theme = CreateLabelTheme(16);
+      hud.AddChild(currency1Count);
+    }
+    if (currency2Count == null) {
+      currency2Count = new Label();
+      currency2Count.Name = "Currency2Count";
+      currency2Count.Text = "Glyph: 0";
+      currency2Count.Theme = CreateLabelTheme(16);
+      hud.AddChild(currency2Count);
+    }
+    if (currency3Count == null) {
+      currency3Count = new Label();
+      currency3Count.Name = "Currency3Count";
+      currency3Count.Text = "Essence: 0";
+      currency3Count.Theme = CreateLabelTheme(16);
+      hud.AddChild(currency3Count);
+    }
+    
+    RedrawCurrencyUI();
+
     // Setup buff indicator UI
     buffIndicatorContainer = hud.GetNodeOrNull<Control>("BuffIndicatorContainer");
     if(buffIndicatorContainer != null) {
@@ -158,7 +191,11 @@ public partial class Player : Actor, IHitable {
 
     if(input.openInventory) { inventoryUI?.Toggle(); }
 
-    if(!inventoryUI.Visible) {
+    // Get UI references
+    bool upgradeBenchOpen = GetTree().Root.GetNodeOrNull<UpgradeBenchUI>("UpgradeBenchUI") is UpgradeBenchUI benchUI && benchUI.Visible;
+    bool anyUIOpen = inventoryUI.Visible || upgradeBenchOpen;
+    
+    if(!anyUIOpen) {
       if(input.interact) { EmitSignalInteracting(); }
 
       if(input.shoot && !switchingWeapon) { activeWeapon.Shoot(); }
@@ -194,26 +231,26 @@ public partial class Player : Actor, IHitable {
         if(hoveredPickup != null) { hoveredPickup.hovering = false; }
         hoveredPickup = null;
       }
-    }
 
-    // --- Rotation ---
-    if(!Mathf.IsEqualApprox(camera.Direction.Y, 0.0f)) {
-      RotateY(camera.Direction.Y);
-      Vector3 camDir = camera.Direction;
-      camDir.Y = 0.0f;
-      camera.Direction = camDir;
-    }
+      // --- Rotation ---
+      if(!Mathf.IsEqualApprox(camera.Direction.Y, 0.0f)) {
+        RotateY(camera.Direction.Y);
+        Vector3 camDir = camera.Direction;
+        camDir.Y = 0.0f;
+        camera.Direction = camDir;
+      }
 
-    // --- Movement direction ---
-    Vector3 inputDirection = new(input.direction.X, 0.0f, input.direction.Y);
-    Direction = (Transform.Basis * inputDirection).Normalized();
-    Direction = Direction.Rotated(UpDirection, camera.Direction.Y);
+      // --- Movement direction ---
+      Vector3 inputDirection = new(input.direction.X, 0.0f, input.direction.Y);
+      Direction = (Transform.Basis * inputDirection).Normalized();
+      Direction = Direction.Rotated(UpDirection, camera.Direction.Y);
 
-    // --- Gravity & move ---
-    if(!IsOnFloor()) {
-      velocityComponent.AddVelocityInDirection(GetGravity() * (float)delta);
+      // --- Gravity & move ---
+      if(!IsOnFloor()) {
+        velocityComponent.AddVelocityInDirection(GetGravity() * (float)delta);
+      }
+      velocityComponent.Move(this);
     }
-    velocityComponent.Move(this);
 
     // ==========================================
     // GODOT TIMER FÜR SCHRITTE (KORRIGIERT!)
@@ -287,23 +324,27 @@ public partial class Player : Actor, IHitable {
         if(hoveredPickup != null) { hoveredPickup.hovering = true; }
       }
       if(input.interact) {
+        ItemType pickedType = hoveredPickup.itemType;
         hoveredPickup.QueueFree();
         inventoryComponent
-          .AddItem(hoveredPickup.itemType, hoveredPickup.amount);
+          .AddItem(pickedType, hoveredPickup.amount);
 
         // For pages, also add the PageData to the collected pages list
         if(
-          hoveredPickup.itemType == ItemType.PAGE &&
+          pickedType == ItemType.PAGE &&
           hoveredPickup.pageData != null
         ) {
           inventoryComponent.AddPageItem(hoveredPickup.pageData);
           PlayItemSound(ItemSoundType.Page);
         } 
-        else if (hoveredPickup.itemType == ItemType.POTION) {
+        else if (pickedType == ItemType.POTION) {
           PlayItemSound(ItemSoundType.Potion);
         } 
-        else if (hoveredPickup.itemType == ItemType.R_AMMO || hoveredPickup.itemType == ItemType.S_AMMO ) {
+        else if (pickedType == ItemType.R_AMMO || pickedType == ItemType.S_AMMO ) {
           PlayItemSound(ItemSoundType.Ammo);
+        }
+        else if (pickedType == ItemType.CURRENCY1 || pickedType == ItemType.CURRENCY2 || pickedType == ItemType.CURRENCY3) {
+          PlayItemSound(ItemSoundType.Page); // Reuse page sound for now
         }
 
         RedrawUI();
@@ -348,10 +389,23 @@ public partial class Player : Actor, IHitable {
   private void RedrawUI() {
     RedrawPotionUI();
     RedrawAmmoUI();
+    RedrawCurrencyUI();
   }
 
   private void RedrawPotionUI() {
     potionCount.Text = "P : " + inventoryComponent.AmountOf(ItemType.POTION);
+  }
+
+  private void RedrawCurrencyUI() {
+    if (currency1Count != null) {
+      currency1Count.Text = "Echo: " + inventoryComponent.AmountOf(ItemType.CURRENCY1);
+    }
+    if (currency2Count != null) {
+      currency2Count.Text = "Glyph: " + inventoryComponent.AmountOf(ItemType.CURRENCY2);
+    }
+    if (currency3Count != null) {
+      currency3Count.Text = "Essence: " + inventoryComponent.AmountOf(ItemType.CURRENCY3);
+    }
   }
 
   private void OnHealingComplete() {
@@ -532,5 +586,15 @@ public partial class Player : Actor, IHitable {
       _ = footstepInstance.Call("stop", 1); // 1 = FMOD_STUDIO_STOP_IMMEDIATE
       _ = footstepInstance.Call("release");
     }
+  }
+
+  private static Theme CreateLabelTheme(int fontSize) {
+    Theme t = new Theme();
+    LabelSettings ls = new LabelSettings();
+    ls.FontSize = fontSize;
+    ls.OutlineSize = 2;
+    ls.OutlineColor = Colors.Black;
+    t.Set("Label/label_settings", ls);
+    return t;
   }
 }

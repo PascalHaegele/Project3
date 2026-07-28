@@ -1,7 +1,7 @@
 using Godot;
 
 /// <summary>
-/// A pickupable item in the world. Can represent ammo, potions, or pages.
+/// A pickupable item in the world. Can represent ammo, potions, pages, or currencies.
 /// Pages carry a PageData reference that gets added to InventoryComponent.
 /// </summary>
 [GlobalClass]
@@ -20,6 +20,11 @@ public partial class Pickup : RigidBody3D {
 
   private Area3D hoverArea;
   private Sprite3D hoverIndicator;
+
+  // Preload currency GLB models
+  private static readonly PackedScene Currency1Model = GD.Load<PackedScene>("res://objects/items/currency/Currency1.glb");
+  private static readonly PackedScene Currency2Model = GD.Load<PackedScene>("res://objects/items/currency/Currency2.glb");
+  private static readonly PackedScene Currency3Model = GD.Load<PackedScene>("res://objects/items/currency/Currency3.glb");
 
   public override void _Ready() {
     CollisionLayer = (uint)CollisionLayerEnum.NONE;
@@ -51,7 +56,27 @@ public partial class Pickup : RigidBody3D {
         .Set("visible", itemType == ItemType.R_AMMO);
       GetNodeOrNull<Node3D>("AmmoShot")?
         .Set("visible", itemType == ItemType.S_AMMO);
+
+      // Currency pickups spawn their model dynamically
+      if (itemType == ItemType.CURRENCY1 || itemType == ItemType.CURRENCY2 || itemType == ItemType.CURRENCY3) {
+        SpawnCurrencyModel();
+      }
     }).CallDeferred();
+  }
+
+  private void SpawnCurrencyModel() {
+    PackedScene modelScene = itemType switch {
+      ItemType.CURRENCY1 => Currency1Model,
+      ItemType.CURRENCY2 => Currency2Model,
+      ItemType.CURRENCY3 => Currency3Model,
+      _ => null
+    };
+
+    if (modelScene != null) {
+      Node3D model = modelScene.Instantiate<Node3D>();
+      model.Scale = new Vector3(0.3f, 0.3f, 0.3f);
+      AddChild(model);
+    }
   }
 
   public override void _PhysicsProcess(double delta) {

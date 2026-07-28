@@ -67,6 +67,12 @@ public partial class Projectile : RigidBody3D {
       if (buff != null) {
         baseDamage *= buff.GetDamageMultiplier();
       }
+
+      // Apply Upgrade Bench weapon damage bonus
+      UpgradeTracker upgradeTracker = player.GetComponent<UpgradeTracker>();
+      if (upgradeTracker != null && upgradeTracker.weaponDamageBonus > 0) {
+        baseDamage *= 1.0f + (upgradeTracker.weaponDamageBonus / 100f);
+      }
     }
 
     hitbox.damage = baseDamage;

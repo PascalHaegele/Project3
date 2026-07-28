@@ -189,6 +189,13 @@ public partial class Weapon : Node3D {
           $"new duration: {reloadDuration:F2}"
         );
       }
+
+      // Apply Upgrade Bench reload speed bonus
+      UpgradeTracker upgradeTracker = player.GetComponent<UpgradeTracker>();
+      if (upgradeTracker != null && upgradeTracker.reloadSpeedBonus > 0) {
+        reloadDuration *= 1.0f - (upgradeTracker.reloadSpeedBonus / 100f);
+        reloadDuration = Mathf.Max(0.1f, reloadDuration);
+      }
     }
 
     weaponAnim?.PlayReload(reloadDuration);

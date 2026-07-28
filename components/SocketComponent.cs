@@ -177,6 +177,35 @@ public partial class SocketComponent : Node {
   public Dictionary<string, PageData> GetAllSocketedPages() => new(socketedPages);
 
   /// <summary>
+  /// Maximum number of slots per category. Can be increased via upgrades.
+  /// </summary>
+  private readonly Dictionary<string, int> maxSlots = new() {
+    { "Weapon", 4 },
+    { "Armor", 3 },
+    { "Skill", 3 }
+  };
+
+  /// <summary>
+  /// Adds an additional socket slot to the given category.
+  /// </summary>
+  public void AddSocketSlot(string category) {
+    if (maxSlots.ContainsKey(category)) {
+      maxSlots[category]++;
+    } else {
+      maxSlots[category] = 1;
+    }
+    GD.Print($"[SocketComponent] Added socket slot to {category}. Total: {maxSlots[category]}");
+    _ = EmitSignal(SignalName.SocketChanged);
+  }
+
+  /// <summary>
+  /// Returns the maximum number of slots for a given category.
+  /// </summary>
+  public int GetMaxSlots(string category) {
+    return maxSlots.GetValueOrDefault(category, 0);
+  }
+
+  /// <summary>
   /// Clears all sockets and modifiers. Use with caution.
   /// </summary>
   public void ClearAllSockets() {
