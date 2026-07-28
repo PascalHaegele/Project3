@@ -243,12 +243,12 @@ public partial class Player : Actor, IHitable {
     //     }
     //   }
     // }
-
+   
     if(footstepEvent != null) {
       // Exakte Laufgeschwindigkeit am Boden ermitteln
       Vector3 flatVelocity = new(Velocity.X, 0.0f, Velocity.Z);
       float currentSpeed = flatVelocity.Length();
-
+       GD.Print(currentSpeed);
       if(currentSpeed > 0.1f && IsOnFloor()) {
 
         // Parameter ans Loop-Event in FMOD senden
@@ -324,6 +324,7 @@ public partial class Player : Actor, IHitable {
   public void RecieveHit(HitInfo info) {
     healthComponent.TakeDamage(info.damage);
     insanityComponent.AddInsanity(10.0f);
+     FmodServerWrapper.PlayOneShotAttached("event:/Damage_Taken_Timeline", this);
   }
 
   public void Reset() {
@@ -357,6 +358,7 @@ public partial class Player : Actor, IHitable {
     if(inventoryComponent.RemoveItem(ItemType.POTION)) {
       healthComponent.Heal(20.0f);
       RedrawPotionUI();
+      FmodServerWrapper.PlayOneShotAttached("event:/Potion_Drink_Action", this);
     }
     isHealing = false;
   }

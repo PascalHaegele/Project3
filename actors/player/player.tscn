@@ -101,6 +101,7 @@ collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_nvxhs")
 weapons = [NodePath("CameraPivot/Revolver"), NodePath("CameraPivot/Shotgun")]
+footstepEventPath = &"event:/Walk_Timeline"
 velocityInfo = SubResource("Resource_pwco0")
 components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("PlayerStateMachine"), NodePath("HealthComponent"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent"), NodePath("InsanityComponent"), NodePath("SocketComponent"), NodePath("InsanityBuffComponent")]
 
