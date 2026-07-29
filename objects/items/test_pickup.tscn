@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://bwal2q4p5kty1" path="res://objects/items/page/Page.glb" id="4_dx4of"]
 [ext_resource type="PackedScene" uid="uid://dyk2updk2j23k" path="res://objects/items/r_ammo/Ammo_Rev.glb" id="5_cd2i0"]
 [ext_resource type="PackedScene" uid="uid://bebdirxcpmgiu" path="res://objects/items/s_ammo/Ammo_Shot.glb" id="6_bebdir"]
+[ext_resource type="PackedScene" uid="uid://c2lpdoe0jp3q8" path="res://objects/items/currency/Currency1.glb" id="7_6t6r1"]
+[ext_resource type="PackedScene" uid="uid://bjwbyqh45s7c6" path="res://objects/items/currency/Currency2.glb" id="8_kl0fu"]
+[ext_resource type="PackedScene" uid="uid://uqmd1of0cufx" path="res://objects/items/currency/Currency3.glb" id="9_4f7bg"]
 
 [sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_hykmt"]
 length = 0.5
@@ -51,15 +54,27 @@ texture = SubResource("ViewportTexture_hykmt")
 
 [node name="Potion" parent="." unique_id=1105336233 instance=ExtResource("3_hykmt")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.221334, 0, 0)
+visible = false
 
 [node name="Page" parent="." unique_id=1105336234 instance=ExtResource("4_dx4of")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.06422828, -0.07045707, 0)
-visible = false
 
 [node name="AmmoRev" parent="." unique_id=1105336235 instance=ExtResource("5_cd2i0")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.17469315, 0, 0.3957262)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.16583954, 0, 0.39838225)
 visible = false
 
 [node name="AmmoShot" parent="." unique_id=1105336236 instance=ExtResource("6_bebdir")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.28521514, 0, 0.3003401)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.27901763, 0, 0.3127351)
+visible = false
+
+[node name="Currency1" parent="." unique_id=253692869 instance=ExtResource("7_6t6r1")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.027542505, -0.050611332, -0.031141326)
+visible = false
+
+[node name="Currency2" parent="." unique_id=1825444080 instance=ExtResource("8_kl0fu")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0.13995022, -0.08569135, -0.026560808)
+visible = false
+
+[node name="Currency3" parent="." unique_id=932431781 instance=ExtResource("9_4f7bg")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -0.42526907, -0.06499502, 0)
 visible = false

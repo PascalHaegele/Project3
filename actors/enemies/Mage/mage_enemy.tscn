@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://jpuh4ooqe4dv" path="res://actors/enemies/Mage/MageEnemy.cs" id="1_1nb7t"]
 [ext_resource type="Material" uid="uid://bhc76ujovrpr2" path="res://actors/enemies/dissolve_material.tres" id="3_1nb7t"]
+[ext_resource type="Material" uid="uid://cikf4egfyc2k3" path="res://actors/enemies/outline_material.tres" id="3_jqdxb"]
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="4_vuu1o"]
 [ext_resource type="PackedScene" uid="uid://duhtxtixegmv3" path="res://actors/enemies/Mage/Magician.glb" id="5_0xejm"]
 [ext_resource type="PackedScene" uid="uid://dcpar8itrvr70" path="res://actors/enemies/Mage/mage_weapon.tscn" id="6_1nb7t"]
@@ -42,6 +43,7 @@ collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_1nb7t")
 dissolveMaterial = ExtResource("3_1nb7t")
+outlineMaterial = ExtResource("3_jqdxb")
 model = NodePath("Magician")
 velocityInfo = SubResource("Resource_nl8p5")
 components = [NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent"), NodePath("AIDetectionComponent"), NodePath("MageEnemyStateMachine"), NodePath("SubViewport/HealthBar"), NodePath("MageWeapon"), NodePath("MageBehaviorTree"), NodePath("AnimationPlayer")]

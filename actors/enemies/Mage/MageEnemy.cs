@@ -8,12 +8,6 @@ public partial class MageEnemy : Enemy, IHitable {
 
   private Weapon weapon;
 
-  [Export] private PackedScene projectile;
-
-  private bool dead;
-
-  [Export] private Node3D projectileSpawnPoint;
-
   // Animation state - use local variables, don't modify Position directly
   private float idleBreatheTime;
   private float idleFloatTime;
@@ -32,17 +26,14 @@ public partial class MageEnemy : Enemy, IHitable {
     // rangedAttack = GetComponent<RangedAttackComponent>();
 
     healthComponent.HealthChanged += OnHealthChanged;
-    healthComponent.Died += OnDeath;
 
     weapon = GetComponent<Weapon>();
-
-    projectileSpawnPoint ??= GetNodeOrNull<Node3D>("ProjectileSpawn");
 
     originalY = Position.Y;
 
     // Health bar
     healthBar = GetNodeOrNull<ProgressBar>("SubViewport/HealthBar");
-    if (healthBar != null) {
+    if(healthBar != null) {
       healthBar.MaxValue = healthComponent.maxHealth;
       healthBar.Value = healthComponent.CurrentHealth;
     }
@@ -55,7 +46,7 @@ public partial class MageEnemy : Enemy, IHitable {
   }
 
   public override void _PhysicsProcess(double delta) {
-    if (dead) { return; }
+    if(!healthComponent.IsAlive) { return; }
 
     input = behaviorTree.GetInput;
     behaviorTree.UpdateInfo(aiInfo);
@@ -67,7 +58,7 @@ public partial class MageEnemy : Enemy, IHitable {
     Vector3 direction = new(input.direction.X, 0.0f, input.direction.Y);
     Direction = direction;
 
-    if (!IsOnFloor()) {
+    if(!IsOnFloor()) {
       velocityComponent.AddVelocityInDirection(GetGravity() * (float)delta);
     }
     velocityComponent.Move(this);
@@ -79,7 +70,7 @@ public partial class MageEnemy : Enemy, IHitable {
   private void UpdateProceduralAnimations(double delta) {
     string currentState = stateMachine.GetCurrentStateName();
 
-    switch (currentState) {
+    switch(currentState) {
       case "idle":
         UpdateIdleAnimation(delta);
         break;
@@ -153,11 +144,11 @@ public partial class MageEnemy : Enemy, IHitable {
     aiInfo.shotFromDirection = direction;
     aiInfo.beeingShot = true;
 
-    if (!healthComponent.IsAlive && hitInfo.shooter is Player player) {
-      player.GetComponent<InsanityComponent>().AddInsanity(10.0f);
+    if(!healthComponent.IsAlive && hitInfo.shooter is Player) {
+      EmitSignalKilled(this);
     }
 
-    if (healthComponent.IsAlive) {
+    if(healthComponent.IsAlive) {
       Tween tween = CreateTween();
       tween.TweenProperty(this, "rotation:x", 0.05f, 0.1f);
       tween.TweenProperty(this, "rotation:x", 0.0f, 0.2f);
@@ -165,46 +156,19 @@ public partial class MageEnemy : Enemy, IHitable {
   }
 
   private void OnHealthChanged(float newHealth) {
-    if (healthBar != null) {
+    if(healthBar != null) {
       healthBar.Value = healthComponent.CurrentHealth;
     }
   }
 
-  private async void OnDeath() {
-    dead = true;
-
-    // Freeze movement
-    velocityComponent.Stop();
-
-    // Find mesh in GLB
-    MeshInstance3D? mesh = FindMeshInChildren(this);
-
-    if (mesh != null && dissolveMaterial != null) {
-      mesh.MaterialOverride = dissolveMaterial;
-      if (mesh.MaterialOverride is ShaderMaterial meshShader) {
-        meshShader.SetShaderParameter("t", 0.0);
-        meshShader.SetShaderParameter("noise_scale", 1.0);
-
-        Tween tween = CreateTween();
-        tween.TweenMethod(
-          Callable.From((float value) => meshShader.SetShaderParameter("t", value)),
-          0.0, 1.0, 2.0
-        );
-        await ToSignal(tween, Tween.SignalName.Finished);
-      }
-    }
-
-    QueueFree();
-  }
-
-  private MeshInstance3D? FindMeshInChildren(Node parent) {
-    foreach (Node child in parent.GetChildren()) {
-      if (child is MeshInstance3D mi && mi.Mesh != null) {
-        return mi;
-      }
-      var found = FindMeshInChildren(child);
-      if (found != null) { return found; }
-    }
-    return null;
-  }
+  // private MeshInstance3D? FindMeshInChildren(Node parent) {
+  //   foreach(Node child in parent.GetChildren()) {
+  //     if(child is MeshInstance3D mi && mi.Mesh != null) {
+  //       return mi;
+  //     }
+  //     var found = FindMeshInChildren(child);
+  //     if(found != null) { return found; }
+  //   }
+  //   return null;
+  // }
 }

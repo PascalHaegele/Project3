@@ -45,8 +45,9 @@ sky_material = SubResource("ShaderMaterial_qsga6")
 background_mode = 2
 sky = SubResource("Sky_pbr4s")
 ambient_light_source = 2
-ambient_light_color = Color(0.17077476, 0.17077497, 0.17077485, 1)
+ambient_light_color = Color(0.25150922, 0.25150928, 0.2515092, 1)
 ambient_light_sky_contribution = 0.01
+ambient_light_energy = 2.34
 glow_enabled = true
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_bfp77"]
