@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 public partial class TestEnemy : Enemy, IHitable {
   private BehaviorTree behaviorTree;
@@ -7,7 +8,8 @@ public partial class TestEnemy : Enemy, IHitable {
 
   private HitboxComponent hitboxComponent;
   private ProgressBar healthBar;
-    private bool dead;
+
+  [Export] private Material dissolveMaterial;
 
   public override void _Ready() {
     base._Ready();
@@ -34,7 +36,6 @@ public partial class TestEnemy : Enemy, IHitable {
   }
 
   public override void _PhysicsProcess(double delta) {
-    if(dead) { return; }
     if(!healthComponent.IsAlive) { return; }
 
     input = behaviorTree.GetInput;
@@ -57,6 +58,9 @@ public partial class TestEnemy : Enemy, IHitable {
     direction.Y = 0.0f;
     aiInfo.shotFromDirection = direction;
     aiInfo.beeingShot = true;
+
+    // WICHTIG: EmitSignalKilled wurde hier entfernt! 
+    // Es darf erst gefeuert werden, wenn die Animation fertig ist!
   }
 
   protected override void ApplyDifficulty() {
@@ -69,42 +73,48 @@ public partial class TestEnemy : Enemy, IHitable {
     healthBar.Value = healthComponent.CurrentHealth;
   }
 
- private async void OnDeath() {
-    dead = true;
-
-    // Freeze movement
+  private async void OnDeath() {
     velocityComponent.Stop();
+    hitboxComponent.DisableCollisionShapes();
 
-    // Find mesh in GLB
-    MeshInstance3D? mesh = FindMeshInChildren(this);
-    
-    if (mesh != null && dissolveMaterial != null) {
-      mesh.MaterialOverride = dissolveMaterial;
-      if (mesh.MaterialOverride is ShaderMaterial meshShader) {
-        meshShader.SetShaderParameter("t", 0.0);
-        meshShader.SetShaderParameter("noise_scale", 1.0);
-
-        Tween tween = CreateTween();
-        tween.TweenMethod(
-          Callable.From((float value) => meshShader.SetShaderParameter("t", value)),
-          0.0, 1.0, 2.0
-        );
-        await ToSignal(tween, Tween.SignalName.Finished);
-      }
+    // Sicherheitscheck, ob das Material im Inspector zugewiesen wurde
+    if (dissolveMaterial != null && dissolveMaterial is ShaderMaterial baseShader) {
       
+      // WICHTIG: Wir duplizieren das Material, damit es für DIESEN speziellen Gegner einzigartig ist.
+      ShaderMaterial uniqueShader = (ShaderMaterial)baseShader.Duplicate();
+      uniqueShader.SetShaderParameter("t", 0.0);
+      uniqueShader.SetShaderParameter("noise_scale", 1.0);
+
+      List<MeshInstance3D> meshList = new List<MeshInstance3D>();
+      FindMeshesRecursive(this, meshList);
+
+      // Weist allen Körperteilen (inklusive Schulter und Schwert) das EINZIGARTIGE Material zu
+      foreach (MeshInstance3D mesh in meshList) {
+          mesh.MaterialOverride = uniqueShader;
+      }
+
+      Tween tween = CreateTween();
+      tween.TweenMethod(
+        Callable.From((float value) => uniqueShader.SetShaderParameter("t", value)),
+        0.0, 1.0, 2.0
+      );
+      
+      // Warte 2 Sekunden, bis der Effekt komplett fertig ist
+      await ToSignal(tween, Tween.SignalName.Finished);
     }
 
+    // Erst JETZT dem GameManager sagen, dass der Gegner tot ist, und ihn dann löschen!
+    EmitSignalKilled(this);
     QueueFree();
   }
 
-  private MeshInstance3D? FindMeshInChildren(Node parent) {
+  // Rekursive Suche, die garantiert jeden Knochen und jedes Rüstungsteil findet
+  private void FindMeshesRecursive(Node parent, List<MeshInstance3D> meshList) {
     foreach (Node child in parent.GetChildren()) {
       if (child is MeshInstance3D mi && mi.Mesh != null) {
-        return mi;
+        meshList.Add(mi);
       }
-      var found = FindMeshInChildren(child);
-      if (found != null) { return found; }
+      FindMeshesRecursive(child, meshList);
     }
-    return null;
   }
 }
