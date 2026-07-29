@@ -3,12 +3,18 @@
 [ext_resource type="PackedScene" uid="uid://conkdp2ortyi4" path="res://core/main/main_menu.tscn" id="1_8fcwd"]
 [ext_resource type="Script" uid="uid://bbp6ef46df7tw" path="res://core/main/GameManager.cs" id="1_vwfi5"]
 [ext_resource type="Script" uid="uid://b20cok5elpx03" path="res://core/EventManager.cs" id="2_6vymn"]
+[ext_resource type="PackedScene" uid="uid://bnqyi5quiedot" path="res://ui/pause_menu.tscn" id="3_yibi5"]
 
 [node name="Main" type="Node" unique_id=686021068]
 script = ExtResource("1_vwfi5")
 
-[node name="MainMenu" parent="." unique_id=2022624294 instance=ExtResource("1_8fcwd")]
+[node name="Menus" type="CanvasLayer" parent="." unique_id=131891335]
+
+[node name="MainMenu" parent="Menus" unique_id=2022624294 instance=ExtResource("1_8fcwd")]
 startMapPath = &"res://maps/test_map.tscn"
+
+[node name="PauseMenu" parent="Menus" unique_id=581734549 instance=ExtResource("3_yibi5")]
+visible = false
 
 [node name="World" type="Node" parent="." unique_id=673644353]
 

@@ -3,8 +3,8 @@ using Godot;
 public partial class GameManager : Node {
   private EventManager eventManager;
   private MainMenu mainMenu;
+  private PauseMenu pauseMenu;
 
-  [Export] private bool createPlayer = true;
   private Player? player;
 
   private Node3D currentMap;
@@ -14,20 +14,33 @@ public partial class GameManager : Node {
     eventManager.PortalLevelChange += LoadNewMap;
     eventManager.Restart += OnRestart;
 
-    mainMenu = GetNode<MainMenu>("MainMenu");
+    mainMenu = GetNode<MainMenu>("Menus/MainMenu");
     mainMenu.Start += (mapPath) => {
       LoadPlayer();
       HideMainMenu();
       LoadNewMap(mapPath);
     };
 
-    // if(createPlayer) { LoadPlayer(); }
+    pauseMenu = GetNode<PauseMenu>("Menus/PauseMenu");
+    pauseMenu.ProcessMode = ProcessModeEnum.WhenPaused;
+
+    pauseMenu.Resume += HidePauseMenu;
+    pauseMenu.QuitToMenu += () => {
+      HidePauseMenu();
+      OnRestart();
+    };
+
+    pauseMenu.ChangeMouseSense +=
+      (value) => player.GetComponent<CameraComponent>().Sensitivity = value;
 
     ShowMainMenu();
   }
 
   public override void _UnhandledInput(InputEvent @event) {
-    if(Input.IsActionJustPressed("exit")) { GetTree().Quit(); }
+    if(Input.IsActionJustPressed("exit")) {
+      if(pauseMenu.Visible) { HidePauseMenu(); }
+      else { ShowPauseMenu(); }
+    }
 
     if(Input.IsActionJustPressed("mouse_capture")) {
       Input.MouseMode =
@@ -48,6 +61,8 @@ public partial class GameManager : Node {
 
     GetNode<Node3D>("World/Actors").AddChild(player);
     eventManager.SetPlayer(player);
+
+    pauseMenu.SetMouseSense(player.GetComponent<CameraComponent>().Sensitivity);
   }
 
   private void ShowMainMenu() {
@@ -92,6 +107,26 @@ public partial class GameManager : Node {
     player.GlobalRotation = playerSpawn.GlobalRotation;
 
     oldMap?.QueueFree();
+  }
+
+  private void ShowPauseMenu() {
+    Input.MouseMode = Input.MouseModeEnum.Visible;
+    pauseMenu.Show();
+    if(player != null) {
+      player.HideHUD();
+      player.Hide();
+    }
+    GetTree().Paused = true;
+  }
+
+  private void HidePauseMenu() {
+    GetTree().Paused = false;
+    if(player != null) {
+      player.Show();
+      player.ShowHUD();
+    }
+    pauseMenu.Hide();
+    Input.MouseMode = Input.MouseModeEnum.Captured;
   }
 }
 

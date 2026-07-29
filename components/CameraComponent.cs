@@ -2,7 +2,7 @@ using Godot;
 
 [GlobalClass]
 public partial class CameraComponent : Camera3D {
-  [Export(PropertyHint.Range, "0.0f, 1.0f, 0.1f")]
+  [Export(PropertyHint.Range, "0.1f, 1.0f, 0.01f")]
   private float sensitivity = 0.5f;
 
   [Export(PropertyHint.Range, "-90.0f, 0.0f, 0.1f, radians_as_degrees")]
@@ -22,6 +22,11 @@ public partial class CameraComponent : Camera3D {
   }
 
   public Vector2 Motion { get; private set; }
+
+  public float Sensitivity {
+    get => sensitivity;
+    set => sensitivity = Mathf.Clamp(value, 0.1f, 1.0f);
+  }
 
   public override void _Ready() {
     pivot = GetParent<Node3D>();

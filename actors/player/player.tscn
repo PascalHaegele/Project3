@@ -116,7 +116,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 [node name="CameraComponent" type="Camera3D" parent="CameraPivot" unique_id=660106367]
 far = 1000.0
 script = ExtResource("3_lsln6")
-sensitivity = 0.35
+sensitivity = 0.30000000000000004
 tiltLowerLimit = -1.3089969389957472
 tiltUpperLimit = 1.3962634015954636
 metadata/_custom_type_script = "uid://dc3slcqxdplvw"
