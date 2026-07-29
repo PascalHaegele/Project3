@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://pdlvbtcehfu8"]
+
+[ext_resource type="PackedScene" uid="uid://tflxmjnhntgn" path="res://objects/assets/scourge/Scourge.glb" id="1_glb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_scourge"]
+size = Vector3(0.7393738, 2.0208008, 0.7078735)
+
+[node name="Scourge" type="StaticBody3D" unique_id=1656069892]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=66258250]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.99140316, 1.0104004, 0.018255591)
+shape = SubResource("BoxShape3D_scourge")
+
+[node name="Model" parent="." unique_id=547755434 instance=ExtResource("1_glb")]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1069804484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0670547, 1.7718487, 0)
+light_color = Color(0.8392157, 0.6431373, 0, 1)
+light_energy = 6.0
+light_indirect_energy = 0.8
+omni_range = 6.996348

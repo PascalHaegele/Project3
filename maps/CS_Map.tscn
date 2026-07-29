@@ -24,6 +24,8 @@
 [ext_resource type="Script" uid="uid://rxe51n18487c" path="res://core/TrapArea.cs" id="16_ck1tj"]
 [ext_resource type="PackedScene" uid="uid://dgu1dmh0xqo3v" path="res://objects/traps/cleaver_trap.tscn" id="17_jdm1q"]
 [ext_resource type="PackedScene" uid="uid://dmv381xyx8dyw" path="res://actors/enemies/Mage/mage_enemy.tscn" id="17_nlsgs"]
+[ext_resource type="PackedScene" uid="uid://dbh2jd0bcvgk2" path="res://objects/assets/lantern/lantern.tscn" id="25_uhw3x"]
+[ext_resource type="PackedScene" uid="uid://pdlvbtcehfu8" path="res://objects/assets/scourge/scourge.tscn" id="26_o0ahx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsga6"]
 shader = ExtResource("1_ui8i3")
@@ -146,7 +148,7 @@ height = 0.1
 radius = 3.0
 height = 17.5
 
-[sub_resource type="Resource" id="Resource_nlsgs"]
+[sub_resource type="Resource" id="Resource_gc3ev"]
 resource_local_to_scene = true
 script = ExtResource("15_24hbc")
 patrolPath = PackedVector3Array(181.4789, 2.3929415, -136.71298, 182.76384, 2.3929405, -130.47568, 184.49522, 2.3929405, -128.45308)
@@ -154,7 +156,7 @@ leashPoint = Vector3(177.45947, 2.3929405, -144.50302)
 leashLength = 50.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_o0ahx"]
+[sub_resource type="Resource" id="Resource_2pf2u"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 walkSpeed = 3.0
@@ -1168,5 +1170,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.45947, 2.3929405, -144.50
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 177, 3, -147)
-enemyInfo = SubResource("Resource_nlsgs")
-velocityInfo = SubResource("Resource_o0ahx")
+enemyInfo = SubResource("Resource_gc3ev")
+velocityInfo = SubResource("Resource_2pf2u")
+
+[node name="Lantern" parent="." unique_id=360009979 instance=ExtResource("25_uhw3x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.35933, 3.9726863, 4.032724)
+
+[node name="Scourge" parent="." unique_id=1656069892 instance=ExtResource("26_o0ahx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 240.49344, 2.334899, -15.878938)
