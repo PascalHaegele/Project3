@@ -3,10 +3,10 @@ using Godot;
 [GlobalClass]
 public partial class BehaviorTree : Node {
   protected AIInfo aiInfo;
-
   protected Enemy enemy;
 
   [Export] protected NavigationAgent3D navAgent;
+  [Export] private float attackRange = 2.0f; 
 
   private BehaviorTreeNode rootNode;
 
@@ -46,11 +46,7 @@ public partial class BehaviorTree : Node {
 
     SequenceNode combatSequence = new();
     combatSequence.AddChildren(
-      new ConditionNode(
-        () =>
-          aiInfo.hasTarget &&
-          enemy.InsideLeashLength
-      ),
+      new ConditionNode(() => aiInfo.hasTarget && enemy.InsideLeashLength),
       new TaskNode(MoveToPlayer),
       new TaskNode(AttackPlayer)
     );
@@ -75,6 +71,9 @@ public partial class BehaviorTree : Node {
     );
 
     SequenceNode idleSequence = new();
+    idleSequence.AddChildren(
+      new TaskNode(PlayIdleAnimation)
+    );
 
     root.AddChildren(
       combatSequence,
@@ -86,22 +85,39 @@ public partial class BehaviorTree : Node {
     return root;
   }
 
-  protected NodeState MoveToPlayer() {
-    if(enemy.TargetInRange) { return NodeState.SUCCESS; }
+  private NodeState MoveToPlayer() {
+    navAgent.TargetPosition = aiInfo.soundPosition; 
 
-    navAgent.TargetPosition = aiInfo.targetPosition;
+    float distanceToTarget = enemy.GlobalPosition.DistanceTo(aiInfo.soundPosition);
 
+    if (distanceToTarget <= attackRange) {
+        return NodeState.SUCCESS;
+    }
+
+    if (enemy.animationPlayer != null && enemy.animationPlayer.CurrentAnimation != "Knight_walk") {
+        enemy.animationPlayer.Play("Knight_walk");
+    }
+    
     MoveToTarget();
-
-    input.sprint = true;
-
     return NodeState.RUNNING;
   }
 
   private NodeState AttackPlayer() {
-    enemy.GetComponent<HitboxComponent>().EnableCollisionShapes();
-    enemy.animationPlayer.Play("attack");
-    return NodeState.SUCCESS;
+    if (enemy.animationPlayer != null) {
+        if (enemy.animationPlayer.CurrentAnimation == "Knight_Attack") {
+          if (enemy.animationPlayer.IsPlaying()) {
+            return NodeState.RUNNING; 
+          } else {
+            enemy.animationPlayer.Stop(); 
+            return NodeState.SUCCESS;    
+          }
+        }
+
+        enemy.GetComponent<HitboxComponent>().EnableCollisionShapes();
+        enemy.animationPlayer.Play("Knight_Attack", -1.0f, 2.0f);
+    }
+    
+    return NodeState.RUNNING;
   }
 
   private NodeState LookToShot() {
@@ -127,8 +143,11 @@ public partial class BehaviorTree : Node {
       return NodeState.SUCCESS;
     }
 
+    if (enemy.animationPlayer != null && enemy.animationPlayer.CurrentAnimation != "Knight_walk") {
+        enemy.animationPlayer.Play("Knight_walk");
+    }
+    
     MoveToTarget();
-
     return NodeState.RUNNING;
   }
 
@@ -137,16 +156,25 @@ public partial class BehaviorTree : Node {
     if(enemy.enemyInfo.patrolPath.Length < 1) { return NodeState.FAILURE; }
 
     if(navAgent.IsTargetReached()) {
-      patrolIndex =
-        Mathf.PosMod(++patrolIndex, enemy.enemyInfo.patrolPath.Length - 1);
+      patrolIndex = Mathf.PosMod(++patrolIndex, enemy.enemyInfo.patrolPath.Length - 1);
       navAgent.TargetPosition = enemy.enemyInfo.patrolPath[patrolIndex];
 
       return NodeState.SUCCESS;
     }
 
-    MoveToTarget();
+    if (enemy.animationPlayer != null && enemy.animationPlayer.CurrentAnimation != "Knight_walk") {
+        enemy.animationPlayer.Play("Knight_walk");
+    }
 
+    MoveToTarget();
     return NodeState.RUNNING;
+  }
+
+  private NodeState PlayIdleAnimation() {
+    if (enemy.animationPlayer != null && enemy.animationPlayer.CurrentAnimation != "Knight_idle") {
+        enemy.animationPlayer.Play("Knight_idle");
+    }
+    return NodeState.SUCCESS; 
   }
 
   private void MoveToTarget() {
@@ -163,4 +191,3 @@ public partial class BehaviorTree : Node {
     }
   }
 }
-

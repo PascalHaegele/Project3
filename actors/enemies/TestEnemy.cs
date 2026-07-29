@@ -6,8 +6,8 @@ public partial class TestEnemy : Enemy, IHitable {
   private AIDetectionComponent detectionComponent;
 
   private HitboxComponent hitboxComponent;
-
   private ProgressBar healthBar;
+    private bool dead;
 
   public override void _Ready() {
     base._Ready();
@@ -17,6 +17,7 @@ public partial class TestEnemy : Enemy, IHitable {
     detectionComponent = GetComponent<AIDetectionComponent>();
 
     healthComponent.HealthChanged += OnHealthChanged;
+    healthComponent.Died += OnDeath;
 
     hitboxComponent = GetComponent<HitboxComponent>();
     hitboxComponent.damage = 10.0f;
@@ -33,6 +34,7 @@ public partial class TestEnemy : Enemy, IHitable {
   }
 
   public override void _PhysicsProcess(double delta) {
+    if(dead) { return; }
     if(!healthComponent.IsAlive) { return; }
 
     input = behaviorTree.GetInput;
@@ -55,10 +57,6 @@ public partial class TestEnemy : Enemy, IHitable {
     direction.Y = 0.0f;
     aiInfo.shotFromDirection = direction;
     aiInfo.beeingShot = true;
-
-    if(!healthComponent.IsAlive && hitInfo.shooter is Player) {
-      EmitSignalKilled(this);
-    }
   }
 
   protected override void ApplyDifficulty() {
@@ -70,5 +68,43 @@ public partial class TestEnemy : Enemy, IHitable {
   private void OnHealthChanged(float newHealth) {
     healthBar.Value = healthComponent.CurrentHealth;
   }
-}
 
+ private async void OnDeath() {
+    dead = true;
+
+    // Freeze movement
+    velocityComponent.Stop();
+
+    // Find mesh in GLB
+    MeshInstance3D? mesh = FindMeshInChildren(this);
+    
+    if (mesh != null && dissolveMaterial != null) {
+      mesh.MaterialOverride = dissolveMaterial;
+      if (mesh.MaterialOverride is ShaderMaterial meshShader) {
+        meshShader.SetShaderParameter("t", 0.0);
+        meshShader.SetShaderParameter("noise_scale", 1.0);
+
+        Tween tween = CreateTween();
+        tween.TweenMethod(
+          Callable.From((float value) => meshShader.SetShaderParameter("t", value)),
+          0.0, 1.0, 2.0
+        );
+        await ToSignal(tween, Tween.SignalName.Finished);
+      }
+      
+    }
+
+    QueueFree();
+  }
+
+  private MeshInstance3D? FindMeshInChildren(Node parent) {
+    foreach (Node child in parent.GetChildren()) {
+      if (child is MeshInstance3D mi && mi.Mesh != null) {
+        return mi;
+      }
+      var found = FindMeshInChildren(child);
+      if (found != null) { return found; }
+    }
+    return null;
+  }
+}
