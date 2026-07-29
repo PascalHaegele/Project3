@@ -1,4 +1,5 @@
 using Godot;
+using FmodSharp;
 
 [GlobalClass]
 public partial class Projectile : RigidBody3D {
@@ -31,6 +32,10 @@ public partial class Projectile : RigidBody3D {
     weapon = GetParent<Weapon>();
     hitbox = GetNode<HitboxComponent>("HitboxComponent");
     hitbox.actor = weapon.actor;
+    if (weapon.actor is MageEnemy) {
+     
+      FmodServerWrapper.PlayOneShotAttached("event:/Mage_Shot_Action", this);
+    }
   }
 
   /// <summary>
