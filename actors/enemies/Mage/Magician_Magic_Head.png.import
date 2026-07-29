@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0j11urf1iqed"
-path.s3tc="res://.godot/imported/Magician_Magic_Torso.png-c35577f887fb6cfe952f096ebcb99b5a.s3tc.ctex"
+uid="uid://c73f2ckwtjm56"
+path.s3tc="res://.godot/imported/Magician_Magic_Head.png-807eb4814b3baf0c30db66fac9fe476a.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "2709fd88544045507378b47b65038110"
+"md5": "2641a52597aa2f726a228fb50eb8001c"
 }
 
 [deps]
 
-source_file="res://actors/enemies/enemies_Assets/Magician_Magic_Torso.png"
-dest_files=["res://.godot/imported/Magician_Magic_Torso.png-c35577f887fb6cfe952f096ebcb99b5a.s3tc.ctex"]
+source_file="res://actors/enemies/Mage/Magician_Magic_Head.png"
+dest_files=["res://.godot/imported/Magician_Magic_Head.png-807eb4814b3baf0c30db66fac9fe476a.s3tc.ctex"]
 
 [params]
 

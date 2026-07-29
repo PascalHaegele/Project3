@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://duhtxtixegmv3"
-path="res://.godot/imported/Magician.glb-3daaa060bb143456d762b847970c858a.scn"
+uid="uid://d05wnw3a3b1q8"
+path="res://.godot/imported/Ghost.glb-f6ccc36de2494af4b6207b8bc9698034.scn"
 
 [deps]
 
-source_file="res://actors/enemies/enemies_Assets/Magician.glb"
-dest_files=["res://.godot/imported/Magician.glb-3daaa060bb143456d762b847970c858a.scn"]
+source_file="res://actors/enemies/Ghost/Ghost.glb"
+dest_files=["res://.godot/imported/Ghost.glb-f6ccc36de2494af4b6207b8bc9698034.scn"]
 
 [params]
 

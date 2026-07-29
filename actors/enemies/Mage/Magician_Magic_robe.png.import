@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0tmtbvxd7bft"
-path.s3tc="res://.godot/imported/Ghost_Ghost_Texture.png-a5ed3448e2dc5b6a3d130f7cf6368075.s3tc.ctex"
+uid="uid://cp0ng4yr886x7"
+path.s3tc="res://.godot/imported/Magician_Magic_robe.png-041dcae7d9366b11fc7be0f23f1b5756.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "942a278d623267dbc98a622b8d7c20f9"
+"md5": "b0b2e1b354ad7feaf155a6f0e592698f"
 }
 
 [deps]
 
-source_file="res://actors/enemies/enemies_Assets/Ghost_Ghost_Texture.png"
-dest_files=["res://.godot/imported/Ghost_Ghost_Texture.png-a5ed3448e2dc5b6a3d130f7cf6368075.s3tc.ctex"]
+source_file="res://actors/enemies/Mage/Magician_Magic_robe.png"
+dest_files=["res://.godot/imported/Magician_Magic_robe.png-041dcae7d9366b11fc7be0f23f1b5756.s3tc.ctex"]
 
 [params]
 

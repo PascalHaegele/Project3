@@ -54,24 +54,10 @@ public partial class HitboxComponent : Area3D {
     }
   }
 
-  /// <summary>
-  /// Applies crit multiplier. Not used in simplified system.
-  /// </summary>
-  public float ApplyCrit(float baseDamage) {
-    return baseDamage;
-  }
-
-  /// <summary>
-  /// Applies bleed DoT if owner has Bleed socketed. Only works for player-owned projectiles.
-  /// </summary>
-  public void ApplyBleed(HurtboxComponent hurtbox) {
-    // Bleed not implemented in simplified system
-  }
-
   private void OnAreaEntered(Area3D area) {
     if(area is HurtboxComponent hurtbox) {
       HitInfo info = new();
-      info.damage = ApplyCrit(damage * damageMultiplier);
+      info.damage = damage * damageMultiplier;
       if(GetParent() is Projectile p) {
         info.direction = GlobalPosition.DirectionTo(p.shotPosition);
       }
@@ -79,13 +65,11 @@ public partial class HitboxComponent : Area3D {
 
       if(hitLog != null) {
         Node hurtboxOwner = hurtbox.GetParent();
-        if(hitLog.HasHit(hurtboxOwner)) { return; } else { hitLog.LogHit(hurtboxOwner); }
+        if(hitLog.HasHit(hurtboxOwner)) { return; }
+        else { hitLog.LogHit(hurtboxOwner); }
       }
 
       hurtbox.RecieveHit(info);
-
-      // Apply bleed on hit
-      ApplyBleed(hurtbox);
 
       // Notify weapon system about hit for effects
       EmitSignalHitLanded(damage, GlobalPosition);

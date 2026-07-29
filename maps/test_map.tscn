@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c55wv856x1kmu" path="res://actors/enemies/test_enemy.tscn" id="2_pbr4s"]
 [ext_resource type="Texture2D" uid="uid://da7jcsvmhja8y" path="res://maps/skybox.png" id="2_svl6s"]
 [ext_resource type="Texture2D" uid="uid://kwnbrnpp1w4" path="res://maps/map_1/Map 1_final_M_Brick_normal.png" id="3_ad6p3"]
-[ext_resource type="PackedScene" uid="uid://dmv381xyx8dyw" path="res://actors/enemies/mage_enemy.tscn" id="3_mage"]
+[ext_resource type="PackedScene" uid="uid://dmv381xyx8dyw" path="res://actors/enemies/Mage/mage_enemy.tscn" id="3_mage"]
 [ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="3_pbr4s"]
 [ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="3_pwco0"]
 [ext_resource type="Texture2D" uid="uid://brqaum1mit0q3" path="res://maps/map_1/Map 1_final_M_Brick_orm.png" id="4_qnwwd"]
@@ -60,7 +60,6 @@ resource_local_to_scene = true
 script = ExtResource("3_pbr4s")
 patrolPath = PackedVector3Array(-8, 0, -17, 6.77744, 0, -16.653843, 15.346003, 0, -4.8959856, 0.55296326, 0, -5.0219855, -14.483469, 0, -2.364942, -16.650803, 0, -12.929461)
 leashPoint = Vector3(0, 0, -14.593309)
-attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [sub_resource type="Resource" id="Resource_7wt56"]
@@ -74,7 +73,8 @@ metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 resource_local_to_scene = true
 script = ExtResource("3_pbr4s")
 leashLength = 30.0
-attackRange = 14.0
+minAttackRange = 8.0
+maxAttackRange = 15.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [sub_resource type="Resource" id="Resource_tiop4"]

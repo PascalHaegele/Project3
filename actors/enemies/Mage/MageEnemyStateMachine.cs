@@ -2,86 +2,145 @@ using Godot;
 
 [GlobalClass]
 public partial class MageEnemyStateMachine : TransitionStateMachine {
-  private Enemy actor;
-  private RangedAttackComponent rangedAttack;
+  private MageEnemy enemy;
+  // private RangedAttackComponent rangedAttack;
 
   public override void _Ready() {
-    actor = GetParent<Enemy>();
-    rangedAttack = actor.GetComponent<RangedAttackComponent>();
+    enemy = GetParent<MageEnemy>();
+    // rangedAttack = enemy.GetComponent<RangedAttackComponent>();
     base._Ready();
   }
 
   protected override void SetupStates() {
-    AddState("idle", new ActorStateIdle(actor, this));
-    AddState("walk", new ActorStateWalk(actor, this));
-    AddState("backpedal", new MageBackpedalState(actor, this));
-    AddState("attack_charge", new MageAttackChargeState(actor, this, rangedAttack));
-    AddState("attack_cooldown", new MageAttackCooldownState(actor, this, rangedAttack));
-    AddState("fall", new ActorStateFall(actor, this));
-    AddState("land", new ActorStateLand(actor, this));
+    AddState("idle", new ActorStateIdle(enemy, this));
+    AddState("walk", new ActorStateWalk(enemy, this));
+    // AddState("backpedal", new MageBackpedalState(actor, this));
+    // AddState("attack_charge", new MageAttackChargeState(actor, this, rangedAttack));
+    // AddState("attack_cooldown", new MageAttackCooldownState(actor, this, rangedAttack));
+    AddState("fall", new ActorStateFall(enemy, this));
+    AddState("land", new ActorStateLand(enemy, this));
   }
 
   protected override void SetupTransitions() {
     AddGlobalTransition(
       "fall",
-      () => !actor.IsOnFloor() && actor.Velocity.Y < 0.0f
+      () => !enemy.IsOnFloor() && enemy.Velocity.Y < 0.0f
     );
 
     // Idle transitions
-    AddTransition("idle", "walk",
-      () => input.direction != Vector2.Zero && actor.aiInfo.hasTarget);
-    AddTransition("idle", "attack_charge",
-      () => {
-        float dist = actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
-        return actor.aiInfo.hasTarget && rangedAttack != null && !rangedAttack.IsOnCooldown && rangedAttack.IsInPreferredRange(dist);
-      });
+    AddTransition(
+      "idle",
+      "walk",
+      () => input.direction != Vector2.Zero && enemy.aiInfo.hasTarget
+    );
+
+    // AddTransition(
+    //   "idle",
+    //   "attack_charge",
+    //   () => {
+    //     float dist =
+    //       actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
+    //     return
+    //       actor.aiInfo.hasTarget &&
+    //       actor.TargetInRange &&
+    //       actor.CanShoot;
+    //       // rangedAttack != null &&
+    //       // !rangedAttack.IsOnCooldown &&
+    //       // rangedAttack.IsInPreferredRange(dist);
+    //   }
+    // );
 
     // Walk transitions
-    AddTransition("walk", "idle",
-      () => input.direction == Vector2.Zero || !actor.aiInfo.hasTarget);
-    AddTransition("walk", "backpedal",
-      () => {
-        float dist = actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
-        return rangedAttack != null && rangedAttack.IsTooClose(dist);
-      });
+    AddTransition(
+      "walk",
+      "idle",
+      () => input.direction == Vector2.Zero || !enemy.aiInfo.hasTarget
+    );
+
+    // AddTransition(
+    //   "walk",
+    //   "backpedal",
+    //   () => {
+    //     float dist =
+    //       actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
+    //     return rangedAttack != null && rangedAttack.IsTooClose(dist);
+    //   }
+    // );
 
     // Backpedal transitions
-    AddTransition("backpedal", "walk",
-      () => {
-        float dist = actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
-        return rangedAttack == null || !rangedAttack.IsTooClose(dist);
-      });
-    AddTransition("backpedal", "attack_cooldown",
-      () => {
-        float dist = actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
-        return rangedAttack != null && rangedAttack.IsInPreferredRange(dist) && !rangedAttack.IsOnCooldown && !rangedAttack.IsCharging;
-      });
+    // AddTransition(
+    //   "backpedal",
+    //   "walk",
+    //   () => {
+    //     float dist =
+    //       actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
+    //     return rangedAttack == null || !rangedAttack.IsTooClose(dist);
+    //   }
+    // );
+    //
+    // AddTransition(
+    //   "backpedal",
+    //   "attack_cooldown",
+    //   () => {
+    //     float dist =
+    //       actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
+    //     return
+    //       rangedAttack != null &&
+    //       rangedAttack.IsInPreferredRange(dist) &&
+    //       !rangedAttack.IsOnCooldown &&
+    //       !rangedAttack.IsCharging;
+    //   }
+    // );
 
     // Attack charge -> cooldown is handled by RangedAttackComponent
-    AddTransition("attack_charge", "attack_cooldown",
-      () => rangedAttack != null && !rangedAttack.IsCharging);
-
-    // Cooldown transitions
-    AddTransition("attack_cooldown", "walk",
-      () => {
-        float dist = actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
-        return rangedAttack == null || rangedAttack.IsTooFar(dist);
-      });
-    AddTransition("attack_cooldown", "backpedal",
-      () => {
-        float dist = actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
-        return rangedAttack != null && rangedAttack.IsTooClose(dist);
-      });
-    AddTransition("attack_cooldown", "idle",
-      () => !actor.aiInfo.hasTarget);
-    AddTransition("attack_cooldown", "attack_charge",
-      () => {
-        float dist = actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
-        return rangedAttack != null && !rangedAttack.IsOnCooldown && rangedAttack.IsInPreferredRange(dist);
-      });
+    // AddTransition(
+    //   "attack_charge",
+    //   "attack_cooldown",
+    //   () => rangedAttack != null && !rangedAttack.IsCharging
+    // );
+    //
+    // // Cooldown transitions
+    // AddTransition(
+    //   "attack_cooldown",
+    //   "walk",
+    //   () => {
+    //     float dist =
+    //       actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
+    //     return rangedAttack == null || rangedAttack.IsTooFar(dist);
+    //   }
+    // );
+    //
+    // AddTransition(
+    //   "attack_cooldown",
+    //   "backpedal",
+    //   () => {
+    //     float dist =
+    //       actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
+    //     return rangedAttack != null && rangedAttack.IsTooClose(dist);
+    //   }
+    // );
+    //
+    // AddTransition(
+    //   "attack_cooldown",
+    //   "idle",
+    //   () => !actor.aiInfo.hasTarget
+    // );
+    //
+    // AddTransition(
+    //   "attack_cooldown",
+    //   "attack_charge",
+    //   () => {
+    //     float dist =
+    //       actor.GlobalPosition.DistanceTo(actor.aiInfo.targetPosition);
+    //     return
+    //       rangedAttack != null &&
+    //       !rangedAttack.IsOnCooldown &&
+    //       rangedAttack.IsInPreferredRange(dist);
+    //   }
+    // );
 
     // Fall/Land
-    AddTransition("fall", "land", actor.IsOnFloor);
+    AddTransition("fall", "land", enemy.IsOnFloor);
     AddTransition("land", "idle", () => input.direction == Vector2.Zero);
     AddTransition("land", "walk", () => input.direction != Vector2.Zero);
   }

@@ -271,10 +271,10 @@ public partial class Player : Actor, IHitable {
         ) {
           inventoryComponent.AddPageItem(hoveredPickup.pageData);
           PlayItemSound(ItemSoundType.Page);
-        } 
+        }
         else if (hoveredPickup.itemType == ItemType.POTION) {
           PlayItemSound(ItemSoundType.Potion);
-        } 
+        }
         else if (hoveredPickup.itemType == ItemType.R_AMMO || hoveredPickup.itemType == ItemType.S_AMMO ) {
           PlayItemSound(ItemSoundType.Ammo);
         }

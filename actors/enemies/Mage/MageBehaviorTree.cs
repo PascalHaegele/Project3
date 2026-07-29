@@ -1,10 +1,10 @@
 using Godot;
 
 [GlobalClass]
-public partial class BehaviorTree : Node {
-  protected AIInfo aiInfo;
+public partial class MageBehaviorTree : Node {
+  private AIInfo aiInfo;
 
-  protected Enemy enemy;
+  protected MageEnemy enemy;
 
   [Export] protected NavigationAgent3D navAgent;
 
@@ -19,7 +19,7 @@ public partial class BehaviorTree : Node {
   public InputPackage GetInput => input;
 
   public override void _Ready() {
-    enemy = GetParent<Enemy>();
+    enemy = GetParent<MageEnemy>();
 
     navAgent ??= GetNode<NavigationAgent3D>("../NavigationAgent3D");
     if(enemy.enemyInfo.patrolPath?.Length > 0) {
@@ -41,7 +41,7 @@ public partial class BehaviorTree : Node {
 
   public void UpdateInfo(AIInfo info) => aiInfo = info;
 
-  protected virtual BehaviorTreeNode ConstructTree() {
+  private BehaviorTreeNode ConstructTree() {
     SelectorNode root = new();
 
     SequenceNode combatSequence = new();
@@ -49,9 +49,9 @@ public partial class BehaviorTree : Node {
       new ConditionNode(
         () =>
           aiInfo.hasTarget &&
-          enemy.InsideLeashLength
+          enemy.LeashDistance < enemy.enemyInfo.leashLength
       ),
-      new TaskNode(MoveToPlayer),
+      new TaskNode(MoveIntoRange),
       new TaskNode(AttackPlayer)
     );
 
@@ -86,21 +86,82 @@ public partial class BehaviorTree : Node {
     return root;
   }
 
-  protected NodeState MoveToPlayer() {
+  // private NodeState HandleCombat() {
+  //   float distance = enemy.GlobalPosition.DistanceTo(aiInfo.targetPosition);
+  //
+  //   // If we're in preferred range, stop moving and let the state machine handle attacks
+  //   if(rangedAttack != null && rangedAttack.IsInPreferredRange(distance)) {
+  //     input.direction = Vector2.Zero;
+  //     input.sprint = false;
+  //
+  //     // Face the player
+  //     Vector3 lookDir = aiInfo.targetPosition - enemy.GlobalPosition;
+  //     lookDir.Y = 0.0f;
+  //     if(!lookDir.IsEqualApprox(Vector3.Zero)) {
+  //       enemy.LookAt(enemy.GlobalPosition + lookDir.Normalized());
+  //     }
+  //
+  //     return NodeState.SUCCESS;
+  //   }
+  //
+  //   // If too far, move toward player
+  //   if(rangedAttack == null || rangedAttack.IsTooFar(distance)) {
+  //     navAgent.TargetPosition = aiInfo.targetPosition;
+  //     MoveToTarget();
+  //     input.sprint = true;
+  //     return NodeState.RUNNING;
+  //   }
+  //
+  //   // If too close, move backward (backpedal handled by state machine)
+  //   if(rangedAttack != null && rangedAttack.IsTooClose(distance)) {
+  //     // Move away from player
+  //     Vector3 awayDir = (enemy.GlobalPosition - aiInfo.targetPosition).Normalized();
+  //     awayDir.Y = 0.0f;
+  //     navAgent.TargetPosition = enemy.GlobalPosition + awayDir * 15.0f;
+  //     MoveToTarget();
+  //     input.sprint = false;
+  //
+  //     // Face the player while moving away
+  //     Vector3 lookDir = aiInfo.targetPosition - enemy.GlobalPosition;
+  //     lookDir.Y = 0.0f;
+  //     if(!lookDir.IsEqualApprox(Vector3.Zero)) {
+  //       enemy.LookAt(enemy.GlobalPosition + lookDir.Normalized());
+  //     }
+  //
+  //     return NodeState.RUNNING;
+  //   }
+  //
+  //   return NodeState.SUCCESS;
+  // }
+
+  private NodeState MoveIntoRange() {
     if(enemy.TargetInRange) { return NodeState.SUCCESS; }
 
-    navAgent.TargetPosition = aiInfo.targetPosition;
+    float distance = enemy.DistanceToTarget;
+    if(distance < enemy.enemyInfo.minAttackRange) {
+      Vector3 dir = (enemy.GlobalPosition - aiInfo.targetPosition).Normalized();
+      dir.Y = enemy.GlobalPosition.Y;
+      navAgent.TargetPosition = enemy.GlobalPosition + dir;
+      MoveToTarget(false);
 
-    MoveToTarget();
-
-    input.sprint = true;
+      if(!enemy.GlobalPosition.IsEqualApprox(aiInfo.targetPosition)) {
+        enemy.LookAt(aiInfo.targetPosition);
+      }
+    } else {
+      Vector3 dir =
+        enemy.GlobalPosition.DirectionTo(aiInfo.targetPosition).Normalized();
+      dir.Y = enemy.GlobalPosition.Y;
+      navAgent.TargetPosition = enemy.GlobalPosition + dir;
+      MoveToTarget();
+    }
 
     return NodeState.RUNNING;
   }
 
   private NodeState AttackPlayer() {
-    enemy.GetComponent<HitboxComponent>().EnableCollisionShapes();
-    enemy.animationPlayer.Play("attack");
+    // enemy.GetComponent<HitboxComponent>().EnableCollisionShapes();
+    // enemy.animationPlayer.Play("attack");
+    input.shoot = true;
     return NodeState.SUCCESS;
   }
 
@@ -140,7 +201,6 @@ public partial class BehaviorTree : Node {
       patrolIndex =
         Mathf.PosMod(++patrolIndex, enemy.enemyInfo.patrolPath.Length - 1);
       navAgent.TargetPosition = enemy.enemyInfo.patrolPath[patrolIndex];
-
       return NodeState.SUCCESS;
     }
 
@@ -149,7 +209,7 @@ public partial class BehaviorTree : Node {
     return NodeState.RUNNING;
   }
 
-  private void MoveToTarget() {
+  private void MoveToTarget(bool lookAtTarget = true) {
     Vector3 position = enemy.GlobalTransform.Origin;
     Vector3 nextPathPosition = navAgent.GetNextPathPosition();
 
@@ -158,9 +218,10 @@ public partial class BehaviorTree : Node {
 
     input.direction = new(direction.X, direction.Z);
 
-    if(!position.IsEqualApprox(enemy.GlobalPosition + direction)) {
-      enemy.LookAt(enemy.GlobalPosition + direction);
+    if(lookAtTarget) {
+      if(!position.IsEqualApprox(enemy.GlobalPosition + direction)) {
+        enemy.LookAt(enemy.GlobalPosition + direction);
+      }
     }
   }
 }
-

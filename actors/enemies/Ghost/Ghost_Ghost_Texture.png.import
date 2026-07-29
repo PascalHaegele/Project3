@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drqln3xanx54w"
-path.s3tc="res://.godot/imported/Magician_Magic_Arms.png-2539ab2fb804c2ade60e68444ba8b49b.s3tc.ctex"
+uid="uid://b0tmtbvxd7bft"
+path.s3tc="res://.godot/imported/Ghost_Ghost_Texture.png-f2cbc73ddb4f93ab1993d0dd6cba5b10.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "129d1c2d6927f790021b0b4e1170873a"
+"md5": "942a278d623267dbc98a622b8d7c20f9"
 }
 
 [deps]
 
-source_file="res://actors/enemies/enemies_Assets/Magician_Magic_Arms.png"
-dest_files=["res://.godot/imported/Magician_Magic_Arms.png-2539ab2fb804c2ade60e68444ba8b49b.s3tc.ctex"]
+source_file="res://actors/enemies/Ghost/Ghost_Ghost_Texture.png"
+dest_files=["res://.godot/imported/Ghost_Ghost_Texture.png-f2cbc73ddb4f93ab1993d0dd6cba5b10.s3tc.ctex"]
 
 [params]
 

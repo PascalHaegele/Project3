@@ -28,19 +28,9 @@ public partial class Projectile : RigidBody3D {
     freeTimer.OneShot = true;
     freeTimer.Timeout += QueueFree;
 
-    CollisionLayer = (uint)CollisionLayerEnum.NONE;
-    CollisionMask =
-      (uint)CollisionLayerEnum.WORLD |
-      (uint)CollisionLayerEnum.ENEMY;
-
     weapon = GetParent<Weapon>();
     hitbox = GetNode<HitboxComponent>("HitboxComponent");
     hitbox.actor = weapon.actor;
-
-    if (weapon.GetParent() is Player) {
-      hitbox.CollisionLayer = (uint)CollisionLayerEnum.PLAYER_HITBOX;
-      hitbox.CollisionMask = (uint)CollisionLayerEnum.ENEMY_HURTBOX;
-    }
   }
 
   /// <summary>
@@ -50,13 +40,12 @@ public partial class Projectile : RigidBody3D {
     float baseDamage =
       weapon.info.projectileDamage * weapon.info.damageMulitplier;
 
-    Player player =
-      weapon.GetParent() as Player ?? weapon.GetParent()?.GetParent<Player>();
-    if (player != null) {
+    Actor actor = weapon.actor;
+    if(actor is Player player) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
-      if (socket != null) {
+      if(socket != null) {
         baseDamage += socket.GetModifier("Damage");
-        if (socket.HasModifier("HomingProjectiles")) {
+        if(socket.HasModifier("HomingProjectiles")) {
           isHoming = true;
           homingStrength = socket.GetModifier("HomingProjectiles");
         }
@@ -64,7 +53,7 @@ public partial class Projectile : RigidBody3D {
     }
 
     hitbox.damage = baseDamage;
-    if (isEmpowered) { hitbox.damage *= 2.0f; }
+    if(isEmpowered) { hitbox.damage *= 2.0f; }
   }
 
   public override void _Process(double delta) {
@@ -130,8 +119,11 @@ public partial class Projectile : RigidBody3D {
       Freeze = true;
       freeTimer.Start(5.0);
 
-      foreach(Node child in GetNode("ProjectileHit").GetChildren()) {
-        if(child is GpuParticles3D particle) { particle.Emitting = true; }
+      Node3D hitVFX = GetNodeOrNull<Node3D>("ProjectileHit");
+      if(hitVFX != null) {
+        foreach(Node child in hitVFX.GetChildren()) {
+          if(child is GpuParticles3D particle) { particle.Emitting = true; }
+        }
       }
 
       if(collision3D.GetCollider() is PhysicsBody3D body) {

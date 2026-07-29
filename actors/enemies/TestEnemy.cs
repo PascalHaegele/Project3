@@ -1,31 +1,28 @@
 using Godot;
 
 public partial class TestEnemy : Enemy, IHitable {
+  private BehaviorTree behaviorTree;
   private TestEnemyStateMachine stateMachine;
+  private AIDetectionComponent detectionComponent;
+
   private HitboxComponent hitboxComponent;
-  private HurtboxComponent hurtboxComponent;
 
   private ProgressBar healthBar;
-
-  [Export] private ShaderMaterial dissolveMaterial;
 
   public override void _Ready() {
     base._Ready();
 
+    behaviorTree = GetComponent<BehaviorTree>();
     stateMachine = GetComponent<TestEnemyStateMachine>();
+    detectionComponent = GetComponent<AIDetectionComponent>();
 
     healthComponent.HealthChanged += OnHealthChanged;
-    healthComponent.Died += OnDeath;
 
     hitboxComponent = GetComponent<HitboxComponent>();
     hitboxComponent.damage = 10.0f;
     hitboxComponent.CollisionLayer = (uint)CollisionLayerEnum.ENEMY_HITBOX;
     hitboxComponent.CollisionMask = (uint)CollisionLayerEnum.PLAYER_HURTBOX;
     hitboxComponent.DisableCollisionShapes();
-
-    hurtboxComponent = GetComponent<HurtboxComponent>();
-    hurtboxComponent.CollisionLayer = (uint)CollisionLayerEnum.ENEMY_HURTBOX;
-    hurtboxComponent.CollisionMask = (uint)CollisionLayerEnum.NONE;
 
     healthBar = GetComponent<ProgressBar>();
     healthBar.MaxValue = healthComponent.maxHealth;
@@ -53,11 +50,12 @@ public partial class TestEnemy : Enemy, IHitable {
 
   public void RecieveHit(HitInfo hitInfo) {
     healthComponent.TakeDamage(hitInfo.damage);
-    if(hitInfo.direction != Vector3.Zero && !playerInVision) {
-      Vector3 direction = hitInfo.direction;
-      direction.Y = 0.0f;
-      LookAt(GlobalPosition + direction);
-    }
+
+    Vector3 direction = hitInfo.direction;
+    direction.Y = 0.0f;
+    aiInfo.shotFromDirection = direction;
+    aiInfo.beeingShot = true;
+
     if(!healthComponent.IsAlive && hitInfo.shooter is Player) {
       EmitSignalKilled(this);
     }
@@ -71,29 +69,6 @@ public partial class TestEnemy : Enemy, IHitable {
 
   private void OnHealthChanged(float newHealth) {
     healthBar.Value = healthComponent.CurrentHealth;
-  }
-
-  private async void OnDeath() {
-    if(dissolveMaterial != null) {
-      MeshInstance3D mesh = GetNode<MeshInstance3D>("MeshInstance3D");
-      mesh.MaterialOverride = dissolveMaterial;
-      ShaderMaterial meshShader = mesh.MaterialOverride as ShaderMaterial;
-      meshShader.SetShaderParameter("t", 0.0);
-
-      Tween tween = CreateTween();
-      _ = tween.TweenMethod(
-        Callable.From(
-          (float value) => meshShader.SetShaderParameter("t", value)
-        ),
-        0.0,
-        1.0,
-        3.0
-      );
-
-      _ = await ToSignal(tween, Tween.SignalName.Finished);
-    }
-
-    QueueFree();
   }
 }
 

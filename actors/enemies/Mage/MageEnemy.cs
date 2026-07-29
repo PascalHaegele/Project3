@@ -2,13 +2,16 @@ using Godot;
 
 public partial class MageEnemy : Enemy, IHitable {
   private MageEnemyStateMachine stateMachine;
-  private RangedAttackComponent rangedAttack;
-  private HurtboxComponent hurtboxComponent;
+  // private RangedAttackComponent rangedAttack;
   private ProgressBar healthBar;
+  private MageBehaviorTree behaviorTree;
+
+  private Weapon weapon;
+
+  [Export] private PackedScene projectile;
 
   private bool dead;
 
-  [Export] private ShaderMaterial dissolveMaterial;
   [Export] private Node3D projectileSpawnPoint;
 
   // Animation state - use local variables, don't modify Position directly
@@ -19,15 +22,19 @@ public partial class MageEnemy : Enemy, IHitable {
   // Store original position for animation offsets
   private float originalY;
 
+  public bool CanShoot => !weapon.Reloading;
+
   public override void _Ready() {
     base._Ready();
 
+    behaviorTree = GetComponent<MageBehaviorTree>();
     stateMachine = GetComponent<MageEnemyStateMachine>();
-    rangedAttack = GetComponent<RangedAttackComponent>();
-    hurtboxComponent = GetComponent<HurtboxComponent>();
+    // rangedAttack = GetComponent<RangedAttackComponent>();
 
     healthComponent.HealthChanged += OnHealthChanged;
     healthComponent.Died += OnDeath;
+
+    weapon = GetComponent<Weapon>();
 
     projectileSpawnPoint ??= GetNodeOrNull<Node3D>("ProjectileSpawn");
 
@@ -41,16 +48,10 @@ public partial class MageEnemy : Enemy, IHitable {
     }
 
     // Connect to ranged attack signals
-    if (rangedAttack != null) {
-      rangedAttack.ChargeStarted += OnChargeStarted;
-      rangedAttack.ProjectileFired += OnProjectileFired;
-    }
-
-    // Disable hitbox - mage doesn't melee
-    var hitbox = GetComponent<HitboxComponent>();
-    if (hitbox != null) {
-      hitbox.DisableCollisionShapes();
-    }
+    // if (rangedAttack != null) {
+    //   rangedAttack.ChargeStarted += OnChargeStarted;
+    //   rangedAttack.ProjectileFired += OnProjectileFired;
+    // }
   }
 
   public override void _PhysicsProcess(double delta) {
@@ -59,6 +60,9 @@ public partial class MageEnemy : Enemy, IHitable {
     input = behaviorTree.GetInput;
     behaviorTree.UpdateInfo(aiInfo);
     stateMachine.UpdateInput(input);
+
+    if(input.shoot) { weapon.Shoot(); weapon.Reload(); }
+    if(!CanShoot) { weapon.Reload(); }
 
     Vector3 direction = new(input.direction.X, 0.0f, input.direction.Y);
     Direction = direction;
@@ -119,8 +123,8 @@ public partial class MageEnemy : Enemy, IHitable {
   private void UpdateChargeAnimation(double delta) {
     idleBreatheTime += (float)delta * 1.5f;
 
-    float leanBack = Mathf.Lerp(0.0f, 0.1f, rangedAttack?.GetChargeProgress ?? 0.0f);
-    Rotation = new Vector3(leanBack, Rotation.Y, 0.0f);
+    // float leanBack = Mathf.Lerp(0.0f, 0.1f, rangedAttack?.GetChargeProgress ?? 0.0f);
+    // Rotation = new Vector3(leanBack, Rotation.Y, 0.0f);
   }
 
   private void UpdateCooldownAnimation(double delta) {
@@ -137,10 +141,17 @@ public partial class MageEnemy : Enemy, IHitable {
 
   private void OnProjectileFired() {
     GD.Print("Mage: Projectile fired!");
+    weapon.Shoot();
+    weapon.Reload();
   }
 
   public void RecieveHit(HitInfo hitInfo) {
     healthComponent.TakeDamage(hitInfo.damage);
+
+    Vector3 direction = hitInfo.direction;
+    direction.Y = 0.0f;
+    aiInfo.shotFromDirection = direction;
+    aiInfo.beeingShot = true;
 
     if (!healthComponent.IsAlive && hitInfo.shooter is Player player) {
       player.GetComponent<InsanityComponent>().AddInsanity(10.0f);

@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dcpar8itrvr70"]
+
+[ext_resource type="Script" uid="uid://cohnw7rgixh8v" path="res://weapons/Weapon.cs" id="1_47v8f"]
+[ext_resource type="PackedScene" uid="uid://bgn6wxujb4kyt" path="res://actors/enemies/Mage/mage_orb.tscn" id="2_bn5kn"]
+[ext_resource type="Script" uid="uid://bv03t2orsyg68" path="res://weapons/WeaponInfo.cs" id="3_o66ic"]
+
+[sub_resource type="Resource" id="Resource_bfp77"]
+script = ExtResource("3_o66ic")
+reloadTime = 2.0
+projectile = ExtResource("2_bn5kn")
+projectileSpeed = 8.0
+projectileDamage = 15.0
+metadata/_custom_type_script = "uid://bv03t2orsyg68"
+
+[node name="MageWeapon" type="Node3D" unique_id=1489655629]
+script = ExtResource("1_47v8f")
+info = SubResource("Resource_bfp77")
+metadata/_custom_type_script = "uid://cohnw7rgixh8v"
+
+[node name="ProjectileSpawn" type="Marker3D" parent="." unique_id=1317815174]

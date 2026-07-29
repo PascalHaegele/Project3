@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dujtr6j1n04vf"
-path.s3tc="res://.godot/imported/Magician_Magic_Hands.png-893485aa3a8b075d656a7edb667943c5.s3tc.ctex"
+path.s3tc="res://.godot/imported/Magician_Magic_Hands.png-8847c9311e442fe1af15ba6d3a0e3ebd.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://actors/enemies/enemies_Assets/Magician_Magic_Hands.png"
-dest_files=["res://.godot/imported/Magician_Magic_Hands.png-893485aa3a8b075d656a7edb667943c5.s3tc.ctex"]
+source_file="res://actors/enemies/Mage/Magician_Magic_Hands.png"
+dest_files=["res://.godot/imported/Magician_Magic_Hands.png-8847c9311e442fe1af15ba6d3a0e3ebd.s3tc.ctex"]
 
 [params]
 
