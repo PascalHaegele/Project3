@@ -63,10 +63,10 @@ public partial class UpgradeBench : StaticBody3D, IInteractable {
     ApplyUpgrade(chosen, player);
     usedThisRun = true;
     benchUsedGlobally = true;
-    
+
     // Disable interaction permanently for this run
     GetNode<CollisionShape3D>("InteractionComponent/CollisionShape3D").Disabled = true;
-    
+
     CloseBench();
   }
 
@@ -85,7 +85,7 @@ public partial class UpgradeBench : StaticBody3D, IInteractable {
       uiInstance.Visible = false;
     }
     Input.MouseMode = Input.MouseModeEnum.Captured;
-    
+
     // Re-enable interaction so player can open bench again without leaving area
     // (only if not used this run)
     if (!usedThisRun && !benchUsedGlobally) {
@@ -110,13 +110,13 @@ public partial class UpgradeBench : StaticBody3D, IInteractable {
   public void ResetBenchInstance() {
     usedThisRun = false;
     isOpen = false;
-    
+
     // Re-enable interaction collision
     CollisionShape3D interactionShape = GetNodeOrNull<CollisionShape3D>("InteractionComponent/CollisionShape3D");
     if (interactionShape != null) {
       interactionShape.Disabled = false;
     }
-    
+
     if (uiInstance != null) {
       uiInstance.Visible = false;
     }
@@ -232,12 +232,3 @@ public partial class UpgradeBench : StaticBody3D, IInteractable {
   }
 }
 
-/// <summary>
-/// Tracks permanent upgrade bonuses on the player.
-/// </summary>
-[GlobalClass]
-public partial class UpgradeTracker : Node {
-  public float weaponDamageBonus = 0f;
-  public float reloadSpeedBonus = 0f;
-  public int randomPageUpgrades = 0;
-}

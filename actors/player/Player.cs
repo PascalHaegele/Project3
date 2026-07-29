@@ -285,7 +285,6 @@ public partial class Player : Actor, IHitable {
       // Exakte Laufgeschwindigkeit am Boden ermitteln
       Vector3 flatVelocity = new(Velocity.X, 0.0f, Velocity.Z);
       float currentSpeed = flatVelocity.Length();
-       GD.Print(currentSpeed);
       if(currentSpeed > 0.1f && IsOnFloor()) {
 
         // Parameter ans Loop-Event in FMOD senden
