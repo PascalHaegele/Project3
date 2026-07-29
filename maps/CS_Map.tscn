@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://dmv381xyx8dyw" path="res://actors/enemies/Mage/mage_enemy.tscn" id="17_nlsgs"]
 [ext_resource type="PackedScene" uid="uid://dbh2jd0bcvgk2" path="res://objects/assets/lantern/lantern.tscn" id="25_uhw3x"]
 [ext_resource type="PackedScene" uid="uid://pdlvbtcehfu8" path="res://objects/assets/scourge/scourge.tscn" id="26_o0ahx"]
+[ext_resource type="PackedScene" uid="uid://b53tt7rmxxl6n" path="res://objects/assets/crate/crate.tscn" id="27_gc3ev"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsga6"]
 shader = ExtResource("1_ui8i3")
@@ -462,8 +463,8 @@ size = Vector3(30.125732, 1, 20.05957)
 material = SubResource("StandardMaterial3D_gc3ev")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1" unique_id=700911130]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2914124, 0, 22.15783)
-size = Vector3(23.542908, 1, 25.675293)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.925705, 0, 23.811333)
+size = Vector3(20.811493, 1, 28.9823)
 material = SubResource("StandardMaterial3D_gc3ev")
 
 [node name="CSGBox3D8" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room1" unique_id=2080182045]
@@ -578,6 +579,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026611328, 0.95805407, 1.83
 size = Vector3(8.377502, 1.6019897, 7.766968)
 material = SubResource("ORMMaterial3D_o0ahx")
 
+[node name="Lantern" parent="NavigationRegion3D/Map_layout_CS/Room1" unique_id=360009979 instance=ExtResource("25_uhw3x")]
+transform = Transform3D(0.8431515, -6.965472e-17, -0.53767604, 3.744345e-16, 1, -2.3877613e-16, 0.53767604, 2.3877613e-16, 0.8431515, 42.70746, 2.0104823, 52.810753)
+
 [node name="Start" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS" unique_id=1421738651]
 transform = Transform3D(0.8246993, 0, -0.5655717, 0, 1, 0, 0.5655717, 0, 0.8246993, 228.97835, 1.8502464, 31.503162)
 use_collision = true
@@ -608,7 +612,8 @@ size = Vector3(20.045383, 1, 20.494148)
 material = SubResource("StandardMaterial3D_gc3ev")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=1958225930]
-size = Vector3(51.660385, 1, 10.978883)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4815216, 0, -3.1070938)
+size = Vector3(42.69738, 1, 17.193054)
 material = SubResource("StandardMaterial3D_gc3ev")
 
 [node name="Walls_Start" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=1542068366]
@@ -656,6 +661,11 @@ material = SubResource("ORMMaterial3D_o0ahx")
 [node name="CSGBox3D15" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start/CSGBox3D15" unique_id=1334764617]
 transform = Transform3D(-1.4693959, -7.8125766e-16, 3.9452581, -1.5375863e-15, 4.2099953, 2.610202e-16, -3.9452581, -1.3497862e-15, -1.4693959, 1.4282112, -0.21324092, -0.31355286)
 size = Vector3(0.28114966, 0.17877197, 0.04617834)
+material = SubResource("ORMMaterial3D_o0ahx")
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start/CSGBox3D15/CSGBox3D15" unique_id=1205088339]
+transform = Transform3D(-2.3895822, -1.5439124e-15, 3.4661338, -1.8488444e-15, 4.209855, 6.005863e-16, -3.4661338, -1.1813804e-15, -2.3895822, 0.22545052, 0.028105274, 0.14813042)
+size = Vector3(0.091723345, 0.06411743, 0.010271788)
 material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D16" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Walls_Start" unique_id=1028274724]
@@ -786,8 +796,8 @@ material = SubResource("ORMMaterial3D_o0ahx")
 [node name="Stairs" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS/Start" unique_id=2115715387]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Stairs" unique_id=1878409485]
-transform = Transform3D(0.99976265, 0, 0.021797389, 0, 1, 0, -0.021797389, 0, 0.99976265, 3.0144653, 1.4540951, 0.12844086)
-size = Vector3(41.240784, 2.2564087, 7.1101074)
+transform = Transform3D(0.99976265, 0, 0.021797389, 0, 1, 0, -0.021797389, 0, 0.99976265, 3.0297394, 1.4540951, 0.8288727)
+size = Vector3(41.240784, 2.2564087, 5.7088623)
 material = SubResource("ORMMaterial3D_o0ahx")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Start/Stairs" unique_id=1881342256]
@@ -1174,8 +1184,17 @@ transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.
 enemyInfo = SubResource("Resource_o0ahx")
 velocityInfo = SubResource("Resource_gc3ev")
 
-[node name="Lantern" parent="." unique_id=360009979 instance=ExtResource("25_uhw3x")]
+[node name="Lantern" parent="." unique_id=579660595 instance=ExtResource("25_uhw3x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.35933, 3.9726863, 4.032724)
 
 [node name="Scourge" parent="." unique_id=1656069892 instance=ExtResource("26_o0ahx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 240.49344, 2.334899, -15.878938)
+
+[node name="Lantern2" parent="." unique_id=784690644 instance=ExtResource("25_uhw3x")]
+transform = Transform3D(0.8801548, 0, -0.47468677, 0, 1, 0, 0.47468677, 0, 0.8801548, 243.43877, 5.8602333, 42.94244)
+
+[node name="Lantern3" parent="." unique_id=485812793 instance=ExtResource("25_uhw3x")]
+transform = Transform3D(0.8217103, 0, -0.5699054, 0, 1, 0, 0.5699054, 0, 0.8217103, 213.66083, 4.7723494, 25.298689)
+
+[node name="Crate" parent="." unique_id=1992583929 instance=ExtResource("27_gc3ev")]
+transform = Transform3D(0.8211459, 0, -0.57071835, 0, 1, 0, 0.57071835, 0, 0.8211459, 216.3855, 2.460552, 19.492119)

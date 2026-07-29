@@ -20,6 +20,7 @@ public partial class UpgradeBench : StaticBody3D, IInteractable {
   private bool usedThisRun = false;
   private bool isOpen = false;
   private UpgradeBenchUI uiInstance;
+  private List<UpgradeOption> cachedUpgrades;
 
   // Static flag that persists across bench instances in the same run
   private static bool benchUsedGlobally = false;
@@ -48,11 +49,13 @@ public partial class UpgradeBench : StaticBody3D, IInteractable {
   private void OpenBench(Player player) {
     if (uiInstance == null) return;
 
-    // Generate 3 random upgrades
-    List<UpgradeOption> upgrades = GenerateUpgrades();
+    // Generate upgrades only once - cache them for subsequent opens
+    if (cachedUpgrades == null) {
+      cachedUpgrades = GenerateUpgrades();
+    }
 
     isOpen = true;
-    uiInstance.ShowUI(player, upgrades, this);
+    uiInstance.ShowUI(player, cachedUpgrades, this);
     Input.MouseMode = Input.MouseModeEnum.Visible;
   }
 
@@ -81,13 +84,8 @@ public partial class UpgradeBench : StaticBody3D, IInteractable {
 
   private void CloseBench() {
     isOpen = false;
-    if (uiInstance != null) {
-      uiInstance.Visible = false;
-    }
-    Input.MouseMode = Input.MouseModeEnum.Captured;
-
-    // Re-enable interaction so player can open bench again without leaving area
-    // (only if not used this run)
+    // UI handles its own close animation and mouse mode
+    // Only re-enable interaction if not used this run
     if (!usedThisRun && !benchUsedGlobally) {
       CollisionShape3D interactionShape = GetNodeOrNull<CollisionShape3D>("InteractionComponent/CollisionShape3D");
       if (interactionShape != null) {

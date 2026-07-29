@@ -30,6 +30,7 @@ window/size/viewport_width=1920
 window/size/viewport_height=1280
 window/size/mode=2
 window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 display_server/driver.linuxbsd="wayland"
 
 [dotnet]
