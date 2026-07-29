@@ -53,4 +53,33 @@ public partial class PageData : Resource {
       _ => ("", 0f)
     };
   }
+
+  /// <summary>
+  /// Returns a human-readable description of an effect name.
+  /// </summary>
+  public static string GetEffectDescription(string effectName) {
+    return effectName switch {
+      "Damage" => "Increases weapon damage",
+      "ReloadSpeed" => "Increases reload speed",
+      "HomingProjectiles" => "Projectiles track enemies",
+      "MovementSpeed" => "Increases movement speed",
+      "DamageReduction" => "Reduces damage taken",
+      "DashDistance" => "Increases dash distance",
+      "BloodRitual" => "Heal on hit",
+      "EchoStep" => "Leaves a damaging shadow trail",
+      "FrenziedSoul" => "Increases fire rate",
+      _ => effectName
+    };
+  }
+
+  /// <summary>
+  /// Returns a formatted string showing the effect with its description and value.
+  /// </summary>
+  public static string GetEffectDisplay(string effectName, float effectValue) {
+    string desc = GetEffectDescription(effectName);
+    if (effectName == "HomingProjectiles" || effectName == "EchoStep") {
+      return $"{desc}";
+    }
+    return $"{desc} (+{effectValue})";
+  }
 }

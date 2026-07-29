@@ -27,7 +27,8 @@ public abstract partial class Enemy : Actor {
 
   protected HurtboxComponent hurtboxComponent;
 
-  [Export] protected ShaderMaterial dissolveMaterial;
+  [Export] private ShaderMaterial dissolveMaterial;
+  [Export] private ShaderMaterial outlineMaterial;
   [Export] private Node3D model;
 
   public bool TargetInRange  {
@@ -66,6 +67,19 @@ public abstract partial class Enemy : Actor {
 
     // Add to "enemies" group for homing projectile targeting
     AddToGroup("enemies");
+
+    foreach(Node child in model.GetChildren()) {
+      if(child is MeshInstance3D mesh) {
+        if(mesh.Mesh is ArrayMesh arrayMesh) {
+          Material mat = arrayMesh.SurfaceGetMaterial(0);
+          mat.NextPass = outlineMaterial;
+        }
+        if(mesh.Mesh is PrimitiveMesh primitiveMesh) {
+          primitiveMesh.Material ??= new StandardMaterial3D();
+          primitiveMesh.Material.NextPass = outlineMaterial;
+        }
+      }
+    }
   }
 
   protected virtual void ApplyDifficulty() { }
@@ -73,6 +87,10 @@ public abstract partial class Enemy : Actor {
   private async void OnDeath() {
     if(dissolveMaterial != null && model != null) {
       Tween tween = CreateTween();
+      Timer timer = new();
+      timer.OneShot = true;
+      AddChild(timer);
+      timer.Start(3.0);
 
       foreach(Node child in model.GetChildren()) {
         if(child is MeshInstance3D mesh) {
@@ -91,7 +109,8 @@ public abstract partial class Enemy : Actor {
         }
       }
 
-      _ = await ToSignal(tween, Tween.SignalName.Finished);
+      // _ = await ToSignal(tween, Tween.SignalName.Finished);
+      _ = await ToSignal(timer, Timer.SignalName.Timeout);
     }
 
     QueueFree();

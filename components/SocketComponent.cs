@@ -16,10 +16,21 @@ public partial class SocketComponent : Node {
   /// </summary>
   /// <param name="page">The PageData to socket</param>
   /// <param name="socketCategory">"Weapon", "Armor", or "Skill"</param>
-  public void SocketPage(PageData page, string socketCategory) {
+  public void SocketPage(PageData page, string socketCategory, int slotIndex = -1) {
     if (page == null) return;
 
-    string slotId = $"{socketCategory}_{socketedPages.Count}";
+    string slotId;
+    if (slotIndex >= 0) {
+      // Use the specified slot index
+      slotId = $"{socketCategory}_{slotIndex}";
+    } else {
+      // Find first available slot index for this category
+      int idx = 0;
+      while (socketedPages.ContainsKey($"{socketCategory}_{idx}")) {
+        idx++;
+      }
+      slotId = $"{socketCategory}_{idx}";
+    }
 
     // Remove existing page in same slot if any
     if (socketedPages.ContainsKey(slotId)) {

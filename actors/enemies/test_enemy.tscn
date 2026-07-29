@@ -6,9 +6,13 @@
 [ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_mka0o"]
 [ext_resource type="Material" uid="uid://bhc76ujovrpr2" path="res://actors/enemies/dissolve_material.tres" id="3_ad4r6"]
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="3_l1sbr"]
+[ext_resource type="Material" uid="uid://cikf4egfyc2k3" path="res://actors/enemies/outline_material.tres" id="3_otf45"]
 [ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="3_p5iym"]
+<<<<<<< HEAD
 [ext_resource type="Texture2D" uid="uid://d2wedv065r8cp" path="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Knight.png" id="10_kstis"]
 [ext_resource type="Texture2D" uid="uid://dpy4mtb5i7rh6" path="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_Chest.png" id="11_da4by"]
+=======
+>>>>>>> fdd9de89d46599746b614d36edbde1ccb6b49633
 [ext_resource type="Script" uid="uid://bvmpjaulofawh" path="res://actors/enemies/TestEnemyStateMachine.cs" id="12_kstis"]
 [ext_resource type="Texture2D" uid="uid://w3uigalwp4yd" path="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Robe_Butt.png" id="12_v554o"]
 [ext_resource type="Texture2D" uid="uid://c2321v560tnlx" path="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Scarf.png" id="13_robej"]
@@ -25,6 +29,22 @@ walkSpeed = 3.0
 sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
+<<<<<<< HEAD
+=======
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_v4a0d"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_bfp77"]
+size = Vector3(0.2, 0.2, 0.6)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bfp77"]
+radius = 0.1
+height = 1.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o8bm0"]
+radius = 0.16
+height = 1.2
+
+>>>>>>> fdd9de89d46599746b614d36edbde1ccb6b49633
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4a0d"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
@@ -2018,10 +2038,40 @@ collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_xmkit")
 dissolveMaterial = ExtResource("3_ad4r6")
+<<<<<<< HEAD
 dissolveMaterial = ExtResource("3_ad4r6")
 model = NodePath("Knight_with_less_armor_Finished_Rig_Animation_SWORD")
 velocityInfo = SubResource("Resource_nl8p5")
 components = [NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent"), NodePath("AIDetectionComponent"), NodePath("HitboxComponent"), NodePath("SubViewport/HealthBar"), NodePath("TestEnemyStateMachine"), NodePath("BehaviorTree"), NodePath("Knight_with_less_armor_Finished_Rig_Animation_SWORD/AnimationPlayer")]
+=======
+outlineMaterial = ExtResource("3_otf45")
+model = NodePath("Model")
+velocityInfo = SubResource("Resource_nl8p5")
+components = [NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent"), NodePath("AIDetectionComponent"), NodePath("Model/MeshInstance3D/MeshInstance3D2/HitboxComponent"), NodePath("SubViewport/HealthBar"), NodePath("TestEnemyStateMachine"), NodePath("BehaviorTree"), NodePath("AnimationPlayer")]
+
+[node name="Model" type="Node3D" parent="." unique_id=1883027690]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model" unique_id=1364863915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_v4a0d")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model/MeshInstance3D" unique_id=1951825375]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.387, -0.745)
+mesh = SubResource("BoxMesh_bfp77")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Model/MeshInstance3D" unique_id=1251135289]
+transform = Transform3D(0.9166701, -0.38602713, -0.10343566, -0.37184048, -0.7289828, -0.57473356, 0.14645992, 0.56530267, -0.81177735, 0.7832922, 0.53795135, -0.5512289)
+mesh = SubResource("CapsuleMesh_bfp77")
+
+[node name="HitboxComponent" type="Area3D" parent="Model/MeshInstance3D/MeshInstance3D2" unique_id=1875458621]
+collision_layer = 64
+collision_mask = 32
+script = ExtResource("3_p5iym")
+metadata/_custom_type_script = "uid://lc0clvytiu8r"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/MeshInstance3D/MeshInstance3D2/HitboxComponent" unique_id=1782961685]
+shape = SubResource("CapsuleShape3D_o8bm0")
+>>>>>>> fdd9de89d46599746b614d36edbde1ccb6b49633
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1951671070]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
