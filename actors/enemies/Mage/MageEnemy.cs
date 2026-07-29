@@ -52,8 +52,8 @@ public partial class MageEnemy : Enemy, IHitable {
     behaviorTree.UpdateInfo(aiInfo);
     stateMachine.UpdateInput(input);
 
-    if(input.shoot) { weapon.Shoot(); weapon.Reload(); }
-    if(!CanShoot) { weapon.Reload(); }
+    // if(input.shoot) { weapon.Shoot(); weapon.Reload(); }
+    // if(!CanShoot) { weapon.Reload(); }
 
     Vector3 direction = new(input.direction.X, 0.0f, input.direction.Y);
     Direction = direction;

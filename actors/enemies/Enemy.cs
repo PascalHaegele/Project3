@@ -85,6 +85,14 @@ public abstract partial class Enemy : Actor {
   protected virtual void ApplyDifficulty() { }
 
   private async void OnDeath() {
+    animationPlayer.Stop();
+
+    CollisionLayer = (uint)CollisionLayerEnum.NONE;
+    CollisionMask = (uint)CollisionLayerEnum.NONE;
+
+    hurtboxComponent.CollisionLayer = (uint)CollisionLayerEnum.NONE;
+    hurtboxComponent.CollisionMask = (uint)CollisionLayerEnum.NONE;
+
     if(dissolveMaterial != null && model != null) {
       Tween tween = CreateTween();
       Timer timer = new();
@@ -109,7 +117,6 @@ public abstract partial class Enemy : Actor {
         }
       }
 
-      // _ = await ToSignal(tween, Tween.SignalName.Finished);
       _ = await ToSignal(timer, Timer.SignalName.Timeout);
     }
 

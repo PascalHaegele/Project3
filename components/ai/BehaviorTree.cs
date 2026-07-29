@@ -6,7 +6,7 @@ public partial class BehaviorTree : Node {
   protected Enemy enemy;
 
   [Export] protected NavigationAgent3D navAgent;
-  [Export] private float attackRange = 2.0f; 
+  [Export] private float attackRange = 2.0f;
 
   private BehaviorTreeNode rootNode;
 
@@ -86,7 +86,7 @@ public partial class BehaviorTree : Node {
   }
 
   private NodeState MoveToPlayer() {
-    navAgent.TargetPosition = aiInfo.soundPosition; 
+    navAgent.TargetPosition = aiInfo.soundPosition;
 
     float distanceToTarget = enemy.GlobalPosition.DistanceTo(aiInfo.soundPosition);
 
@@ -97,7 +97,7 @@ public partial class BehaviorTree : Node {
     if (enemy.animationPlayer != null && enemy.animationPlayer.CurrentAnimation != "Knight_walk") {
         enemy.animationPlayer.Play("Knight_walk");
     }
-    
+
     MoveToTarget();
     return NodeState.RUNNING;
   }
@@ -106,17 +106,17 @@ public partial class BehaviorTree : Node {
     if (enemy.animationPlayer != null) {
         if (enemy.animationPlayer.CurrentAnimation == "Knight_Attack") {
           if (enemy.animationPlayer.IsPlaying()) {
-            return NodeState.RUNNING; 
+            return NodeState.RUNNING;
           } else {
-            enemy.animationPlayer.Stop(); 
-            return NodeState.SUCCESS;    
+            enemy.animationPlayer.Stop();
+            return NodeState.SUCCESS;
           }
         }
 
-        enemy.GetComponent<HitboxComponent>().EnableCollisionShapes();
+        // enemy.GetComponent<HitboxComponent>().EnableCollisionShapes();
         enemy.animationPlayer.Play("Knight_Attack", -1.0f, 2.0f);
     }
-    
+
     return NodeState.RUNNING;
   }
 
@@ -146,7 +146,7 @@ public partial class BehaviorTree : Node {
     if (enemy.animationPlayer != null && enemy.animationPlayer.CurrentAnimation != "Knight_walk") {
         enemy.animationPlayer.Play("Knight_walk");
     }
-    
+
     MoveToTarget();
     return NodeState.RUNNING;
   }
@@ -174,7 +174,7 @@ public partial class BehaviorTree : Node {
     if (enemy.animationPlayer != null && enemy.animationPlayer.CurrentAnimation != "Knight_idle") {
         enemy.animationPlayer.Play("Knight_idle");
     }
-    return NodeState.SUCCESS; 
+    return NodeState.SUCCESS;
   }
 
   private void MoveToTarget() {
