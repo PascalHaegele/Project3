@@ -3,13 +3,13 @@
 [ext_resource type="PackedScene" uid="uid://c5a5ptiss0qq7" path="res://objects/assets/vase/Vase.glb" id="1_glb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vase"]
-size = Vector3(0.53212893, 0.87628174, 0.46342772)
+size = Vector3(0.63065183, 1.2205353, 0.46342772)
 
 [node name="Vase" type="StaticBody3D" unique_id=1637637181]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=57866632]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19287108, 0.5712497, -0.2502197)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36485332, 0.85253656, -0.14474928)
 shape = SubResource("BoxShape3D_vase")
 
 [node name="Model" parent="." unique_id=11079947 instance=ExtResource("1_glb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3602464, 0, -1.0441782)
+transform = Transform3D(1.375, 0, 0, 0, 1.375, 0, 0, 0, 1.375, 0.329447, 0, -1.0441782)

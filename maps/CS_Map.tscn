@@ -149,7 +149,7 @@ height = 0.1
 radius = 3.0
 height = 17.5
 
-[sub_resource type="Resource" id="Resource_gc3ev"]
+[sub_resource type="Resource" id="Resource_o0ahx"]
 resource_local_to_scene = true
 script = ExtResource("15_24hbc")
 patrolPath = PackedVector3Array(181.4789, 2.3929415, -136.71298, 182.76384, 2.3929405, -130.47568, 184.49522, 2.3929405, -128.45308)
@@ -157,7 +157,7 @@ leashPoint = Vector3(177.45947, 2.3929405, -144.50302)
 leashLength = 50.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_2pf2u"]
+[sub_resource type="Resource" id="Resource_gc3ev"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 walkSpeed = 3.0
@@ -198,27 +198,27 @@ navigation_mesh = SubResource("NavigationMesh_bfp77")
 [node name="Map_layout_CS" type="Node3D" parent="NavigationRegion3D" unique_id=1241012519]
 transform = Transform3D(1, 1.4901161e-08, 1.4901161e-08, 1.4901161e-08, 1, 2.9802322e-08, 1.4901161e-08, 2.220446e-16, 1, 0, 0, 0)
 
-[node name="Bos Layer" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS" unique_id=1436365781]
+[node name="Boss Layer" type="CSGCombiner3D" parent="NavigationRegion3D/Map_layout_CS" unique_id=1436365781]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.536156, 1.8530712, -120.51465)
 use_collision = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Bos Layer" unique_id=61060599]
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Boss Layer" unique_id=61060599]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.535095)
 use_collision = true
 size = Vector3(35.558716, 1, 330.02332)
 material = SubResource("StandardMaterial3D_uhw3x")
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Bos Layer" unique_id=420156372]
+[node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Boss Layer" unique_id=420156372]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.17492, -0.08709097, 30.125092)
 size = Vector3(32.281128, 1, 16.662476)
 material = SubResource("StandardMaterial3D_22v2i")
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Bos Layer" unique_id=933988669]
+[node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Boss Layer" unique_id=933988669]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.954994, -0.215024, -101.07512)
 size = Vector3(46.341553, 1, 20.05957)
 material = SubResource("StandardMaterial3D_0nuwe")
 
-[node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Bos Layer" unique_id=295147568]
+[node name="CSGBox3D7" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Boss Layer" unique_id=295147568]
 transform = Transform3D(-0.9740234, 0, -0.2264473, 0, 1, 0, 0.2264473, 0, -0.9740234, 46.8592, -0.017900467, -52.507004)
 size = Vector3(64.75769, 1, 24.492554)
 material = SubResource("StandardMaterial3D_nlsgs")
@@ -1171,8 +1171,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.45947, 2.3929405, -144.50
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 177, 3, -147)
-enemyInfo = SubResource("Resource_gc3ev")
-velocityInfo = SubResource("Resource_2pf2u")
+enemyInfo = SubResource("Resource_o0ahx")
+velocityInfo = SubResource("Resource_gc3ev")
 
 [node name="Lantern" parent="." unique_id=360009979 instance=ExtResource("25_uhw3x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.35933, 3.9726863, 4.032724)
