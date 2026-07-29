@@ -14,6 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://cn8nhwdvhamst" path="res://objects/portal/portal.tscn" id="15_ad6p3"]
 [ext_resource type="Script" uid="uid://bbqb6u8gahdth" path="res://tools/PageDebugTool.cs" id="17"]
 [ext_resource type="CompressedTexture2DArray" uid="uid://c20yn5tfpeeb2" path="res://maps/sun.png" id="17_7wt56"]
+[ext_resource type="PackedScene" uid="uid://dbh2jd0bcvgk2" path="res://objects/assets/lantern/lantern.tscn" id="18_6emo8"]
+[ext_resource type="PackedScene" uid="uid://pdlvbtcehfu8" path="res://objects/assets/scourge/scourge.tscn" id="19_tiop4"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_bfp77"]
 vertices = PackedVector3Array(-24.5, 0.4, -17.75, -19, 0.4, -17.75, -19, 0.4, -18.75, -17.75, 0.4, -19, -17.75, 0.4, -24.5, -24.5, 0.4, -24.5, -16.75, 0.4, -18.75, -7.25, 0.4, -24.5, -16.75, 0.4, -17.25, -8.75, 0.4, -9, -7.25, 0.4, -9, -6.75, 0.4, -8, 7, 0.4, -7.75, 7, 0.4, -8.75, -6.75, 0.4, -8.75, 7.5, 0.4, -9, 7.5, 0.4, -24.5, 17, 0.4, -18.75, 18, 0.4, -19, 18, 0.4, -24.5, 17, 0.4, -17, 9, 0.4, -9, 17.5, 0.4, -16.75, 19, 0.4, -19, 19.25, 0.4, -18, 24.5, 0.4, -18, 24.5, 0.4, -24.5, 18.75, 0.4, -16.75, 24.5, 0.4, -6.75, 9.25, 0.4, -7.25, 8.75, 0.4, -6.75, -18.75, 0.4, -16.75, -24.5, 0.4, -7.25, -17.25, 0.4, -16.75, -9, 0.4, -7.25, -7.25, 0.4, -6.75, -8, 0.4, -6.75, -7.75, 0.4, 7, -7, 0.4, 7, 7, 0.4, 7.25, 8, 0.4, 7, 8, 0.4, -6.75, -6.75, 0.4, 8, 7, 0.4, 8, 7, 0.4, -7, -8.75, 0.4, 7, -8.75, 0.4, -6.75, -9, 0.4, 7.5, -24.5, 0.4, 7.5, 8.75, 0.4, 7, 24.5, 0.4, 6.75, 19, 0.4, 17, 19.25, 0.4, 18, 24.5, 0.4, 18, 9.25, 0.4, 7.25, 17.5, 0.4, 17, 9.25, 0.4, 8.75, -24.5, 0.4, 18, -19, 0.4, 18, -18.75, 0.4, 17, -17.25, 0.4, 17, -8.75, 0.4, 9.25, 7, 0.4, 8.75, -6.75, 0.4, 8.75, -6.75, 0.4, 24.5, 6.75, 0.4, 24.5, -16.75, 0.4, 18.75, -18, 0.4, 19.25, -18, 0.4, 24.5, -16.75, 0.4, 17.25, -7.25, 0.4, 9.25, 18, 0.4, 24.5, 18, 0.4, 19.25, 17, 0.4, 19, 17, 0.4, 17.25, 8.75, 0.4, 9.25, 7.25, 0.4, 9.25, -19, 0.4, 19, -24.5, 0.4, 24.5, 18.75, 0.4, 19.25, 24.5, 0.4, 24.5)
@@ -168,21 +170,21 @@ glow_enabled = true
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_bfp77"]
 
-[sub_resource type="Resource" id="Resource_ks570"]
+[sub_resource type="Resource" id="Resource_tiop4"]
 resource_local_to_scene = true
 script = ExtResource("3_pbr4s")
 patrolPath = PackedVector3Array(-8, 0, -17, 6.77744, 0, -16.653843, 15.346003, 0, -4.8959856, 0.55296326, 0, -5.0219855, -14.483469, 0, -2.364942, -16.650803, 0, -12.929461)
 leashPoint = Vector3(0, 0, -14.593309)
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_ad6p3"]
+[sub_resource type="Resource" id="Resource_lqwt6"]
 resource_local_to_scene = true
 script = ExtResource("2_6b7mj")
 walkSpeed = 3.0
 sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
-[sub_resource type="Resource" id="Resource_qnwwd"]
+[sub_resource type="Resource" id="Resource_w0ppd"]
 resource_local_to_scene = true
 script = ExtResource("3_pbr4s")
 leashLength = 30.0
@@ -190,7 +192,7 @@ minAttackRange = 8.0
 maxAttackRange = 15.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_7wt56"]
+[sub_resource type="Resource" id="Resource_x0wvt"]
 resource_local_to_scene = true
 script = ExtResource("2_6b7mj")
 walkSpeed = 2.5
@@ -304,13 +306,13 @@ metadata/_custom_type_script = "uid://cq4ddchn0vss"
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_pbr4s")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -11.255119, 0, -17.172976)
-enemyInfo = SubResource("Resource_ks570")
-velocityInfo = SubResource("Resource_ad6p3")
+enemyInfo = SubResource("Resource_tiop4")
+velocityInfo = SubResource("Resource_lqwt6")
 
 [node name="MageEnemy" parent="." unique_id=1902247724 instance=ExtResource("3_mage")]
 transform = Transform3D(-0.020375142, 0, 0.9997924, 0, 1, 0, -0.9997924, 0, -0.020375142, 1.8428822, 0.21478271, -8.425738)
-enemyInfo = SubResource("Resource_qnwwd")
-velocityInfo = SubResource("Resource_7wt56")
+enemyInfo = SubResource("Resource_w0ppd")
+velocityInfo = SubResource("Resource_x0wvt")
 
 [node name="Chest" parent="." unique_id=1750432848 instance=ExtResource("5_cabd0")]
 transform = Transform3D(0.2525325, 0, 0.96758854, 0, 1, 0, -0.96758854, 0, 0.2525325, 4.5567584, -2.3841858e-07, 0.13444328)
@@ -362,3 +364,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.070607185, 0, 4.032242)
 
 [node name="Marker3D2" type="Marker3D" parent="Altars/Altar" unique_id=1758417777]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.392482, 0, -0.7654152)
+
+[node name="Lantern" parent="." unique_id=1844915472 instance=ExtResource("18_6emo8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.092992, -0.1883949, 7.3206544)
+
+[node name="Scourge" parent="." unique_id=1656069892 instance=ExtResource("19_tiop4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4429245, 0.16770124, -3.125853)
