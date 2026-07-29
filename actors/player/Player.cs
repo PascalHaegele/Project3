@@ -19,6 +19,7 @@ public partial class Player : Actor, IHitable {
   private HealthComponent healthComponent;
   private InventoryComponent inventoryComponent;
   private InsanityComponent insanityComponent;
+  private InsanityBuffComponent insanityBuffComponent;
 
   [Export] private Weapon[] weapons;
   private Weapon activeWeapon;
@@ -36,7 +37,13 @@ public partial class Player : Actor, IHitable {
 
   private Label ammoDisplay;
   private Label potionCount;
+  private Label currency1Count;
+  private Label currency2Count;
+  private Label currency3Count;
   private InventoryUI inventoryUI;
+  private Control buffIndicatorContainer;
+  private Panel buffIcon;
+  private Panel cooldownOverlay;
 
   private HealingAnimation healingAnim;
   private bool isHealing;
@@ -61,6 +68,7 @@ public partial class Player : Actor, IHitable {
     healthComponent = GetComponent<HealthComponent>();
     inventoryComponent = GetComponent<InventoryComponent>();
     insanityComponent = GetComponent<InsanityComponent>();
+    insanityBuffComponent = GetComponent<InsanityBuffComponent>();
 
     healingAnim = GetNode<HealingAnimation>("CameraPivot/HealingAnimation");
     if(healingAnim != null) {
@@ -94,6 +102,53 @@ public partial class Player : Actor, IHitable {
 
     potionCount = hud.GetNode<Label>("PotionCount");
     RedrawPotionUI();
+
+    // Setup currency labels
+    currency1Count = hud.GetNodeOrNull<Label>("Currency1Count");
+    currency2Count = hud.GetNodeOrNull<Label>("Currency2Count");
+    currency3Count = hud.GetNodeOrNull<Label>("Currency3Count");
+
+    // If currency labels don't exist in scene, create them dynamically
+    if (currency1Count == null) {
+      currency1Count = new Label();
+      currency1Count.Name = "Currency1Count";
+      currency1Count.Text = "Echo: 0";
+      currency1Count.Theme = CreateLabelTheme(16);
+      hud.AddChild(currency1Count);
+    }
+    if (currency2Count == null) {
+      currency2Count = new Label();
+      currency2Count.Name = "Currency2Count";
+      currency2Count.Text = "Glyph: 0";
+      currency2Count.Theme = CreateLabelTheme(16);
+      hud.AddChild(currency2Count);
+    }
+    if (currency3Count == null) {
+      currency3Count = new Label();
+      currency3Count.Name = "Currency3Count";
+      currency3Count.Text = "Essence: 0";
+      currency3Count.Theme = CreateLabelTheme(16);
+      hud.AddChild(currency3Count);
+    }
+
+    RedrawCurrencyUI();
+
+    // Setup buff indicator UI
+    buffIndicatorContainer = hud.GetNodeOrNull<Control>("BuffIndicatorContainer");
+    if(buffIndicatorContainer != null) {
+      buffIcon = buffIndicatorContainer.GetNodeOrNull<Panel>("BuffIcon");
+      cooldownOverlay = buffIndicatorContainer.GetNodeOrNull<Panel>("CooldownOverlay");
+      buffIndicatorContainer.Visible = true;
+    }
+
+    // Insanity Buff signals
+    if(insanityBuffComponent != null) {
+      insanityBuffComponent.BuffActivated += OnBuffActivated;
+      insanityBuffComponent.BuffExpired += OnBuffExpired;
+      insanityBuffComponent.CooldownStarted += OnBuffCooldownStarted;
+      insanityBuffComponent.CooldownUpdated += OnBuffCooldownUpdated;
+      insanityBuffComponent.CooldownFinished += OnBuffCooldownFinished;
+    }
 
     // Setup InventoryUI
     inventoryUI = hud.GetNodeOrNull<InventoryUI>("InventoryUI");
@@ -136,7 +191,11 @@ public partial class Player : Actor, IHitable {
 
     if(input.openInventory) { inventoryUI?.Toggle(); }
 
-    if(!inventoryUI.Visible) {
+    // Get UI references
+    bool upgradeBenchOpen = GetTree().Root.GetNodeOrNull<UpgradeBenchUI>("UpgradeBenchUI") is UpgradeBenchUI benchUI && benchUI.Visible;
+    bool anyUIOpen = inventoryUI.Visible || upgradeBenchOpen;
+
+    if(!anyUIOpen) {
       if(input.interact) { EmitSignalInteracting(); }
 
       if(input.shoot && !switchingWeapon) { activeWeapon.Shoot(); }
@@ -149,6 +208,11 @@ public partial class Player : Actor, IHitable {
             healingAnim?.PlayHeal();
           }
         }
+      }
+
+      // Right Click Insanity Buff
+      if(input.special && insanityBuffComponent != null) {
+        insanityBuffComponent.Activate();
       }
 
       if(input.weapon1 && activeWeaponIndex != 0) {
@@ -167,26 +231,26 @@ public partial class Player : Actor, IHitable {
         if(hoveredPickup != null) { hoveredPickup.hovering = false; }
         hoveredPickup = null;
       }
-    }
 
-    // --- Rotation ---
-    if(!Mathf.IsEqualApprox(camera.Direction.Y, 0.0f)) {
-      RotateY(camera.Direction.Y);
-      Vector3 camDir = camera.Direction;
-      camDir.Y = 0.0f;
-      camera.Direction = camDir;
-    }
+      // --- Rotation ---
+      if(!Mathf.IsEqualApprox(camera.Direction.Y, 0.0f)) {
+        RotateY(camera.Direction.Y);
+        Vector3 camDir = camera.Direction;
+        camDir.Y = 0.0f;
+        camera.Direction = camDir;
+      }
 
-    // --- Movement direction ---
-    Vector3 inputDirection = new(input.direction.X, 0.0f, input.direction.Y);
-    Direction = (Transform.Basis * inputDirection).Normalized();
-    Direction = Direction.Rotated(UpDirection, camera.Direction.Y);
+      // --- Movement direction ---
+      Vector3 inputDirection = new(input.direction.X, 0.0f, input.direction.Y);
+      Direction = (Transform.Basis * inputDirection).Normalized();
+      Direction = Direction.Rotated(UpDirection, camera.Direction.Y);
 
-    // --- Gravity & move ---
-    if(!IsOnFloor()) {
-      velocityComponent.AddVelocityInDirection(GetGravity() * (float)delta);
+      // --- Gravity & move ---
+      if(!IsOnFloor()) {
+        velocityComponent.AddVelocityInDirection(GetGravity() * (float)delta);
+      }
+      velocityComponent.Move(this);
     }
-    velocityComponent.Move(this);
 
     // ==========================================
     // GODOT TIMER FÜR SCHRITTE (KORRIGIERT!)
@@ -221,7 +285,7 @@ public partial class Player : Actor, IHitable {
       // Exakte Laufgeschwindigkeit am Boden ermitteln
       Vector3 flatVelocity = new(Velocity.X, 0.0f, Velocity.Z);
       float currentSpeed = flatVelocity.Length();
-
+       GD.Print(currentSpeed);
       if(currentSpeed > 0.1f && IsOnFloor()) {
 
         // Parameter ans Loop-Event in FMOD senden
@@ -260,23 +324,27 @@ public partial class Player : Actor, IHitable {
         if(hoveredPickup != null) { hoveredPickup.hovering = true; }
       }
       if(input.interact) {
+        ItemType pickedType = hoveredPickup.itemType;
         hoveredPickup.QueueFree();
         inventoryComponent
-          .AddItem(hoveredPickup.itemType, hoveredPickup.amount);
+          .AddItem(pickedType, hoveredPickup.amount);
 
         // For pages, also add the PageData to the collected pages list
         if(
-          hoveredPickup.itemType == ItemType.PAGE &&
+          pickedType == ItemType.PAGE &&
           hoveredPickup.pageData != null
         ) {
           inventoryComponent.AddPageItem(hoveredPickup.pageData);
           PlayItemSound(ItemSoundType.Page);
         }
-        else if (hoveredPickup.itemType == ItemType.POTION) {
+        else if (pickedType == ItemType.POTION) {
           PlayItemSound(ItemSoundType.Potion);
         }
-        else if (hoveredPickup.itemType == ItemType.R_AMMO || hoveredPickup.itemType == ItemType.S_AMMO ) {
+        else if (pickedType == ItemType.R_AMMO || pickedType == ItemType.S_AMMO ) {
           PlayItemSound(ItemSoundType.Ammo);
+        }
+        else if (pickedType == ItemType.CURRENCY1 || pickedType == ItemType.CURRENCY2 || pickedType == ItemType.CURRENCY3) {
+          PlayItemSound(ItemSoundType.Page); // Reuse page sound for now
         }
 
         RedrawUI();
@@ -297,6 +365,7 @@ public partial class Player : Actor, IHitable {
   public void RecieveHit(HitInfo info) {
     healthComponent.TakeDamage(info.damage);
     insanityComponent.AddInsanity(10.0f);
+     FmodServerWrapper.PlayOneShotAttached("event:/Damage_Taken_Timeline", this);
   }
 
   public void Reset() {
@@ -304,6 +373,11 @@ public partial class Player : Actor, IHitable {
     insanityComponent.ResetInsanity();
     inventoryComponent.Reset();
     foreach(Weapon weapon in weapons) { weapon.Reset(); }
+
+    // Clean up buff state on reset/restart
+    if(insanityBuffComponent != null && insanityBuffComponent.IsBuffActive) {
+      insanityBuffComponent.ForceDeactivate();
+    }
 
     healthBar.MaxValue = healthComponent.maxHealth;
     healthBar.Value = healthComponent.CurrentHealth;
@@ -315,16 +389,30 @@ public partial class Player : Actor, IHitable {
   private void RedrawUI() {
     RedrawPotionUI();
     RedrawAmmoUI();
+    RedrawCurrencyUI();
   }
 
   private void RedrawPotionUI() {
     potionCount.Text = "P : " + inventoryComponent.AmountOf(ItemType.POTION);
   }
 
+  private void RedrawCurrencyUI() {
+    if (currency1Count != null) {
+      currency1Count.Text = "Echo: " + inventoryComponent.AmountOf(ItemType.CURRENCY1);
+    }
+    if (currency2Count != null) {
+      currency2Count.Text = "Glyph: " + inventoryComponent.AmountOf(ItemType.CURRENCY2);
+    }
+    if (currency3Count != null) {
+      currency3Count.Text = "Essence: " + inventoryComponent.AmountOf(ItemType.CURRENCY3);
+    }
+  }
+
   private void OnHealingComplete() {
     if(inventoryComponent.RemoveItem(ItemType.POTION)) {
       healthComponent.Heal(20.0f);
       RedrawPotionUI();
+      FmodServerWrapper.PlayOneShotAttached("event:/Potion_Drink_Action", this);
     }
     isHealing = false;
   }
@@ -401,6 +489,50 @@ public partial class Player : Actor, IHitable {
     insanityMeter.Value = insanity;
   }
 
+  // =========================
+  // Insanity Buff Event Handlers
+  // =========================
+
+  private void OnBuffActivated() {
+    if(buffIcon != null) {
+      // Show golden circle
+      buffIcon.Modulate = new Color(0.85f, 0.65f, 0.0f, 1.0f); // Solid gold
+    }
+    if(cooldownOverlay != null) {
+      cooldownOverlay.Modulate = new Color(0.0f, 0.0f, 0.0f, 0.0f); // Transparent
+    }
+  }
+
+  private void OnBuffExpired() {
+    if(buffIcon != null) {
+      buffIcon.Modulate = new Color(0.85f, 0.65f, 0.0f, 0.0f); // Hidden
+    }
+  }
+
+  private void OnBuffCooldownStarted(float duration) {
+    if(cooldownOverlay != null) {
+      // Start fully covered (black)
+      cooldownOverlay.Modulate = new Color(0.0f, 0.0f, 0.0f, 0.8f);
+    }
+  }
+
+  private void OnBuffCooldownUpdated(float remaining) {
+    if(cooldownOverlay != null && buffIndicatorContainer != null) {
+      // Scale the overlay alpha from 0.8 (full cooldown) to 0 (ready)
+      float cooldownRatio = remaining / 20.0f; // 20s total cooldown
+      cooldownOverlay.Modulate = new Color(0.0f, 0.0f, 0.0f, 0.8f * cooldownRatio);
+    }
+  }
+
+  private void OnBuffCooldownFinished() {
+    if(buffIcon != null) {
+      buffIcon.Modulate = new Color(0.3f, 0.8f, 0.3f, 1.0f); // Green = ready
+    }
+    if(cooldownOverlay != null) {
+      cooldownOverlay.Modulate = new Color(0.0f, 0.0f, 0.0f, 0.0f); // No overlay
+    }
+  }
+
   public void SwitchWeapon(Weapon newWeapon) {
     if(activeWeapon == newWeapon) { return; }
 
@@ -454,5 +586,15 @@ public partial class Player : Actor, IHitable {
       _ = footstepInstance.Call("stop", 1); // 1 = FMOD_STUDIO_STOP_IMMEDIATE
       _ = footstepInstance.Call("release");
     }
+  }
+
+  private static Theme CreateLabelTheme(int fontSize) {
+    Theme t = new Theme();
+    LabelSettings ls = new LabelSettings();
+    ls.FontSize = fontSize;
+    ls.OutlineSize = 2;
+    ls.OutlineColor = Colors.Black;
+    t.Set("Label/label_settings", ls);
+    return t;
   }
 }

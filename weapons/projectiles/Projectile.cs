@@ -50,6 +50,18 @@ public partial class Projectile : RigidBody3D {
           homingStrength = socket.GetModifier("HomingProjectiles");
         }
       }
+
+      // Apply Insanity Buff damage multiplier (+25% when active)
+      InsanityBuffComponent buff = player.GetComponent<InsanityBuffComponent>();
+      if (buff != null) {
+        baseDamage *= buff.GetDamageMultiplier();
+      }
+
+      // Apply Upgrade Bench weapon damage bonus
+      UpgradeTracker upgradeTracker = player.GetComponent<UpgradeTracker>();
+      if (upgradeTracker != null && upgradeTracker.weaponDamageBonus > 0) {
+        baseDamage *= 1.0f + (upgradeTracker.weaponDamageBonus / 100f);
+      }
     }
 
     hitbox.damage = baseDamage;

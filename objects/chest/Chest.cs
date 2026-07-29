@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using FmodSharp;
 
 public partial class Chest : StaticBody3D, IInteractable {
   private PackedScene pickup;
@@ -7,6 +8,9 @@ public partial class Chest : StaticBody3D, IInteractable {
   private AnimationPlayer animationPlayer;
   private bool opened = false;
   private string[] availableAnimations;
+
+  // Currency notification label (created once)
+  private Label currencyNotification;
 
   public override void _Ready() {
     // Load pickup scene directly to ensure it's available
@@ -26,6 +30,13 @@ public partial class Chest : StaticBody3D, IInteractable {
     if(animationPlayer != null) {
       availableAnimations = animationPlayer.GetAnimationList();
     }
+
+    // Create floating notification label (hidden by default)
+    currencyNotification = new Label();
+    currencyNotification.Name = "CurrencyNotification";
+    currencyNotification.Visible = false;
+    currencyNotification.HorizontalAlignment = HorizontalAlignment.Center;
+    AddChild(currencyNotification);
   }
 
   private AnimationPlayer GetAnimationPlayerRecursive(Node node) {
@@ -41,7 +52,7 @@ public partial class Chest : StaticBody3D, IInteractable {
     if(opened) { return; }
 
     opened = true;
-
+    FmodServerWrapper.PlayOneShotAttached("event:/Chest_Interaction_Action", this);
     if(animationPlayer == null) {
     } else {
       string animationName = FindBestAnimation();
@@ -58,6 +69,17 @@ public partial class Chest : StaticBody3D, IInteractable {
         return;
       }
       GD.Print("Chest:Loaded pickup via UID.");
+    }
+
+    // Check insanity for currency drop BEFORE normal loot
+    InsanityComponent insanity = player.GetComponent<InsanityComponent>();
+    if (insanity != null) {
+      if (insanity.CurrentInsanity >= insanity.HighThreshold) {
+        // Drop ONE random currency
+        DropCurrency(player, insanity);
+      } else {
+        ShowNotification("Insanity too low.");
+      }
     }
 
     // Spawn pickup from LootSpawn marker above the chest
@@ -101,6 +123,56 @@ public partial class Chest : StaticBody3D, IInteractable {
     }
 
     GD.Print("Chest: Loot generation complete.");
+  }
+
+  private void DropCurrency(Player player, InsanityComponent insanity) {
+    // Pick one random currency
+    var rng = new RandomNumberGenerator();
+    rng.Randomize();
+    
+    int currencyIndex = rng.RandiRange(0, 2);
+    ItemType currencyType = currencyIndex switch {
+      0 => ItemType.CURRENCY1,
+      1 => ItemType.CURRENCY2,
+      _ => ItemType.CURRENCY3
+    };
+    
+    string currencyName = currencyIndex switch {
+      0 => "Echo Fragment",
+      1 => "Ancient Glyph",
+      _ => "Forbidden Essence"
+    };
+
+    // Spawn the currency pickup at LootSpawn
+    Marker3D lootSpawn = GetNodeOrNull<Marker3D>("LootSpawn");
+    if (lootSpawn != null) {
+      Pickup currencyPickup = pickup.Instantiate<Pickup>();
+      AddChild(currencyPickup);
+      currencyPickup.GlobalPosition = lootSpawn.GlobalPosition;
+      currencyPickup.itemType = currencyType;
+      currencyPickup.amount = 1;
+      currencyPickup.ApplyImpulse(GetImpulseVector());
+    }
+
+    // Show floating notification
+    ShowNotification($"+1 {currencyName}");
+    GD.Print($"Chest dropped currency: {currencyName}");
+  }
+
+  private void ShowNotification(string message) {
+    if (currencyNotification == null) return;
+    
+    currencyNotification.Text = message;
+    currencyNotification.Visible = true;
+    
+    // Create a tween to fade out after 2 seconds
+    Tween tween = CreateTween();
+    tween.TweenInterval(1.5f);
+    tween.TweenProperty(currencyNotification, "modulate:a", 0.0f, 0.5f);
+    tween.TweenCallback(Callable.From(() => {
+      currencyNotification.Visible = false;
+      currencyNotification.Modulate = new Color(1, 1, 1, 1);
+    }));
   }
 
   /// <summary>

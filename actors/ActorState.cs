@@ -1,4 +1,5 @@
 using Godot;
+using FmodSharp;
 
 public abstract partial class ActorState : State {
   public int soundLevel;
@@ -6,6 +7,7 @@ public abstract partial class ActorState : State {
   protected Actor actor;
   protected VelocityComponent velocityComponent;
   protected AnimationPlayer? animationPlayer;
+ 
 
   public ActorState(Actor actor, StateMachine stateMachine) {
     this.actor = actor;
@@ -161,7 +163,7 @@ public partial class ActorStateDash : ActorState {
 
   public override void Enter() {
     base.Enter();
-
+    FmodServerWrapper.PlayOneShotAttached("event:/Dash_Timeline", actor);
     cooldownTimer.Start(actor.velocityInfo.dashCooldown);
 
     direction = actor.Direction;

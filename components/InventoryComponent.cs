@@ -1,18 +1,21 @@
 using Godot;
 using System.Collections.Generic;
 
-public enum ItemType { POTION, R_AMMO, S_AMMO, PAGE, MAX, }
+public enum ItemType { POTION, R_AMMO, S_AMMO, PAGE, CURRENCY1, CURRENCY2, CURRENCY3, MAX, }
 
 // Tracks a collection of items held by an actor
 [GlobalClass]
 public partial class InventoryComponent : Node {
-  public readonly int[] maxItems = [3, 54, 36, 100];
+  public readonly int[] maxItems = [3, 54, 36, 100, 99, 99, 99];
   public readonly int[] items = new int[(int)ItemType.MAX];
   public readonly string[] itemNames = [
     "Potion",
     "Revolver Ammunition",
     "Shotgun Ammunition",
-    "Page"
+    "Page",
+    "Echo Fragment",
+    "Ancient Glyph",
+    "Forbidden Essence"
   ];
 
   /// <summary>
