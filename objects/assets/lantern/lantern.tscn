@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dbh2jd0bcvgk2"]
+
+[ext_resource type="PackedScene" uid="uid://dbttqwq080uub" path="res://objects/assets/lantern/Lantern.glb" id="1_glb"]
+
+[node name="Lantern" type="StaticBody3D" unique_id=360009979]
+
+[node name="Model" parent="." unique_id=1460227515 instance=ExtResource("1_glb")]
+transform = Transform3D(0.315, 0, 0, 0, 0.315, 0, 0, 0, 0.315, 0, 1.7002552, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=871358929]
+transform = Transform3D(1, 0, 0, 0, -0.54464006, -0.8386699, 0, 0.8386699, -0.54464006, 0, 2.2087615, -0.20903641)
+light_color = Color(0.96862745, 0.78431374, 0.3529412, 1)
+light_energy = 8.0
+light_indirect_energy = 0.8
+light_size = 1.0
+omni_range = 4.536

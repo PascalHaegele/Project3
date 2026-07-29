@@ -177,6 +177,35 @@ public partial class SocketComponent : Node {
   public Dictionary<string, PageData> GetAllSocketedPages() => new(socketedPages);
 
   /// <summary>
+  /// Maximum number of slots per category. Can be increased via upgrades.
+  /// </summary>
+  private readonly Dictionary<string, int> maxSlots = new() {
+    { "Weapon", 4 },
+    { "Armor", 3 },
+    { "Skill", 3 }
+  };
+
+  /// <summary>
+  /// Adds an additional socket slot to the given category.
+  /// </summary>
+  public void AddSocketSlot(string category) {
+    if (maxSlots.ContainsKey(category)) {
+      maxSlots[category]++;
+    } else {
+      maxSlots[category] = 1;
+    }
+    GD.Print($"[SocketComponent] Added socket slot to {category}. Total: {maxSlots[category]}");
+    _ = EmitSignal(SignalName.SocketChanged);
+  }
+
+  /// <summary>
+  /// Returns the maximum number of slots for a given category.
+  /// </summary>
+  public int GetMaxSlots(string category) {
+    return maxSlots.GetValueOrDefault(category, 0);
+  }
+
+  /// <summary>
   /// Clears all sockets and modifiers. Use with caution.
   /// </summary>
   public void ClearAllSockets() {
@@ -184,5 +213,19 @@ public partial class SocketComponent : Node {
     socketedPages.Clear();
     GD.Print("All sockets cleared.");
     _ = EmitSignal(SignalName.SocketChanged);
+  }
+
+  /// <summary>
+  /// Internal method to add a modifier directly (used by buff systems like InsanityBuffComponent).
+  /// </summary>
+  public void AddModifierInternal(string effectName, float value) {
+    AddModifier(effectName, value);
+  }
+
+  /// <summary>
+  /// Internal method to remove a modifier directly (used by buff systems like InsanityBuffComponent).
+  /// </summary>
+  public void RemoveModifierInternal(string effectName, float value) {
+    RemoveModifier(effectName, value);
   }
 }

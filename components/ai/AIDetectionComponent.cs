@@ -48,12 +48,10 @@ public partial class AIDetectionComponent : Node3D {
     if(playerInHearing) {
       enemy.aiInfo.soundPosition = player.GlobalPosition;
       if(player.soundLevel >= soundThreshold) {
-        enemy.hearingPlayer = enemy.aiInfo.soundHeard = true;
+        enemy.aiInfo.soundHeard = true;
         if(!player.GlobalPosition.IsEqualApprox(enemy.GlobalPosition)) {
           enemy.LookAt(player.GlobalPosition);
         }
-      } else {
-        enemy.hearingPlayer = false;
       }
     }
 
@@ -65,7 +63,7 @@ public partial class AIDetectionComponent : Node3D {
       Vector3 dir = enemy.GlobalBasis.Transposed() * direction;
       float angle = Mathf.Atan2(dir.X, -dir.Z);
 
-      enemy.playerInVision = enemy.aiInfo.hasTarget =
+      enemy.aiInfo.hasTarget =
         angle <= cosHalfFov && angle >= -cosHalfFov;
     }
   }
@@ -77,7 +75,7 @@ public partial class AIDetectionComponent : Node3D {
 
   private void OnBodyExitedVision(Node3D body) {
     playerInVision = false;
-    enemy.playerInVision = enemy.aiInfo.hasTarget = false;
+    enemy.aiInfo.hasTarget = false;
   }
 
   private void OnBodyEnteredHearing(Node3D body) {
@@ -87,7 +85,6 @@ public partial class AIDetectionComponent : Node3D {
 
   private void OnBodyExitedHearing(Node3D body) {
     playerInHearing = false;
-    enemy.hearingPlayer = false;
   }
 }
 

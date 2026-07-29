@@ -16,7 +16,6 @@ public partial class WeaponInfo : Resource {
   [Export] public PackedScene projectile;
   [Export] public float projectileSpeed = 50.0f;
   [Export] public float projectileDamage = 20.0f;
-  [Export] public float projectileRange = 50.0f;
 
   [Export] public int projectileCount = 1;
   [Export] public float projectileSpread = 0.0f;

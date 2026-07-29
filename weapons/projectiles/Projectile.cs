@@ -1,4 +1,5 @@
 using Godot;
+using FmodSharp;
 
 [GlobalClass]
 public partial class Projectile : RigidBody3D {
@@ -28,18 +29,12 @@ public partial class Projectile : RigidBody3D {
     freeTimer.OneShot = true;
     freeTimer.Timeout += QueueFree;
 
-    CollisionLayer = (uint)CollisionLayerEnum.NONE;
-    CollisionMask =
-      (uint)CollisionLayerEnum.WORLD |
-      (uint)CollisionLayerEnum.ENEMY;
-
     weapon = GetParent<Weapon>();
     hitbox = GetNode<HitboxComponent>("HitboxComponent");
     hitbox.actor = weapon.actor;
-
-    if (weapon.GetParent() is Player) {
-      hitbox.CollisionLayer = (uint)CollisionLayerEnum.PLAYER_HITBOX;
-      hitbox.CollisionMask = (uint)CollisionLayerEnum.ENEMY_HURTBOX;
+    if (weapon.actor is MageEnemy) {
+     
+      FmodServerWrapper.PlayOneShotAttached("event:/Mage_Shot_Action", this);
     }
   }
 
@@ -50,21 +45,32 @@ public partial class Projectile : RigidBody3D {
     float baseDamage =
       weapon.info.projectileDamage * weapon.info.damageMulitplier;
 
-    Player player =
-      weapon.GetParent() as Player ?? weapon.GetParent()?.GetParent<Player>();
-    if (player != null) {
+    Actor actor = weapon.actor;
+    if(actor is Player player) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
-      if (socket != null) {
+      if(socket != null) {
         baseDamage += socket.GetModifier("Damage");
-        if (socket.HasModifier("HomingProjectiles")) {
+        if(socket.HasModifier("HomingProjectiles")) {
           isHoming = true;
           homingStrength = socket.GetModifier("HomingProjectiles");
         }
       }
+
+      // Apply Insanity Buff damage multiplier (+25% when active)
+      InsanityBuffComponent buff = player.GetComponent<InsanityBuffComponent>();
+      if (buff != null) {
+        baseDamage *= buff.GetDamageMultiplier();
+      }
+
+      // Apply Upgrade Bench weapon damage bonus
+      UpgradeTracker upgradeTracker = player.GetComponent<UpgradeTracker>();
+      if (upgradeTracker != null && upgradeTracker.weaponDamageBonus > 0) {
+        baseDamage *= 1.0f + (upgradeTracker.weaponDamageBonus / 100f);
+      }
     }
 
     hitbox.damage = baseDamage;
-    if (isEmpowered) { hitbox.damage *= 2.0f; }
+    if(isEmpowered) { hitbox.damage *= 2.0f; }
   }
 
   public override void _Process(double delta) {
@@ -130,8 +136,11 @@ public partial class Projectile : RigidBody3D {
       Freeze = true;
       freeTimer.Start(5.0);
 
-      foreach(Node child in GetNode("ProjectileHit").GetChildren()) {
-        if(child is GpuParticles3D particle) { particle.Emitting = true; }
+      Node3D hitVFX = GetNodeOrNull<Node3D>("ProjectileHit");
+      if(hitVFX != null) {
+        foreach(Node child in hitVFX.GetChildren()) {
+          if(child is GpuParticles3D particle) { particle.Emitting = true; }
+        }
       }
 
       if(collision3D.GetCollider() is PhysicsBody3D body) {

@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://objects/Upgrade/UpgradeBench.cs" id="1_bench"]
+[ext_resource type="Script" path="res://components/InteractionComponent.cs" id="2_interact"]
+[ext_resource type="PackedScene" path="res://objects/Upgrade/Bench.glb" id="3_glb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bench"]
+size = Vector3(0.8, 0.5, 0.6)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_interact"]
+radius = 2.0
+
+[node name="UpgradeBench" type="StaticBody3D"]
+collision_mask = 0
+script = ExtResource("1_bench")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("BoxShape3D_bench")
+
+[node name="Model" parent="." instance=ExtResource("3_glb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="InteractionComponent" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_interact")
+metadata/_custom_type_script = "uid://2pt8ci63eny8"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionComponent"]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0.65, 0)
+shape = SubResource("SphereShape3D_interact")

@@ -23,7 +23,9 @@
 [ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="15_24hbc"]
 [ext_resource type="Script" uid="uid://rxe51n18487c" path="res://core/TrapArea.cs" id="16_ck1tj"]
 [ext_resource type="PackedScene" uid="uid://dgu1dmh0xqo3v" path="res://objects/traps/cleaver_trap.tscn" id="17_jdm1q"]
-[ext_resource type="PackedScene" uid="uid://dmv381xyx8dyw" path="res://actors/enemies/mage_enemy.tscn" id="17_nlsgs"]
+[ext_resource type="PackedScene" uid="uid://dmv381xyx8dyw" path="res://actors/enemies/Mage/mage_enemy.tscn" id="17_nlsgs"]
+[ext_resource type="PackedScene" uid="uid://dbh2jd0bcvgk2" path="res://objects/assets/lantern/lantern.tscn" id="25_uhw3x"]
+[ext_resource type="PackedScene" uid="uid://pdlvbtcehfu8" path="res://objects/assets/scourge/scourge.tscn" id="26_o0ahx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsga6"]
 shader = ExtResource("1_ui8i3")
@@ -42,8 +44,9 @@ sky_material = SubResource("ShaderMaterial_qsga6")
 background_mode = 2
 sky = SubResource("Sky_pbr4s")
 ambient_light_source = 2
-ambient_light_color = Color(0.17077476, 0.17077497, 0.17077485, 1)
+ambient_light_color = Color(0.25150922, 0.25150928, 0.2515092, 1)
 ambient_light_sky_contribution = 0.01
+ambient_light_energy = 2.34
 glow_enabled = true
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_bfp77"]
@@ -124,13 +127,14 @@ radius = 2.5708997
 
 [sub_resource type="Resource" id="Resource_uhw3x"]
 script = ExtResource("15_24hbc")
-attackRange = 14.0
+leashPoint = Vector3(259.4424, 2.827221, 48.288475)
+minAttackRange = 4.0
+maxAttackRange = 20.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [sub_resource type="Resource" id="Resource_ld23n"]
 script = ExtResource("15_24hbc")
 leashPoint = Vector3(167.01741, -5.3969307, -12.601194)
-attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_litht"]
@@ -145,16 +149,15 @@ height = 0.1
 radius = 3.0
 height = 17.5
 
-[sub_resource type="Resource" id="Resource_0nuwe"]
+[sub_resource type="Resource" id="Resource_gc3ev"]
 resource_local_to_scene = true
 script = ExtResource("15_24hbc")
 patrolPath = PackedVector3Array(181.4789, 2.3929415, -136.71298, 182.76384, 2.3929405, -130.47568, 184.49522, 2.3929405, -128.45308)
 leashPoint = Vector3(177.45947, 2.3929405, -144.50302)
 leashLength = 50.0
-attackRange = 2.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_nlsgs"]
+[sub_resource type="Resource" id="Resource_2pf2u"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 walkSpeed = 3.0
@@ -1044,7 +1047,7 @@ transform = Transform3D(0.94866735, -0.038837478, 0.31388193, 0.08419464, 0.9876
 shape = SubResource("SphereShape3D_bfp77")
 
 [node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea3" unique_id=1223258513]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0056458, 3.0234776, 2.8861313)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85562134, 3.0234776, 3.4365807)
 
 [node name="Altars" type="Node" parent="." unique_id=23785359]
 
@@ -1168,5 +1171,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.45947, 2.3929405, -144.50
 
 [node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_3soxs")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 177, 3, -147)
-enemyInfo = SubResource("Resource_0nuwe")
-velocityInfo = SubResource("Resource_nlsgs")
+enemyInfo = SubResource("Resource_gc3ev")
+velocityInfo = SubResource("Resource_2pf2u")
+
+[node name="Lantern" parent="." unique_id=360009979 instance=ExtResource("25_uhw3x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.35933, 3.9726863, 4.032724)
+
+[node name="Scourge" parent="." unique_id=1656069892 instance=ExtResource("26_o0ahx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 240.49344, 2.334899, -15.878938)

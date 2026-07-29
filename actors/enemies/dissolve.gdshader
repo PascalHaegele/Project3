@@ -1,7 +1,7 @@
 shader_type spatial;
 
 uniform float t = 0.0;
-uniform vec3 emmission_color: source_color = vec3(1.0);
+uniform vec3 emmission_color: source_color = vec3(0.914, 0.843, 0.416);
 
 uniform sampler2D noise_tex;
 uniform float noise_scale = 1.0;

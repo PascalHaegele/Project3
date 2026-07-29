@@ -9,7 +9,6 @@ public partial class BehaviorTree : Node {
   [Export] protected NavigationAgent3D navAgent;
 
   private BehaviorTreeNode rootNode;
-  private BehaviorTreeNode runningNode;
 
   [Export] private float updateInterval = 0.1f;
   private float timeSinceLastUpdate;
@@ -37,13 +36,7 @@ public partial class BehaviorTree : Node {
     timeSinceLastUpdate = 0.0f;
     input = new();
 
-    NodeState result = rootNode.Evaluate();
-
-    // if(result == NodeState.SUCCESS) {
-    //   GD.Print("BehaviorTree completed successfully");
-    // } else if(result == NodeState.FAILURE) {
-    //   GD.Print("BehaviorTree failed");
-    // }
+    _ = rootNode.Evaluate();
   }
 
   public void UpdateInfo(AIInfo info) => aiInfo = info;
@@ -56,10 +49,16 @@ public partial class BehaviorTree : Node {
       new ConditionNode(
         () =>
           aiInfo.hasTarget &&
-          enemy.LeashDistance < enemy.enemyInfo.leashLength
+          enemy.InsideLeashLength
       ),
       new TaskNode(MoveToPlayer),
       new TaskNode(AttackPlayer)
+    );
+
+    SequenceNode shotAtSequence = new();
+    shotAtSequence.AddChildren(
+      new ConditionNode(() => aiInfo.beeingShot && !aiInfo.playerVisible),
+      new TaskNode(LookToShot)
     );
 
     SequenceNode investigateSequence = new();
@@ -79,17 +78,16 @@ public partial class BehaviorTree : Node {
 
     root.AddChildren(
       combatSequence,
+      shotAtSequence,
       investigateSequence,
       patrolSequence,
       idleSequence
     );
-    // root.AddChildren(combatSequence, patrolSequence);
     return root;
   }
 
   protected NodeState MoveToPlayer() {
-    float distance = enemy.GlobalPosition.DistanceTo(aiInfo.targetPosition);
-    if(distance <= enemy.enemyInfo.attackRange) { return NodeState.SUCCESS; }
+    if(enemy.TargetInRange) { return NodeState.SUCCESS; }
 
     navAgent.TargetPosition = aiInfo.targetPosition;
 
@@ -103,6 +101,14 @@ public partial class BehaviorTree : Node {
   private NodeState AttackPlayer() {
     enemy.GetComponent<HitboxComponent>().EnableCollisionShapes();
     enemy.animationPlayer.Play("attack");
+    return NodeState.SUCCESS;
+  }
+
+  private NodeState LookToShot() {
+    if(aiInfo.shotFromDirection != Vector3.Zero) {
+      enemy.LookAt(enemy.GlobalPosition + aiInfo.shotFromDirection);
+    }
+
     return NodeState.SUCCESS;
   }
 
@@ -147,8 +153,7 @@ public partial class BehaviorTree : Node {
     Vector3 position = enemy.GlobalTransform.Origin;
     Vector3 nextPathPosition = navAgent.GetNextPathPosition();
 
-    Vector3 direction =
-      position.DirectionTo(nextPathPosition).Normalized();
+    Vector3 direction = position.DirectionTo(nextPathPosition).Normalized();
     direction.Y = 0.0f;
 
     input.direction = new(direction.X, direction.Z);

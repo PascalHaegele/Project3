@@ -1,7 +1,7 @@
 using Godot;
 
 /// <summary>
-/// A pickupable item in the world. Can represent ammo, potions, or pages.
+/// A pickupable item in the world. Can represent ammo, potions, pages, or currencies.
 /// Pages carry a PageData reference that gets added to InventoryComponent.
 /// </summary>
 [GlobalClass]
@@ -25,6 +25,10 @@ public partial class Pickup : RigidBody3D {
     CollisionLayer = (uint)CollisionLayerEnum.NONE;
     CollisionMask = (uint)CollisionLayerEnum.WORLD;
 
+    GravityScale = 2.0f;
+    ContactMonitor = true;
+    MaxContactsReported = 1;
+
     BodyEntered += OnBodyEntered;
 
     hoverArea = GetNode<Area3D>("HoverArea");
@@ -40,18 +44,6 @@ public partial class Pickup : RigidBody3D {
     box.Size = new Vector3(0.3f, 0.1f, 0.3f);
     floorCollision.Shape = box;
     AddChild(floorCollision);
-
-    // Show the correct mesh; defer once to avoid transform issues
-    Callable.From(() => {
-      GetNodeOrNull<Node3D>("Potion")?
-        .Set("visible", itemType == ItemType.POTION);
-      GetNodeOrNull<Node3D>("Page")?
-        .Set("visible", itemType == ItemType.PAGE);
-      GetNodeOrNull<Node3D>("AmmoRev")?
-        .Set("visible", itemType == ItemType.R_AMMO);
-      GetNodeOrNull<Node3D>("AmmoShot")?
-        .Set("visible", itemType == ItemType.S_AMMO);
-    }).CallDeferred();
   }
 
   public override void _PhysicsProcess(double delta) {

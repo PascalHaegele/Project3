@@ -12,10 +12,12 @@
 [ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="14_0wchr"]
 [ext_resource type="Script" uid="uid://385nx60lb30b" path="res://core/debug/DebugPanel.cs" id="15_12xki"]
 [ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="15_qrxv1"]
+[ext_resource type="Script" uid="uid://h5rudxe08m0i" path="res://components/UpgradeTracker.cs" id="18_dqf5y"]
 [ext_resource type="PackedScene" uid="uid://dn261xqm15ik0" path="res://ui/health_bar.tscn" id="18_qrxv1"]
 [ext_resource type="Script" uid="uid://cvmxf2r8l8urx" path="res://actors/player/PlayerStateMachine.cs" id="19_dqf5y"]
 [ext_resource type="Script" uid="uid://dgu23pvwogb43" path="res://components/SocketComponent.cs" id="20_socket"]
 [ext_resource type="PackedScene" uid="uid://cwlsusxyigjxm" path="res://weapons/shotgun/shotgun.tscn" id="21_shotgun"]
+[ext_resource type="Script" uid="uid://2dripi5spdea" path="res://components/InsanityBuffComponent.cs" id="22_insanitybuff"]
 
 [sub_resource type="Resource" id="Resource_pwco0"]
 resource_local_to_scene = true
@@ -102,7 +104,7 @@ script = ExtResource("1_nvxhs")
 weapons = [NodePath("CameraPivot/Revolver"), NodePath("CameraPivot/Shotgun")]
 footstepEventPath = &"event:/Walk_Timeline"
 velocityInfo = SubResource("Resource_pwco0")
-components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("PlayerStateMachine"), NodePath("HealthComponent"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent"), NodePath("InsanityComponent"), NodePath("SocketComponent")]
+components = [NodePath("InputComponent"), NodePath("CameraPivot/CameraComponent"), NodePath("PlayerStateMachine"), NodePath("HealthComponent"), NodePath("VelocityComponent"), NodePath("HurtboxComponent"), NodePath("InventoryComponent"), NodePath("InsanityComponent"), NodePath("SocketComponent"), NodePath("InsanityBuffComponent"), NodePath("UpgradeTracker")]
 
 [node name="BodyCollision" type="CollisionShape3D" parent="." unique_id=859779642]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -183,6 +185,9 @@ metadata/_custom_type_script = "uid://blliffgtkxkfr"
 
 [node name="SocketComponent" type="Node" parent="." unique_id=619938317]
 script = ExtResource("20_socket")
+
+[node name="InsanityBuffComponent" type="Node" parent="." unique_id=1111111111]
+script = ExtResource("22_insanitybuff")
 
 [node name="HUD" type="Control" parent="." unique_id=925751462]
 layout_mode = 3
@@ -290,5 +295,43 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_7aotg")
 value = 50.0
 fill_mode = 3
 show_percentage = false
+
+[node name="BuffIndicatorContainer" type="Control" parent="HUD" unique_id=-961633963]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 105.0
+offset_top = -120.0
+offset_right = 125.0
+offset_bottom = -100.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="BuffIcon" type="Panel" parent="HUD/BuffIndicatorContainer" unique_id=149477148]
+modulate = Color(0.85, 0.65, 0, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_litht")
+
+[node name="CooldownOverlay" type="Panel" parent="HUD/BuffIndicatorContainer" unique_id=1260588259]
+modulate = Color(0, 0, 0, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_litht")
+
+[node name="UpgradeTracker" type="Node" parent="." unique_id=855590747]
+script = ExtResource("18_dqf5y")
+metadata/_custom_type_script = "uid://h5rudxe08m0i"
 
 [node name="FmodListener3D" type="FmodListener3D" parent="." unique_id=1927274579]

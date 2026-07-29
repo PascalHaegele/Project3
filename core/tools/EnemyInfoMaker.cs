@@ -8,7 +8,8 @@ public partial class EnemyInfoMaker : EditorScript {
   private readonly Array<Vector3> patrolPoints = [];
   private Vector3 leashPoint = new();
   private float leashLength;
-  private float attackRange;
+  private float minAttackRange;
+  private float maxAttackRange;
   private string infoName = "";
 
   public override void _Run() {
@@ -65,21 +66,37 @@ public partial class EnemyInfoMaker : EditorScript {
     leashLengthButton.Pressed += () =>
       leashLength = leashLengthEdit.Text.ToFloat();
 
-    HBoxContainer attackRangeBox = new();
-    vBox.AddChild(attackRangeBox);
+    HBoxContainer minAttackRangeBox = new();
+    vBox.AddChild(minAttackRangeBox);
 
-    Label attackRangeLabel = new();
-    attackRangeBox.AddChild(attackRangeLabel);
-    attackRangeLabel .Text = "Attack Range";
+    Label minAttackRangeLabel = new();
+    minAttackRangeBox.AddChild(minAttackRangeLabel);
+    minAttackRangeLabel.Text = "Min Attack Range";
 
-    LineEdit atttackRangeEdit = new();
-    attackRangeBox.AddChild(atttackRangeEdit);
+    LineEdit minAttackRangeEdit = new();
+    minAttackRangeBox.AddChild(minAttackRangeEdit);
 
-    Button attackRangeButton = new();
-    attackRangeBox.AddChild(attackRangeButton);
-    attackRangeButton.Text = "Submit";
-    attackRangeButton.Pressed += () =>
-      attackRange = atttackRangeEdit.Text.ToFloat();
+    Button minAttackRangeButton = new();
+    minAttackRangeBox.AddChild(minAttackRangeButton);
+    minAttackRangeButton.Text = "Submit";
+    minAttackRangeButton.Pressed += () =>
+      minAttackRange = minAttackRangeEdit.Text.ToFloat();
+
+    HBoxContainer maxAttackRangeBox = new();
+    vBox.AddChild(maxAttackRangeBox);
+
+    Label maxAttackRangeLabel = new();
+    maxAttackRangeBox.AddChild(maxAttackRangeLabel);
+    maxAttackRangeLabel.Text = "Max Attack Range";
+
+    LineEdit maxAttackRangeEdit = new();
+    maxAttackRangeBox.AddChild(maxAttackRangeEdit);
+
+    Button maxAttackRangeButton = new();
+    maxAttackRangeBox.AddChild(maxAttackRangeButton);
+    maxAttackRangeButton.Text = "Submit";
+    maxAttackRangeButton.Pressed += () =>
+      maxAttackRange = maxAttackRangeEdit.Text.ToFloat();
 
     HBoxContainer nameBox = new();
     vBox.AddChild(nameBox);
@@ -106,7 +123,8 @@ public partial class EnemyInfoMaker : EditorScript {
       info.patrolPath = [.. patrolPoints];
       info.leashPoint = leashPoint;
       info.leashLength = leashLength;
-      info.attackRange = attackRange;
+      info.minAttackRange = minAttackRange;
+      info.maxAttackRange = maxAttackRange;
       _ = ResourceSaver
         .Save(info, "res://actors/enemies/infos/" + infoName + ".res");
       window.QueueFree();

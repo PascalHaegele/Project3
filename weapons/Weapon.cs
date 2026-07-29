@@ -13,6 +13,7 @@ public partial class Weapon : Node3D {
   [Export] private Marker3D projectileSpawn;
 
   private float fireCooldown;
+  private float reloadTimer;
 
   private RayCast3D aimCast;
   private RayCast3D projectileCast;
@@ -41,16 +42,18 @@ public partial class Weapon : Node3D {
   [Signal] public delegate void ReloadedEventHandler();
 
   public override void _Ready() {
-    aimCast = GetNode<RayCast3D>("../AimCast");
-    aimCast.TargetPosition = new(0.0f, 0.0f, -info.range);
-
-    projectileCast = GetNode<RayCast3D>("../ProjectileCast");
-
     actor = GetParent() as Actor ?? GetParent().GetParent<Actor>();
-    inventoryComponent = actor.GetComponent<InventoryComponent>();
 
-    AmmoType =
-      info.type == WeaponType.Revolver ? ItemType.R_AMMO : ItemType.S_AMMO;
+    if(actor is Player) {
+      aimCast = GetNode<RayCast3D>("../AimCast");
+      aimCast.TargetPosition = new(0.0f, 0.0f, -info.range);
+      projectileCast = GetNode<RayCast3D>("../ProjectileCast");
+
+      inventoryComponent = actor.GetComponent<InventoryComponent>();
+
+      AmmoType =
+        info.type == WeaponType.Revolver ? ItemType.R_AMMO : ItemType.S_AMMO;
+    }
 
     CurrentAmmo = info.magazineSize;
 
@@ -72,6 +75,12 @@ public partial class Weapon : Node3D {
 
   public override void _PhysicsProcess(double delta) {
     if(fireCooldown > 0.0f) { fireCooldown -= (float)delta; }
+    if(weaponAnim == null) {
+      if(Reloading) {
+        reloadTimer -= (float)delta;
+        if(reloadTimer <= 0.0f) { OnReloadVisualComplete(); }
+      }
+    }
   }
 
   public void Reset() {
@@ -100,8 +109,18 @@ public partial class Weapon : Node3D {
       Projectile p = info.projectile.Instantiate<Projectile>();
       if(p == null) { continue; }
 
+      AddChild(p);
+
       // Track shot count for FrenziedSoul effect
       if(actor is Player player) {
+        p.CollisionLayer = (uint)CollisionLayerEnum.NONE;
+        p.CollisionMask =
+          (uint)CollisionLayerEnum.WORLD |
+          (uint)CollisionLayerEnum.ENEMY;
+
+        p.hitbox.CollisionLayer = (uint)CollisionLayerEnum.PLAYER_HITBOX;
+        p.hitbox.CollisionMask = (uint)CollisionLayerEnum.ENEMY_HURTBOX;
+
         SocketComponent socket = player.GetComponent<SocketComponent>();
         if(socket != null && socket.HasModifier("FrenziedSoul")) {
           if(empowerNextShot) {
@@ -110,32 +129,46 @@ public partial class Weapon : Node3D {
             empowerNextShot = false;
           }
         }
+      } else {
+        p.CollisionLayer = (uint)CollisionLayerEnum.NONE;
+        p.CollisionMask =
+          (uint)CollisionLayerEnum.WORLD |
+          (uint)CollisionLayerEnum.PLAYER_HURTBOX;
+
+        p.hitbox.CollisionLayer = (uint)CollisionLayerEnum.ENEMY_HITBOX;
+        p.hitbox.CollisionMask = (uint)CollisionLayerEnum.PLAYER_HURTBOX;
       }
 
-      AddChild(p);
       p.RecalculateDamage();
 
       p.GlobalPosition = projectileSpawn.GlobalPosition;
       p.GlobalRotation = projectileSpawn.GlobalRotation;
 
-      if(aimCast.IsColliding()) {
-        Vector3 collisionPoint = aimCast.GetCollisionPoint();
+      if(actor is Player) {
+        if(aimCast.IsColliding()) {
+          Vector3 collisionPoint = aimCast.GetCollisionPoint();
 
-        if(projectileCast.IsColliding()) {
-          float distance =
-            projectileCast.GlobalPosition.DistanceTo(collisionPoint);
+          if(projectileCast.IsColliding()) {
+            float distance =
+              projectileCast.GlobalPosition.DistanceTo(collisionPoint);
 
-          Vector3 position = projectileSpawn.GlobalPosition;
-          projectileSpawn.Position += new Vector3(0.0f, 0.0f, distance + 0.05f);
+            Vector3 position = projectileSpawn.GlobalPosition;
+            projectileSpawn.Position +=
+              new Vector3(0.0f, 0.0f, distance + 0.05f);
 
-          p.GlobalPosition = projectileSpawn.GlobalPosition;
-          p.GlobalRotation = projectileSpawn.GlobalRotation;
+            p.GlobalPosition = projectileSpawn.GlobalPosition;
+            p.GlobalRotation = projectileSpawn.GlobalRotation;
 
-          projectileSpawn.GlobalPosition = position;
-        } else {
-          p.GlobalPosition = projectileSpawn.GlobalPosition;
-          p.LookAt(collisionPoint);
+            projectileSpawn.GlobalPosition = position;
+          } else {
+            p.GlobalPosition = projectileSpawn.GlobalPosition;
+            p.LookAt(collisionPoint);
+          }
         }
+      } else if(actor is Enemy enemy) {
+        Vector3 target = enemy.aiInfo.targetPosition;
+        target.Y += 1.0f;
+        p.LookAt(target);
       }
 
       float spread = info.projectileSpread;
@@ -169,14 +202,17 @@ public partial class Weapon : Node3D {
     if(
       Reloading ||
       waitingForReloadAnimation ||
-      CurrentAmmo >= info.magazineSize ||
-      inventoryComponent.AmountOf(AmmoType) <= 0
+      CurrentAmmo >= info.magazineSize
     ) { return; }
+
+    if(actor is Player) {
+      if(inventoryComponent.AmountOf(AmmoType) <= 0) { return; }
+    }
 
     Reloading = true;
     waitingForReloadAnimation = true;
 
-    float reloadDuration = info.reloadTime;
+    float reloadDuration = reloadTimer = info.reloadTime;
 
     if(actor is Player player) {
       SocketComponent socket = player.GetComponent<SocketComponent>();
@@ -188,6 +224,13 @@ public partial class Weapon : Node3D {
           $"ReloadSpeed modifier: -{reloadBonus}, " +
           $"new duration: {reloadDuration:F2}"
         );
+      }
+
+      // Apply Upgrade Bench reload speed bonus
+      UpgradeTracker upgradeTracker = player.GetComponent<UpgradeTracker>();
+      if (upgradeTracker != null && upgradeTracker.reloadSpeedBonus > 0) {
+        reloadDuration *= 1.0f - (upgradeTracker.reloadSpeedBonus / 100f);
+        reloadDuration = Mathf.Max(0.1f, reloadDuration);
       }
     }
 
@@ -202,22 +245,21 @@ public partial class Weapon : Node3D {
     waitingForReloadAnimation = false;
     Reloading = false;
 
-    CurrentAmmo +=
-      inventoryComponent
-        .RemoveItem(AmmoType, info.magazineSize - CurrentAmmo);
-
     // Empower next shot after reload if FrenziedSoul is active
     if(actor is Player player) {
+      CurrentAmmo +=
+        inventoryComponent
+          .RemoveItem(AmmoType, info.magazineSize - CurrentAmmo);
+
       SocketComponent socket = player.GetComponent<SocketComponent>();
       if(socket != null && socket.HasModifier("FrenziedSoul")) {
         empowerNextShot = true;
       }
+    } else {
+      CurrentAmmo += info.magazineSize;
     }
 
     EmitSignalReloaded();
-
-    GD.Print($"{Name} reload finished (magazine refilled)");
-    GD.Print($"{Name} Ammo: {CurrentAmmo}");
   }
 
   private void OnWeaponCameraShake(float amount, float duration) {

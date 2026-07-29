@@ -1,0 +1,128 @@
+[gd_scene format=3 uid="uid://dmv381xyx8dyw"]
+
+[ext_resource type="Script" uid="uid://jpuh4ooqe4dv" path="res://actors/enemies/Mage/MageEnemy.cs" id="1_1nb7t"]
+[ext_resource type="Material" uid="uid://bhc76ujovrpr2" path="res://actors/enemies/dissolve_material.tres" id="3_1nb7t"]
+[ext_resource type="Material" uid="uid://cikf4egfyc2k3" path="res://actors/enemies/outline_material.tres" id="3_jqdxb"]
+[ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="4_vuu1o"]
+[ext_resource type="PackedScene" uid="uid://duhtxtixegmv3" path="res://actors/enemies/Mage/Magician.glb" id="5_0xejm"]
+[ext_resource type="PackedScene" uid="uid://dcpar8itrvr70" path="res://actors/enemies/Mage/mage_weapon.tscn" id="6_1nb7t"]
+[ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="6_rrbyt"]
+[ext_resource type="Script" uid="uid://c82bj6pgjb6ye" path="res://actors/enemies/Mage/MageEnemyStateMachine.cs" id="7_i075w"]
+[ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="8_0oa4g"]
+[ext_resource type="Script" uid="uid://t441iujo23o8" path="res://actors/enemies/Mage/MageBehaviorTree.cs" id="9_ooivl"]
+[ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="10_oxwh2"]
+[ext_resource type="Script" uid="uid://bh1wcy7x4xxqk" path="res://components/ai/AIDetectionComponent.cs" id="11_nwoxm"]
+[ext_resource type="PackedScene" uid="uid://dn261xqm15ik0" path="res://ui/health_bar.tscn" id="14_bjm0u"]
+
+[sub_resource type="Resource" id="Resource_nl8p5"]
+resource_local_to_scene = true
+script = ExtResource("4_vuu1o")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o8bm0"]
+radius = 0.25
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_litht"]
+radius = 0.3
+height = 1.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jqdxb"]
+radius = 13.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1nb7t"]
+radius = 9.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bfp77"]
+viewport_path = NodePath("SubViewport")
+
+[node name="MageEnemy" type="CharacterBody3D" unique_id=900136881 node_paths=PackedStringArray("model", "components")]
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_1nb7t")
+dissolveMaterial = ExtResource("3_1nb7t")
+outlineMaterial = ExtResource("3_jqdxb")
+model = NodePath("Magician")
+velocityInfo = SubResource("Resource_nl8p5")
+components = [NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent"), NodePath("AIDetectionComponent"), NodePath("MageEnemyStateMachine"), NodePath("SubViewport/HealthBar"), NodePath("MageWeapon"), NodePath("MageBehaviorTree"), NodePath("AnimationPlayer")]
+
+[node name="Magician" parent="." unique_id=1892265524 instance=ExtResource("5_0xejm")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -2.449)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=586813275]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_o8bm0")
+
+[node name="MageWeapon" parent="." unique_id=1489655629 node_paths=PackedStringArray("projectileSpawn") instance=ExtResource("6_1nb7t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+projectileSpawn = NodePath("../ProjectileSpawn")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=848568847]
+path_desired_distance = 0.5
+target_desired_distance = 0.5
+path_height_offset = 0.25
+
+[node name="VelocityComponent" type="Node" parent="." unique_id=532052306]
+script = ExtResource("6_rrbyt")
+metadata/_custom_type_script = "uid://2b3a880do5ag"
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1680026701]
+script = ExtResource("8_0oa4g")
+metadata/_custom_type_script = "uid://cmb0oydjb0jfo"
+
+[node name="MageEnemyStateMachine" type="Node" parent="." unique_id=999262112]
+script = ExtResource("7_i075w")
+metadata/_custom_type_script = "uid://c82bj6pgjb6ye"
+
+[node name="MageBehaviorTree" type="Node" parent="." unique_id=530351340]
+script = ExtResource("9_ooivl")
+metadata/_custom_type_script = "uid://t441iujo23o8"
+
+[node name="HurtboxComponent" type="Area3D" parent="." unique_id=548584192]
+collision_layer = 128
+collision_mask = 0
+script = ExtResource("10_oxwh2")
+metadata/_custom_type_script = "uid://t8p3r0lninay"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent" unique_id=14901380]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0748901, 0)
+shape = SubResource("CapsuleShape3D_litht")
+
+[node name="AIDetectionComponent" type="Node3D" parent="." unique_id=1531702253]
+script = ExtResource("11_nwoxm")
+metadata/_custom_type_script = "uid://bh1wcy7x4xxqk"
+
+[node name="Vision" type="Area3D" parent="AIDetectionComponent" unique_id=708298449]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AIDetectionComponent/Vision" unique_id=293629782]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_jqdxb")
+debug_color = Color(0.8589963, 0.34451708, 0.3117536, 0.41960785)
+
+[node name="Hearing" type="Area3D" parent="AIDetectionComponent" unique_id=114735291]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AIDetectionComponent/Hearing" unique_id=916088522]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_1nb7t")
+debug_color = Color(0.19589242, 0.5166347, 1, 0.41960785)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1874420823]
+
+[node name="ProjectileSpawn" type="Marker3D" parent="." unique_id=124557232]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.3)
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=965664848]
+disable_3d = true
+transparent_bg = true
+
+[node name="HealthBar" parent="SubViewport" unique_id=69104966 instance=ExtResource("14_bjm0u")]
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=977339682]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 1.9758728, 0)
+billboard = 1
+double_sided = false
+texture = SubResource("ViewportTexture_bfp77")

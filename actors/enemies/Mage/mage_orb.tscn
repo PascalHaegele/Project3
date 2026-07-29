@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://bgn6wxujb4kyt"]
+
+[ext_resource type="Script" uid="uid://bl7eube2r4d4u" path="res://weapons/projectiles/Projectile.cs" id="1_t6br8"]
+[ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="2_2jvgo"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6wg76"]
+albedo_color = Color(1, 0.8, 0.2, 1)
+metallic = 0.3
+roughness = 0.2
+emission_enabled = true
+emission = Color(1, 0.5529412, 0.09019608, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_cq2wl"]
+radius = 0.3
+height = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t6br8"]
+transparency = 1
+albedo_color = Color(0.1, 0.1, 0.1, 0.7)
+
+[sub_resource type="SphereMesh" id="SphereMesh_2jvgo"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_o8bm0"]
+radius = 0.28128204
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bfp77"]
+radius = 0.38976803
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_litht"]
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bfp77"]
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 3.0
+gravity = Vector3(0, 2, 0)
+color = Color(1, 0.4862745, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_o8bm0"]
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f3oj0"]
+transparency = 1
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4ajh5"]
+direction = Vector3(0, 0, 1)
+spread = 10.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.5
+gravity = Vector3(0, 0, 0)
+color = Color(1, 0.4, 0.101960786, 0.49803922)
+
+[sub_resource type="QuadMesh" id="QuadMesh_vavvm"]
+size = Vector2(0.1, 0.1)
+
+[node name="MageOrb" type="RigidBody3D" unique_id=1731081173]
+collision_layer = 0
+gravity_scale = 0.0
+script = ExtResource("1_t6br8")
+metadata/_custom_type_script = "uid://bl7eube2r4d4u"
+
+[node name="Core" type="MeshInstance3D" parent="." unique_id=1683374129]
+material_override = SubResource("StandardMaterial3D_6wg76")
+mesh = SubResource("SphereMesh_cq2wl")
+
+[node name="Outer" type="MeshInstance3D" parent="." unique_id=590085666]
+material_override = SubResource("StandardMaterial3D_t6br8")
+mesh = SubResource("SphereMesh_2jvgo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=408238298]
+shape = SubResource("SphereShape3D_o8bm0")
+
+[node name="HitboxComponent" type="Area3D" parent="." unique_id=2092720871]
+collision_layer = 64
+collision_mask = 32
+script = ExtResource("2_2jvgo")
+metadata/_custom_type_script = "uid://lc0clvytiu8r"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent" unique_id=812943023]
+shape = SubResource("SphereShape3D_bfp77")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2013490467]
+light_color = Color(1, 0.6862745, 0.2509804, 1)
+light_energy = 1.5
+omni_range = 4.0
+
+[node name="Embers" type="GPUParticles3D" parent="." unique_id=1384558674]
+material_override = SubResource("StandardMaterial3D_litht")
+amount = 20
+lifetime = 1.5
+process_material = SubResource("ParticleProcessMaterial_bfp77")
+draw_pass_1 = SubResource("QuadMesh_o8bm0")
+
+[node name="Trails" type="GPUParticles3D" parent="." unique_id=477351298]
+material_override = SubResource("StandardMaterial3D_f3oj0")
+amount = 30
+lifetime = 2.0
+process_material = SubResource("ParticleProcessMaterial_4ajh5")
+draw_pass_1 = SubResource("QuadMesh_vavvm")

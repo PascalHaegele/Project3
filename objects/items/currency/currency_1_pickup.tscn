@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://d4h4suavsuyf5"]
+
+[ext_resource type="Script" uid="uid://6p00olcusefr" path="res://objects/items/Pickup.cs" id="1_bvki0"]
+[ext_resource type="PackedScene" uid="uid://4ujh60nwrugk" path="res://ui/pickup_indicator.tscn" id="2_pmufg"]
+[ext_resource type="PackedScene" uid="uid://c2lpdoe0jp3q8" path="res://objects/items/currency/Currency1.glb" id="3_6s2sm"]
+[ext_resource type="Shader" uid="uid://r8o3ctfr02fa" path="res://objects/items/glow.gdshader" id="3_mg1ar"]
+[ext_resource type="Texture2D" uid="uid://bevhjpqqu83qy" path="res://objects/items/glow.png" id="4_ettta"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o8bm0"]
+render_priority = 0
+shader = ExtResource("3_mg1ar")
+shader_parameter/main_color = Color(0.8430695, 0.35198873, 0.31867102, 1)
+shader_parameter/transparency_texture = ExtResource("4_ettta")
+
+[sub_resource type="QuadMesh" id="QuadMesh_litht"]
+size = Vector2(0.15, 0.15)
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_mg1ar"]
+length = 0.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ettta"]
+radius = 0.1
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_tfurb"]
+viewport_path = NodePath("SubViewport")
+
+[node name="Currency1Pickup" type="RigidBody3D" unique_id=1747664799]
+script = ExtResource("1_bvki0")
+itemType = 4
+metadata/_custom_type_script = "uid://6p00olcusefr"
+
+[node name="Currency1" parent="." unique_id=253692869 instance=ExtResource("3_6s2sm")]
+transform = Transform3D(0.29999998, 0, 0, 0, 0.2631372, 0.14407918, 0, -0.14407918, 0.2631372, -0.027542505, -0.06935428, -0.0008786768)
+
+[node name="Glow" type="MeshInstance3D" parent="." unique_id=1907546428]
+material_override = SubResource("ShaderMaterial_o8bm0")
+mesh = SubResource("QuadMesh_litht")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=112470295]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+shape = SubResource("SeparationRayShape3D_mg1ar")
+
+[node name="HoverArea" type="Area3D" parent="." unique_id=607351818]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HoverArea" unique_id=802121746]
+shape = SubResource("SphereShape3D_ettta")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=2086150377]
+disable_3d = true
+transparent_bg = true
+
+[node name="PickupIndicator" parent="SubViewport" unique_id=955568873 instance=ExtResource("2_pmufg")]
+
+[node name="HoverIndicator" type="Sprite3D" parent="." unique_id=161885250]
+transform = Transform3D(0.3, 0, 0, 0, 0.30000004, 0, 0, 0, 0.30000004, 0, 0, 0)
+billboard = 1
+double_sided = false
+no_depth_test = true
+texture = SubResource("ViewportTexture_tfurb")

@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bhc76ujovrpr2"]
+
+[ext_resource type="Shader" uid="uid://cbm5fk8m2l66i" path="res://actors/enemies/dissolve.gdshader" id="1_uh4nh"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ks570"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8pc84"]
+noise = SubResource("FastNoiseLite_ks570")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_uh4nh")
+shader_parameter/t = 0.0
+shader_parameter/emmission_color = Color(0.9137255, 0.84313726, 0.41568628, 1)
+shader_parameter/noise_tex = SubResource("NoiseTexture2D_8pc84")
+shader_parameter/noise_scale = 1.0
