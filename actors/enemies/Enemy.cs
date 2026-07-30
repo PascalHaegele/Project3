@@ -84,14 +84,28 @@ public abstract partial class Enemy : Actor {
 
   protected virtual void ApplyDifficulty() { }
 
-  private async void OnDeath() {
-    animationPlayer.Stop();
+  protected virtual async void OnDeath() {
+    velocityComponent.Stop();
+    velocityComponent.ClearDashBoost();
+    SetPhysicsProcess(false);
+
+    if (this is TestEnemy) {
+      animationPlayer.Play("Knight_idle");
+    }
 
     CollisionLayer = (uint)CollisionLayerEnum.NONE;
     CollisionMask = (uint)CollisionLayerEnum.NONE;
 
     hurtboxComponent.CollisionLayer = (uint)CollisionLayerEnum.NONE;
     hurtboxComponent.CollisionMask = (uint)CollisionLayerEnum.NONE;
+    hurtboxComponent.SetDeferred(Area3D.PropertyName.Monitoring, false);
+    hurtboxComponent.SetDeferred(Area3D.PropertyName.Monitorable, false);
+
+    if (GetNodeOrNull<HitboxComponent>("HitboxComponent") is HitboxComponent hitbox) {
+      hitbox.CallDeferred(nameof(HitboxComponent.DisableCollisionShapes));
+      hitbox.SetDeferred(Area3D.PropertyName.Monitoring, false);
+      hitbox.SetDeferred(Area3D.PropertyName.Monitorable, false);
+    }
 
     if(dissolveMaterial != null && model != null) {
       Tween tween = CreateTween();

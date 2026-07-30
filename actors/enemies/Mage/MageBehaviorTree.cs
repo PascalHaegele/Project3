@@ -177,14 +177,22 @@ public partial class MageBehaviorTree : Node {
     Vector3 position = enemy.GlobalTransform.Origin;
     Vector3 nextPathPosition = navAgent.GetNextPathPosition();
 
-    Vector3 direction = position.DirectionTo(nextPathPosition).Normalized();
+    Vector3 direction = position.DirectionTo(nextPathPosition);
+    // Avoid normalizing a zero vector which can lead to look_at being called with identical origin/target
+    if (direction.IsEqualApprox(Vector3.Zero)) {
+      input.direction = Vector2.Zero;
+      return;
+    }
+
+    direction = direction.Normalized();
     direction.Y = 0.0f;
 
     input.direction = new(direction.X, direction.Z);
 
     if(lookAtTarget) {
-      if(!position.IsEqualApprox(enemy.GlobalPosition + direction)) {
-        enemy.LookAt(enemy.GlobalPosition + direction);
+      Vector3 lookTarget = enemy.GlobalPosition + direction;
+      if(!lookTarget.IsEqualApprox(enemy.GlobalPosition)) {
+        enemy.LookAt(lookTarget);
       }
     }
   }

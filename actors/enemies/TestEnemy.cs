@@ -8,7 +8,7 @@ public partial class TestEnemy : Enemy, IHitable {
 
   private HitboxComponent hitboxComponent;
   private ProgressBar healthBar;
-
+   [Export] public string attackSoundEvent = "event:/Knight_Attack_Action";
   // [Export] private Material dissolveMaterial;
 
   public override void _Ready() {
@@ -22,6 +22,7 @@ public partial class TestEnemy : Enemy, IHitable {
     // healthComponent.Died += OnDeath;
 
     hitboxComponent = GetComponent<HitboxComponent>();
+    hitboxComponent.actor = this;
     hitboxComponent.damage = 10.0f;
     hitboxComponent.CollisionLayer = (uint)CollisionLayerEnum.ENEMY_HITBOX;
     hitboxComponent.CollisionMask = (uint)CollisionLayerEnum.PLAYER_HURTBOX;
@@ -62,6 +63,28 @@ public partial class TestEnemy : Enemy, IHitable {
     if(!healthComponent.IsAlive && hitInfo.shooter is Player) {
       EmitSignalKilled(this);
     }
+  }
+
+  protected override async void OnDeath() {
+    base.OnDeath();
+
+    if (behaviorTree != null) {
+      behaviorTree.SetProcess(false);
+      behaviorTree.SetPhysicsProcess(false);
+    }
+
+    if (stateMachine != null) {
+      stateMachine.autoUpdate = false;
+      stateMachine.SetPhysicsProcess(false);
+    }
+
+    if (detectionComponent != null) {
+      detectionComponent.SetProcess(false);
+      detectionComponent.SetPhysicsProcess(false);
+    }
+
+    SetProcess(false);
+    SetPhysicsProcess(false);
   }
 
   protected override void ApplyDifficulty() {

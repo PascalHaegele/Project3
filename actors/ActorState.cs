@@ -7,7 +7,8 @@ public abstract partial class ActorState : State {
   protected Actor actor;
   protected VelocityComponent velocityComponent;
   protected AnimationPlayer? animationPlayer;
- 
+  
+    
 
   public ActorState(Actor actor, StateMachine stateMachine) {
     this.actor = actor;
@@ -60,6 +61,64 @@ public partial class ActorStateIdle : ActorState {
   }
 }
 
+public partial class ActorStateAttack : ActorState {
+  private FmodEvent? attackSoundInstance;
+  private Timer? attackLoopTimer;
+
+  public ActorStateAttack(Actor actor, StateMachine stateMachine) :
+    base(actor, stateMachine) { }
+
+  public override void Start() => soundLevel = 4;
+
+  public override void Enter() {
+    base.Enter();
+    GD.Print("=== ATTACK STATE GESTARTET ===");
+    animationPlayer?.Play("Knight_Attack");
+
+    if (actor is TestEnemy testEnemy && !string.IsNullOrEmpty(testEnemy.attackSoundEvent)) {
+      var eventInstance = FmodServerWrapper.CreateEventInstance(testEnemy.attackSoundEvent);
+      if (eventInstance != null) {
+        actor.AddChild(eventInstance);
+        eventInstance.SetNodeAttributes(actor);
+        eventInstance.SetLoopCount(-1);
+        eventInstance.Start();
+        attackSoundInstance = eventInstance;
+
+        attackLoopTimer = new Timer();
+        attackLoopTimer.OneShot = false;
+        attackLoopTimer.WaitTime = 0.1f;
+        attackLoopTimer.Timeout += OnAttackLoopTimerTimeout;
+        actor.AddChild(attackLoopTimer);
+        attackLoopTimer.Start();
+      } 
+    }
+  }
+
+  private void OnAttackLoopTimerTimeout() {
+    if (attackSoundInstance == null) { return; }
+    if (!attackSoundInstance.IsPlaying) {
+      attackSoundInstance.Start();
+    }
+  }
+
+  public override void PhysicsUpdate(double delta) {
+    velocityComponent.Decelerate();
+  }
+
+  public override void Exit() {
+    if (attackLoopTimer != null) {
+      attackLoopTimer.Stop();
+      attackLoopTimer.QueueFree();
+      attackLoopTimer = null;
+    }
+
+    if (attackSoundInstance != null) {
+      attackSoundInstance.Stop(true);
+      attackSoundInstance.QueueFree();
+      attackSoundInstance = null;
+    }
+  }
+}
 public partial class ActorStateWalk : ActorState {
   public ActorStateWalk(Actor actor, StateMachine stateMachine) :
     base(actor, stateMachine) { }
