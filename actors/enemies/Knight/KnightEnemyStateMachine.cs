@@ -1,25 +1,25 @@
 using Godot;
 
 [GlobalClass]
-public partial class TestEnemyStateMachine : TransitionStateMachine {
-  private Enemy actor;
+public partial class KnightEnemyStateMachine : TransitionStateMachine {
+  private Enemy enemy;
   public override void _Ready() {
-    actor = GetParent<Enemy>();
+    enemy = GetParent<Enemy>();
     base._Ready();
   }
 
   protected override void SetupStates() {
-    AddState("idle", new ActorStateIdle(actor, this));
-    AddState("walk", new ActorStateWalk(actor, this));
-    AddState("sprint", new ActorStateSprint(actor, this));
-    AddState("fall", new ActorStateFall(actor, this));
-    AddState("land", new ActorStateLand(actor, this));
+    AddState("idle", new ActorStateIdle(enemy, this));
+    AddState("walk", new ActorStateWalk(enemy, this));
+    AddState("sprint", new ActorStateSprint(enemy, this));
+    AddState("fall", new ActorStateFall(enemy, this));
+    AddState("land", new ActorStateLand(enemy, this));
   }
 
   protected override void SetupTransitions() {
     AddGlobalTransition(
       "fall",
-      () => !actor.IsOnFloor() && actor.Velocity.Y < 0.0f
+      () => !enemy.IsOnFloor() && enemy.Velocity.Y < 0.0f
     );
 
     AddTransition("idle", "walk", () => input.direction != Vector2.Zero);
@@ -39,7 +39,7 @@ public partial class TestEnemyStateMachine : TransitionStateMachine {
     AddTransition("sprint", "idle", () => input.direction == Vector2.Zero);
     AddTransition("sprint", "walk", () => !input.sprint);
 
-    AddTransition("fall", "land", actor.IsOnFloor);
+    AddTransition("fall", "land", enemy.IsOnFloor);
 
     AddTransition("land", "idle", () => input.direction == Vector2.Zero);
     AddTransition("land", "walk", () => input.direction != Vector2.Zero);

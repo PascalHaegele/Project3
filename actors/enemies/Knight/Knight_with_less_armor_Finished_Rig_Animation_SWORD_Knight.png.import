@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpy4mtb5i7rh6"
-path.s3tc="res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_Chest.png-10f67bc208f70413fa2d596776d058cb.s3tc.ctex"
+uid="uid://d2wedv065r8cp"
+path.s3tc="res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Knight.png-bbdda1c22d08746601f9d3cac8d94292.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "234ebc43a42a4cc4c6ad86fb6454448e"
+"md5": "bf4fe3c0d6e2fe44abcb7c1edb4b8e9e"
 }
 
 [deps]
 
-source_file="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_Chest.png"
-dest_files=["res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_Chest.png-10f67bc208f70413fa2d596776d058cb.s3tc.ctex"]
+source_file="res://actors/enemies/Knight/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Knight.png"
+dest_files=["res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Knight.png-bbdda1c22d08746601f9d3cac8d94292.s3tc.ctex"]
 
 [params]
 

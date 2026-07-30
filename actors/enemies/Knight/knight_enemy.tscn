@@ -1,27 +1,27 @@
-[gd_scene format=4 uid="uid://c55wv856x1kmu"]
+[gd_scene format=4 uid="uid://doqs2ffqa72ta"]
 
-[ext_resource type="Script" uid="uid://b8mw3s0ecxg3r" path="res://actors/enemies/TestEnemy.cs" id="1_xmkit"]
-[ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="2_k4hf1"]
-[ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="2_l1sbr"]
-[ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="2_mka0o"]
-[ext_resource type="Material" uid="uid://bhc76ujovrpr2" path="res://actors/enemies/dissolve_material.tres" id="3_ad4r6"]
-[ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="3_l1sbr"]
-[ext_resource type="Material" uid="uid://cikf4egfyc2k3" path="res://actors/enemies/outline_material.tres" id="3_otf45"]
-[ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="3_p5iym"]
-[ext_resource type="Texture2D" uid="uid://d2wedv065r8cp" path="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Knight.png" id="10_kstis"]
-[ext_resource type="Texture2D" uid="uid://dpy4mtb5i7rh6" path="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_Chest.png" id="11_da4by"]
-[ext_resource type="Script" uid="uid://bvmpjaulofawh" path="res://actors/enemies/TestEnemyStateMachine.cs" id="12_kstis"]
-[ext_resource type="Texture2D" uid="uid://w3uigalwp4yd" path="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Robe_Butt.png" id="12_v554o"]
-[ext_resource type="Texture2D" uid="uid://c2321v560tnlx" path="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Scarf.png" id="13_robej"]
-[ext_resource type="Texture2D" uid="uid://ot1yx2h6rtnc" path="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_arm.png" id="14_nl8p5"]
-[ext_resource type="Texture2D" uid="uid://co4niri2ibh1o" path="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Sword.png" id="15_jm64t"]
-[ext_resource type="Script" uid="uid://bh1wcy7x4xxqk" path="res://components/ai/AIDetectionComponent.cs" id="17_da4by"]
-[ext_resource type="Script" uid="uid://wnjheg6xmkdy" path="res://components/ai/BehaviorTree.cs" id="17_v554o"]
-[ext_resource type="PackedScene" uid="uid://dn261xqm15ik0" path="res://ui/health_bar.tscn" id="19_nl8p5"]
+[ext_resource type="Script" uid="uid://b8mw3s0ecxg3r" path="res://actors/enemies/Knight/KnightEnemy.cs" id="1_f0emv"]
+[ext_resource type="Material" uid="uid://bhc76ujovrpr2" path="res://actors/enemies/dissolve_material.tres" id="2_eoxw3"]
+[ext_resource type="Material" uid="uid://cikf4egfyc2k3" path="res://actors/enemies/outline_material.tres" id="3_ldkjf"]
+[ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="4_mtx5r"]
+[ext_resource type="Script" uid="uid://2b3a880do5ag" path="res://components/VelocityComponent.cs" id="5_dmn5o"]
+[ext_resource type="Script" uid="uid://bvmpjaulofawh" path="res://actors/enemies/Knight/KnightEnemyStateMachine.cs" id="6_b7bmt"]
+[ext_resource type="Script" uid="uid://cmb0oydjb0jfo" path="res://components/HealthComponent.cs" id="7_a62om"]
+[ext_resource type="Script" uid="uid://wnjheg6xmkdy" path="res://actors/enemies/Knight/KnightBehaviorTree.cs" id="8_14mgn"]
+[ext_resource type="Script" uid="uid://t8p3r0lninay" path="res://components/HurtboxComponent.cs" id="9_tffsp"]
+[ext_resource type="Script" uid="uid://bh1wcy7x4xxqk" path="res://components/ai/AIDetectionComponent.cs" id="10_6ryf0"]
+[ext_resource type="PackedScene" uid="uid://dn261xqm15ik0" path="res://ui/health_bar.tscn" id="11_xydvu"]
+[ext_resource type="Texture2D" uid="uid://d2wedv065r8cp" path="res://actors/enemies/Knight/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Knight.png" id="12_ehppc"]
+[ext_resource type="Texture2D" uid="uid://dpy4mtb5i7rh6" path="res://actors/enemies/Knight/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_Chest.png" id="13_bcjog"]
+[ext_resource type="Texture2D" uid="uid://w3uigalwp4yd" path="res://actors/enemies/Knight/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Robe_Butt.png" id="14_htba3"]
+[ext_resource type="Texture2D" uid="uid://c2321v560tnlx" path="res://actors/enemies/Knight/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Scarf.png" id="15_gfm63"]
+[ext_resource type="Texture2D" uid="uid://ot1yx2h6rtnc" path="res://actors/enemies/Knight/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_arm.png" id="16_pu8r2"]
+[ext_resource type="Texture2D" uid="uid://co4niri2ibh1o" path="res://actors/enemies/Knight/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Sword.png" id="17_u6mvl"]
+[ext_resource type="Script" uid="uid://lc0clvytiu8r" path="res://components/HitboxComponent.cs" id="18_yr604"]
 
 [sub_resource type="Resource" id="Resource_nl8p5"]
 resource_local_to_scene = true
-script = ExtResource("2_mka0o")
+script = ExtResource("4_mtx5r")
 walkSpeed = 3.0
 sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
@@ -44,7 +44,7 @@ viewport_path = NodePath("SubViewport")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m0xhw"]
 resource_name = "Material.002"
 cull_mode = 2
-albedo_texture = ExtResource("10_kstis")
+albedo_texture = ExtResource("12_ehppc")
 metadata/_gltf_primary_texture_coord = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_a52if"]
@@ -209,7 +209,7 @@ bind/34/pose = Transform3D(-1, -1.155119e-23, 1.5503748e-16, 4.109007e-14, -7.45
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xvx7c"]
 resource_name = "Material.005"
 cull_mode = 2
-albedo_texture = ExtResource("11_da4by")
+albedo_texture = ExtResource("13_bcjog")
 metadata/_gltf_primary_texture_coord = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_dditd"]
@@ -234,7 +234,7 @@ blend_shape_mode = 0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mn1wj"]
 resource_name = "Material.006"
 cull_mode = 2
-albedo_texture = ExtResource("12_v554o")
+albedo_texture = ExtResource("14_htba3")
 metadata/_gltf_primary_texture_coord = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_afgon"]
@@ -260,7 +260,7 @@ blend_shape_mode = 0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pfc7y"]
 resource_name = "Material"
 cull_mode = 2
-albedo_texture = ExtResource("13_robej")
+albedo_texture = ExtResource("15_gfm63")
 metadata/_gltf_primary_texture_coord = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_qjm0s"]
@@ -286,7 +286,7 @@ blend_shape_mode = 0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uqqxe"]
 resource_name = "Material.003"
 cull_mode = 2
-albedo_texture = ExtResource("14_nl8p5")
+albedo_texture = ExtResource("16_pu8r2")
 metadata/_gltf_primary_texture_coord = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_7y5r5"]
@@ -311,7 +311,7 @@ blend_shape_mode = 0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_14mwu"]
 resource_name = "Material.001"
 cull_mode = 2
-albedo_texture = ExtResource("15_jm64t")
+albedo_texture = ExtResource("17_u6mvl")
 metadata/_gltf_primary_texture_coord = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_pq0jn"]
@@ -1943,46 +1943,22 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../HitboxComponent/CollisionShape3D:rotation")
+tracks/0/path = NodePath("../HitboxComponent:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.001),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0.0052087815, -2.5273972, 3.0982885), Vector3(0.6294835, -2.347908, -2.6492054)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../HitboxComponent/CollisionShape3D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.001),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(-0.066930026, 1.0720763, 0.07474634), Vector3(0.34245262, 1.3701007, -0.47196373)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../HitboxComponent:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0.41296396, 0.7130661, -0.070200615)]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../HitboxComponent:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../HitboxComponent:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -2001,15 +1977,15 @@ _data = {
 radius = 0.16
 height = 1.2
 
-[node name="TestEnemy" type="CharacterBody3D" unique_id=952052820 node_paths=PackedStringArray("model", "components")]
+[node name="KnightEnemy" type="CharacterBody3D" unique_id=952052820 node_paths=PackedStringArray("model", "components")]
 collision_layer = 4
 collision_mask = 7
-script = ExtResource("1_xmkit")
-dissolveMaterial = ExtResource("3_ad4r6")
-outlineMaterial = ExtResource("3_otf45")
+script = ExtResource("1_f0emv")
+dissolveMaterial = ExtResource("2_eoxw3")
+outlineMaterial = ExtResource("3_ldkjf")
 model = NodePath("Knight_with_less_armor_Finished_Rig_Animation_SWORD/Knight/Skeleton3D")
 velocityInfo = SubResource("Resource_nl8p5")
-components = [NodePath("VelocityComponent"), NodePath("HealthComponent"), NodePath("HurtboxComponent"), NodePath("AIDetectionComponent"), NodePath("HitboxComponent"), NodePath("SubViewport/HealthBar"), NodePath("TestEnemyStateMachine"), NodePath("BehaviorTree"), NodePath("Knight_with_less_armor_Finished_Rig_Animation_SWORD/AnimationPlayer")]
+components = [NodePath("VelocityComponent"), NodePath("TestEnemyStateMachine"), NodePath("HealthComponent"), NodePath("KnightBehaviorTree"), NodePath("HurtboxComponent"), NodePath("SubViewport/HealthBar"), NodePath("AIDetectionComponent"), NodePath("HitboxComponent"), NodePath("Knight_with_less_armor_Finished_Rig_Animation_SWORD/AnimationPlayer")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1951671070]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -2021,26 +1997,26 @@ target_desired_distance = 0.5
 path_height_offset = 0.25
 
 [node name="VelocityComponent" type="Node" parent="." unique_id=1302938011]
-script = ExtResource("2_k4hf1")
+script = ExtResource("5_dmn5o")
 metadata/_custom_type_script = "uid://2b3a880do5ag"
 
 [node name="TestEnemyStateMachine" type="Node" parent="." unique_id=1819301161]
-script = ExtResource("12_kstis")
+script = ExtResource("6_b7bmt")
 metadata/_custom_type_script = "uid://bvmpjaulofawh"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1400482761]
-script = ExtResource("2_l1sbr")
+script = ExtResource("7_a62om")
 metadata/_custom_type_script = "uid://cmb0oydjb0jfo"
 
-[node name="BehaviorTree" type="Node" parent="." unique_id=1182068400 node_paths=PackedStringArray("navAgent")]
-script = ExtResource("17_v554o")
+[node name="KnightBehaviorTree" type="Node" parent="." unique_id=2042494912 node_paths=PackedStringArray("navAgent")]
+script = ExtResource("8_14mgn")
 navAgent = NodePath("../NavigationAgent3D")
 metadata/_custom_type_script = "uid://wnjheg6xmkdy"
 
 [node name="HurtboxComponent" type="Area3D" parent="." unique_id=1301362105]
 collision_layer = 128
 collision_mask = 0
-script = ExtResource("3_l1sbr")
+script = ExtResource("9_tffsp")
 metadata/_custom_type_script = "uid://t8p3r0lninay"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent" unique_id=1049210021]
@@ -2049,7 +2025,7 @@ shape = SubResource("CapsuleShape3D_bfp77")
 
 [node name="AIDetectionComponent" type="Node3D" parent="." unique_id=1688496113]
 visible = false
-script = ExtResource("17_da4by")
+script = ExtResource("10_6ryf0")
 metadata/_custom_type_script = "uid://bh1wcy7x4xxqk"
 
 [node name="Vision" type="Area3D" parent="AIDetectionComponent" unique_id=288155143]
@@ -2072,7 +2048,7 @@ debug_color = Color(0.19589242, 0.5166347, 1, 0.41960785)
 disable_3d = true
 transparent_bg = true
 
-[node name="HealthBar" parent="SubViewport" unique_id=1342211278 instance=ExtResource("19_nl8p5")]
+[node name="HealthBar" parent="SubViewport" unique_id=1342211278 instance=ExtResource("11_xydvu")]
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1454135990]
 transform = Transform3D(0.38817945, 0, 0, 0, 0.7000002, 0, 0, 0, 0.32380867, 0, 2.3872952, 0)
@@ -2367,12 +2343,12 @@ skeleton = NodePath("..")
 libraries/ = SubResource("AnimationLibrary_phchr")
 
 [node name="HitboxComponent" type="Area3D" parent="." unique_id=1875458621]
-transform = Transform3D(0.9223856, -0.14172359, -0.3593299, 0.30373856, 0.8408267, 0.44805437, 0.23863426, -0.52242154, 0.81861395, 0.41296396, 0.7130661, -0.070200615)
+transform = Transform3D(0.92238516, -0.14172359, -0.3593299, 0.30373845, 0.8408267, 0.44805437, 0.23863415, -0.52242154, 0.81861395, 0.41296396, 0.7130661, -0.070200615)
 collision_layer = 64
 collision_mask = 32
-script = ExtResource("3_p5iym")
+script = ExtResource("18_yr604")
 metadata/_custom_type_script = "uid://lc0clvytiu8r"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent" unique_id=1782961685]
-transform = Transform3D(0.8163412, 0.03837768, -0.57629335, 0.043289997, -0.9990488, -0.0052087572, -0.57594526, -0.020695614, -0.8172261, -0.066930026, 1.0720763, 0.07474634)
+transform = Transform3D(1, 0, 0, 0, 0.9999995, 0, 0, 0, 0.9999998, 0, 0.6, 0)
 shape = SubResource("CapsuleShape3D_o8bm0")
