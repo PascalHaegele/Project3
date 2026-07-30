@@ -64,7 +64,7 @@ public partial class MageEnemy : Enemy, IHitable {
     velocityComponent.Move(this);
 
     // Update procedural animations
-    UpdateProceduralAnimations(delta);
+    // UpdateProceduralAnimations(delta);
   }
 
   private void UpdateProceduralAnimations(double delta) {

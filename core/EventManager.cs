@@ -109,7 +109,7 @@ public partial class EventManager : Node {
   private void MapChange() {
     // Reset upgrade benches for the new level/run
     UpgradeBench.ResetAllBenches();
-    
+
     // Reset all individual bench instances in the new map
     foreach (Node child in currentMap.GetChildren()) {
       if (child is UpgradeBench bench) {

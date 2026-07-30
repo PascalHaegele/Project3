@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://ci31eubnodj4i" path="res://core/PortalArea.cs" id="10_wd2vj"]
 [ext_resource type="PackedScene" uid="uid://b2f87vnuu8frk" path="res://objects/altar/altar.tscn" id="14_ks570"]
 [ext_resource type="PackedScene" uid="uid://cn8nhwdvhamst" path="res://objects/portal/portal.tscn" id="15_ad6p3"]
-[ext_resource type="Script" uid="uid://bbqb6u8gahdth" path="res://tools/PageDebugTool.cs" id="17"]
+[ext_resource type="Script" uid="uid://bbqb6u8gahdth" path="res://core/tools/PageDebugTool.cs" id="17"]
 [ext_resource type="CompressedTexture2DArray" uid="uid://c20yn5tfpeeb2" path="res://maps/sun.png" id="17_7wt56"]
 [ext_resource type="PackedScene" uid="uid://dbh2jd0bcvgk2" path="res://objects/assets/lantern/lantern.tscn" id="18_6emo8"]
 [ext_resource type="PackedScene" uid="uid://pdlvbtcehfu8" path="res://objects/assets/scourge/scourge.tscn" id="19_tiop4"]
@@ -314,7 +314,7 @@ enemyInfo = SubResource("Resource_6emo8")
 velocityInfo = SubResource("Resource_tiop4")
 
 [node name="Chest" parent="." unique_id=1750432848 instance=ExtResource("5_cabd0")]
-transform = Transform3D(0.2525325, 0, 0.96758854, 0, 1, 0, -0.96758854, 0, 0.2525325, 4.5567584, -2.3841858e-07, 0.13444328)
+transform = Transform3D(0.999979, 0, 0.006502703, 0, 1, 0, -0.006502703, 0, 0.999979, 4.5567584, -2.3841858e-07, 0.13444328)
 
 [node name="Chest2" parent="." unique_id=1378517736 instance=ExtResource("5_cabd0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4432416, 0.03575319, 0.13444328)

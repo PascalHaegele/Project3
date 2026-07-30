@@ -2367,12 +2367,12 @@ skeleton = NodePath("..")
 libraries/ = SubResource("AnimationLibrary_phchr")
 
 [node name="HitboxComponent" type="Area3D" parent="." unique_id=1875458621]
-transform = Transform3D(0.92238563, -0.14172359, -0.3593299, 0.3037386, 0.8408267, 0.44805437, 0.23863426, -0.52242154, 0.81861395, 0.41296396, 0.7130661, -0.070200615)
+transform = Transform3D(0.9223856, -0.14172359, -0.3593299, 0.30373856, 0.8408267, 0.44805437, 0.23863426, -0.52242154, 0.81861395, 0.41296396, 0.7130661, -0.070200615)
 collision_layer = 64
 collision_mask = 32
 script = ExtResource("3_p5iym")
 metadata/_custom_type_script = "uid://lc0clvytiu8r"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent" unique_id=1782961685]
-transform = Transform3D(0.8163412, 0.03837768, -0.57629335, 0.043289997, -0.9990489, -0.0052087572, -0.57594526, -0.020695614, -0.8172262, -0.066930026, 1.0720763, 0.07474634)
+transform = Transform3D(0.8163412, 0.03837768, -0.57629335, 0.043289997, -0.9990488, -0.0052087572, -0.57594526, -0.020695614, -0.8172261, -0.066930026, 1.0720763, 0.07474634)
 shape = SubResource("CapsuleShape3D_o8bm0")

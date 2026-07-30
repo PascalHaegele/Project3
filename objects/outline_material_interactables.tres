@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://df1uratn00fhl"]
+
+[ext_resource type="Shader" uid="uid://cgb6bnciw6bua" path="res://actors/enemies/outline.gdshader" id="1_jgi3g"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_jgi3g")
+shader_parameter/weight = 0.02000000095
+shader_parameter/color = Color(0.7771957, 0.7771957, 0.7771957, 1)
+shader_parameter/intensity = 4.0

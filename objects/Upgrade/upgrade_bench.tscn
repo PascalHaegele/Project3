@@ -1,8 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dh47hjsp40r1t"]
 
-[ext_resource type="Script" path="res://objects/Upgrade/UpgradeBench.cs" id="1_bench"]
-[ext_resource type="Script" path="res://components/InteractionComponent.cs" id="2_interact"]
-[ext_resource type="PackedScene" path="res://objects/Upgrade/Bench.glb" id="3_glb"]
+[ext_resource type="Script" uid="uid://bodq6mvvxutew" path="res://objects/Upgrade/UpgradeBench.cs" id="1_bench"]
+[ext_resource type="Script" uid="uid://2pt8ci63eny8" path="res://components/InteractionComponent.cs" id="2_interact"]
+[ext_resource type="PackedScene" uid="uid://doe7dspnuy1vq" path="res://objects/Upgrade/Bench.glb" id="3_glb"]
+[ext_resource type="Material" uid="uid://df1uratn00fhl" path="res://objects/outline_material_interactables.tres" id="4_b07b0"]
+[ext_resource type="PackedScene" uid="uid://ccf1audq7rsld" path="res://ui/interactable_indicator.tscn" id="5_ufrmy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bench"]
 size = Vector3(0.8, 0.5, 0.6)
@@ -10,23 +12,40 @@ size = Vector3(0.8, 0.5, 0.6)
 [sub_resource type="SphereShape3D" id="SphereShape3D_interact"]
 radius = 2.0
 
-[node name="UpgradeBench" type="StaticBody3D"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_6y4t0"]
+viewport_path = NodePath("InteractionComponent/SubViewport")
+
+[node name="UpgradeBench" type="StaticBody3D" unique_id=593974112]
 collision_mask = 0
 script = ExtResource("1_bench")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=864431602]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("BoxShape3D_bench")
 
-[node name="Model" parent="." instance=ExtResource("3_glb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="Model" parent="." unique_id=87361962 instance=ExtResource("3_glb")]
 
-[node name="InteractionComponent" type="Area3D" parent="."]
+[node name="InteractionComponent" type="Area3D" parent="." unique_id=1575279464 node_paths=PackedStringArray("ownerModel")]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("2_interact")
+outlineMaterial = ExtResource("4_b07b0")
+ownerModel = NodePath("../Model")
 metadata/_custom_type_script = "uid://2pt8ci63eny8"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionComponent"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionComponent" unique_id=1754439401]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0.65, 0)
 shape = SubResource("SphereShape3D_interact")
+
+[node name="SubViewport" type="SubViewport" parent="InteractionComponent" unique_id=2090474861]
+disable_3d = true
+transparent_bg = true
+
+[node name="InteractableIndicator" parent="InteractionComponent/SubViewport" unique_id=1366279527 instance=ExtResource("5_ufrmy")]
+
+[node name="InteractableIndicator" type="Sprite3D" parent="InteractionComponent" unique_id=1770792285]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8449662, 0)
+billboard = 1
+double_sided = false
+no_depth_test = true
+texture = SubResource("ViewportTexture_6y4t0")
