@@ -89,7 +89,7 @@ public abstract partial class Enemy : Actor {
     velocityComponent.ClearDashBoost();
     SetPhysicsProcess(false);
 
-    if (this is TestEnemy) {
+    if (this is KnightEnemy) {
       animationPlayer.Play("Knight_idle");
     }
 

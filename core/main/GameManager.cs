@@ -91,7 +91,13 @@ public partial class GameManager : Node {
 
   private void LoadNewMap(StringName path) {
     Node3D oldMap = currentMap;
-    Node3D map = ResourceLoader.Load<PackedScene>(path).Instantiate<Node3D>();
+    PackedScene? packed = ResourceLoader.Load<PackedScene>(path);
+    if(packed == null) {
+      GD.PrintErr($"Failed to load map: {path}");
+      return;
+    }
+
+    Node3D map = packed.Instantiate<Node3D>();
     currentMap = eventManager.CurrentMap = map;
     GetNode<Node3D>("World/Maps").AddChild(map);
 
@@ -101,10 +107,13 @@ public partial class GameManager : Node {
       eventManager.SetPlayer(player);
     }
 
-    Marker3D playerSpawn = map.GetNode<Marker3D>("PlayerSpawn");
-
-    player.GlobalPosition = playerSpawn.GlobalPosition;
-    player.GlobalRotation = playerSpawn.GlobalRotation;
+    Marker3D? playerSpawn = map.GetNodeOrNull<Marker3D>("PlayerSpawn");
+    if(playerSpawn != null && player != null) {
+      player.GlobalPosition = playerSpawn.GlobalPosition;
+      player.GlobalRotation = playerSpawn.GlobalRotation;
+    } else {
+      GD.PrintErr("PlayerSpawn not found on map or player is null");
+    }
 
     oldMap?.QueueFree();
   }

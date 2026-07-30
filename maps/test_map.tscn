@@ -166,21 +166,21 @@ background_mode = 2
 sky = SubResource("Sky_pbr4s")
 ambient_light_sky_contribution = 0.01
 
-[sub_resource type="Resource" id="Resource_8dvw1"]
+[sub_resource type="Resource" id="Resource_ad6p3"]
 resource_local_to_scene = true
 script = ExtResource("3_pbr4s")
 patrolPath = PackedVector3Array(-8, 0, -17, 6.77744, 0, -16.653843, 15.346003, 0, -4.8959856, 0.55296326, 0, -5.0219855, -14.483469, 0, -2.364942, -16.650803, 0, -12.929461)
 leashPoint = Vector3(0, 0, -14.593309)
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_kr8g4"]
+[sub_resource type="Resource" id="Resource_qnwwd"]
 resource_local_to_scene = true
 script = ExtResource("2_6b7mj")
 walkSpeed = 3.0
 sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
-[sub_resource type="Resource" id="Resource_prpsj"]
+[sub_resource type="Resource" id="Resource_7wt56"]
 resource_local_to_scene = true
 script = ExtResource("3_pbr4s")
 leashLength = 30.0
@@ -188,7 +188,7 @@ minAttackRange = 8.0
 maxAttackRange = 15.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_6k8ls"]
+[sub_resource type="Resource" id="Resource_6emo8"]
 resource_local_to_scene = true
 script = ExtResource("2_6b7mj")
 walkSpeed = 2.5
@@ -297,13 +297,13 @@ shadow_enabled = true
 
 [node name="KnightEnemy" parent="." unique_id=952052820 instance=ExtResource("17_6emo8")]
 transform = Transform3D(-0.07536416, 0, -0.9971561, 0, 1, 0, 0.9971561, 0, -0.07536416, -10.455633, -1.9073486e-06, -15.960244)
-enemyInfo = SubResource("Resource_8dvw1")
-velocityInfo = SubResource("Resource_kr8g4")
+enemyInfo = SubResource("Resource_ad6p3")
+velocityInfo = SubResource("Resource_qnwwd")
 
 [node name="MageEnemy" parent="." unique_id=1902247724 instance=ExtResource("3_mage")]
 transform = Transform3D(-0.020375142, 0, 0.9997924, 0, 1, 0, -0.9997924, 0, -0.020375142, 1.8428822, 0.21478271, -8.425738)
-enemyInfo = SubResource("Resource_prpsj")
-velocityInfo = SubResource("Resource_6k8ls")
+enemyInfo = SubResource("Resource_7wt56")
+velocityInfo = SubResource("Resource_6emo8")
 
 [node name="Chest" parent="." unique_id=1750432848 instance=ExtResource("5_cabd0")]
 transform = Transform3D(0.999979, 0, 0.006502703, 0, 1, 0, -0.006502703, 0, 0.999979, 4.5567584, -2.3841858e-07, 0.13444328)

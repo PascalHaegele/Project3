@@ -367,7 +367,7 @@ public partial class Player : Actor, IHitable {
     healthComponent.TakeDamage(info.damage);
     insanityComponent.AddInsanity(10.0f);
 
-    if (info.shooter is TestEnemy) {
+    if (info.shooter is KnightEnemy) {
       if (!string.IsNullOrEmpty(impactSoundEvent)) {
         FmodServerWrapper.PlayOneShotAttached(impactSoundEvent, this);
       }

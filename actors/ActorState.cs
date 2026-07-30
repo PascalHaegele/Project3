@@ -75,8 +75,8 @@ public partial class ActorStateAttack : ActorState {
     GD.Print("=== ATTACK STATE GESTARTET ===");
     animationPlayer?.Play("Knight_Attack");
 
-    if (actor is TestEnemy testEnemy && !string.IsNullOrEmpty(testEnemy.attackSoundEvent)) {
-      var eventInstance = FmodServerWrapper.CreateEventInstance(testEnemy.attackSoundEvent);
+    if (actor is KnightEnemy knightEnemy && !string.IsNullOrEmpty(knightEnemy.attackSoundEvent)) {
+      var eventInstance = FmodServerWrapper.CreateEventInstance(knightEnemy.attackSoundEvent);
       if (eventInstance != null) {
         actor.AddChild(eventInstance);
         eventInstance.SetNodeAttributes(actor);

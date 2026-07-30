@@ -9,11 +9,12 @@ public partial class KnightEnemyStateMachine : TransitionStateMachine {
   }
 
   protected override void SetupStates() {
-    AddState("idle", new ActorStateIdle(actor, this));
-    AddState("walk", new ActorStateWalk(actor, this));
-    AddState("sprint", new ActorStateSprint(actor, this));
-    AddState("fall", new ActorStateFall(actor, this));
-    AddState("land", new ActorStateLand(actor, this));
+    AddState("idle", new ActorStateIdle(enemy, this));
+    AddState("walk", new ActorStateWalk(enemy, this));
+    AddState("sprint", new ActorStateSprint(enemy, this));
+    AddState("fall", new ActorStateFall(enemy, this));
+    AddState("land", new ActorStateLand(enemy, this));
+    AddState("attack", new ActorStateAttack(enemy,this));
   }
 
   protected override void SetupTransitions() {
@@ -46,7 +47,7 @@ public partial class KnightEnemyStateMachine : TransitionStateMachine {
     AddTransition("sprint", "walk", () => !input.sprint);
     AddTransition("sprint", "attack", () => input.attack);
 
-    AddTransition("fall", "land", actor.IsOnFloor);
+    AddTransition("fall", "land", enemy.IsOnFloor);
 
     // --- Von LAND ---
     AddTransition("land", "idle", () => input.direction == Vector2.Zero);
