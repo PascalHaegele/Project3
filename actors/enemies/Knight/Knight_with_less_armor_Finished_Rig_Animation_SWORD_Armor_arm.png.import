@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ot1yx2h6rtnc"
-path.s3tc="res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_arm.png-b6517e63ebbe3b4a99492bfd8f7f5ffe.s3tc.ctex"
+path.s3tc="res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_arm.png-56054056fbd3cc536f3d44c4bc48f6f0.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_arm.png"
-dest_files=["res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_arm.png-b6517e63ebbe3b4a99492bfd8f7f5ffe.s3tc.ctex"]
+source_file="res://actors/enemies/Knight/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_arm.png"
+dest_files=["res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD_Armor_arm.png-56054056fbd3cc536f3d44c4bc48f6f0.s3tc.ctex"]
 
 [params]
 

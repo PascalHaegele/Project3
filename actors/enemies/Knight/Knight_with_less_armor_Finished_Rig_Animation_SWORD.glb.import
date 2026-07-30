@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://b685jkcwudidt"
-path="res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD.glb-c55ff4f97274387f281413947db27a6c.scn"
+path="res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD.glb-e8b84e2ae5f360dd39f8d7e049fb0b8a.scn"
 
 [deps]
 
-source_file="res://actors/enemies/Mage/Knight_with_less_armor_Finished_Rig_Animation_SWORD.glb"
-dest_files=["res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD.glb-c55ff4f97274387f281413947db27a6c.scn"]
+source_file="res://actors/enemies/Knight/Knight_with_less_armor_Finished_Rig_Animation_SWORD.glb"
+dest_files=["res://.godot/imported/Knight_with_less_armor_Finished_Rig_Animation_SWORD.glb-e8b84e2ae5f360dd39f8d7e049fb0b8a.scn"]
 
 [params]
 

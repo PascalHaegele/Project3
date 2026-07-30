@@ -1,10 +1,10 @@
 using Godot;
 
 [GlobalClass]
-public partial class TestEnemyStateMachine : TransitionStateMachine {
-  private Enemy actor;
+public partial class KnightEnemyStateMachine : TransitionStateMachine {
+  private Enemy enemy;
   public override void _Ready() {
-    actor = GetParent<Enemy>();
+    enemy = GetParent<Enemy>();
     base._Ready();
   }
 
@@ -14,14 +14,13 @@ public partial class TestEnemyStateMachine : TransitionStateMachine {
     AddState("sprint", new ActorStateSprint(actor, this));
     AddState("fall", new ActorStateFall(actor, this));
     AddState("land", new ActorStateLand(actor, this));
-    AddState("attack", new ActorStateAttack(actor,this));
   }
 
   protected override void SetupTransitions() {
     // --- Globale Transitions ---
     AddGlobalTransition(
       "fall",
-      () => !actor.IsOnFloor() && actor.Velocity.Y < 0.0f
+      () => !enemy.IsOnFloor() && enemy.Velocity.Y < 0.0f
     );
 
     // --- Von IDLE ---
@@ -47,7 +46,6 @@ public partial class TestEnemyStateMachine : TransitionStateMachine {
     AddTransition("sprint", "walk", () => !input.sprint);
     AddTransition("sprint", "attack", () => input.attack);
 
-    // --- Von FALL ---
     AddTransition("fall", "land", actor.IsOnFloor);
 
     // --- Von LAND ---

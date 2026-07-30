@@ -1,9 +1,8 @@
 using Godot;
-using System.Collections.Generic;
 
-public partial class TestEnemy : Enemy, IHitable {
-  private BehaviorTree behaviorTree;
-  private TestEnemyStateMachine stateMachine;
+public partial class KnightEnemy : Enemy, IHitable {
+  private KnightBehaviorTree behaviorTree;
+  private KnightEnemyStateMachine stateMachine;
   private AIDetectionComponent detectionComponent;
 
   private HitboxComponent hitboxComponent;
@@ -14,12 +13,11 @@ public partial class TestEnemy : Enemy, IHitable {
   public override void _Ready() {
     base._Ready();
 
-    behaviorTree = GetComponent<BehaviorTree>();
-    stateMachine = GetComponent<TestEnemyStateMachine>();
+    behaviorTree = GetComponent<KnightBehaviorTree>();
+    stateMachine = GetComponent<KnightEnemyStateMachine>();
     detectionComponent = GetComponent<AIDetectionComponent>();
 
     healthComponent.HealthChanged += OnHealthChanged;
-    // healthComponent.Died += OnDeath;
 
     hitboxComponent = GetComponent<HitboxComponent>();
     hitboxComponent.actor = this;

@@ -1,7 +1,7 @@
 using Godot;
 
 [GlobalClass]
-public partial class BehaviorTree : Node {
+public partial class KnightBehaviorTree : Node {
   protected AIInfo aiInfo;
   protected Enemy enemy;
 
@@ -197,9 +197,10 @@ public partial class BehaviorTree : Node {
 
     input.direction = new(direction.X, direction.Z);
 
-    Vector3 lookTarget = enemy.GlobalPosition + direction;
-    if (!lookTarget.IsEqualApprox(enemy.GlobalPosition)) {
-      enemy.LookAt(lookTarget);
+    Vector3 lookAtPosition = position + direction;
+
+    if(position.DistanceSquaredTo(lookAtPosition) > 0.1) {
+      enemy.LookAtFromPosition(position, lookAtPosition);
     }
   }
 }
