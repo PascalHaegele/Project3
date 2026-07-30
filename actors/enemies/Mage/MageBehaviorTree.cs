@@ -183,8 +183,10 @@ public partial class MageBehaviorTree : Node {
     input.direction = new(direction.X, direction.Z);
 
     if(lookAtTarget) {
-      if(!position.IsEqualApprox(enemy.GlobalPosition + direction)) {
-        enemy.LookAt(enemy.GlobalPosition + direction);
+      Vector3 lookAtPosition = position + direction;
+
+      if(position.DistanceSquaredTo(lookAtPosition) > 0.1) {
+        enemy.LookAtFromPosition(position, lookAtPosition);
       }
     }
   }

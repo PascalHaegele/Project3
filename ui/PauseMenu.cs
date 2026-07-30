@@ -2,6 +2,8 @@ using Godot;
 
 public partial class PauseMenu : Control {
   private PanelContainer settingsPanel;
+  private PanelContainer guidePanel;
+
   private Slider mouseSenseSlider;
   private Label mouseSenseDisplay;
 
@@ -14,8 +16,12 @@ public partial class PauseMenu : Control {
     settingsPanel = GetNode<PanelContainer>("SettingsPanel");
     settingsPanel.Hide();
 
+    guidePanel = GetNode<PanelContainer>("GuidePanel");
+    guidePanel.Hide();
+
     GetNode<Button>("%Resume").Pressed += EmitSignalResume;
     GetNode<Button>("%Settings").Pressed += () => settingsPanel.Show();
+    GetNode<Button>("%Guide").Pressed += () => guidePanel.Show();
     GetNode<Button>("%QuitToMenu").Pressed += EmitSignalQuitToMenu;
     GetNode<Button>("%QuitGame").Pressed += () => GetTree().Quit();
 
@@ -29,6 +35,8 @@ public partial class PauseMenu : Control {
       EmitSignalChangeMouseSense((float)mouseSenseSlider.Value);
       settingsPanel.Hide();
     };
+
+    GetNode<Button>("%CloseGuide").Pressed += () => guidePanel.Hide();
   }
 
   public void SetMouseSense(float value) {

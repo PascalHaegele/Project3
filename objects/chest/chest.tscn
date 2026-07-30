@@ -2,7 +2,9 @@
 
 [ext_resource type="Script" uid="uid://c7fmydcy4tvts" path="res://objects/chest/Chest.cs" id="1_f2ppc"]
 [ext_resource type="Script" uid="uid://2pt8ci63eny8" path="res://components/InteractionComponent.cs" id="1_q5muc"]
+[ext_resource type="Material" uid="uid://df1uratn00fhl" path="res://objects/outline_material_interactables.tres" id="2_5hgct"]
 [ext_resource type="PackedScene" uid="uid://ds2lv6gpvwsv7" path="res://objects/chest/Chest.glb" id="3_chest_glb"]
+[ext_resource type="PackedScene" uid="uid://ccf1audq7rsld" path="res://ui/interactable_indicator.tscn" id="5_0vgg6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v4a0d"]
 size = Vector3(0.35, 0.3, 0.25)
@@ -10,9 +12,13 @@ size = Vector3(0.35, 0.3, 0.25)
 [sub_resource type="SphereShape3D" id="SphereShape3D_7n6tf"]
 radius = 2.0
 
-[node name="Chest" type="StaticBody3D" unique_id=1750432848]
+[sub_resource type="ViewportTexture" id="ViewportTexture_bfp77"]
+viewport_path = NodePath("InteractionComponent/SubViewport")
+
+[node name="Chest" type="StaticBody3D" unique_id=1750432848 node_paths=PackedStringArray("model")]
 collision_mask = 0
 script = ExtResource("1_f2ppc")
+model = NodePath("Model")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2123959842]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
@@ -24,12 +30,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4426546, 0, 0)
 [node name="LootSpawn" type="Marker3D" parent="." unique_id=1234567890]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 1, 0)
 
-[node name="InteractionComponent" type="Area3D" parent="." unique_id=2074660880]
+[node name="InteractionComponent" type="Area3D" parent="." unique_id=2074660880 node_paths=PackedStringArray("ownerModel")]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_q5muc")
+outlineMaterial = ExtResource("2_5hgct")
+ownerModel = NodePath("../Model")
 metadata/_custom_type_script = "uid://2pt8ci63eny8"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionComponent" unique_id=607868856]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0.65, 0)
 shape = SubResource("SphereShape3D_7n6tf")
+
+[node name="SubViewport" type="SubViewport" parent="InteractionComponent" unique_id=1747854020]
+disable_3d = true
+transparent_bg = true
+
+[node name="InteractableIndicator" parent="InteractionComponent/SubViewport" unique_id=1366279527 instance=ExtResource("5_0vgg6")]
+
+[node name="InteractableIndicator" type="Sprite3D" parent="InteractionComponent" unique_id=344605980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3663604, 0)
+billboard = 1
+double_sided = false
+no_depth_test = true
+texture = SubResource("ViewportTexture_bfp77")

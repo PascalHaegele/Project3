@@ -14,24 +14,20 @@ public partial class Chest : StaticBody3D, IInteractable {
 
   private PackedScene potionPickup =
     GD.Load<PackedScene>("res://objects/items/potion/potion_pickup.tscn");
-
   private PackedScene pagePickup =
     GD.Load<PackedScene>("res://objects/items/page/page_pickup.tscn");
-
   private PackedScene rAmmoPickup =
     GD.Load<PackedScene>("res://objects/items/r_ammo/r_ammo_pickup.tscn");
-
   private PackedScene sAmmoPickup =
     GD.Load<PackedScene>("res://objects/items/s_ammo/s_ammo_pickup.tscn");
-
   private PackedScene currency1Pickup =
     GD.Load<PackedScene>("res://objects/items/currency/currency_1_pickup.tscn");
-
   private PackedScene currency2Pickup =
     GD.Load<PackedScene>("res://objects/items/currency/currency_2_pickup.tscn");
-
   private PackedScene currency3Pickup =
     GD.Load<PackedScene>("res://objects/items/currency/currency_3_pickup.tscn");
+
+  [Export] private Node3D model;
 
   public override void _Ready() {
     // Load pickup scene directly to ensure it's available
@@ -40,7 +36,6 @@ public partial class Chest : StaticBody3D, IInteractable {
       GD.PrintErr("Chest: Could not load test_pickup.tscn!");
     }
     // Find AnimationPlayer from the imported GLB model
-    Node3D model = GetNode<Node3D>("Model");
     if(model.HasNode("AnimationPlayer")) {
       animationPlayer = model.GetNode<AnimationPlayer>("AnimationPlayer");
     } else {
@@ -73,24 +68,18 @@ public partial class Chest : StaticBody3D, IInteractable {
     if(opened) { return; }
 
     opened = true;
-    FmodServerWrapper.PlayOneShotAttached("event:/Chest_Interaction_Action", this);
-    if(animationPlayer == null) {
-    } else {
+    FmodServerWrapper
+      .PlayOneShotAttached("event:/Chest_Interaction_Action", this);
+
+    if(animationPlayer != null) {
       string animationName = FindBestAnimation();
+
       if(!string.IsNullOrEmpty(animationName)) {
         animationPlayer.Play(animationName);
       }
     }
 
-    if(pickup == null) {
-      GD.PrintErr("Chest: pickup is still null after _Ready load. Trying UID load...");
-      pickup = GD.Load<PackedScene>("uid://dudmf7poy21iv");
-      if(pickup == null) {
-        GD.PrintErr("Chest: Finally no pickup available.");
-        return;
-      }
-      GD.Print("Chest:Loaded pickup via UID.");
-    }
+    if(pickup == null) { return; }
 
     // Check insanity for currency drop BEFORE normal loot
     InsanityComponent insanity = player.GetComponent<InsanityComponent>();

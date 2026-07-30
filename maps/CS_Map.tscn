@@ -2,18 +2,14 @@
 
 [ext_resource type="Script" uid="uid://c8525x2xugj2n" path="res://core/SpawnArea.cs" id="1_jvdko"]
 [ext_resource type="Shader" uid="uid://cgo4kfkp8kqls" path="res://maps/sky.gdshader" id="1_ui8i3"]
-[ext_resource type="PackedScene" uid="uid://c55wv856x1kmu" path="res://actors/enemies/test_enemy.tscn" id="2_3soxs"]
 [ext_resource type="Texture2D" uid="uid://da7jcsvmhja8y" path="res://maps/skybox.png" id="2_a1t7w"]
 [ext_resource type="Texture2D" uid="uid://lv4ptmsm7xpg" path="res://maps/map_1/Map 1_final_M_Brick_albedo.png" id="4_8wn1s"]
 [ext_resource type="Texture2D" uid="uid://b7hxr7c124ggq" path="res://maps/Map_Material/Floor_Mud_albedo.png" id="4_22v2i"]
-[ext_resource type="Script" uid="uid://chl6vebbxv7ms" path="res://actors/VelocityInfo.cs" id="4_a1t7w"]
 [ext_resource type="CompressedTexture2DArray" uid="uid://c20yn5tfpeeb2" path="res://maps/sun.png" id="4_f7lwg"]
 [ext_resource type="Texture2D" uid="uid://dd1wu723k4dih" path="res://maps/Map_Material/Floor_4_normal.png" id="5_0nuwe"]
 [ext_resource type="Texture2D" uid="uid://kwnbrnpp1w4" path="res://maps/map_1/Map 1_final_M_Brick_normal.png" id="5_8wn1s"]
 [ext_resource type="Texture2D" uid="uid://d8r6by1qffnm" path="res://maps/Map_Material/Floor_Mud_normal.png" id="5_22v2i"]
-[ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="7_a1t7w"]
 [ext_resource type="Texture2D" uid="uid://brqaum1mit0q3" path="res://maps/map_1/Map 1_final_M_Brick_orm.png" id="8_nlsgs"]
-[ext_resource type="Resource" uid="uid://dj5esj56ptnvn" path="res://enemy_info_spawn_01.tres" id="8_x1dlt"]
 [ext_resource type="Texture2D" uid="uid://7h0ithbtqi6q" path="res://maps/Map_Material/Floor_4_albedo.png" id="9_nlsgs"]
 [ext_resource type="PackedScene" uid="uid://dlkpyc3c3onqq" path="res://objects/assets/wall/wall.tscn" id="9_y0dr2"]
 [ext_resource type="PackedScene" uid="uid://cu21q0dre0non" path="res://objects/assets/shelf/shelf.tscn" id="10_3fp30"]
@@ -23,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://bhjqup4fbd0ew" path="res://objects/assets/crate/crate_group.tscn" id="11_kltpo"]
 [ext_resource type="PackedScene" uid="uid://cn8nhwdvhamst" path="res://objects/portal/portal.tscn" id="12_k8dp5"]
 [ext_resource type="PackedScene" uid="uid://b2f87vnuu8frk" path="res://objects/altar/altar.tscn" id="13_oxeun"]
+[ext_resource type="PackedScene" uid="uid://doqs2ffqa72ta" path="res://actors/enemies/Knight/knight_enemy.tscn" id="14_nlsgs"]
 [ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="15_24hbc"]
 [ext_resource type="Script" uid="uid://rxe51n18487c" path="res://core/TrapArea.cs" id="16_ck1tj"]
 [ext_resource type="PackedScene" uid="uid://dgu1dmh0xqo3v" path="res://objects/traps/cleaver_trap.tscn" id="17_jdm1q"]
@@ -124,10 +121,18 @@ normal_enabled = true
 normal_texture = ExtResource("5_0nuwe")
 uv1_triplanar = true
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_bfp77"]
+[sub_resource type="Resource" id="Resource_ad6p3"]
+script = ExtResource("15_24hbc")
+leashPoint = Vector3(202.789, -9.005641e-14, 11.050104)
+metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ui8i3"]
 radius = 2.6650364
+
+[sub_resource type="Resource" id="Resource_qnwwd"]
+script = ExtResource("15_24hbc")
+leashPoint = Vector3(259.4424, 2.827221, 48.288475)
+metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_bfp77"]
 radius = 2.5708997
@@ -182,7 +187,6 @@ albedo_texture = ExtResource("33_4vjw4")
 normal_enabled = true
 normal_texture = ExtResource("34_xji4g")
 uv1_triplanar = true
-
 [node name="Main" type="Node3D" unique_id=7192887]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1193041950]
@@ -1108,11 +1112,6 @@ transform = Transform3D(0.9999883, -9.677077e-16, 0.0074272156, 5.2349977e-16, 1
 size = Vector3(19.522896, 4.2871704, 1.1013184)
 material = SubResource("ORMMaterial3D_o0ahx")
 
-[node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=2016545012]
-mesh = SubResource("ImmediateMesh_bfp77")
-script = ExtResource("7_a1t7w")
-metadata/_custom_type_script = "uid://cq4ddchn0vss"
-
 [node name="PlayerSpawn" type="Marker3D" parent="." unique_id=1497851202]
 transform = Transform3D(-0.9983377, 0, -0.05763531, 0, 1, 0, 0.05763531, 0, -0.9983377, 245.9327, 2.3502445, -13.683335)
 
@@ -1124,8 +1123,8 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("1_jvdko")
-enemy = ExtResource("2_3soxs")
-enemyInfo = ExtResource("8_x1dlt")
+enemy = ExtResource("14_nlsgs")
+enemyInfo = SubResource("Resource_ad6p3")
 metadata/_custom_type_script = "uid://c8525x2xugj2n"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea" unique_id=1434659579]
@@ -1141,14 +1140,11 @@ transform = Transform3D(-0.62799466, 0, 0.7782177, 0, 1, 0, -0.7782177, 0, -0.62
 [node name="Spawn3" type="Marker3D" parent="SpawnAreas/SpawnArea" unique_id=879166801]
 transform = Transform3D(-0.62799466, 0, 0.7782177, 0, 1, 0, -0.7782177, 0, -0.62799466, 2.804947, 3.011866, 2.3909378)
 
-[node name="Chest" parent="SpawnAreas/SpawnArea" unique_id=1750432848 instance=ExtResource("10_oxeun")]
-transform = Transform3D(0.8218369, -7.912033e-17, -0.56972283, 3.649689e-16, 1, -2.5300776e-16, 0.56972283, 2.5300774e-16, 0.8218369, 56.386017, 2.3510907, 26.75059)
-
 [node name="SpawnArea2" type="Area3D" parent="SpawnAreas" unique_id=882140401]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 259.4424, 2.827221, 48.288475)
 script = ExtResource("1_jvdko")
-enemy = ExtResource("2_3soxs")
-enemyInfo = ExtResource("10_5qq3c")
+enemy = ExtResource("14_nlsgs")
+enemyInfo = SubResource("Resource_qnwwd")
 metadata/_custom_type_script = "uid://c8525x2xugj2n"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea2" unique_id=327006367]
@@ -1177,7 +1173,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85562134, 3.0234776, 3.4365
 [node name="Altar2" parent="Altars" unique_id=286822846 instance=ExtResource("13_oxeun")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 169.79832, -6.0413146, -12.601194)
 effect = 4
-enemy = ExtResource("2_3soxs")
+enemy = ExtResource("14_nlsgs")
 enemyInfo = SubResource("Resource_ld23n")
 
 [node name="Marker3D" type="Marker3D" parent="Altars/Altar2" unique_id=692916169]
@@ -1249,6 +1245,9 @@ transform = Transform3D(-0.8681663, 9.207242e-24, 0.49627325, 4.440892e-16, 1, 3
 
 [node name="Chest17" parent="Chests" unique_id=824278481 instance=ExtResource("10_oxeun")]
 transform = Transform3D(0.9984554, -2.7806757e-23, -0.055557966, 4.440892e-16, 1, 3.020427e-23, 0.055557966, 5.072325e-24, 0.9984554, 147.1385, -3.0778325, -82.50767)
+
+[node name="Chest18" parent="Chests" unique_id=1750432848 instance=ExtResource("10_oxeun")]
+transform = Transform3D(0.8218369, -7.912033e-17, -0.56972283, 0, 1, 0, 0.56972283, 2.5300774e-16, 0.8218369, 259.17502, 2.3510907, 37.800694)
 
 [node name="Portals" type="Node" parent="." unique_id=1549579445]
 
