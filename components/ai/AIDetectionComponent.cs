@@ -69,7 +69,6 @@ public partial class AIDetectionComponent : Node3D {
   }
 
   private void OnBodyEnteredVision(Node3D body) {
-    GD.Print("Player entered vision");
     playerInVision = true;
   }
 
@@ -79,7 +78,6 @@ public partial class AIDetectionComponent : Node3D {
   }
 
   private void OnBodyEnteredHearing(Node3D body) {
-    GD.Print("Player entered hearing");
     playerInHearing = true;
   }
 

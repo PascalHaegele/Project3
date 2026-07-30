@@ -15,9 +15,12 @@ public partial class EventManager : Node {
   private EnemyDifficultyInfo enemyDifficultyInfo = new();
 
   [ExportGroup("Enemy Difficulty")]
-  [Export] private float difficultyMultiplierNormal = 1.0f;
-  [Export] private float difficultyMultiplierMedium = 1.2f;
-  [Export] private float difficultyMultiplierHigh = 1.5f;
+  [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
+  private float difficultyMultiplierNormal = 0.0f;
+  [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
+  private float difficultyMultiplierMedium = 0.2f;
+  [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
+  private float difficultyMultiplierHigh = 0.4f;
 
   [ExportGroup("Portal Activation Chances")]
   [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
@@ -35,6 +38,14 @@ public partial class EventManager : Node {
   [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
   private float trapChanceHigh = 1.0f;
 
+  [ExportGroup("Loop")]
+  [Export(PropertyHint.Range, "0.0, 1.0, 0.01")]
+  private float loopDifficultyMultiplier = 0.05f;
+
+  private float enemySpeedMultiplier = 1.0f;
+  private float enemyHealthMultiplier = 1.0f;
+  private float enemyDamageMultiplier = 1.0f;
+
   private readonly List<PortalArea> portalAreas = new();
   private readonly List<Portal> portals = new();
 
@@ -45,6 +56,8 @@ public partial class EventManager : Node {
   private FmodEvent ambientEvent;
 
   private Node3D currentMap;
+
+  private int loopCount;
 
   public Node3D CurrentMap {
     set {
@@ -137,6 +150,15 @@ public partial class EventManager : Node {
         if(child is PortalArea portalArea) { portalAreas.Add(portalArea); }
         if(child is Portal portal) {
           portals.Add(portal);
+
+          if(portal.isLoop) {
+            portal.Loop += () => {
+              loopCount++;
+              GD.Print($"Loop: {loopCount}");
+              UpdateDifficulty();
+            };
+          }
+
           if(portal.isLevelChange) {
             portal.ChangeLevel += EmitSignalPortalLevelChange;
           }
@@ -181,11 +203,6 @@ public partial class EventManager : Node {
     deathTimer.OneShot = true;
     deathTimer.Start(4.0);
     deathTimer.Timeout += () => {
-      // player.Reset();
-      // player.GlobalPosition = playerSpawn.GlobalPosition;
-      // player.GlobalRotation = playerSpawn.GlobalRotation;
-      // player.ProcessMode = ProcessModeEnum.Inherit;
-
       currentMap.QueueFree();
       EmitSignalRestart();
     };
@@ -230,10 +247,9 @@ public partial class EventManager : Node {
           area.activationChance = trapChanceNormal;
         }
 
-        enemyDifficultyInfo.damageMultiplier = difficultyMultiplierNormal;
-        enemyDifficultyInfo.healthMultiplier = difficultyMultiplierNormal;
-        enemyDifficultyInfo.speedMultiplier = difficultyMultiplierNormal;
-        _ = enemyDifficultyInfo.EmitSignal(Resource.SignalName.Changed);
+        enemySpeedMultiplier = 1.0f + difficultyMultiplierNormal;
+        enemyHealthMultiplier = 1.0f + difficultyMultiplierNormal;
+        enemyDamageMultiplier = 1.0f + difficultyMultiplierNormal;
 
         break;
       case InsanityLevel.Medium:
@@ -244,10 +260,9 @@ public partial class EventManager : Node {
           area.activationChance = trapChanceMedium;
         }
 
-        enemyDifficultyInfo.damageMultiplier = difficultyMultiplierMedium;
-        enemyDifficultyInfo.healthMultiplier = difficultyMultiplierMedium;
-        enemyDifficultyInfo.speedMultiplier = difficultyMultiplierMedium;
-        _ = enemyDifficultyInfo.EmitSignal(Resource.SignalName.Changed);
+        enemyDamageMultiplier = 1.0f + difficultyMultiplierMedium;
+        enemyHealthMultiplier = 1.0f + difficultyMultiplierMedium;
+        enemySpeedMultiplier = 1.0f + difficultyMultiplierMedium;
 
         break;
       case InsanityLevel.High:
@@ -258,14 +273,32 @@ public partial class EventManager : Node {
           area.activationChance = trapChanceHigh;
         }
 
-        enemyDifficultyInfo.damageMultiplier = difficultyMultiplierHigh;
-        enemyDifficultyInfo.healthMultiplier = difficultyMultiplierHigh;
-        enemyDifficultyInfo.speedMultiplier = difficultyMultiplierHigh;
-        _ = enemyDifficultyInfo.EmitSignal(Resource.SignalName.Changed);
+        enemyDamageMultiplier = 1.0f + difficultyMultiplierHigh;
+        enemyHealthMultiplier = 1.0f + difficultyMultiplierHigh;
+        enemySpeedMultiplier = 1.0f + difficultyMultiplierHigh;
 
         break;
       default: break;
     }
+
+    UpdateDifficulty();
+  }
+
+  private void UpdateDifficulty() {
+    enemyDifficultyInfo.speedMultiplier =
+      enemyDamageMultiplier + loopCount * loopDifficultyMultiplier;
+    enemyDifficultyInfo.healthMultiplier =
+      enemyDamageMultiplier + loopCount * loopDifficultyMultiplier;
+    enemyDifficultyInfo.damageMultiplier =
+      enemyDamageMultiplier + loopCount * loopDifficultyMultiplier;
+
+    _ = enemyDifficultyInfo.EmitSignal(Resource.SignalName.Changed);
+
+    GD.Print(
+      $"Enemy Speed Multiplier: {enemyDifficultyInfo.speedMultiplier}, " +
+      $"Enemy Health Multiplier: {enemyDifficultyInfo.healthMultiplier}, "+
+      $"Enemy Damage Multiplier: {enemyDifficultyInfo.damageMultiplier}"
+    );
   }
 
   // Stoppt den Sound beim Szenenwechsel sauber und gibt den RAM frei

@@ -44,8 +44,6 @@ public partial class InventoryComponent : Node {
     items[(int)type] =
       Mathf.Min(maxItems[(int)type], items[(int)type] + amount);
 
-    GD.Print($"Item Added: {type}");
-
     EmitSignalInventoryChanged();
   }
 
@@ -55,7 +53,6 @@ public partial class InventoryComponent : Node {
   /// </summary>
   public void AddPageItem(PageData page) {
     collectedPages.Add(page);
-    GD.Print($"Page Collected: {page.PageName}");
     EmitSignalInventoryChanged();
   }
 
@@ -66,7 +63,6 @@ public partial class InventoryComponent : Node {
   public bool RemovePageItem(PageData page) {
     bool removed = collectedPages.Remove(page);
     if(removed) {
-      GD.Print($"Page Removed from inventory: {page.PageName}");
       EmitSignalInventoryChanged();
     }
     return removed;
@@ -93,7 +89,6 @@ public partial class InventoryComponent : Node {
 
     if(removed) {
       items[(int)type]--;
-      GD.Print($"Item Removed: {type}");
       EmitSignalInventoryChanged();
     }
 
@@ -107,7 +102,6 @@ public partial class InventoryComponent : Node {
     if(removed) {
       amountRemoved = items[(int)type] < amount ? items[(int)type] : amount;
       items[(int)type] -= amountRemoved;
-      GD.Print($"Item Removed: {type}, amount: {amountRemoved}");
       EmitSignalInventoryChanged();
     }
 
@@ -118,7 +112,6 @@ public partial class InventoryComponent : Node {
   public void ClearInventory() {
     for(int i = 0; i < items.Length; i++) { items[i] = 0; }
     collectedPages.Clear();
-    GD.Print("Inventory Cleared");
     EmitSignalInventoryChanged();
   }
 

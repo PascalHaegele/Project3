@@ -62,8 +62,6 @@ public partial class InventoryUI : Control {
 
     if (weaponSocketContainer != null) return;
 
-    GD.Print("InventoryUI: Building Gothic UI");
-
     AnchorRight = 1.0f;
     AnchorBottom = 1.0f;
 

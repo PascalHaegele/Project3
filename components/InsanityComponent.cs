@@ -48,8 +48,6 @@ public partial class InsanityComponent : Node {
   public void AddInsanity(float amount) {
     CurrentInsanity = Mathf.Clamp(CurrentInsanity + amount, 0f, MaxInsanity);
 
-    GD.Print($"Insanity: {CurrentInsanity}");
-
     EmitSignalInsanityChanged(CurrentInsanity);
 
     UpdateInsanityLevel();
@@ -57,8 +55,6 @@ public partial class InsanityComponent : Node {
 
   public void RemoveInsanity(float amount) {
     CurrentInsanity = Mathf.Clamp(CurrentInsanity - amount, 0f, MaxInsanity);
-
-    GD.Print($"Insanity: {CurrentInsanity}");
 
     EmitSignalInsanityChanged(CurrentInsanity);
 
@@ -88,11 +84,6 @@ public partial class InsanityComponent : Node {
       InsanityLevel.High;
 
     if(previousLevel != CurrentLevel) {
-      GD.Print("");
-      GD.Print("==================================");
-      GD.Print($"INSANITY LEVEL -> {CurrentLevel}");
-      GD.Print("==================================");
-
       EmitSignalInsanityLevelChanged(CurrentLevel);
 
       // PrintCurrentEffects();

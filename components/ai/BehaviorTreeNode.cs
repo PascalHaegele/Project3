@@ -29,8 +29,6 @@ public abstract class CompositeNode : BehaviorTreeNode {
 }
 
 public class SelectorNode : CompositeNode {
-  private int currentIndex;
-
   public override NodeState Evaluate() {
     foreach(BehaviorTreeNode child in children) {
       switch(child.Evaluate()) {
@@ -51,8 +49,6 @@ public class SelectorNode : CompositeNode {
 }
 
 public class SequenceNode : CompositeNode {
-  private int currentIndex;
-
   public override NodeState Evaluate() {
     foreach(BehaviorTreeNode child in children) {
       switch(child.Evaluate()) {

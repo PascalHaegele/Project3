@@ -571,10 +571,6 @@ public partial class Player : Actor, IHitable {
       if(fmodServer != null) {
         _ = fmodServer.Call("play_one_shot", eventPath);
 
-        GD.Print($">>> FMOD 2D Sound abgespielt: {soundType} ({eventPath})");
-
-      } else {
-        GD.PrintErr(">>> FMOD Fehler: FmodServer-Singleton nicht gefunden!");
       }
     }
   }

@@ -126,16 +126,6 @@ public partial class MageEnemy : Enemy, IHitable {
     );
   }
 
-  private void OnChargeStarted() {
-    GD.Print("Mage: Charge started!");
-  }
-
-  private void OnProjectileFired() {
-    GD.Print("Mage: Projectile fired!");
-    weapon.Shoot();
-    weapon.Reload();
-  }
-
   public void RecieveHit(HitInfo hitInfo) {
     healthComponent.TakeDamage(hitInfo.damage);
 

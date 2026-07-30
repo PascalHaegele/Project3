@@ -33,14 +33,11 @@ public partial class LootComponent : Node {
   /// </summary>
   public string GenerateLoot() {
     if(PossiblePages.Count == 0) {
-      GD.Print("LootComponent: No loot available.");
       return "";
     }
 
     int index = rng.RandiRange(0, PossiblePages.Count - 1);
     string item = PossiblePages[index];
-
-    GD.Print($"Loot Generated: {item}");
 
     _ = EmitSignal(SignalName.LootGenerated, item);
 
@@ -59,14 +56,11 @@ public partial class LootComponent : Node {
       if(allPages.Length > 0) {
         PageData page = PageDatabase.GetPage(allPages[randomIndex]);
         if(page != null) {
-          GD.Print($"Page Drop Generated: {page.PageName}");
           _ = EmitSignal(SignalName.PageDropped, page);
           return page;
         }
       }
     }
-
-    GD.Print("LootComponent: No pages available for drop.");
     return null;
   }
 
@@ -92,7 +86,6 @@ public partial class LootComponent : Node {
   public void AddPossiblePage(string pageName) {
     if(!PossiblePages.Contains(pageName)) {
       PossiblePages.Add(pageName);
-      GD.Print($"Added possible loot: {pageName}");
     }
   }
 
@@ -100,7 +93,6 @@ public partial class LootComponent : Node {
   public void RemovePossiblePage(string pageName) {
     if(PossiblePages.Contains(pageName)) {
       _ = PossiblePages.Remove(pageName);
-      GD.Print($"Removed possible loot: {pageName}");
     }
   }
 

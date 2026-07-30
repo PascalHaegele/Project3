@@ -125,7 +125,6 @@ public partial class Weapon : Node3D {
         if(socket != null && socket.HasModifier("FrenziedSoul")) {
           if(empowerNextShot) {
             p.isEmpowered = true;
-            GD.Print($">>> DEBUG FrenziedSoul: EMPOWERED SHOT after reload!");
             empowerNextShot = false;
           }
         }
@@ -220,10 +219,6 @@ public partial class Weapon : Node3D {
         float reloadBonus = socket.GetModifier("ReloadSpeed");
         reloadDuration -= reloadBonus;
         reloadDuration = Mathf.Max(0.1f, reloadDuration);
-        GD.Print(
-          $"ReloadSpeed modifier: -{reloadBonus}, " +
-          $"new duration: {reloadDuration:F2}"
-        );
       }
 
       // Apply Upgrade Bench reload speed bonus
@@ -281,66 +276,6 @@ public partial class Weapon : Node3D {
     if(muzzleRoot != null) {
       foreach(Node child in muzzleRoot.GetChildren()) {
         if(child is GpuParticles3D particle) { particle.Emitting = true; }
-      }
-    }
-  }
-
-  private string GetEventPathForType(WeaponSoundType soundType) {
-    bool isRevolver = (info != null && info.type == WeaponType.Revolver);
-
-    switch(soundType) {
-      case WeaponSoundType.Shot:
-        return
-          isRevolver ?
-          "event:/GunShot_Timeline" :
-          "event:/ShotgunShot_Timeline";
-
-      case WeaponSoundType.Reload:
-        return
-          isRevolver ?
-          "event:/Gun_Reload_Timeline" :
-          "event:/Shotgun_Reload_Timeline";
-
-      case WeaponSoundType.EmptyShot:
-        return "event:/EmptyWeapon_Action";
-
-      default:
-        return string.Empty;
-    }
-  }
-
-  public void PlayWeaponSound(WeaponSoundType soundType) {
-    string eventPath = GetEventPathForType(soundType);
-
-    if(!string.IsNullOrEmpty(eventPath)) {
-      var fmodServer = Engine.GetSingleton("FmodServer");
-      if(fmodServer != null) {
-
-        if(soundType == WeaponSoundType.Reload) {
-          var eventInstance =
-            fmodServer
-              .Call("create_event_instance", eventPath)
-              .As<GodotObject>();
-
-          if(eventInstance != null && IsInstanceValid(eventInstance)) {
-            _ = eventInstance
-              .Call("set_parameter_by_name", "ShotCount", (float)CurrentAmmo);
-
-            _ = eventInstance.Call("start");
-            _ = eventInstance.Call("release");
-
-            GD.Print(
-              $">>> FMOD Reload gespielt ({info.type} | Ammo: {CurrentAmmo})"
-            );
-          }
-        } else {
-
-          _ = fmodServer.Call("play_one_shot", eventPath);
-          GD.Print($">>> FMOD 2D-Sound gespielt: {soundType} ({eventPath})");
-        }
-
-      } else {
-        GD.PrintErr(">>> FMOD Fehler: FmodServer-Singleton nicht gefunden!");
       }
     }
   }

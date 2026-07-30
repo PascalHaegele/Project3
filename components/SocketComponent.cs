@@ -44,7 +44,6 @@ public partial class SocketComponent : Node {
     AddModifier(newEffect, newValue);
 
     socketedPages[slotId] = page;
-    GD.Print($"Socketed {page.PageName} into {socketCategory} slot. Effect: {newEffect} = {newValue}");
     _ = EmitSignal(SignalName.SocketChanged);
   }
 
@@ -67,7 +66,6 @@ public partial class SocketComponent : Node {
       (string effect, float value) = page.GetEffectForCategory(socketCategory);
       RemoveModifier(effect, value);
       socketedPages.Remove(slotIdToRemove);
-      GD.Print($"Removed {page.PageName} from {socketCategory} slot.");
       _ = EmitSignal(SignalName.SocketChanged);
     }
   }
@@ -98,8 +96,6 @@ public partial class SocketComponent : Node {
         _modifiers.Add(effectName, value);
       }
     }
-
-    GD.Print($"Socket Modifier Added: {effectName} = {GetModifier(effectName)}");
   }
 
   // Internal: remove a modifier from the active pool
@@ -116,8 +112,6 @@ public partial class SocketComponent : Node {
         }
       }
     }
-
-    GD.Print($"Socket Modifier Removed: {effectName}");
   }
 
   // Check if this effect requires special handling (not just a flat number)
@@ -205,7 +199,6 @@ public partial class SocketComponent : Node {
     } else {
       maxSlots[category] = 1;
     }
-    GD.Print($"[SocketComponent] Added socket slot to {category}. Total: {maxSlots[category]}");
     _ = EmitSignal(SignalName.SocketChanged);
   }
 
@@ -222,7 +215,6 @@ public partial class SocketComponent : Node {
   public void ClearAllSockets() {
     _modifiers.Clear();
     socketedPages.Clear();
-    GD.Print("All sockets cleared.");
     _ = EmitSignal(SignalName.SocketChanged);
   }
 

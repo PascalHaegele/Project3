@@ -3,13 +3,17 @@ using Godot;
 public partial class Portal : StaticBody3D {
   [Export] public Marker3D destination;
 
+  [Export] public bool isLoop;
   [Export] public bool isLevelChange;
-  [Export] private StringName? newLevelPath;
+
+  [Export(PropertyHint.File, "*.tscn")] private string? newLevelPath;
 
   private Area3D portalArea;
 
   [Signal]
   public delegate void ChangeLevelEventHandler(StringName newLevelPath);
+
+  [Signal] public delegate void LoopEventHandler();
 
   public override void _Ready() {
     CollisionLayer = (uint)CollisionLayerEnum.WORLD;
@@ -27,7 +31,12 @@ public partial class Portal : StaticBody3D {
         .MaterialOverride as ShaderMaterial;
     material.ResourceLocalToScene = true;
 
-    if(isLevelChange) {
+    if(isLoop) {
+      isLevelChange = true;
+      newLevelPath ??= "res://maps/CS_Map.tscn";
+
+      material.SetShaderParameter("color", new Vector3(0.8f, 0.1f, 0.7f));
+    } else if(isLevelChange) {
       material.SetShaderParameter("color", new Vector3(0.2f, 1.0f, 0.2f));
     } else {
       destination ??= GetNode<Marker3D>("../PortalPosition");
@@ -37,6 +46,7 @@ public partial class Portal : StaticBody3D {
 
   private void OnBodyEntered(Node3D body) {
     if(isLevelChange && newLevelPath != null) {
+      if(isLoop) { EmitSignalLoop(); }
       EmitSignalChangeLevel(newLevelPath);
       return;
     }

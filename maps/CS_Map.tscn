@@ -1116,7 +1116,7 @@ destination = NodePath("../../PlayerSpawn")
 [node name="Portal3" parent="Portals" unique_id=785998237 instance=ExtResource("12_k8dp5")]
 transform = Transform3D(-0.9999682, 0, -0.007975581, 0, 1, 0, 0.007975581, 0, -0.9999682, 86.95053, 2.3850918, 44.44347)
 isLevelChange = true
-newLevelPath = &"res://maps/map_1/level_1.tscn"
+newLevelPath = "uid://bc32niwsqbkfs"
 
 [node name="Marker3D" type="Marker3D" parent="Portals/Portal3" unique_id=492238885]
 transform = Transform3D(0.9999683, 0, -0.0079754945, 0, 1, 0, 0.0079754945, 0, 0.9999683, -0.19451141, 0, 24.3874)

@@ -31,10 +31,6 @@ public partial class Chest : StaticBody3D, IInteractable {
 
   public override void _Ready() {
     // Load pickup scene directly to ensure it's available
-    pickup = GD.Load<PackedScene>("res://objects/items/test_pickup.tscn");
-    if(pickup == null) {
-      GD.PrintErr("Chest: Could not load test_pickup.tscn!");
-    }
     // Find AnimationPlayer from the imported GLB model
     if(model.HasNode("AnimationPlayer")) {
       animationPlayer = model.GetNode<AnimationPlayer>("AnimationPlayer");
@@ -94,45 +90,34 @@ public partial class Chest : StaticBody3D, IInteractable {
 
     // Spawn pickup from LootSpawn marker above the chest
     Marker3D lootSpawn = GetNodeOrNull<Marker3D>("LootSpawn");
-    if(lootSpawn == null) {
-      GD.PrintErr("Chest: LootSpawn marker not found!");
-      return;
-    }
+    if(lootSpawn == null) { return; }
 
     Vector3 baseSpawnPos = lootSpawn.GlobalPosition;
     var rng = new RandomNumberGenerator();
     rng.Randomize();
 
-    GD.Print("Chest: Generating loot...");
-
     // --- GUARANTEED LOOT: 1 Ammo Pack (50/50 Revolver or Shotgun) ---
     string guaranteedAmmoType = rng.Randf() < 0.5f ? "Revolver" : "Shotgun";
     DropAmmo(guaranteedAmmoType, baseSpawnPos, rng);
-    GD.Print($"Chest dropped guaranteed ammo: {guaranteedAmmoType}");
 
     // --- RANDOM LOOT ---
 
     // 60% chance: Drop 1 Health Potion
     if (rng.Randf() < 0.6f) {
       DropItem(ItemType.POTION, null, baseSpawnPos, rng);
-      GD.Print("Chest dropped random loot: Health Potion");
     }
 
     // 45% chance: Drop 1 Page
     if (rng.Randf() < 0.45f) {
       PageData page = GeneratePageDrop();
       DropItem(ItemType.PAGE, page, baseSpawnPos, rng);
-      GD.Print("Chest dropped random loot: Page");
     }
 
     // 20% chance: Drop an extra Ammo Pack (random type)
     if (rng.Randf() < 0.2f) {
       string extraAmmoType = rng.Randf() < 0.5f ? "Revolver" : "Shotgun";
       DropAmmo(extraAmmoType, baseSpawnPos, rng);
-      GD.Print($"Chest dropped random loot: Extra Ammo Pack ({extraAmmoType})");
     }
-
-    GD.Print("Chest: Loot generation complete.");
   }
 
   private void DropCurrency(Player player, InsanityComponent insanity) {
@@ -173,7 +158,6 @@ public partial class Chest : StaticBody3D, IInteractable {
 
     // Show floating notification
     ShowNotification($"+1 {currencyName}");
-    GD.Print($"Chest dropped currency: {currencyName}");
   }
 
   private void ShowNotification(string message) {
@@ -257,7 +241,6 @@ public partial class Chest : StaticBody3D, IInteractable {
     );
     impulse = impulse.Rotated(Vector3.Up, GlobalRotation.Y);
     // impulse = GlobalBasis.Z * impulse;
-    GD.Print(impulse);
     return impulse;
   }
 

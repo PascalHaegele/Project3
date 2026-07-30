@@ -33,10 +33,8 @@ public partial class HealthComponent : Node {
       float bleedDmg = bleedDamagePerTick * bleedStacks;
       CurrentHealth = Mathf.Max(0.0f, CurrentHealth - bleedDmg);
       EmitSignalHealthChanged(CurrentHealth);
-      GD.Print($"{GetParent().Name}: Bleed tick -{bleedDmg} (stacks: {bleedStacks}) | Health: {CurrentHealth}/{GetEffectiveMaxHealth()}");
 
       if(CurrentHealth <= 0.0f) {
-        GD.Print($"{GetParent().Name} Died (Bleed)");
         EmitSignalDied();
       }
     }
@@ -59,7 +57,6 @@ public partial class HealthComponent : Node {
         // Value is percentage reduction (e.g. 5 = 5%)
         finalDamage = damage * (1.0f - reduction / 100.0f);
         if(!Mathf.IsEqualApprox(finalDamage, damage)) {
-          GD.Print($">>> DAMAGE REDUCED by {reduction}%: {damage} -> {finalDamage}");
         }
       }
     }
@@ -68,10 +65,8 @@ public partial class HealthComponent : Node {
 
     EmitSignalHealthChanged(CurrentHealth);
 
-    GD.Print($"Damage Taken: {finalDamage} | Health: {CurrentHealth}/{GetEffectiveMaxHealth()}");
 
     if(CurrentHealth <= 0.0f) {
-      GD.Print($"{GetParent().Name} Died");
       EmitSignalDied();
     }
   }
@@ -84,7 +79,6 @@ public partial class HealthComponent : Node {
 
     EmitSignalHealthChanged(CurrentHealth);
 
-    GD.Print($"Healed: {amount} | Health: {CurrentHealth}/{effectiveMax}");
   }
 
   /// <summary>
@@ -101,7 +95,6 @@ public partial class HealthComponent : Node {
       if(socket != null && socket.HasModifier("BloodRitual")) {
         float healAmount = socket.GetModifier("BloodRitual");
         Heal(healAmount);
-        GD.Print($">>> DEBUG BloodRitual: healed={healAmount} HP, current={CurrentHealth:F1}/{GetEffectiveMaxHealth():F1}");
       }
     }
   }
@@ -116,7 +109,6 @@ public partial class HealthComponent : Node {
     if(wasEmpty) {
       bleedTimer = bleedTickInterval; // Only reset when starting fresh
     }
-    GD.Print($"{GetParent().Name}: Bleed applied! Stacks: {bleedStacks}, DPS: {bleedDamagePerTick}");
   }
 
   public void ClearBleed() {

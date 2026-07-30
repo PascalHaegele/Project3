@@ -7,7 +7,7 @@ public abstract partial class ActorState : State {
   protected Actor actor;
   protected VelocityComponent velocityComponent;
   protected AnimationPlayer? animationPlayer;
- 
+
 
   public ActorState(Actor actor, StateMachine stateMachine) {
     this.actor = actor;
@@ -22,7 +22,6 @@ public abstract partial class ActorState : State {
       if(socket != null && socket.HasModifier("MovementSpeed")) {
         float bonusPercent = socket.GetModifier("MovementSpeed") / 100.0f;
         float effectiveSpeed = baseSpeed * (1.0f + bonusPercent);
-        GD.Print($">>> DEBUG MovementSpeed: base={baseSpeed:F2}, modifier={socket.GetModifier("MovementSpeed")}, result={effectiveSpeed:F2}");
         return effectiveSpeed;
       }
     }
@@ -35,7 +34,6 @@ public abstract partial class ActorState : State {
       if(socket != null && socket.HasModifier("DashDistance")) {
         float bonusPercent = socket.GetModifier("DashDistance") / 100.0f;
         float effectiveDistance = baseDistance * (1.0f + bonusPercent);
-        GD.Print($">>> DEBUG DashDistance: base={baseDistance:F2}, modifier={socket.GetModifier("DashDistance")}, result={effectiveDistance:F2}");
         return effectiveDistance;
       }
     }
@@ -175,13 +173,11 @@ public partial class ActorStateDash : ActorState {
       if(socket != null && socket.HasModifier("EchoStep")) {
         float echoDistance = socket.GetModifier("EchoStep") * 0.25f;
         actor.GlobalPosition += direction * echoDistance;
-        GD.Print($">>> DEBUG EchoStep: value={socket.GetModifier("EchoStep")}, added={echoDistance:F2} units during dash");
       }
     }
 
     velocityComponent.SetDashBoost(effectiveDashDistance * 0.4f);
     actor.velocityInfo.Speed = 1.0f;
-    GD.Print($">>> DEBUG Dash: distance={effectiveDashDistance:F2}, duration={actor.velocityInfo.dashDuration:F2}, cooldown={actor.velocityInfo.dashCooldown:F2}");
   }
 
   public override void PhysicsUpdate(double delta) {

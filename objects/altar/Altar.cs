@@ -40,7 +40,6 @@ public partial class Altar : StaticBody3D, IInteractable {
   }
 
   public void Interact(Player player) {
-    GD.Print($"Interaction with {Name}");
     EffectFunction f = functions[(int)effect];
     f(player);
   }
