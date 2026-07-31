@@ -117,17 +117,6 @@ refraction_texture = SubResource("NoiseTexture2D_gdp6c")
 refraction_texture_channel = 2
 uv1_triplanar = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8wn1s"]
-albedo_texture = ExtResource("4_8wn1s")
-normal_enabled = true
-normal_scale = 10.6
-normal_texture = ExtResource("5_8wn1s")
-uv1_triplanar = true
-
-[sub_resource type="BoxMesh" id="BoxMesh_8vqkf"]
-material = SubResource("StandardMaterial3D_8wn1s")
-size = Vector3(5.371338, 4.820801, 1)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gc3ev"]
 albedo_color = Color(0.982053, 0.9820307, 0.98529834, 1)
 albedo_texture = ExtResource("9_nlsgs")
@@ -144,6 +133,27 @@ radius = 2.200812
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o8bm0"]
 radius = 0.9033203
 height = 23.682
+
+[sub_resource type="Resource" id="Resource_0txe0"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_3r525"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_ejeic"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="Resource" id="Resource_ubllf"]
 resource_local_to_scene = true
@@ -166,99 +176,78 @@ walkSpeed = 2.5
 sprintSpeed = 3.5
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_litht"]
+height = 6.5
+
 [sub_resource type="Resource" id="Resource_3avth"]
 resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-walkSpeed = 2.5
-sprintSpeed = 3.5
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+script = ExtResource("15_24hbc")
+patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
+leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
+leashLength = 60.0
+maxAttackRange = 1.75
 
 [sub_resource type="Resource" id="Resource_r6y8c"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
-walkSpeed = 2.5
-sprintSpeed = 3.5
+walkSpeed = 3.0
+sprintSpeed = 6.0
 metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="Resource" id="Resource_fqf62"]
 resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-walkSpeed = 2.5
-sprintSpeed = 3.5
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_litht"]
-height = 6.5
+script = ExtResource("15_24hbc")
+patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
+leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
+leashLength = 60.0
+maxAttackRange = 1.75
 
 [sub_resource type="Resource" id="Resource_sxp5c"]
 resource_local_to_scene = true
-script = ExtResource("15_24hbc")
-patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
-leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
-leashLength = 60.0
-maxAttackRange = 1.75
+script = ExtResource("4_a1t7w")
+walkSpeed = 3.0
+sprintSpeed = 6.0
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="Resource" id="Resource_tbboo"]
 resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-walkSpeed = 3.0
-sprintSpeed = 6.0
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+script = ExtResource("15_24hbc")
+patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
+leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
+leashLength = 60.0
+maxAttackRange = 1.75
 
 [sub_resource type="Resource" id="Resource_vr04d"]
 resource_local_to_scene = true
-script = ExtResource("15_24hbc")
-patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
-leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
-leashLength = 60.0
-maxAttackRange = 1.75
+script = ExtResource("4_a1t7w")
+walkSpeed = 3.0
+sprintSpeed = 6.0
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="Resource" id="Resource_515bn"]
 resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-walkSpeed = 3.0
-sprintSpeed = 6.0
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+script = ExtResource("15_24hbc")
+patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
+leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
+leashLength = 60.0
+maxAttackRange = 1.75
 
 [sub_resource type="Resource" id="Resource_llcqm"]
 resource_local_to_scene = true
-script = ExtResource("15_24hbc")
-patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
-leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
-leashLength = 60.0
-maxAttackRange = 1.75
+script = ExtResource("4_a1t7w")
+walkSpeed = 3.0
+sprintSpeed = 6.0
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="Resource" id="Resource_h8ids"]
 resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-walkSpeed = 3.0
-sprintSpeed = 6.0
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+script = ExtResource("15_24hbc")
+patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
+leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
+leashLength = 60.0
+maxAttackRange = 1.75
 
 [sub_resource type="Resource" id="Resource_k7l0c"]
-resource_local_to_scene = true
-script = ExtResource("15_24hbc")
-patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
-leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
-leashLength = 60.0
-maxAttackRange = 1.75
-
-[sub_resource type="Resource" id="Resource_qkubs"]
-resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-walkSpeed = 3.0
-sprintSpeed = 6.0
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
-
-[sub_resource type="Resource" id="Resource_0ymgt"]
-resource_local_to_scene = true
-script = ExtResource("15_24hbc")
-patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
-leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
-leashLength = 60.0
-maxAttackRange = 1.75
-
-[sub_resource type="Resource" id="Resource_h1xqq"]
 resource_local_to_scene = true
 script = ExtResource("4_a1t7w")
 walkSpeed = 3.0
@@ -561,10 +550,6 @@ material = SubResource("ORMMaterial3D_o0ahx")
 transform = Transform3D(-0.6338117, -1.0700996e-16, -0.77351636, -8.3507507e-16, 1, 1.6930293e-16, 0.77351636, 4.1801738e-16, -0.6338117, 138.90283, 2.3784466, 206.2971)
 size = Vector3(17.932117, 6.3116455, 1.1013184)
 material = SubResource("ORMMaterial3D_o0ahx")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=428549650]
-transform = Transform3D(0.6575074, -3.5232552e-16, 0.753448, 1.5279212e-16, 1, 3.342814e-16, -0.753448, -1.0467158e-16, 0.6575074, 131.67184, 3.0758219, 214.77144)
-mesh = SubResource("BoxMesh_8vqkf")
 
 [node name="CSGBox3D47" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Room3/Room3_Wall" unique_id=1953735001]
 transform = Transform3D(-0.64324045, -3.6899037e-16, -0.76566887, -2.1982421e-16, 1, -2.9724684e-16, 0.76566887, -2.2888008e-17, -0.64324045, 55.964493, 2.40382, 104.07747)
@@ -1531,7 +1516,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.57518, 2.4544578, 47.66572
 transform = Transform3D(-0.02665852, 0, 0.9996446, 0, 1, 0, -0.9996446, 0, -0.02665852, 81.578575, 2.441574, 35.46433)
 
 [node name="Lantern9" parent="NavigationRegion3D/Assets" unique_id=537387355 instance=ExtResource("25_uhw3x")]
-transform = Transform3D(-0.99825764, 0, -0.059006035, 0, 1, 0, 0.059006035, 0, -0.99825764, 83.27364, 3.5275235, 33.36061)
+transform = Transform3D(-0.99825764, 0, -0.059006035, 0, 1, 0, 0.059006035, 0, -0.99825764, 86.86727, 3.5275235, 33.36061)
 
 [node name="Lantern10" parent="NavigationRegion3D/Assets" unique_id=2023701625 instance=ExtResource("25_uhw3x")]
 transform = Transform3D(-0.90854704, 0, -0.41778252, 0, 1, 0, 0.41778252, 0, -0.90854704, 151.95258, -0.24918485, -82.94443)
@@ -1724,32 +1709,32 @@ transform = Transform3D(-0.14322671, 0, 0.9896899, 0, 1, 0, -0.9896899, 0, -0.14
 [node name="MageEnemy" parent="SpawnAreas/Mages1" unique_id=900136881 instance=ExtResource("17_nlsgs")]
 transform = Transform3D(-0.9659258, 0, -0.25881913, 0, 1, 0, 0.25881913, 0, -0.9659258, 195.02995, 2.3929482, -105.533195)
 enemyInfo = ExtResource("24_1pow3")
-velocityInfo = SubResource("Resource_ubllf")
+velocityInfo = SubResource("Resource_0txe0")
 
 [node name="MageEnemy2" parent="SpawnAreas/Mages1" unique_id=888025677 instance=ExtResource("17_nlsgs")]
 transform = Transform3D(-0.732186, 0, -0.6811047, 0, 1, 0, 0.6811047, 0, -0.732186, 185.54712, 2.3929424, -103.47158)
 enemyInfo = ExtResource("24_1pow3")
-velocityInfo = SubResource("Resource_aetu6")
+velocityInfo = SubResource("Resource_3r525")
 
 [node name="MageEnemy3" parent="SpawnAreas/Mages1" unique_id=610724947 instance=ExtResource("17_nlsgs")]
 transform = Transform3D(-0.9998209, 0, 0.01892588, 0, 1, 0, -0.01892588, 0, -0.9998209, 189.44476, 2.3929424, -125.23087)
 enemyInfo = ExtResource("24_1pow3")
-velocityInfo = SubResource("Resource_ql0ap")
+velocityInfo = SubResource("Resource_ejeic")
 
 [node name="MageEnemy4" parent="SpawnAreas/Mages1" unique_id=549108306 instance=ExtResource("17_nlsgs")]
 transform = Transform3D(-0.7258123, 0, -0.6878928, 0, 1, 0, 0.6878928, 0, -0.7258123, 181.75668, 2.3929386, -123.81369)
 enemyInfo = ExtResource("24_1pow3")
-velocityInfo = SubResource("Resource_3avth")
+velocityInfo = SubResource("Resource_ubllf")
 
 [node name="MageEnemy5" parent="SpawnAreas/Mages1" unique_id=363217940 instance=ExtResource("17_nlsgs")]
 transform = Transform3D(-0.99827385, 0, 0.05873127, 0, 1, 0, -0.05873127, 0, -0.99827385, 184.25209, 2.3929424, -146.21611)
 enemyInfo = ExtResource("24_1pow3")
-velocityInfo = SubResource("Resource_r6y8c")
+velocityInfo = SubResource("Resource_aetu6")
 
 [node name="MageEnemy6" parent="SpawnAreas/Mages1" unique_id=1525396222 instance=ExtResource("17_nlsgs")]
 transform = Transform3D(-0.6153272, 0, -0.78827184, 0, 1, 0, 0.78827184, 0, -0.6153272, 176.63028, 2.3929405, -143.8764)
 enemyInfo = ExtResource("24_1pow3")
-velocityInfo = SubResource("Resource_fqf62")
+velocityInfo = SubResource("Resource_ql0ap")
 
 [node name="SpawnArea6" type="Area3D" parent="SpawnAreas" unique_id=1024416379]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 216.43643, 2.3929412, -115.1223)
@@ -1792,28 +1777,28 @@ transform = Transform3D(-0.98923296, 0, -0.14635016, 0, 1, 0, 0.14635016, 0, -0.
 
 [node name="KnightEnemy" parent="SpawnAreas/Knights1" unique_id=952052820 instance=ExtResource("2_3soxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 183.25406, 2.3929462, -180.57022)
-enemyInfo = SubResource("Resource_sxp5c")
-velocityInfo = SubResource("Resource_tbboo")
+enemyInfo = SubResource("Resource_3avth")
+velocityInfo = SubResource("Resource_r6y8c")
 
 [node name="KnightEnemy2" parent="SpawnAreas/Knights1" unique_id=720317329 instance=ExtResource("2_3soxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 161.16998, 2.3351707, -173.89027)
-enemyInfo = SubResource("Resource_vr04d")
-velocityInfo = SubResource("Resource_515bn")
+enemyInfo = SubResource("Resource_fqf62")
+velocityInfo = SubResource("Resource_sxp5c")
 
 [node name="KnightEnemy3" parent="SpawnAreas/Knights1" unique_id=511218587 instance=ExtResource("2_3soxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 138.98294, 2.335167, -170.6587)
-enemyInfo = SubResource("Resource_llcqm")
-velocityInfo = SubResource("Resource_h8ids")
+enemyInfo = SubResource("Resource_tbboo")
+velocityInfo = SubResource("Resource_vr04d")
 
 [node name="KnightEnemy4" parent="SpawnAreas/Knights1" unique_id=1609821692 instance=ExtResource("2_3soxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120.45909, 2.3351707, -166.49158)
-enemyInfo = SubResource("Resource_k7l0c")
-velocityInfo = SubResource("Resource_qkubs")
+enemyInfo = SubResource("Resource_515bn")
+velocityInfo = SubResource("Resource_llcqm")
 
 [node name="KnightEnemy5" parent="SpawnAreas/Knights1" unique_id=1054025088 instance=ExtResource("2_3soxs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.954346, 2.3530731, -171.35442)
-enemyInfo = SubResource("Resource_0ymgt")
-velocityInfo = SubResource("Resource_h1xqq")
+enemyInfo = SubResource("Resource_h8ids")
+velocityInfo = SubResource("Resource_k7l0c")
 
 [node name="SpawnArea8" type="Area3D" parent="SpawnAreas" unique_id=1693306455]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 83.91023, 2.3530712, -56.404167)
