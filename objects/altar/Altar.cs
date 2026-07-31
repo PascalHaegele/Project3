@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using FmodSharp;
 
 public partial class Altar : StaticBody3D, IInteractable {
   public enum AltarEffect {
@@ -42,6 +43,7 @@ public partial class Altar : StaticBody3D, IInteractable {
   public void Interact(Player player) {
     EffectFunction f = functions[(int)effect];
     f(player);
+    FmodServerWrapper.PlayOneShotAttached("event:/Altar_Action", this);
   }
 
   private void DamagePlayer(Player player) {

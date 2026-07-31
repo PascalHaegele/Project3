@@ -252,6 +252,18 @@ public partial class FmodEvent : Node
         FmodInstance.Call("set_reverb_level", index, level);
     }
 
+    public void SetLoopCount(int loopCount)
+    {
+        if (FmodInstance.HasMethod("set_loop_count"))
+        {
+            FmodInstance.Call("set_loop_count", loopCount);
+        }
+        else
+        {
+            GD.PushWarning("FmodEvent: set_loop_count is not available on this FMOD object. Ensure the event is authored with looping in FMOD Studio.");
+        }
+    }
+
     /// <summary>
     /// Start playback of the event.
     /// </summary>

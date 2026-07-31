@@ -361,10 +361,19 @@ public partial class Player : Actor, IHitable {
     activeWeapon.weaponAnim.SetGrounded(IsOnFloor(), Velocity.Y);
   }
 
+  [Export] private string impactSoundEvent = "event:/Knight_Attack_Impact_Action";
+
   public void RecieveHit(HitInfo info) {
     healthComponent.TakeDamage(info.damage);
     insanityComponent.AddInsanity(10.0f);
-     FmodServerWrapper.PlayOneShotAttached("event:/Damage_Taken_Timeline", this);
+
+    if (info.shooter is KnightEnemy) {
+      if (!string.IsNullOrEmpty(impactSoundEvent)) {
+        FmodServerWrapper.PlayOneShotAttached(impactSoundEvent, this);
+      }
+    }
+
+    FmodServerWrapper.PlayOneShotAttached("event:/Damage_Taken_Timeline", this);
   }
 
   public void Reset() {

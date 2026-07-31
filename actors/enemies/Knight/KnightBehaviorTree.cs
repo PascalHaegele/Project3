@@ -86,9 +86,10 @@ public partial class KnightBehaviorTree : Node {
   }
 
   private NodeState MoveToPlayer() {
-    navAgent.TargetPosition = aiInfo.soundPosition;
+    // Use the visual target position (last seen player position), not the sound position
+    navAgent.TargetPosition = aiInfo.targetPosition;
 
-    float distanceToTarget = enemy.GlobalPosition.DistanceTo(aiInfo.soundPosition);
+    float distanceToTarget = enemy.GlobalPosition.DistanceTo(aiInfo.targetPosition);
 
     if (distanceToTarget <= attackRange) {
         return NodeState.SUCCESS;
@@ -103,6 +104,8 @@ public partial class KnightBehaviorTree : Node {
   }
 
   private NodeState AttackPlayer() {
+    input.attack = true;
+    input.direction = Vector2.Zero;
     if (enemy.animationPlayer != null) {
         if (enemy.animationPlayer.CurrentAnimation == "Knight_Attack") {
           if (enemy.animationPlayer.IsPlaying()) {
@@ -178,7 +181,15 @@ public partial class KnightBehaviorTree : Node {
     Vector3 position = enemy.GlobalTransform.Origin;
     Vector3 nextPathPosition = navAgent.GetNextPathPosition();
 
-    Vector3 direction = position.DirectionTo(nextPathPosition).Normalized();
+    Vector3 direction = position.DirectionTo(nextPathPosition);
+    // If the next path position equals current position, direction will be zero.
+    // Avoid normalizing a zero vector and calling LookAt with identical origin/target.
+    if (direction.IsEqualApprox(Vector3.Zero)) {
+      input.direction = Vector2.Zero;
+      return;
+    }
+
+    direction = direction.Normalized();
     direction.Y = 0.0f;
 
     input.direction = new(direction.X, direction.Z);

@@ -147,7 +147,7 @@ public partial class Weapon : Node3D {
         if(aimCast.IsColliding()) {
           Vector3 collisionPoint = aimCast.GetCollisionPoint();
 
-          if(projectileCast.IsColliding()) {
+            if(projectileCast.IsColliding()) {
             float distance =
               projectileCast.GlobalPosition.DistanceTo(collisionPoint);
 
@@ -159,15 +159,20 @@ public partial class Weapon : Node3D {
             p.GlobalRotation = projectileSpawn.GlobalRotation;
 
             projectileSpawn.GlobalPosition = position;
-          } else {
+            } else {
             p.GlobalPosition = projectileSpawn.GlobalPosition;
-            p.LookAt(collisionPoint);
+            // Avoid calling LookAt when origin == target
+            if (!p.GlobalPosition.IsEqualApprox(collisionPoint)) {
+              p.LookAt(collisionPoint);
+            }
           }
         }
       } else if(actor is Enemy enemy) {
         Vector3 target = enemy.aiInfo.targetPosition;
         target.Y += 1.0f;
-        p.LookAt(target);
+        if (!p.GlobalPosition.IsEqualApprox(target)) {
+          p.LookAt(target);
+        }
       }
 
       float spread = info.projectileSpread;

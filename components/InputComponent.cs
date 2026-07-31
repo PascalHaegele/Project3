@@ -8,6 +8,7 @@ public partial class InputPackage : Resource {
   public bool sprint;
   public bool dash;
 
+  public bool attack;
   public bool shoot;
   public bool special;
 
