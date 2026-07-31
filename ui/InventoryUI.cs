@@ -1,4 +1,5 @@
 using Godot;
+using FmodSharp;
 using System.Collections.Generic;
 
 /// <summary>
@@ -630,6 +631,7 @@ public partial class InventoryUI : Control {
       string oldCategory = GetCurrentSocketCategory(selectedPageForSocket);
       if (oldCategory != null) {
         socketComponent.RemovePage(selectedPageForSocket, oldCategory);
+        PlaySocketTimeline(false); // Unequip
         // Don't add back to inventory - we're moving it directly
       } else {
         // Remove from inventory only if it wasn't socketed before
@@ -638,17 +640,33 @@ public partial class InventoryUI : Control {
 
       // Socket into the specific slot the player clicked
       socketComponent.SocketPage(selectedPageForSocket, category, slotIndex);
+      PlaySocketTimeline(true); // Equip
       selectedPageForSocket = null;
     } else {
       if (slot != null && slot.HasPage) {
         PageData page = slot.CurrentPage;
         socketComponent.RemovePage(page, category);
+        PlaySocketTimeline(false); // Unequip
         inventory.AddPageItem(page);
       }
     }
 
     RefreshUI();
   }
+
+private void PlaySocketTimeline(bool isEquip) {
+   
+    var socketEvent = FmodServerWrapper.CreateEventInstance("event:/UI_Pages_Sound_Timeline");
+    
+    if (socketEvent != null) {
+    
+        socketEvent.SetParameterByName("OnEquip", isEquip ? 1.0f : 0.0f);
+        
+ 
+        socketEvent.Start();
+        
+    }
+}
 
   private SocketSlot GetSlotByCategoryIndex(string category, int index) {
     List<SocketSlot> slots = category switch {
