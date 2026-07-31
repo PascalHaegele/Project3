@@ -2,6 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://cktw25uwbd8y5" path="res://Fonts/Caudex/Caudex-Bold.ttf" id="1_50142"]
 [ext_resource type="Script" uid="uid://40clsucagwly" path="res://ui/PauseMenu.cs" id="1_ejwgg"]
+[ext_resource type="FontFile" uid="uid://buwiewqjoyyso" path="res://Fonts/gothic_war/Gothic War.otf" id="3_fob5h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bfp77"]
 bg_color = Color(0, 0, 0, 1)
@@ -172,6 +173,15 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="FontVariation" id="FontVariation_kqthd"]
+base_font = ExtResource("3_fob5h")
+spacing_glyph = 5
+spacing_top = 3
+
+[sub_resource type="LabelSettings" id="LabelSettings_uh4nh"]
+font = SubResource("FontVariation_kqthd")
+font_size = 80
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b1mq0"]
 bg_color = Color(0.52, 0.41079995, 0.20799997, 1)
@@ -417,7 +427,6 @@ text = "Close
 "
 
 [node name="GuidePanel" type="PanelContainer" parent="." unique_id=81588254]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -459,116 +468,240 @@ horizontal_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GuidePanel/MarginContainer/Control/ScrollContainer" unique_id=1669591535]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=351326985]
+[node name="Title" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=351326985]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+size_flags_vertical = 6
+theme_override_fonts/font = ExtResource("3_fob5h")
+theme_override_font_sizes/font_size = 80
+text = "Controls for Keyboard"
+label_settings = SubResource("LabelSettings_uh4nh")
+horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=261514681]
+[node name="Description Insan Header" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=261514681]
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
 theme_override_font_sizes/font_size = 50
-text = "TEXT"
+text = "Insanity"
+vertical_alignment = 2
 
-[node name="Label3" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=996983748]
+[node name="Insanity" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=734289399]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "The current insanity level is indicated by the yellow
+vertical bar in the bottom-left in-game overlay. 
+The higher the player's insanity, the stronger 
+enemies become, and events like portals
+appear more frequently."
+vertical_alignment = 2
 
-[node name="Label4" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=869637104]
+[node name="Movement Header2" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=154220013]
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
 theme_override_font_sizes/font_size = 50
-text = "TEXT"
+text = "MOVEMENT"
+vertical_alignment = 2
 
-[node name="Label5" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1232498424]
+[node name="Walk Control" type="GridContainer" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1318216199]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+columns = 2
 
-[node name="Label6" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1520516925]
+[node name="WASD" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control" unique_id=996983748]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "WASD "
+vertical_alignment = 3
 
-[node name="Label7" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1984217878]
+[node name="WALK" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control" unique_id=869637104]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Walk"
+vertical_alignment = 3
 
-[node name="Label8" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1585058562]
+[node name="SHIFT" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control" unique_id=1232498424]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "SHIFT"
 
-[node name="Label9" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=9970607]
+[node name="SPRINT" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control" unique_id=1520516925]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Sprint"
 
-[node name="Label10" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=460111802]
+[node name="SPACE" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control" unique_id=1984217878]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "SPACE"
 
-[node name="Label11" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1813139923]
+[node name="JUMP" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control" unique_id=1585058562]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Jump"
 
-[node name="Label12" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1005531873]
+[node name="STRG_CTRL" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control" unique_id=460111802]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "STRG/CTRL"
 
-[node name="Label13" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1118880635]
+[node name="DASH" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control" unique_id=1813139923]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Dash forward"
 
-[node name="Label14" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1936661143]
+[node name="Combat Header" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=9970607]
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
 theme_override_font_sizes/font_size = 50
-text = "TEXT"
+text = "COMBAT"
+vertical_alignment = 2
 
-[node name="Label15" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=728517137]
+[node name="Walk Control3" type="GridContainer" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=913758833]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+columns = 2
 
-[node name="Label16" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1581923800]
+[node name="LEFT_CLICK" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control3" unique_id=1321114238]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Left click "
+vertical_alignment = 3
 
-[node name="Label17" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=531124409]
+[node name="SHOOT" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control3" unique_id=1455063188]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Shoot"
+vertical_alignment = 3
 
-[node name="Label18" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=637886076]
+[node name="R" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control3" unique_id=1929227304]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "R"
 
-[node name="Label19" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=410757199]
+[node name="RELOAD" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control3" unique_id=876434779]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Reload"
 
-[node name="Label20" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1737596114]
+[node name="1_2" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control3" unique_id=1492450004]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "NUM 1/2"
 
-[node name="Label21" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1042863002]
+[node name="WEAPON SWITCH" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control3" unique_id=605067772]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "TEXT"
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Weapon switch"
 
-[node name="Label22" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1814790436]
+[node name="MOUSE SCROLL" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control3" unique_id=1658043032]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Mouse scroll"
+
+[node name="SWITCH" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control3" unique_id=2095410737]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Weapon switch fast"
+
+[node name="Interact Header" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=1737596114]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
 theme_override_font_sizes/font_size = 50
-text = "TEXT"
+text = "INTERACT"
+vertical_alignment = 2
+
+[node name="Walk Control2" type="GridContainer" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer" unique_id=2101652655]
+layout_mode = 2
+columns = 2
+
+[node name="E" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control2" unique_id=248278855]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "E"
+vertical_alignment = 3
+
+[node name="INTERACT" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control2" unique_id=1958519549]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Walk"
+vertical_alignment = 3
+
+[node name="Q" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control2" unique_id=357326211]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Q"
+
+[node name="USE POTION" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control2" unique_id=1054481186]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Sprint"
+
+[node name="I" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control2" unique_id=667269696]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "I"
+
+[node name="OPEN PAGE MENU" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control2" unique_id=1506608373]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Jump"
+
+[node name="ESC" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control2" unique_id=1383273893]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "ESC"
+
+[node name="PAUSE MENU" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control2" unique_id=470148861]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Pause Menu"
+
+[node name="RIGHT MOUSE" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control2" unique_id=525641064]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Right Mouse Button"
+
+[node name="INSANITY BUFF" type="Label" parent="GuidePanel/MarginContainer/Control/ScrollContainer/VBoxContainer/Walk Control2" unique_id=1532389511]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_50142")
+theme_override_font_sizes/font_size = 35
+text = "Insanity Buff"
 
 [node name="CloseGuide" type="Button" parent="GuidePanel/MarginContainer/Control" unique_id=244107842]
 unique_name_in_owner = true
