@@ -10,7 +10,7 @@
 points = PackedVector3Array(-0.25, -0.5, -5, 0.25, -0.5, -5, -0.25, -0.5, 5, 0, 0.5, -5, 0.25, -0.5, 5, 0, 0.5, 5)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
-radius = 0.377
+radius = 0.64501953
 height = 10.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dw125"]
@@ -60,9 +60,12 @@ tracks/1/path = NodePath("AnimatableBody3D/HitboxComponent")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
+"args": [],
+"method": &"EnableCollisionShapes"
+}, {
 "args": [],
 "method": &"DisableCollisionShapes"
 }]
@@ -80,6 +83,7 @@ hitbox = NodePath("AnimatableBody3D/HitboxComponent")
 
 [node name="AnimatableBody3D" type="AnimatableBody3D" parent="." unique_id=1979286106]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+collision_mask = 0
 
 [node name="Cleaver2" parent="AnimatableBody3D" unique_id=129755903 instance=ExtResource("2_rhxct")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13766956, 0)
@@ -95,7 +99,7 @@ script = ExtResource("2_xuijj")
 metadata/_custom_type_script = "uid://lc0clvytiu8r"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D/HitboxComponent" unique_id=1123739040]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, -0.2282567, 0)
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, -0.27501822, 0)
 shape = SubResource("CapsuleShape3D_bfp77")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=801155328]

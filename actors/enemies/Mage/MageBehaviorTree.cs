@@ -93,6 +93,13 @@ public partial class MageBehaviorTree : Node {
   private NodeState MoveIntoRange() {
     if(enemy.TargetInRange) { return NodeState.SUCCESS; }
 
+    Vector3 lookAtPosition = aiInfo.targetPosition;
+    lookAtPosition.Y = enemy.GlobalPosition.Y;
+
+    if(enemy.GlobalPosition.DistanceSquaredTo(lookAtPosition) > 0.1f) {
+      enemy.LookAt(lookAtPosition);
+    }
+
     float distance = enemy.DistanceToTarget;
     if(distance < enemy.enemyInfo.minAttackRange) {
       Vector3 dir = (enemy.GlobalPosition - aiInfo.targetPosition).Normalized();
@@ -115,9 +122,15 @@ public partial class MageBehaviorTree : Node {
   }
 
   private NodeState AttackPlayer() {
-    // if(enemy.animationPlayer.IsPlaying()) { return NodeState.RUNNING; }
     enemy.animationPlayer.Play("shoot");
-    // input.shoot = true;
+
+    Vector3 lookAtPosition = aiInfo.targetPosition;
+    lookAtPosition.Y = enemy.GlobalPosition.Y;
+
+    if(enemy.GlobalPosition.DistanceSquaredTo(lookAtPosition) > 0.1f) {
+      enemy.LookAt(lookAtPosition);
+    }
+
     return NodeState.SUCCESS;
   }
 
@@ -130,7 +143,10 @@ public partial class MageBehaviorTree : Node {
   }
 
   private NodeState LookToSound() {
-    if(!aiInfo.soundPosition.IsEqualApprox(enemy.GlobalPosition)) {
+    Vector3 lookAtPosition = aiInfo.soundPosition;
+    lookAtPosition.Y = enemy.GlobalPosition.Y;
+
+    if(aiInfo.soundPosition.DistanceSquaredTo(aiInfo.soundPosition) > 0.1f) {
       enemy.LookAt(aiInfo.soundPosition);
     }
 
@@ -176,7 +192,7 @@ public partial class MageBehaviorTree : Node {
 
     Vector3 direction = position.DirectionTo(nextPathPosition);
     // Avoid normalizing a zero vector which can lead to look_at being called with identical origin/target
-    if (direction.IsEqualApprox(Vector3.Zero)) {
+    if(direction.IsEqualApprox(Vector3.Zero)) {
       input.direction = Vector2.Zero;
       return;
     }
@@ -187,8 +203,10 @@ public partial class MageBehaviorTree : Node {
     input.direction = new(direction.X, direction.Z);
 
     if(lookAtTarget) {
-      if(!position.IsEqualApprox(enemy.GlobalPosition + direction)) {
-        enemy.LookAt(enemy.GlobalPosition + direction);
+      Vector3 lookAtPosition = position + direction;
+
+      if(position.DistanceSquaredTo(lookAtPosition) > 0.1) {
+        enemy.LookAt(lookAtPosition);
       }
     }
   }

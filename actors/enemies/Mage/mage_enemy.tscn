@@ -271,10 +271,10 @@ radius = 0.25
 height = 1.8
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jqdxb"]
-radius = 13.0
+radius = 20.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1nb7t"]
-radius = 9.0
+radius = 14.0
 
 [sub_resource type="Animation" id="Animation_vuu1o"]
 length = 0.001
@@ -465,6 +465,7 @@ metadata/_custom_type_script = "uid://t441iujo23o8"
 
 [node name="AIDetectionComponent" type="Node3D" parent="." unique_id=1531702253]
 script = ExtResource("11_nwoxm")
+fov = 1.5707963267948966
 metadata/_custom_type_script = "uid://bh1wcy7x4xxqk"
 
 [node name="Vision" type="Area3D" parent="AIDetectionComponent" unique_id=708298449]

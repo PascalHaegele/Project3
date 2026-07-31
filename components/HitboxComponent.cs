@@ -62,19 +62,7 @@ public partial class HitboxComponent : Area3D {
         info.direction = GlobalPosition.DirectionTo(p.shotPosition);
       }
 
-      Actor? hitActor = actor;
-      if(hitActor == null) {
-        Node? current = GetParent();
-        while(current != null && hitActor == null) {
-          if(current is Actor a) {
-            hitActor = a;
-            break;
-          }
-          current = current.GetParent();
-        }
-      }
-      if(hitActor == null) {return;}
-      info.shooter = hitActor;
+      info.shooter = actor;
 
       if(hitLog != null) {
         Node hurtboxOwner = hurtbox.GetParent();

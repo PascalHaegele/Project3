@@ -132,7 +132,10 @@ public partial class KnightBehaviorTree : Node {
   }
 
   private NodeState LookToSound() {
-    if(!aiInfo.soundPosition.IsEqualApprox(enemy.GlobalPosition)) {
+    Vector3 lookAtPosition = aiInfo.soundPosition;
+    lookAtPosition.Y = enemy.GlobalPosition.Y;
+
+    if(aiInfo.soundPosition.DistanceSquaredTo(aiInfo.soundPosition) > 0.1f) {
       enemy.LookAt(aiInfo.soundPosition);
     }
 
@@ -196,8 +199,8 @@ public partial class KnightBehaviorTree : Node {
 
     Vector3 lookAtPosition = position + direction;
 
-    if(position.DistanceSquaredTo(lookAtPosition) > 0.1) {
-      enemy.LookAtFromPosition(position, lookAtPosition);
+    if(position.DistanceSquaredTo(lookAtPosition) > 0.1f) {
+      enemy.LookAt(lookAtPosition);
     }
   }
 }

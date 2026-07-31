@@ -33,10 +33,10 @@ radius = 0.4116211
 radius = 0.4765625
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_v4a0d"]
-radius = 13.0
+radius = 14.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_iupsc"]
-radius = 9.0
+radius = 11.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_bfp77"]
 viewport_path = NodePath("SubViewport")
@@ -2025,6 +2025,7 @@ shape = SubResource("CapsuleShape3D_bfp77")
 
 [node name="AIDetectionComponent" type="Node3D" parent="." unique_id=1688496113]
 script = ExtResource("10_6ryf0")
+fov = 1.5707963267948966
 metadata/_custom_type_script = "uid://bh1wcy7x4xxqk"
 
 [node name="Vision" type="Area3D" parent="AIDetectionComponent" unique_id=288155143]
@@ -2342,7 +2343,7 @@ skeleton = NodePath("..")
 libraries/ = SubResource("AnimationLibrary_phchr")
 
 [node name="HitboxComponent" type="Area3D" parent="." unique_id=1875458621]
-transform = Transform3D(0.9223851, -0.14172359, -0.3593299, 0.30373842, 0.8408267, 0.44805437, 0.23863412, -0.52242154, 0.81861395, 0.41296396, 0.7130661, -0.070200615)
+transform = Transform3D(0.92238504, -0.14172359, -0.3593299, 0.3037384, 0.8408267, 0.44805437, 0.23863411, -0.52242154, 0.81861395, 0.41296396, 0.7130661, -0.070200615)
 collision_layer = 64
 collision_mask = 32
 script = ExtResource("18_yr604")
