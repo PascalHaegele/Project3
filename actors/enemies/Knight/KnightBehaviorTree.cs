@@ -153,7 +153,7 @@ public partial class KnightBehaviorTree : Node {
 
   private NodeState MoveToNextWaypoint() {
     if(navAgent.IsTargetReached()) {
-      patrolIndex = Mathf.PosMod(++patrolIndex, enemy.enemyInfo.patrolPath.Length - 1);
+      patrolIndex = Mathf.PosMod(++patrolIndex, enemy.enemyInfo.patrolPath.Length);
       navAgent.TargetPosition = enemy.enemyInfo.patrolPath[patrolIndex];
 
       return NodeState.SUCCESS;

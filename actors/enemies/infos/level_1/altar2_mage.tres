@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemyInfo" format=3 uid="uid://befygq5dwkttg"]
+
+[ext_resource type="Script" uid="uid://46wwp5gewpfd" path="res://actors/enemies/EnemyInfo.cs" id="1_d330l"]
+
+[resource]
+script = ExtResource("1_d330l")
+leashPoint = Vector3(37.512417, -2.3841858e-07, -68.19421)
+minAttackRange = 7.0
+maxAttackRange = 10.0
+metadata/_custom_type_script = "uid://46wwp5gewpfd"

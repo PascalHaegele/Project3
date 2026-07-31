@@ -157,7 +157,9 @@ radiance_size = 2
 [sub_resource type="Environment" id="Environment_6b7mj"]
 background_mode = 2
 sky = SubResource("Sky_pbr4s")
+ambient_light_color = Color(0.124913625, 0.12491364, 0.124913625, 1)
 ambient_light_sky_contribution = 0.01
+reflected_light_source = 1
 
 [node name="TestMap" type="Node3D" unique_id=1304355676]
 

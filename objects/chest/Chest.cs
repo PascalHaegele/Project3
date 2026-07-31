@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using FmodSharp;
 
 public partial class Chest : StaticBody3D, IInteractable {
-  private PackedScene pickup;
-
   private AnimationPlayer animationPlayer;
   private bool opened = false;
   private string[] availableAnimations;
@@ -30,7 +28,6 @@ public partial class Chest : StaticBody3D, IInteractable {
   [Export] private Node3D model;
 
   public override void _Ready() {
-    // Load pickup scene directly to ensure it's available
     // Find AnimationPlayer from the imported GLB model
     if(model.HasNode("AnimationPlayer")) {
       animationPlayer = model.GetNode<AnimationPlayer>("AnimationPlayer");
@@ -64,18 +61,14 @@ public partial class Chest : StaticBody3D, IInteractable {
     if(opened) { return; }
 
     opened = true;
-    FmodServerWrapper
-      .PlayOneShotAttached("event:/Chest_Interaction_Action", this);
-
-    if(animationPlayer != null) {
+    FmodServerWrapper.PlayOneShotAttached("event:/Chest_Interaction_Action", this);
+    if(animationPlayer == null) {
+    } else {
       string animationName = FindBestAnimation();
-
       if(!string.IsNullOrEmpty(animationName)) {
         animationPlayer.Play(animationName);
       }
     }
-
-    if(pickup == null) { return; }
 
     // Check insanity for currency drop BEFORE normal loot
     InsanityComponent insanity = player.GetComponent<InsanityComponent>();
@@ -90,7 +83,10 @@ public partial class Chest : StaticBody3D, IInteractable {
 
     // Spawn pickup from LootSpawn marker above the chest
     Marker3D lootSpawn = GetNodeOrNull<Marker3D>("LootSpawn");
-    if(lootSpawn == null) { return; }
+    if(lootSpawn == null) {
+      GD.PrintErr("Chest: LootSpawn marker not found!");
+      return;
+    }
 
     Vector3 baseSpawnPos = lootSpawn.GlobalPosition;
     var rng = new RandomNumberGenerator();
@@ -147,7 +143,6 @@ public partial class Chest : StaticBody3D, IInteractable {
     // Spawn the currency pickup at LootSpawn
     Marker3D lootSpawn = GetNodeOrNull<Marker3D>("LootSpawn");
     if (lootSpawn != null) {
-      // Pickup currencyPickup = pickup.Instantiate<Pickup>();
       Pickup currencyPickup = pickupScene.Instantiate<Pickup>();
       AddChild(currencyPickup);
       currencyPickup.GlobalPosition = lootSpawn.GlobalPosition;
@@ -180,7 +175,6 @@ public partial class Chest : StaticBody3D, IInteractable {
   /// Drops an ammo pickup with the correct model visibility.
   /// </summary>
   private void DropAmmo(string ammoType, Vector3 baseSpawnPos, RandomNumberGenerator rng) {
-    // Pickup pickupInstance = pickup.Instantiate<Pickup>();
     PackedScene pickupScene = ammoType switch {
       "Shotgun" => sAmmoPickup,
       _ => rAmmoPickup
@@ -210,8 +204,6 @@ public partial class Chest : StaticBody3D, IInteractable {
   /// Drops a general item (potion or page) using the same spawn pattern as the original chest.
   /// </summary>
   private void DropItem(ItemType type, PageData page, Vector3 baseSpawnPos, RandomNumberGenerator rng) {
-    // Pickup pickupInstance = pickup.Instantiate<Pickup>();
-
     PackedScene pickupScene = type switch {
       ItemType.POTION => potionPickup,
       _ => pagePickup
@@ -240,7 +232,6 @@ public partial class Chest : StaticBody3D, IInteractable {
       (float)GD.RandRange(-0.3, 0.3) + 3.0f
     );
     impulse = impulse.Rotated(Vector3.Up, GlobalRotation.Y);
-    // impulse = GlobalBasis.Z * impulse;
     return impulse;
   }
 

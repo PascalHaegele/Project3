@@ -51,10 +51,11 @@ public partial class Portal : StaticBody3D {
       return;
     }
 
-    body.GlobalPosition =
-      destination.GlobalPosition +
-      destination.GlobalBasis *
-      new Vector3(0.0f, 0.0f, 4.0f);
+    // body.GlobalPosition =
+    //   destination.GlobalPosition +
+    //   destination.GlobalBasis *
+    //   new Vector3(0.0f, 0.0f, 4.0f);
+    body.GlobalPosition = destination.GlobalPosition;
     body.GlobalRotation = destination.GlobalRotation;
     (body as Actor).GetComponent<VelocityComponent>().Stop();
   }

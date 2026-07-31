@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ccf1audq7rsld" path="res://ui/interactable_indicator.tscn" id="5_p0q75"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bfp77"]
-size = Vector3(1.5, 1.3, 1.5)
+size = Vector3(1, 0.9003906, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_bfp77"]
 radius = 1.75
@@ -21,7 +21,7 @@ script = ExtResource("1_4fo7c")
 [node name="AltarModel" parent="." unique_id=994214795 instance=ExtResource("3_e0q88")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=849729109]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4501953, 0)
 shape = SubResource("BoxShape3D_bfp77")
 
 [node name="InteractionComponent" type="Area3D" parent="." unique_id=2010354825 node_paths=PackedStringArray("ownerModel")]

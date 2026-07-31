@@ -1,7 +1,7 @@
 using Godot;
 
 public partial class MainMenu : Control {
-  [Export] private StringName startMapPath = "";
+  [Export(PropertyHint.File, "*.tscn")] private string startMapPath;
 
   [Signal] public delegate void StartEventHandler(StringName mapPath);
 

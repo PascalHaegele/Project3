@@ -152,7 +152,7 @@ public partial class MageBehaviorTree : Node {
   private NodeState MoveToNextWaypoint() {
     if(navAgent.IsTargetReached()) {
       patrolIndex =
-        Mathf.PosMod(++patrolIndex, enemy.enemyInfo.patrolPath.Length - 1);
+        Mathf.PosMod(++patrolIndex, enemy.enemyInfo.patrolPath.Length);
       navAgent.TargetPosition = enemy.enemyInfo.patrolPath[patrolIndex];
       return NodeState.SUCCESS;
     }
