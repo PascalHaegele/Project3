@@ -7,6 +7,9 @@ public partial class CleaverTrap : Node3D, ITrap {
   private AnimationPlayer animationPlayer;
 
   public override void _Ready() {
+    hitbox.CollisionLayer = (uint)CollisionLayerEnum.ENEMY_HITBOX;
+    hitbox.CollisionMask = (uint)CollisionLayerEnum.PLAYER_HURTBOX;
+
     animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
     hitbox.damage = damage;
     hitbox.DisableCollisionShapes();
@@ -14,7 +17,6 @@ public partial class CleaverTrap : Node3D, ITrap {
 
   public void Activate() {
     if(!animationPlayer.IsPlaying()) {
-      hitbox.EnableCollisionShapes();
       animationPlayer.Play("activate");
     }
   }
