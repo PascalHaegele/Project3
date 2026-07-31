@@ -81,16 +81,16 @@ public partial class EventManager : Node {
     };
   }
 
-  public override void _UnhandledInput(InputEvent @event) {
-    if(@event is InputEventKey keyEvent) {
-      if(keyEvent.Keycode == Key.Period) {
-        playerInsanityComponent.AddInsanity(10.0f);
-      }
-      if(keyEvent.Keycode == Key.Comma) {
-        playerInsanityComponent.AddInsanity(-10.0f);
-      }
-    }
-  }
+  // public override void _UnhandledInput(InputEvent @event) {
+  //   if(@event is InputEventKey keyEvent) {
+  //     if(keyEvent.Keycode == Key.Period) {
+  //       playerInsanityComponent.AddInsanity(10.0f);
+  //     }
+  //     if(keyEvent.Keycode == Key.Comma) {
+  //       playerInsanityComponent.AddInsanity(-10.0f);
+  //     }
+  //   }
+  // }
 
   public void SetPlayer(Player player) {
     this.player = player;

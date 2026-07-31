@@ -28,7 +28,7 @@ FmodServerWrapper="*uid://b5ek7m0xcb6s0"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1280
-window/size/mode=2
+window/size/mode=3
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 display_server/driver.linuxbsd="wayland"

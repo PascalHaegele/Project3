@@ -379,7 +379,7 @@ public partial class Player : Actor, IHitable {
   public void Reset() {
     healthComponent.Reset();
     insanityComponent.ResetInsanity();
-    inventoryComponent.Reset();
+    // inventoryComponent.Reset();
     foreach(Weapon weapon in weapons) { weapon.Reset(); }
 
     // Clean up buff state on reset/restart

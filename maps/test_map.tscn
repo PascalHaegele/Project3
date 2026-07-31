@@ -13,7 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://npcgs26g3734" path="res://objects/assets/vase/vase.tscn" id="15_6emo8"]
 [ext_resource type="PackedScene" uid="uid://cn8nhwdvhamst" path="res://objects/portal/portal.tscn" id="15_ad6p3"]
 [ext_resource type="PackedScene" uid="uid://b53tt7rmxxl6n" path="res://objects/assets/crate/crate.tscn" id="16_tiop4"]
-[ext_resource type="Script" uid="uid://bbqb6u8gahdth" path="res://core/tools/PageDebugTool.cs" id="17"]
 [ext_resource type="PackedScene" uid="uid://dmp0my4bhl36n" path="res://objects/chest/chest.tscn" id="17_rw4qe"]
 [ext_resource type="PackedScene" uid="uid://dbh2jd0bcvgk2" path="res://objects/assets/lantern/lantern.tscn" id="18_6emo8"]
 [ext_resource type="PackedScene" uid="uid://pdlvbtcehfu8" path="res://objects/assets/scourge/scourge.tscn" id="19_tiop4"]
@@ -101,9 +100,6 @@ mesh = SubResource("ArrayMesh_6emo8")
 
 [node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="Hub/Wall/StaticBody3D" unique_id=1787328682]
 shape = SubResource("ConcavePolygonShape3D_tiop4")
-
-[node name="PageDebugTool" type="Node" parent="." unique_id=376056744]
-script = ExtResource("17")
 
 [node name="PlayerSpawn" type="Marker3D" parent="." unique_id=160749305]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.1939893)

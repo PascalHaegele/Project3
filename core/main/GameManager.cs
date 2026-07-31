@@ -90,6 +90,8 @@ public partial class GameManager : Node {
   }
 
   private void LoadNewMap(StringName path) {
+    if(path.Equals("res://maps/test_map.tscn")) { player?.Reset(); }
+
     Node3D oldMap = currentMap;
     PackedScene? packed = ResourceLoader.Load<PackedScene>(path);
     if(packed == null) {
