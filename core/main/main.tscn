@@ -14,7 +14,6 @@ script = ExtResource("1_vwfi5")
 [node name="Menus" type="CanvasLayer" parent="." unique_id=131891335]
 
 [node name="MainMenu" parent="Menus" unique_id=2022624294 instance=ExtResource("1_8fcwd")]
-startMapPath = "uid://b1557xgv14uto"
 
 [node name="PauseMenu" parent="Menus" unique_id=581734549 instance=ExtResource("3_yibi5")]
 visible = false
