@@ -1,4 +1,5 @@
 using Godot;
+using FmodSharp;
 
 public partial class CleaverTrap : Node3D, ITrap {
   [Export] private float damage = 15.0f;
@@ -16,6 +17,7 @@ public partial class CleaverTrap : Node3D, ITrap {
     if(!animationPlayer.IsPlaying()) {
       hitbox.EnableCollisionShapes();
       animationPlayer.Play("activate");
+      FmodServerWrapper.PlayOneShotAttached("event:/Trap_Sound_Action", this);
     }
   }
 }
