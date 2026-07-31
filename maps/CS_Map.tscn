@@ -11,11 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://dd1wu723k4dih" path="res://maps/Map_Material/Floor_4_normal.png" id="5_0nuwe"]
 [ext_resource type="Texture2D" uid="uid://kwnbrnpp1w4" path="res://maps/map_1/Map 1_final_M_Brick_normal.png" id="5_8wn1s"]
 [ext_resource type="Texture2D" uid="uid://d8r6by1qffnm" path="res://maps/Map_Material/Floor_Mud_normal.png" id="5_22v2i"]
-[ext_resource type="Script" uid="uid://cq4ddchn0vss" path="res://core/debug/DebugDraw.cs" id="7_a1t7w"]
 [ext_resource type="Texture2D" uid="uid://brqaum1mit0q3" path="res://maps/map_1/Map 1_final_M_Brick_orm.png" id="8_nlsgs"]
-[ext_resource type="Resource" uid="uid://b62kvjvucx8ma" path="res://actors/enemies/infos/enemy_info_01.tres" id="8_x1dlt"]
 [ext_resource type="Texture2D" uid="uid://7h0ithbtqi6q" path="res://maps/Map_Material/Floor_4_albedo.png" id="9_nlsgs"]
-[ext_resource type="Resource" uid="uid://b5k2ifw2t7ki1" path="res://actors/enemies/infos/mage_enemy_info.tres" id="10_5qq3c"]
 [ext_resource type="PackedScene" uid="uid://dmp0my4bhl36n" path="res://objects/chest/chest.tscn" id="10_oxeun"]
 [ext_resource type="Script" uid="uid://ci31eubnodj4i" path="res://core/PortalArea.cs" id="11_6t5b2"]
 [ext_resource type="PackedScene" uid="uid://cn8nhwdvhamst" path="res://objects/portal/portal.tscn" id="12_k8dp5"]
@@ -24,16 +21,25 @@
 [ext_resource type="Script" uid="uid://rxe51n18487c" path="res://core/TrapArea.cs" id="16_ck1tj"]
 [ext_resource type="PackedScene" uid="uid://dgu1dmh0xqo3v" path="res://objects/traps/cleaver_trap.tscn" id="17_jdm1q"]
 [ext_resource type="PackedScene" uid="uid://dmv381xyx8dyw" path="res://actors/enemies/Mage/mage_enemy.tscn" id="17_nlsgs"]
+[ext_resource type="Resource" uid="uid://k8e4w40wfksr" path="res://actors/enemies/infos/cs_map/spawn1_knight.res" id="18_qtxnv"]
+[ext_resource type="Resource" uid="uid://uk0ryollra7f" path="res://actors/enemies/infos/cs_map/spawn2_mage.res" id="20_xu0vn"]
+[ext_resource type="Resource" uid="uid://dnu1x7egsumk" path="res://actors/enemies/infos/cs_map/spawn3_knight.res" id="21_1pow3"]
+[ext_resource type="Resource" uid="uid://c8whb8ldiv4aq" path="res://actors/enemies/infos/cs_map/spawn4_mage.res" id="22_07psw"]
+[ext_resource type="Resource" uid="uid://clbqommnnjt2m" path="res://actors/enemies/infos/cs_map/spawn5_knight.res" id="23_8yw3b"]
+[ext_resource type="Resource" uid="uid://bu5byyv20fcv0" path="res://actors/enemies/infos/cs_map/mages1.res" id="24_1pow3"]
 [ext_resource type="PackedScene" uid="uid://dbh2jd0bcvgk2" path="res://objects/assets/lantern/lantern.tscn" id="25_uhw3x"]
+[ext_resource type="Resource" uid="uid://cpdhtrd26y15p" path="res://actors/enemies/infos/cs_map/spawn6_knight.res" id="26_07psw"]
 [ext_resource type="Texture2D" uid="uid://ch2on8au2msik" path="res://maps/Map_Material/Floor1.png" id="26_cfuen"]
 [ext_resource type="PackedScene" uid="uid://pdlvbtcehfu8" path="res://objects/assets/scourge/scourge.tscn" id="26_o0ahx"]
 [ext_resource type="PackedScene" uid="uid://b53tt7rmxxl6n" path="res://objects/assets/crate/crate.tscn" id="27_gc3ev"]
 [ext_resource type="Texture2D" uid="uid://bxaxgpvedim3i" path="res://maps/Map_Material/Floor_Yellow_normal.png" id="27_jyu8e"]
 [ext_resource type="PackedScene" uid="uid://bhjqup4fbd0ew" path="res://objects/assets/crate/crate_group.tscn" id="28_3fp30"]
+[ext_resource type="Resource" uid="uid://w71y2mttdwkm" path="res://actors/enemies/infos/cs_map/knights1.res" id="28_8yw3b"]
 [ext_resource type="PackedScene" uid="uid://npcgs26g3734" path="res://objects/assets/vase/vase.tscn" id="29_kltpo"]
 [ext_resource type="PackedScene" uid="uid://dlkpyc3c3onqq" path="res://objects/assets/wall/wall.tscn" id="30_4vjw4"]
 [ext_resource type="PackedScene" uid="uid://c77lug0u3hfn8" path="res://objects/assets/crate/Crate._group.glb" id="31_xji4g"]
 [ext_resource type="PackedScene" uid="uid://cu21q0dre0non" path="res://objects/assets/shelf/shelf.tscn" id="32_cfuen"]
+[ext_resource type="Resource" uid="uid://bevwqcs5glo7w" path="res://actors/enemies/infos/cs_map/altar2_knight.res" id="35_jll1c"]
 [ext_resource type="Texture2D" uid="uid://ck57xgc4rabel" path="res://maps/Map_Material/Floor3_albedo.png" id="35_qtxnv"]
 [ext_resource type="Texture2D" uid="uid://der73vov31jm1" path="res://maps/Map_Material/Floor3_normal.png" id="36_xu0vn"]
 [ext_resource type="PackedScene" uid="uid://dh47hjsp40r1t" path="res://objects/Upgrade/upgrade_bench.tscn" id="37_jyu8e"]
@@ -127,25 +133,110 @@ normal_enabled = true
 normal_texture = ExtResource("5_0nuwe")
 uv1_triplanar = true
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_bfp77"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_o8bm0"]
+radius = 1.9332039
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_ui8i3"]
-radius = 2.6650364
+[sub_resource type="SphereShape3D" id="SphereShape3D_4ajh5"]
+radius = 2.200812
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_bfp77"]
-radius = 2.5708997
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o8bm0"]
+radius = 0.9033203
+height = 23.682
 
-[sub_resource type="Resource" id="Resource_uhw3x"]
+[sub_resource type="Resource" id="Resource_8yw3b"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_jll1c"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_5rjyv"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_0txe0"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_3r525"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_ejeic"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 2.5
+sprintSpeed = 3.5
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_litht"]
+height = 6.5
+
+[sub_resource type="Resource" id="Resource_bfp77"]
 script = ExtResource("15_24hbc")
-leashPoint = Vector3(259.4424, 2.827221, 48.288475)
-minAttackRange = 4.0
-maxAttackRange = 20.0
+leashPoint = Vector3(216.43643, 2.3929412, -115.1223)
+minAttackRange = 8.0
+maxAttackRange = 12.0
 metadata/_custom_type_script = "uid://46wwp5gewpfd"
 
-[sub_resource type="Resource" id="Resource_ld23n"]
+[sub_resource type="Resource" id="Resource_ubllf"]
+resource_local_to_scene = true
 script = ExtResource("15_24hbc")
-leashPoint = Vector3(167.01741, -5.3969307, -12.601194)
-metadata/_custom_type_script = "uid://46wwp5gewpfd"
+patrolPath = PackedVector3Array(181.87254, 2.3351712, -178.44566, 167.33673, 2.3351712, -188.46301, 147.77063, 2.3351712, -180.58508, 128.85895, 2.3351693, -179.77367, 115.59808, 2.3351674, -171.90593, 132.05293, 2.3351674, -167.11797, 148.2276, 2.3351674, -172.98405, 168.47446, 2.3351674, -172.85165)
+leashPoint = Vector3(147.81131, 2.3351674, -177.53865)
+leashLength = 60.0
+maxAttackRange = 1.75
+
+[sub_resource type="Resource" id="Resource_aetu6"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 3.0
+sprintSpeed = 6.0
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_ql0ap"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 3.0
+sprintSpeed = 6.0
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_3avth"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 3.0
+sprintSpeed = 6.0
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_r6y8c"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 3.0
+sprintSpeed = 6.0
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
+
+[sub_resource type="Resource" id="Resource_fqf62"]
+resource_local_to_scene = true
+script = ExtResource("4_a1t7w")
+walkSpeed = 3.0
+sprintSpeed = 6.0
+metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_litht"]
 radius = 2.0
@@ -166,21 +257,6 @@ height = 0.1
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bfp77"]
 radius = 3.0
 height = 17.5
-
-[sub_resource type="Resource" id="Resource_jyu8e"]
-resource_local_to_scene = true
-script = ExtResource("15_24hbc")
-patrolPath = PackedVector3Array(181.4789, 2.3929415, -136.71298, 182.76384, 2.3929405, -130.47568, 184.49522, 2.3929405, -128.45308)
-leashPoint = Vector3(177.45947, 2.3929405, -144.50302)
-leashLength = 50.0
-metadata/_custom_type_script = "uid://46wwp5gewpfd"
-
-[sub_resource type="Resource" id="Resource_qtxnv"]
-resource_local_to_scene = true
-script = ExtResource("4_a1t7w")
-walkSpeed = 3.0
-sprintSpeed = 6.0
-metadata/_custom_type_script = "uid://chl6vebbxv7ms"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_07psw"]
 albedo_texture = ExtResource("35_qtxnv")
@@ -233,8 +309,8 @@ size = Vector3(35.558716, 1, 330.02332)
 material = SubResource("StandardMaterial3D_uhw3x")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Boss Layer" unique_id=420156372]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.17492, -0.08709097, 30.125092)
-size = Vector3(32.281128, 1, 16.662476)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.065147, -0.08709097, 30.125092)
+size = Vector3(30.061584, 1, 16.662476)
 material = SubResource("StandardMaterial3D_22v2i")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/Map_layout_CS/Boss Layer" unique_id=933988669]
@@ -1083,94 +1159,191 @@ transform = Transform3D(0.9999883, -9.677077e-16, 0.0074272156, 5.2349977e-16, 1
 size = Vector3(19.522896, 4.2871704, 1.1013184)
 material = SubResource("ORMMaterial3D_o0ahx")
 
-[node name="DebugDraw" type="MeshInstance3D" parent="." unique_id=2016545012]
-mesh = SubResource("ImmediateMesh_bfp77")
-script = ExtResource("7_a1t7w")
-metadata/_custom_type_script = "uid://cq4ddchn0vss"
-
 [node name="PlayerSpawn" type="Marker3D" parent="." unique_id=1497851202]
 transform = Transform3D(-0.9983377, 0, -0.05763531, 0, 1, 0, 0.05763531, 0, -0.9983377, 245.9327, 2.3502445, -13.683335)
 
 [node name="SpawnAreas" type="Node" parent="." unique_id=1134004840]
 
-[node name="SpawnArea" type="Area3D" parent="SpawnAreas" unique_id=113920348]
-transform = Transform3D(1, -3.3087225e-24, 0, -4.440892e-16, 1, 0, 0, 0, 1, 202.789, -9.005641e-14, 11.050104)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
+[node name="SpawnArea" type="Area3D" parent="SpawnAreas" unique_id=1333423926]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 260.59253, 2.8502445, 48.10911)
 script = ExtResource("1_jvdko")
 enemy = ExtResource("2_3soxs")
-enemyInfo = ExtResource("8_x1dlt")
+enemyInfo = ExtResource("18_qtxnv")
 metadata/_custom_type_script = "uid://c8525x2xugj2n"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea" unique_id=1434659579]
-transform = Transform3D(0.5154133, 0, 0.8569417, 0, 1, 0, -0.8569417, 0, 0.5154133, 10.698624, 5.506712, 10.702553)
-shape = SubResource("SphereShape3D_ui8i3")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea" unique_id=2072993486]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.784546, -0.045265198, -12.72089)
+shape = SubResource("SphereShape3D_o8bm0")
 
-[node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea" unique_id=188372638]
-transform = Transform3D(-0.8441097, 0, -0.5361705, 0, 1, 0, 0.5361705, 0, -0.8441097, 9.690262, 3.011867, -8.167305)
+[node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea" unique_id=155871648]
+transform = Transform3D(0.6693231, 0, -0.7429715, 0, 1, 0, 0.7429715, 0, 0.6693231, 1.0083618, 0, -0.21881485)
 
-[node name="Spawn2" type="Marker3D" parent="SpawnAreas/SpawnArea" unique_id=1307794526]
-transform = Transform3D(-0.62799466, 0, 0.7782177, 0, 1, 0, -0.7782177, 0, -0.62799466, -0.38508606, 3.011867, -5.748043)
-
-[node name="Spawn3" type="Marker3D" parent="SpawnAreas/SpawnArea" unique_id=879166801]
-transform = Transform3D(-0.62799466, 0, 0.7782177, 0, 1, 0, -0.7782177, 0, -0.62799466, 2.804947, 3.011866, 2.3909378)
-
-[node name="Chest" parent="SpawnAreas/SpawnArea" unique_id=1750432848 instance=ExtResource("10_oxeun")]
-transform = Transform3D(0.8218369, -7.912033e-17, -0.56972283, 3.649689e-16, 1, -2.5300776e-16, 0.56972283, 2.5300774e-16, 0.8218369, 56.386017, 2.3510907, 26.75059)
-
-[node name="SpawnArea2" type="Area3D" parent="SpawnAreas" unique_id=882140401]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 259.4424, 2.827221, 48.288475)
-script = ExtResource("1_jvdko")
-enemy = ExtResource("2_3soxs")
-enemyInfo = ExtResource("10_5qq3c")
-metadata/_custom_type_script = "uid://c8525x2xugj2n"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea2" unique_id=327006367]
-transform = Transform3D(0.94866735, -0.038837478, 0.31388193, 0.08419464, 0.98763216, -0.13226488, -0.30486304, 0.15190256, 0.9402043, 6.513733, 4.7683716e-07, -8.303593)
-shape = SubResource("SphereShape3D_bfp77")
-
-[node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea2" unique_id=365766057]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74346924, -0.47697687, 0.85860443)
-
-[node name="SpawnArea3" type="Area3D" parent="SpawnAreas" unique_id=298656895]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 259.4424, 2.827221, 48.288475)
+[node name="SpawnArea2" type="Area3D" parent="SpawnAreas" unique_id=1300645215]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 260.59253, 2.8502445, 48.10911)
 script = ExtResource("1_jvdko")
 enemy = ExtResource("17_nlsgs")
-enemyInfo = SubResource("Resource_uhw3x")
+enemyInfo = ExtResource("20_xu0vn")
 metadata/_custom_type_script = "uid://c8525x2xugj2n"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea3" unique_id=163023551]
-transform = Transform3D(0.94866735, -0.038837478, 0.31388193, 0.08419464, 0.98763216, -0.13226488, -0.30486304, 0.15190256, 0.9402043, 6.513733, 4.7683716e-07, -8.303593)
-shape = SubResource("SphereShape3D_bfp77")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea2" unique_id=172251276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.784546, -0.045265198, -12.72089)
+shape = SubResource("SphereShape3D_o8bm0")
 
-[node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea3" unique_id=1223258513]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85562134, 3.0234776, 3.4365807)
+[node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea2" unique_id=358817810]
+transform = Transform3D(0.82018626, 0, -0.57209665, 0, 1, 0, 0.57209665, 0, 0.82018626, 0.016204834, 3.000453, 3.6090546)
 
-[node name="Altars" type="Node" parent="." unique_id=23785359]
-
-[node name="Altar2" parent="Altars" unique_id=286822846 instance=ExtResource("13_oxeun")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 169.79832, -6.0413146, -12.601194)
-effect = 4
+[node name="SpawnArea3" type="Area3D" parent="SpawnAreas" unique_id=17134035]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 207.42871, 2.3502455, -1.3529778)
+script = ExtResource("1_jvdko")
 enemy = ExtResource("2_3soxs")
-enemyInfo = SubResource("Resource_ld23n")
+enemyInfo = ExtResource("21_1pow3")
+metadata/_custom_type_script = "uid://c8525x2xugj2n"
 
-[node name="Marker3D" type="Marker3D" parent="Altars/Altar2" unique_id=692916169]
-transform = Transform3D(-0.9602152, 0, 0.2792612, 0, 1, 0, -0.2792612, 0, -0.9602152, 4.932583, 0.0019593239, -7.5753937)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea3" unique_id=755606293]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.1588745, 4.57695, 25.173878)
+shape = SubResource("SphereShape3D_4ajh5")
 
-[node name="Marker3D2" type="Marker3D" parent="Altars/Altar2" unique_id=1505054651]
-transform = Transform3D(-0.72103876, 0, -0.69289464, 0, 1, 0, 0.69289464, 0, -0.72103876, -4.8570857, 0.0019593239, -8.727325)
+[node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea3" unique_id=1024858425]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5588074, 0, -1.2873445)
 
-[node name="Altar" parent="Altars" unique_id=1471931379 instance=ExtResource("13_oxeun")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.42548, 2.3850918, -265.36526)
-effect = 2
+[node name="Spawn2" type="Marker3D" parent="SpawnAreas/SpawnArea3" unique_id=962216275]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5434875, 0, 0.041230917)
 
-[node name="Altar3" parent="Altars" unique_id=78452936 instance=ExtResource("13_oxeun")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.42548, 2.3850918, -265.36526)
-effect = 3
+[node name="Spawn3" type="Marker3D" parent="SpawnAreas/SpawnArea3" unique_id=1543817526]
+transform = Transform3D(-0.6810882, 0, -0.73220134, 0, 1, 0, 0.73220134, 0, -0.6810882, 2.7125854, 0, 14.460937)
 
-[node name="Altar4" parent="Altars" unique_id=2035887710 instance=ExtResource("13_oxeun")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.67478, 2.3530731, 28.972717)
+[node name="SpawnArea4" type="Area3D" parent="SpawnAreas" unique_id=1470729873]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 207.42871, 2.3502455, -1.3529778)
+script = ExtResource("1_jvdko")
+enemy = ExtResource("17_nlsgs")
+enemyInfo = ExtResource("22_07psw")
+metadata/_custom_type_script = "uid://c8525x2xugj2n"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea4" unique_id=459787755]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.1588745, 4.57695, 25.173878)
+shape = SubResource("SphereShape3D_4ajh5")
+
+[node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea4" unique_id=361413408]
+transform = Transform3D(-0.8855724, 0, -0.46450132, 0, 1, 0, 0.46450132, 0, -0.8855724, -2.8400116, 1.2590489, -9.302919)
+
+[node name="Spawn2" type="Marker3D" parent="SpawnAreas/SpawnArea4" unique_id=2106576152]
+transform = Transform3D(-0.99986356, 0, -0.016516656, 0, 1, 0, 0.016516656, 0, -0.99986356, 1.115036, 1.2590489, -9.302919)
+
+[node name="SpawnArea5" type="Area3D" parent="SpawnAreas" unique_id=486088562]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 228.5658, 2.3502452, -47.814808)
+script = ExtResource("1_jvdko")
+enemy = ExtResource("2_3soxs")
+enemyInfo = ExtResource("23_8yw3b")
+metadata/_custom_type_script = "uid://c8525x2xugj2n"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea5" unique_id=2062727325]
+transform = Transform3D(0.37720776, 0.74782515, -0.54632574, -0.8295249, 0.01049815, -0.558371, -0.41182846, 0.6638128, 0.6242997, -17.554916, 1.9854453, 10.543449)
+shape = SubResource("CapsuleShape3D_o8bm0")
+
+[node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea5" unique_id=1315210954]
+transform = Transform3D(0.7510389, 0, 0.660258, 0, 1, 0, -0.660258, 0, 0.7510389, -4.7705383, 0, 3.9903145)
+
+[node name="Spawn2" type="Marker3D" parent="SpawnAreas/SpawnArea5" unique_id=180604477]
+transform = Transform3D(-0.75103897, 0, -0.66025794, 0, 1, 0, 0.66025794, 0, -0.75103897, -6.8161163, 0, -5.2958946)
+
+[node name="Spawn3" type="Marker3D" parent="SpawnAreas/SpawnArea5" unique_id=1899079960]
+transform = Transform3D(-0.14322671, 0, 0.9896899, 0, 1, 0, -0.9896899, 0, -0.14322671, 6.0239716, 0, 2.2980995)
+
+[node name="Mages1" type="Node" parent="SpawnAreas" unique_id=1186966275]
+
+[node name="MageEnemy" parent="SpawnAreas/Mages1" unique_id=900136881 instance=ExtResource("17_nlsgs")]
+transform = Transform3D(-0.9659258, 0, -0.25881913, 0, 1, 0, 0.25881913, 0, -0.9659258, 195.02995, 2.3929482, -105.533195)
+enemyInfo = ExtResource("24_1pow3")
+velocityInfo = SubResource("Resource_8yw3b")
+
+[node name="MageEnemy2" parent="SpawnAreas/Mages1" unique_id=888025677 instance=ExtResource("17_nlsgs")]
+transform = Transform3D(-0.732186, 0, -0.6811047, 0, 1, 0, 0.6811047, 0, -0.732186, 185.54712, 2.3929424, -103.47158)
+enemyInfo = ExtResource("24_1pow3")
+velocityInfo = SubResource("Resource_jll1c")
+
+[node name="MageEnemy3" parent="SpawnAreas/Mages1" unique_id=610724947 instance=ExtResource("17_nlsgs")]
+transform = Transform3D(-0.9998209, 0, 0.01892588, 0, 1, 0, -0.01892588, 0, -0.9998209, 189.44476, 2.3929424, -125.23087)
+enemyInfo = ExtResource("24_1pow3")
+velocityInfo = SubResource("Resource_5rjyv")
+
+[node name="MageEnemy4" parent="SpawnAreas/Mages1" unique_id=549108306 instance=ExtResource("17_nlsgs")]
+transform = Transform3D(-0.7258123, 0, -0.6878928, 0, 1, 0, 0.6878928, 0, -0.7258123, 181.75668, 2.3929386, -123.81369)
+enemyInfo = ExtResource("24_1pow3")
+velocityInfo = SubResource("Resource_0txe0")
+
+[node name="MageEnemy5" parent="SpawnAreas/Mages1" unique_id=363217940 instance=ExtResource("17_nlsgs")]
+transform = Transform3D(-0.99827385, 0, 0.05873127, 0, 1, 0, -0.05873127, 0, -0.99827385, 184.25209, 2.3929424, -146.21611)
+enemyInfo = ExtResource("24_1pow3")
+velocityInfo = SubResource("Resource_3r525")
+
+[node name="MageEnemy6" parent="SpawnAreas/Mages1" unique_id=1525396222 instance=ExtResource("17_nlsgs")]
+transform = Transform3D(-0.6153272, 0, -0.78827184, 0, 1, 0, 0.78827184, 0, -0.6153272, 176.63028, 2.3929405, -143.8764)
+enemyInfo = ExtResource("24_1pow3")
+velocityInfo = SubResource("Resource_ejeic")
+
+[node name="SpawnArea6" type="Area3D" parent="SpawnAreas" unique_id=1024416379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 216.43643, 2.3929412, -115.1223)
+script = ExtResource("1_jvdko")
+enemy = ExtResource("2_3soxs")
+enemyInfo = ExtResource("26_07psw")
+metadata/_custom_type_script = "uid://c8525x2xugj2n"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea6" unique_id=297095872]
+transform = Transform3D(-4.366385e-08, -0.99891245, 0.046625067, 1, -4.371139e-08, 0, 2.0380464e-09, 0.046625067, 0.99891245, 4.6469574, 0.5382259, 17.153381)
+shape = SubResource("CapsuleShape3D_litht")
+
+[node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea6" unique_id=1584404893]
+transform = Transform3D(-0.7290531, 0, 0.6844572, 0, 1, 0, -0.6844572, 0, -0.7290531, 6.001892, 0, -0.6942978)
+
+[node name="Spawn2" type="Marker3D" parent="SpawnAreas/SpawnArea6" unique_id=250363700]
+transform = Transform3D(-0.7214651, 0, -0.6924508, 0, 1, 0, 0.6924508, 0, -0.7214651, -6.9343414, 0, -1.6446686)
+
+[node name="Spawn3" type="Marker3D" parent="SpawnAreas/SpawnArea6" unique_id=1505252151]
+transform = Transform3D(-0.992559, 0.06045226, -0.10569841, 0.07380849, 0.9891015, -0.1273988, 0.09684494, -0.13425228, -0.98620355, -0.35255432, 9.536743e-07, -3.596611)
+
+[node name="SpawnArea7" type="Area3D" parent="SpawnAreas" unique_id=2067692404]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 216.43643, 2.3929412, -115.1223)
+script = ExtResource("1_jvdko")
+enemy = ExtResource("17_nlsgs")
+enemyInfo = SubResource("Resource_bfp77")
+metadata/_custom_type_script = "uid://c8525x2xugj2n"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpawnAreas/SpawnArea7" unique_id=1325904992]
+transform = Transform3D(-4.366385e-08, -0.99891245, 0.046625067, 1, -4.371139e-08, 0, 2.0380464e-09, 0.046625067, 0.99891245, 4.6469574, 0.5382259, 17.153381)
+shape = SubResource("CapsuleShape3D_litht")
+
+[node name="Spawn1" type="Marker3D" parent="SpawnAreas/SpawnArea7" unique_id=1238264286]
+transform = Transform3D(-0.99795276, 0, 0.06395517, 0, 1, 0, -0.06395517, 0, -0.99795276, 2.6437836, 0, -1.4776917)
+
+[node name="Spawn2" type="Marker3D" parent="SpawnAreas/SpawnArea7" unique_id=575826431]
+transform = Transform3D(-0.98923296, 0, -0.14635016, 0, 1, 0, 0.14635016, 0, -0.98923296, -2.2571106, 0, 0.0046539307)
+
+[node name="Knights1" type="Node" parent="SpawnAreas" unique_id=1635579212]
+
+[node name="KnightEnemy" parent="SpawnAreas/Knights1" unique_id=952052820 instance=ExtResource("2_3soxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 183.25406, 2.3929462, -180.57022)
+enemyInfo = SubResource("Resource_ubllf")
+velocityInfo = SubResource("Resource_aetu6")
+
+[node name="KnightEnemy2" parent="SpawnAreas/Knights1" unique_id=720317329 instance=ExtResource("2_3soxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 161.16998, 2.3351707, -173.89027)
+enemyInfo = ExtResource("28_8yw3b")
+velocityInfo = SubResource("Resource_ql0ap")
+
+[node name="KnightEnemy3" parent="SpawnAreas/Knights1" unique_id=511218587 instance=ExtResource("2_3soxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 138.98294, 2.335167, -170.6587)
+enemyInfo = ExtResource("28_8yw3b")
+velocityInfo = SubResource("Resource_3avth")
+
+[node name="KnightEnemy4" parent="SpawnAreas/Knights1" unique_id=1609821692 instance=ExtResource("2_3soxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120.45909, 2.3351707, -166.49158)
+enemyInfo = ExtResource("28_8yw3b")
+velocityInfo = SubResource("Resource_r6y8c")
+
+[node name="KnightEnemy5" parent="SpawnAreas/Knights1" unique_id=1054025088 instance=ExtResource("2_3soxs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.954346, 2.3530731, -171.35442)
+enemyInfo = ExtResource("28_8yw3b")
+velocityInfo = SubResource("Resource_fqf62")
 
 [node name="Chests" type="Node" parent="." unique_id=554117665]
 
@@ -1228,6 +1401,9 @@ transform = Transform3D(-0.5376794, 2.88866e-23, 0.8431495, 4.440892e-16, 1, 1.6
 [node name="Chest18" parent="Chests" unique_id=503839369 instance=ExtResource("10_oxeun")]
 transform = Transform3D(0.1955193, 2.6857533e-23, 0.9806999, 4.440892e-16, 1, 2.0953466e-23, -0.9806999, 5.8908235e-24, 0.1955193, 24.120722, -1.7909946, -125.78205)
 
+[node name="Chest19" parent="Chests" unique_id=1750432848 instance=ExtResource("10_oxeun")]
+transform = Transform3D(0.8354889, 0, -0.5495074, 0, 1, 0, 0.5495074, 0, 0.8354889, 259.91272, 2.3510919, 36.99188)
+
 [node name="Portals" type="Node" parent="." unique_id=1549579445]
 
 [node name="PortalArea2" type="Area3D" parent="Portals" unique_id=883824118]
@@ -1251,14 +1427,20 @@ transform = Transform3D(0.9801943, 0, -0.1980381, 0, 1, 0, 0.1980381, 0, 0.98019
 
 [node name="Portal" parent="Portals" unique_id=1171833219 node_paths=PackedStringArray("destination") instance=ExtResource("12_k8dp5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.95053, 2.3850918, -265.90442)
+visible = false
 destination = NodePath("../Portal3/Marker3D")
 
-[node name="Portal2" parent="Portals" unique_id=574168270 node_paths=PackedStringArray("destination") instance=ExtResource("12_k8dp5")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 97.54355, 2.429808, 20.682245)
-destination = NodePath("../../PlayerSpawn")
+[node name="Portal2" parent="Portals" unique_id=2029433077 node_paths=PackedStringArray("destination") instance=ExtResource("12_k8dp5")]
+transform = Transform3D(0.0088166855, 0, -0.99996126, 0, 1, 0, 0.99996126, 0, 0.0088166855, 38.0828, -1.6408377, -122.09165)
+visible = false
+destination = NodePath("Marker_Secret")
+
+[node name="Marker_Secret" type="Marker3D" parent="Portals/Portal2" unique_id=9120987]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.003616, 4.478558, -41.962296)
 
 [node name="Portal3" parent="Portals" unique_id=785998237 instance=ExtResource("12_k8dp5")]
 transform = Transform3D(-0.9999682, 0, -0.007975581, 0, 1, 0, 0.007975581, 0, -0.9999682, 86.95053, 2.3850918, 44.44347)
+visible = false
 isLevelChange = true
 newLevelPath = "uid://bc32niwsqbkfs"
 
@@ -1283,6 +1465,31 @@ transform = Transform3D(0.066009104, 0.035650946, 0.99718195, -0.0022444373, 0.9
 
 [node name="PortalDestination" type="Marker3D" parent="Portals/PortalArea3" unique_id=1666353948]
 transform = Transform3D(0.9801943, 0, -0.1980381, 0, 1, 0, 0.1980381, 0, 0.9801943, -63.415173, -3.4526415, 2.583702)
+
+[node name="Altars" type="Node" parent="." unique_id=23785359]
+
+[node name="Altar" parent="Altars" unique_id=1471931379 instance=ExtResource("13_oxeun")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.42548, 2.3850918, -265.36526)
+effect = 2
+
+[node name="Altar2" parent="Altars" unique_id=286822846 instance=ExtResource("13_oxeun")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 169.79832, -6.0413146, -12.601194)
+effect = 4
+enemy = ExtResource("2_3soxs")
+enemyInfo = ExtResource("35_jll1c")
+
+[node name="Marker3D" type="Marker3D" parent="Altars/Altar2" unique_id=692916169]
+transform = Transform3D(-0.9602152, 0, 0.2792612, 0, 1, 0, -0.2792612, 0, -0.9602152, 4.932583, 0.0019593239, -7.5753937)
+
+[node name="Marker3D2" type="Marker3D" parent="Altars/Altar2" unique_id=1505054651]
+transform = Transform3D(-0.72103876, 0, -0.69289464, 0, 1, 0, 0.69289464, 0, -0.72103876, -4.8570857, 0.0019593239, -8.727325)
+
+[node name="Altar3" parent="Altars" unique_id=78452936 instance=ExtResource("13_oxeun")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.42548, 2.3850918, -265.36526)
+effect = 3
+
+[node name="Altar4" parent="Altars" unique_id=2035887710 instance=ExtResource("13_oxeun")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.67478, 2.3530731, 28.972717)
 
 [node name="Traps" type="Node" parent="." unique_id=2121430909]
 
@@ -1358,26 +1565,6 @@ shape = SubResource("CapsuleShape3D_bfp77")
 [node name="CleaverTrap" parent="Traps/TrapArea6" unique_id=2003769320 instance=ExtResource("17_jdm1q")]
 transform = Transform3D(1.584, 0, 0, 0, 1.584, 0, 0, 0, 1.584, 0.41197205, 0, -3.833355)
 
-[node name="Patrol" type="Node3D" parent="." unique_id=1325055428]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 179.74365, 2.3929415, -147.2857)
-
-[node name="Marker3D" type="Marker3D" parent="Patrol" unique_id=2025071028]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7352448, 0, 10.572723)
-
-[node name="Marker3D2" type="Marker3D" parent="Patrol" unique_id=190296589]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0201874, -9.536743e-07, 16.810028)
-
-[node name="Marker3D3" type="Marker3D" parent="Patrol" unique_id=609791155]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7515717, -9.536743e-07, 18.832626)
-
-[node name="LeashPoint" type="Marker3D" parent="." unique_id=197291322]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.45947, 2.3929405, -144.50302)
-
-[node name="TestEnemy" parent="." unique_id=952052820 instance=ExtResource("2_3soxs")]
-transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 177, 3, -147)
-enemyInfo = SubResource("Resource_jyu8e")
-velocityInfo = SubResource("Resource_qtxnv")
-
 [node name="Assets" type="Node" parent="." unique_id=427521765]
 
 [node name="Lantern" parent="Assets" unique_id=579660595 instance=ExtResource("25_uhw3x")]
@@ -1403,6 +1590,9 @@ transform = Transform3D(0.39378083, 0, -0.91920435, 0, 1, 0, 0.91920435, 0, 0.39
 
 [node name="Lantern4" parent="Assets" unique_id=360009979 instance=ExtResource("25_uhw3x")]
 transform = Transform3D(0.8431515, -6.965472e-17, -0.53767604, 0, 1, 0, 0.53767604, 2.3877613e-16, 0.8431515, 249.63329, 3.8607287, 39.604633)
+
+[node name="Lantern13" parent="Assets" unique_id=340515847 instance=ExtResource("25_uhw3x")]
+transform = Transform3D(0.8431515, -6.965472e-17, -0.53767604, 0, 1, 0, 0.53767604, 2.3877613e-16, 0.8431515, 217.03998, 3.8607287, 20.169891)
 
 [node name="Vase" parent="Assets" unique_id=1278798146 instance=ExtResource("29_kltpo")]
 transform = Transform3D(1, 4.9303807e-31, 0, -5.293956e-23, 1, 0, 0, -9.8607613e-32, 1, 258.71246, 2.116734, 36.00673)
@@ -1758,6 +1948,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 152.11592, -6.0268793, -29.30
 [node name="CrateGroup50" parent="Assets" unique_id=307840073 instance=ExtResource("28_3fp30")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 217.72917, 2.4814472, -90.63233)
 
+[node name="CrateGroup62" parent="Assets" unique_id=845095459 instance=ExtResource("28_3fp30")]
+transform = Transform3D(0.56485415, 0, 0.8251907, 0, 1, 0, -0.8251907, 0, 0.56485415, 215.56802, 2.4814472, -91.62642)
+
 [node name="CrateGroup51" parent="Assets" unique_id=1085928944 instance=ExtResource("28_3fp30")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 216.2388, 2.4814453, -140.1251)
 
@@ -1855,13 +2048,6 @@ transform = Transform3D(-0.033787895, 0, -0.99942905, 0, 1, 0, 0.99942905, 0, -0
 
 [node name="UpgradeBench" parent="Secret_Room" unique_id=593974112 instance=ExtResource("37_jyu8e")]
 transform = Transform3D(0.02021552, 0, 0.9997957, 0, 1, 0, -0.9997957, 0, 0.02021552, 28.196089, -1.8087811, -122.65092)
-
-[node name="Portal" parent="Secret_Room" unique_id=2029433077 node_paths=PackedStringArray("destination") instance=ExtResource("12_k8dp5")]
-transform = Transform3D(0.0088166855, 0, -0.99996126, 0, 1, 0, 0.99996126, 0, 0.0088166855, 38.0828, -1.6408377, -122.09165)
-destination = NodePath("Marker_Secret")
-
-[node name="Marker_Secret" type="Marker3D" parent="Secret_Room/Portal" unique_id=9120987]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.003616, 4.478558, -41.962296)
 
 [node name="Bench" type="Node" parent="." unique_id=777696788]
 

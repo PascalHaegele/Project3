@@ -197,7 +197,7 @@ public partial class KnightBehaviorTree : Node {
     Vector3 lookAtPosition = position + direction;
 
     if(position.DistanceSquaredTo(lookAtPosition) > 0.1) {
-      enemy.LookAtFromPosition(position, lookAtPosition);
+      enemy.LookAt(lookAtPosition);
     }
   }
 }

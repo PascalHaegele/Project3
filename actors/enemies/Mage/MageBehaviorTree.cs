@@ -115,9 +115,15 @@ public partial class MageBehaviorTree : Node {
   }
 
   private NodeState AttackPlayer() {
-    // if(enemy.animationPlayer.IsPlaying()) { return NodeState.RUNNING; }
     enemy.animationPlayer.Play("shoot");
-    // input.shoot = true;
+
+    Vector3 lookAtPosition = aiInfo.targetPosition;
+    lookAtPosition.Y = enemy.GlobalPosition.Y;
+
+    if(enemy.GlobalPosition.DistanceSquaredTo(lookAtPosition) > 0.1) {
+      enemy.LookAt(lookAtPosition);
+    }
+
     return NodeState.SUCCESS;
   }
 
@@ -187,8 +193,10 @@ public partial class MageBehaviorTree : Node {
     input.direction = new(direction.X, direction.Z);
 
     if(lookAtTarget) {
-      if(!position.IsEqualApprox(enemy.GlobalPosition + direction)) {
-        enemy.LookAt(enemy.GlobalPosition + direction);
+      Vector3 lookAtPosition = position + direction;
+
+      if(position.DistanceSquaredTo(lookAtPosition) > 0.1) {
+        enemy.LookAt(lookAtPosition);
       }
     }
   }
